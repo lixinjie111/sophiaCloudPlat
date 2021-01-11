@@ -5,9 +5,9 @@
         <section class="menu-wrapper">
             <div class="c-scroll-wrap">
                 <div class="c-scroll-inner">
-                    <!-- <div class="menuShow" @click="collapse">
+                    <div class="menuShow" @click="collapse">
                          <i class="el-icon-guide" ></i>
-                    </div> -->
+                    </div>
                     <!--导航菜单-->
                     <el-menu 
                         class="el-menu-vertical-demo"
