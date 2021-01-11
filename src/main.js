@@ -5,6 +5,11 @@ import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+
+import Xui from 'x-intelligent-ui';
+import 'x-intelligent-ui/dist/main.css';
+Vue.use(Xui);
+
 // 进度条
 // 进度条
 import NProgress from 'nprogress';
