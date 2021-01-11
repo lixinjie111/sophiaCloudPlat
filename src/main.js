@@ -47,8 +47,8 @@ const whiteList = ['/login', '/404'];
 window.cancleSource = {};
 window.cancelToken = axios.CancelToken;
 
-import saveModel from '@/components/model/saveModel';
-Vue.component('save-model',saveModel)
+// import saveModel from '@/components/model/saveModel';
+// Vue.component('save-model',saveModel)
 router.beforeEach((to, from, next) => {
     window.cancleSource.cancel && window.cancleSource.cancel()
     window.cancleSource = window.cancelToken.source()
