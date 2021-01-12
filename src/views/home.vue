@@ -31,7 +31,7 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
+      <a-layout-header style="background: #fff; padding: 0" class="cloudHeader">
         <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
@@ -57,7 +57,7 @@ export default {
   },
 };
 </script>
-<style >
+<style lang="scss" scoped>
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -69,24 +69,29 @@ export default {
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
 }
-
-#components-layout-demo-custom-trigger .logo {
-  height: 50px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
-  display: flex;
-  color: #fff;
-  align-items: center;
-  justify-content: center;
+#components-layout-demo-custom-trigger  {
+    .cloudHeader{
+        
+    }
+    .logo{
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 16px;
+        display: flex;
+        color: #fff;
+        align-items: center;
+        justify-content: center;
+        .pic{
+            width: 30px;
+        }
+        .sidebar-title{
+            margin-left: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    }
+  
 }
-.pic{
-      width: 30px;
-      
-  }
-  .sidebar-title{
-    margin-left: 12px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-  }
+
 </style>
