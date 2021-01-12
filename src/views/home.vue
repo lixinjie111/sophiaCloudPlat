@@ -86,7 +86,6 @@
           margin: '84px 16px 24px 16px',
           padding: '24px',
           background: '#fff',
-          minHeight: '280px'
         }"
       >
         <router-view></router-view>
