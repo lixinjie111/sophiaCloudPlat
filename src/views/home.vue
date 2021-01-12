@@ -16,19 +16,30 @@
         </template>
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
+        <!--应用管理部分-->
         <a-menu-item disabled="true">
           <span>应用管理</span>
         </a-menu-item>
         <a-sub-menu key="sub1">
           <span slot="title"><a-icon type="user" /><span>我的应用</span></span>
-          <a-menu-item key="3">
+          <a-menu-item key="1">
             应用1
           </a-menu-item>
-          <a-menu-item key="4">
+          <a-menu-item key="2">
             应用2
           </a-menu-item>
-          <a-menu-item key="5">
+          <a-menu-item key="3">
             应用3
+          </a-menu-item>
+        </a-sub-menu>
+        <!--产品服务部分-->
+        <a-menu-item disabled="true">
+          <span>产品服务</span>
+        </a-menu-item>
+        <a-sub-menu v-for="(item) in proServiceList" :key="item.subKey">
+          <span slot="title"><a-icon type="user" /><span>{{item.title}}</span></span>
+          <a-menu-item v-for="(item1) in item.menuItmList" :key="item1.itemKey">
+            {{item1.title}}
           </a-menu-item>
         </a-sub-menu>
       </a-menu>
@@ -56,6 +67,106 @@ export default {
       title: 'Vue Admin',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
       collapsed: false,
+      proServiceList:[
+        {
+          subKey:'pro1',
+          title:'自然语言处理',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey1'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey2'
+            }
+          ]
+        },
+        {
+          subKey:'pro2',
+          title:'语音技术',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey3'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey4'
+            }
+          ]
+        },
+        {
+          subKey:'pro3',
+          title:'人脸识别',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey5'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey6'
+            }
+          ]
+        },
+        {
+          subKey:'pro4',
+          title:'人体分析',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey7'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey8'
+            }
+          ]
+        },
+        {
+          subKey:'pro5',
+          title:'文字识别',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey9'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey10'
+            }
+          ]
+        },
+        {
+          subKey:'pro6',
+          title:'图像技术',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey11'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey12'
+            }
+          ]
+        },
+        {
+          subKey:'pro7',
+          title:'视频技术',
+          menuItmList:[
+            {
+              title:'API管理',
+              itemKey:'itemKey13'
+            },
+            {
+              title:'SDK管理',
+              itemKey:'itemKey14'
+            }
+          ]
+        }
+      ]
     };
   },
 };
