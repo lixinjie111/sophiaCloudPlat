@@ -18,4 +18,8 @@ export default {
 #app {
 	height: 100%;
 }
+img{
+    width: 100%;
+    display: block;
+}
 </style>
