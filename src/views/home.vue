@@ -38,9 +38,11 @@
             <a-icon type="user" />
             <span>{{ item.title }}</span>
           </span>
-          <a-menu-item v-for="item1 in item.menuItmList" :key="item1.itemKey">{{
+          <a-menu-item v-for="item1 in item.menuItmList" :key="item1.itemKey">
+            {{
             item1.title
-          }}</a-menu-item>
+            }}
+          </a-menu-item>
         </a-sub-menu>
         <!--数据服务部分-->
         <a-menu-item disabled="true" v-if="!collapsed">
@@ -76,11 +78,7 @@
     </a-layout-sider>
     <a-layout class="cloudContainer">
       <a-layout-header class="cloudHeader">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="collapse"
-        />
+        <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight"></div>
       </a-layout-header>
       <a-layout-content
@@ -90,8 +88,9 @@
           background: '#fff',
           minHeight: '280px'
         }"
-        ><router-view></router-view></a-layout-content
       >
+        <router-view></router-view>
+      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -110,11 +109,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey1"
+              itemKey: "yuyanAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey2"
+              itemKey: "yuyanSDK"
             }
           ]
         },
@@ -124,11 +123,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey3"
+              itemKey: "yuyinAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey4"
+              itemKey: "yuyinSDK"
             }
           ]
         },
@@ -138,11 +137,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey5"
+              itemKey: "renlianAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey6"
+              itemKey: "renlianSDK"
             }
           ]
         },
@@ -152,11 +151,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey7"
+              itemKey: "rentiAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey8"
+              itemKey: "rentiSDK"
             }
           ]
         },
@@ -166,11 +165,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey9"
+              itemKey: "wenziAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey10"
+              itemKey: "wenziSDK"
             }
           ]
         },
@@ -180,11 +179,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey11"
+              itemKey: "tuxiangAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey12"
+              itemKey: "tuxiangSDK"
             }
           ]
         },
@@ -194,11 +193,11 @@ export default {
           menuItmList: [
             {
               title: "API管理",
-              itemKey: "itemKey13"
+              itemKey: "shipinAPI"
             },
             {
               title: "SDK管理",
-              itemKey: "itemKey14"
+              itemKey: "shipinSDK"
             }
           ]
         }
@@ -264,12 +263,22 @@ export default {
       }
     },
     menuHandleClick(e) {
-      if(e.keyPath.indexOf("pro1") != -1){
-        this.$router.push({
-          path:'/proSer1'
-        });
+      var keyPathList = e.keyPath || [];
+      console.log(keyPathList, "keyPathList");
+      for (var i = 0; i < keyPathList.length; i++) {
+        if (keyPathList[1].indexOf("pro") != -1) {
+          if (keyPathList[0].indexOf("API") != -1) {
+            this.$router.push({
+              path: "/apiMan"
+            });
+          } else if (keyPathList[0].indexOf("SDK") != -1) {
+            this.$router.push({
+              path: "/sdkMan"
+            });
+          }
+        }
       }
-    },
+    }
   }
 };
 </script>
