@@ -1,6 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger" style="height:100%">
-    <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
+    <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="250">
       <div class="logo">
         <template v-if="collapsed" class="sidebar-logo-link" to="/">
           <div class="pic" v-if="logo">
@@ -17,7 +17,7 @@
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <!--应用管理部分-->
-        <a-menu-item disabled="true">
+        <a-menu-item disabled="true" v-if="!collapsed">
           <span>应用管理</span>
         </a-menu-item>
         <a-sub-menu key="sub1">
@@ -30,7 +30,7 @@
           <a-menu-item key="3">应用3</a-menu-item>
         </a-sub-menu>
         <!--产品服务部分-->
-        <a-menu-item disabled="true">
+        <a-menu-item disabled="true" v-if="!collapsed">
           <span>产品服务</span>
         </a-menu-item>
         <a-sub-menu v-for="(item) in proServiceList" :key="item.subKey">
@@ -41,7 +41,7 @@
           <a-menu-item v-for="(item1) in item.menuItmList" :key="item1.itemKey">{{item1.title}}</a-menu-item>
         </a-sub-menu>
         <!--数据服务部分-->
-        <a-menu-item disabled="true">
+        <a-menu-item disabled="true" v-if="!collapsed">
           <span>数据服务</span>
         </a-menu-item>
         <a-sub-menu v-for="(item) in dataSericeList" :key="item.subKey">
@@ -51,7 +51,7 @@
           </span>
         </a-sub-menu>
         <!--工具服务部分-->
-        <a-menu-item disabled="true">
+        <a-menu-item disabled="true" v-if="!collapsed">
           <span>工具服务</span>
         </a-menu-item>
         <a-sub-menu v-for="(item) in toolSericeList" :key="item.subKey">
@@ -61,7 +61,7 @@
           </span>
         </a-sub-menu>
         <!--系统管理部分-->
-        <a-menu-item disabled="true">
+        <a-menu-item disabled="true" v-if="!collapsed">
           <span>系统管理</span>
         </a-menu-item>
         <a-sub-menu v-for="(item) in systemManList" :key="item.subKey">
@@ -270,6 +270,13 @@ export default {
         padding-left: 70px !important;
       }
     }
+  }
+}
+
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-layout-sider{
+    height: 100%;
+    overflow-y: scroll;
   }
 }
 
