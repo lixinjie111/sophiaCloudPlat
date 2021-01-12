@@ -94,7 +94,8 @@
         :style="{
           margin: '0px 16px 24px 16px',
           padding: '24px',
-          background: '#fff'
+          background: '#fff',
+          minHeight:'auto'
         }"
       >
         <router-view></router-view>
