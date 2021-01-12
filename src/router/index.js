@@ -6,11 +6,9 @@
 const Login = resolve => require(['@/views/login/index'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
-// 在菜单导航里的路由
-// 我的数据集
-// const Index = resolve => require(['@/views/index/index'], resolve)
-// const indexList = resolve => require(['@/views/index/components/list'], resolve)
-    // 不在菜单导航里的路由
+//产品服务模板页
+const proSer1 = resolve => require(['@/views/proSer/proSer1'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         // { path: '*', redirect: '/404' }
@@ -20,31 +18,12 @@ export const menuRouterMap = [{
     path: "/",
     name: "home",
     component: Home,
-    // redirect: "/index",
-    // children: [{
-    //         name: "Index",
-    //         path: "/index",
-    //         component: Index,
-    //         redirect: "/index/list",
-    //         meta: {
-    //             title: "我的数据集",
-    //             icon: "el-icon-mc-app",
-    //             enable: "Y"
-    //         },
-    //         children: [{
-    //                 name: "indexList",
-    //                 path: "/index/list",
-    //                 component: indexList,
-    //                 meta: {
-    //                     title: "数据列表",
-    //                     enable: "Y"
-    //                 },
-    //                 children: [],
-    //             },
-               
-    //         ]
-    //     },
-    //]
+    children: [{
+            name: "proSer1",
+            path: "/proSer1",
+            component: proSer1
+        },
+    ]
 }];
 export default new VueRouter({
     // mode: 'history',
