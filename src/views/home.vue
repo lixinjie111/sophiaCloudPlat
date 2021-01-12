@@ -81,9 +81,18 @@
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight"></div>
       </a-layout-header>
-      <a-layout-content
+        <a-breadcrumb 
         :style="{
           margin: '84px 16px 24px 16px',
+        }">
+            <a-breadcrumb-item>Home</a-breadcrumb-item>
+            <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>
+            <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>
+            <a-breadcrumb-item>An Application</a-breadcrumb-item>
+        </a-breadcrumb>
+      <a-layout-content
+        :style="{
+          margin: '0px 16px 24px 16px',
           padding: '24px',
           background: '#fff',
         }"
@@ -262,8 +271,9 @@ export default {
       }
     },
     menuHandleClick(e) {
+        console.log(e)
       var keyPathList = e.keyPath || [];
-      console.log(keyPathList, "keyPathList");
+      //console.log(keyPathList, "keyPathList");
       for (var i = 0; i < keyPathList.length; i++) {
         if (keyPathList[1].indexOf("pro") != -1) {
           if (keyPathList[0].indexOf("API") != -1) {
