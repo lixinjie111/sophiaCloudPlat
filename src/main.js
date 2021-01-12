@@ -8,9 +8,10 @@ Vue.use(ElementUI);
 
 import Xui from 'x-intelligent-ui';
 import 'x-intelligent-ui/dist/main.css';
-import 'moment/locale/zh-cn';
 Vue.use(Xui);
 
+import echarts from "echarts";
+Vue.prototype.$echarts = echarts;
 
 // 进度条
 // 进度条
