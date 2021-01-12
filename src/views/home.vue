@@ -1,18 +1,18 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger" style="height:100%">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-      <div class="logo" >
-        <template v-if="collapsed"  class="sidebar-logo-link" to="/">
-            <div class="pic" v-if="logo">
-                <img  :src="logo" class="sidebar-logo">
-            </div>
-            <h1 v-else class="sidebar-title">{{ title }} </h1>
+      <div class="logo">
+        <template v-if="collapsed" class="sidebar-logo-link" to="/">
+          <div class="pic" v-if="logo">
+            <img :src="logo" class="sidebar-logo" />
+          </div>
+          <h1 v-else class="sidebar-title">{{ title }}</h1>
         </template>
-        <template v-else  class="sidebar-logo-link" to="/">
-            <div class="pic" v-if="logo">
-                <img :src="logo" class="sidebar-logo">
-            </div>
-            <h1 class="sidebar-title">{{ title }} </h1>
+        <template v-else class="sidebar-logo-link" to="/">
+          <div class="pic" v-if="logo">
+            <img :src="logo" class="sidebar-logo" />
+          </div>
+          <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
@@ -21,26 +21,54 @@
           <span>应用管理</span>
         </a-menu-item>
         <a-sub-menu key="sub1">
-          <span slot="title"><a-icon type="user" /><span>我的应用</span></span>
-          <a-menu-item key="1">
-            应用1
-          </a-menu-item>
-          <a-menu-item key="2">
-            应用2
-          </a-menu-item>
-          <a-menu-item key="3">
-            应用3
-          </a-menu-item>
+          <span slot="title">
+            <a-icon type="user" />
+            <span>我的应用</span>
+          </span>
+          <a-menu-item key="1">应用1</a-menu-item>
+          <a-menu-item key="2">应用2</a-menu-item>
+          <a-menu-item key="3">应用3</a-menu-item>
         </a-sub-menu>
         <!--产品服务部分-->
         <a-menu-item disabled="true">
           <span>产品服务</span>
         </a-menu-item>
         <a-sub-menu v-for="(item) in proServiceList" :key="item.subKey">
-          <span slot="title"><a-icon type="user" /><span>{{item.title}}</span></span>
-          <a-menu-item v-for="(item1) in item.menuItmList" :key="item1.itemKey">
-            {{item1.title}}
-          </a-menu-item>
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{item.title}}</span>
+          </span>
+          <a-menu-item v-for="(item1) in item.menuItmList" :key="item1.itemKey">{{item1.title}}</a-menu-item>
+        </a-sub-menu>
+        <!--数据服务部分-->
+        <a-menu-item disabled="true">
+          <span>数据服务</span>
+        </a-menu-item>
+        <a-sub-menu v-for="(item) in dataSericeList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{item.title}}</span>
+          </span>
+        </a-sub-menu>
+        <!--工具服务部分-->
+        <a-menu-item disabled="true">
+          <span>工具服务</span>
+        </a-menu-item>
+        <a-sub-menu v-for="(item) in toolSericeList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{item.title}}</span>
+          </span>
+        </a-sub-menu>
+        <!--系统管理部分-->
+        <a-menu-item disabled="true">
+          <span>系统管理</span>
+        </a-menu-item>
+        <a-sub-menu v-for="(item) in systemManList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{item.title}}</span>
+          </span>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
@@ -54,9 +82,7 @@
       </a-layout-header>
       <a-layout-content
         :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-      >
-        Content
-      </a-layout-content>
+      >Content</a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -64,111 +90,154 @@
 export default {
   data() {
     return {
-      title: 'Vue Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+      title: "Vue Admin",
+      logo:
+        "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
       collapsed: false,
-      proServiceList:[
+      proServiceList: [
         {
-          subKey:'pro1',
-          title:'自然语言处理',
-          menuItmList:[
+          subKey: "pro1",
+          title: "自然语言处理",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey1'
+              title: "API管理",
+              itemKey: "itemKey1"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey2'
+              title: "SDK管理",
+              itemKey: "itemKey2"
             }
           ]
         },
         {
-          subKey:'pro2',
-          title:'语音技术',
-          menuItmList:[
+          subKey: "pro2",
+          title: "语音技术",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey3'
+              title: "API管理",
+              itemKey: "itemKey3"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey4'
+              title: "SDK管理",
+              itemKey: "itemKey4"
             }
           ]
         },
         {
-          subKey:'pro3',
-          title:'人脸识别',
-          menuItmList:[
+          subKey: "pro3",
+          title: "人脸识别",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey5'
+              title: "API管理",
+              itemKey: "itemKey5"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey6'
+              title: "SDK管理",
+              itemKey: "itemKey6"
             }
           ]
         },
         {
-          subKey:'pro4',
-          title:'人体分析',
-          menuItmList:[
+          subKey: "pro4",
+          title: "人体分析",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey7'
+              title: "API管理",
+              itemKey: "itemKey7"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey8'
+              title: "SDK管理",
+              itemKey: "itemKey8"
             }
           ]
         },
         {
-          subKey:'pro5',
-          title:'文字识别',
-          menuItmList:[
+          subKey: "pro5",
+          title: "文字识别",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey9'
+              title: "API管理",
+              itemKey: "itemKey9"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey10'
+              title: "SDK管理",
+              itemKey: "itemKey10"
             }
           ]
         },
         {
-          subKey:'pro6',
-          title:'图像技术',
-          menuItmList:[
+          subKey: "pro6",
+          title: "图像技术",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey11'
+              title: "API管理",
+              itemKey: "itemKey11"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey12'
+              title: "SDK管理",
+              itemKey: "itemKey12"
             }
           ]
         },
         {
-          subKey:'pro7',
-          title:'视频技术',
-          menuItmList:[
+          subKey: "pro7",
+          title: "视频技术",
+          menuItmList: [
             {
-              title:'API管理',
-              itemKey:'itemKey13'
+              title: "API管理",
+              itemKey: "itemKey13"
             },
             {
-              title:'SDK管理',
-              itemKey:'itemKey14'
+              title: "SDK管理",
+              itemKey: "itemKey14"
             }
           ]
         }
+      ],
+      dataSericeList: [
+        {
+          subKey: "dataSer1",
+          title: "智能推荐"
+        },
+        {
+          subKey: "dataSer2",
+          title: "用户画像"
+        }
+      ],
+      toolSericeList: [
+        {
+          subKey: "toolSer1",
+          title: "风控管理"
+        },
+        {
+          subKey: "toolSer2",
+          title: "财税计算"
+        },
+        {
+          subKey: "toolSer3",
+          title: "出行工具"
+        }
+      ],
+      systemManList: [
+        {
+          subKey: "sys1",
+          title: "企业设置"
+        },
+        {
+          subKey: "sys2",
+          title: "个人设置"
+        },
+        {
+          subKey: "sys3",
+          title: "消息中心"
+        },
+        {
+          subKey: "sys4",
+          title: "日志管理"
+        }
       ]
     };
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -180,13 +249,12 @@ export default {
   transition: color 0.3s;
 }
 
-
-#components-layout-demo-custom-trigger{
-  /deep/ .ant-layout-sider-dark{
-    /deep/ .ant-layout-sider-children{
-      /deep/ .ant-menu-dark{
-        /deep/ .ant-menu-submenu-inline{
-          /deep/ .ant-menu-submenu-title{
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-layout-sider-dark {
+    /deep/ .ant-layout-sider-children {
+      /deep/ .ant-menu-dark {
+        /deep/ .ant-menu-submenu-inline {
+          /deep/ .ant-menu-submenu-title {
             padding-left: 44px !important;
           }
         }
@@ -195,43 +263,39 @@ export default {
   }
 }
 
-#components-layout-demo-custom-trigger{
-  /deep/ .ant-menu-dark{
-    /deep/ .ant-menu-inline{
-      /deep/ .ant-menu-item{
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-menu-dark {
+    /deep/ .ant-menu-inline {
+      /deep/ .ant-menu-item {
         padding-left: 70px !important;
       }
     }
   }
 }
 
-
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
 }
-#components-layout-demo-custom-trigger  {
-    .cloudHeader{
-        
+#components-layout-demo-custom-trigger {
+  .cloudHeader {
+  }
+  .logo {
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+    display: flex;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    .pic {
+      width: 30px;
     }
-    .logo{
-        height: 50px;
-        background: rgba(255, 255, 255, 0.2);
-        margin: 16px;
-        display: flex;
-        color: #fff;
-        align-items: center;
-        justify-content: center;
-        .pic{
-            width: 30px;
-        }
-        .sidebar-title{
-            margin-left: 12px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-        }
+    .sidebar-title {
+      margin-left: 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
     }
-  
+  }
 }
-
 </style>
