@@ -1,6 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger" style="height:100%">
-    <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
+    <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="250">
       <div class="logo">
         <template v-if="collapsed" class="sidebar-logo-link" to="/">
           <div class="pic" v-if="logo">
@@ -16,18 +16,62 @@
         </template>
       </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-        <a-menu-item key="1">
-          <a-icon type="user" />
-          <span>nav 1</span>
+        <!--应用管理部分-->
+        <a-menu-item disabled="true" v-if="!collapsed">
+          <span>应用管理</span>
         </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera" />
-          <span>nav 2</span>
+        <a-sub-menu key="sub1">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>我的应用</span>
+          </span>
+          <a-menu-item key="1">应用1</a-menu-item>
+          <a-menu-item key="2">应用2</a-menu-item>
+          <a-menu-item key="3">应用3</a-menu-item>
+        </a-sub-menu>
+        <!--产品服务部分-->
+        <a-menu-item disabled="true" v-if="!collapsed">
+          <span>产品服务</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload" />
-          <span>nav 3</span>
+        <a-sub-menu v-for="item in proServiceList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{ item.title }}</span>
+          </span>
+          <a-menu-item v-for="item1 in item.menuItmList" :key="item1.itemKey">{{
+            item1.title
+          }}</a-menu-item>
+        </a-sub-menu>
+        <!--数据服务部分-->
+        <a-menu-item disabled="true" v-if="!collapsed">
+          <span>数据服务</span>
         </a-menu-item>
+        <a-sub-menu v-for="item in dataSericeList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{ item.title }}</span>
+          </span>
+        </a-sub-menu>
+        <!--工具服务部分-->
+        <a-menu-item disabled="true" v-if="!collapsed">
+          <span>工具服务</span>
+        </a-menu-item>
+        <a-sub-menu v-for="item in toolSericeList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{ item.title }}</span>
+          </span>
+        </a-sub-menu>
+        <!--系统管理部分-->
+        <a-menu-item disabled="true" v-if="!collapsed">
+          <span>系统管理</span>
+        </a-menu-item>
+        <a-sub-menu v-for="item in systemManList" :key="item.subKey">
+          <span slot="title">
+            <a-icon type="user" />
+            <span>{{ item.title }}</span>
+          </span>
+        </a-sub-menu>
       </a-menu>
     </a-layout-sider>
     <a-layout class="cloudContainer">
@@ -41,14 +85,13 @@
       </a-layout-header>
       <a-layout-content
         :style="{
-          margin: '88px 16px 24px 16px',
+          margin: '84px 16px 24px 16px',
           padding: '24px',
           background: '#fff',
           minHeight: '280px'
         }"
+        >Content</a-layout-content
       >
-        Content
-      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -59,7 +102,149 @@ export default {
       title: "Vue Admin",
       logo:
         "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
-      collapsed: false
+      collapsed: false,
+      proServiceList: [
+        {
+          subKey: "pro1",
+          title: "自然语言处理",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey1"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey2"
+            }
+          ]
+        },
+        {
+          subKey: "pro2",
+          title: "语音技术",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey3"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey4"
+            }
+          ]
+        },
+        {
+          subKey: "pro3",
+          title: "人脸识别",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey5"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey6"
+            }
+          ]
+        },
+        {
+          subKey: "pro4",
+          title: "人体分析",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey7"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey8"
+            }
+          ]
+        },
+        {
+          subKey: "pro5",
+          title: "文字识别",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey9"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey10"
+            }
+          ]
+        },
+        {
+          subKey: "pro6",
+          title: "图像技术",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey11"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey12"
+            }
+          ]
+        },
+        {
+          subKey: "pro7",
+          title: "视频技术",
+          menuItmList: [
+            {
+              title: "API管理",
+              itemKey: "itemKey13"
+            },
+            {
+              title: "SDK管理",
+              itemKey: "itemKey14"
+            }
+          ]
+        }
+      ],
+      dataSericeList: [
+        {
+          subKey: "dataSer1",
+          title: "智能推荐"
+        },
+        {
+          subKey: "dataSer2",
+          title: "用户画像"
+        }
+      ],
+      toolSericeList: [
+        {
+          subKey: "toolSer1",
+          title: "风控管理"
+        },
+        {
+          subKey: "toolSer2",
+          title: "财税计算"
+        },
+        {
+          subKey: "toolSer3",
+          title: "出行工具"
+        }
+      ],
+      systemManList: [
+        {
+          subKey: "sys1",
+          title: "企业设置"
+        },
+        {
+          subKey: "sys2",
+          title: "个人设置"
+        },
+        {
+          subKey: "sys3",
+          title: "消息中心"
+        },
+        {
+          subKey: "sys4",
+          title: "日志管理"
+        }
+      ]
     };
   },
   mounted() {
@@ -71,11 +256,11 @@ export default {
       this.showHeader();
     },
     showHeader() {
-      var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];  
+      var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];
       if (this.collapsed) {
         cloudHeaderDom.style = ` width: calc(100% - 80px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       } else {
-        cloudHeaderDom.style = ` width: calc(100% - 200px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
+        cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       }
     }
   }
@@ -88,6 +273,37 @@ export default {
   padding: 0 24px;
   cursor: pointer;
   transition: color 0.3s;
+}
+
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-layout-sider-dark {
+    /deep/ .ant-layout-sider-children {
+      /deep/ .ant-menu-dark {
+        /deep/ .ant-menu-submenu-inline {
+          /deep/ .ant-menu-submenu-title {
+            padding-left: 44px !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-menu-dark {
+    /deep/ .ant-menu-inline {
+      /deep/ .ant-menu-item {
+        padding-left: 70px !important;
+      }
+    }
+  }
+}
+
+#components-layout-demo-custom-trigger {
+  /deep/ .ant-layout-sider {
+    height: 100%;
+    overflow-y: scroll;
+  }
 }
 
 #components-layout-demo-custom-trigger .trigger:hover {
