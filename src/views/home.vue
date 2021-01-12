@@ -70,9 +70,30 @@ export default {
 }
 
 
-#components-layout-demo-custom-trigger .ant-menu-dark.ant-menu-inline .ant-menu-submenu-title{
-  padding-left: 44px !important;
+#components-layout-demo-custom-trigger{
+  /deep/ .ant-layout-sider-dark{
+    /deep/ .ant-layout-sider-children{
+      /deep/ .ant-menu-dark{
+        /deep/ .ant-menu-submenu-inline{
+          /deep/ .ant-menu-submenu-title{
+            padding-left: 44px !important;
+          }
+        }
+      }
+    }
+  }
 }
+
+#components-layout-demo-custom-trigger{
+  /deep/ .ant-menu-dark{
+    /deep/ .ant-menu-inline{
+      /deep/ .ant-menu-item{
+        padding-left: 70px !important;
+      }
+    }
+  }
+}
+
 
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
