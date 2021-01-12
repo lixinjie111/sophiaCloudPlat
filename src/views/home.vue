@@ -15,7 +15,7 @@
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
+      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" @click="menuHandleClick">
         <!--应用管理部分-->
         <a-menu-item disabled="true" v-if="!collapsed">
           <span>应用管理</span>
@@ -89,7 +89,7 @@
           padding: '24px',
           background: '#fff',
         }"
-        >Content</a-layout-content
+        ><router-view></router-view></a-layout-content
       >
     </a-layout>
   </a-layout>
@@ -261,7 +261,14 @@ export default {
       } else {
         cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       }
-    }
+    },
+    menuHandleClick(e) {
+      if(e.keyPath.indexOf("pro1") != -1){
+        this.$router.push({
+          path:'/proSer1'
+        });
+      }
+    },
   }
 };
 </script>
