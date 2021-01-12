@@ -85,7 +85,7 @@
         :style="{
           margin: '84px 16px 24px 16px',
           padding: '24px',
-          background: '#fff',
+          background: '#fff'
         }"
       >
         <router-view></router-view>
