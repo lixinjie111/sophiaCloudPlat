@@ -12,6 +12,7 @@ ul,ol,menu{list-style:none}
 fieldset,img{border:0}
 // img,object,input,textarea,button,select{vertical-align:middle}
 img {
+  width: 100%;
   display: block;
   object-fit: cover;
   object-position: center center;

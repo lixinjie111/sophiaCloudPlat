@@ -1,14 +1,14 @@
 <template>
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <template v-if="collapse"  class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
         <h1 v-else class="sidebar-title">{{ title }} </h1>
-      </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+      </template>
+      <template v-else  class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
         <h1 class="sidebar-title">{{ title }} </h1>
-      </router-link>
+      </template>
     </transition>
   </div>
 </template>
@@ -20,6 +20,11 @@ export default {
     collapse: {
       type: Boolean,
       required: true
+    }
+  },
+  watch:{
+    collapse(newVal,oldVal){
+      console.log(newVal,oldVal)
     }
   },
   data() {

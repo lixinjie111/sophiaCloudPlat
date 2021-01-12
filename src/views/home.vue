@@ -1,7 +1,20 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger" style="height:100%">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-      <div class="logo" />
+      <div class="logo" >
+        <template v-if="collapsed"  class="sidebar-logo-link" to="/">
+            <div class="pic" v-if="logo">
+                <img  :src="logo" class="sidebar-logo">
+            </div>
+            <h1 v-else class="sidebar-title">{{ title }} </h1>
+        </template>
+        <template v-else  class="sidebar-logo-link" to="/">
+            <div class="pic" v-if="logo">
+                <img :src="logo" class="sidebar-logo">
+            </div>
+            <h1 class="sidebar-title">{{ title }} </h1>
+        </template>
+      </div>
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
           <a-icon type="user" />
@@ -37,12 +50,14 @@
 export default {
   data() {
     return {
+      title: 'Vue Admin',
+      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
       collapsed: false,
     };
   },
 };
 </script>
-<style>
+<style >
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -56,8 +71,22 @@ export default {
 }
 
 #components-layout-demo-custom-trigger .logo {
-  height: 32px;
+  height: 50px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
 }
+.pic{
+      width: 30px;
+      
+  }
+  .sidebar-title{
+    margin-left: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+  }
 </style>
