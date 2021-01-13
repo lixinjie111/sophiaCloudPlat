@@ -71,46 +71,58 @@ export default {
         },
         {
           title: "购买时间",
-          key: "action",
-          dataIndex: "action"
+          key: "buyTime",
+          dataIndex: "buyTime"
         },
         {
           title: "到期时间",
-          key: "action",
-          dataIndex: "action"
+          key: "matuTime",
+          dataIndex: "matuTime"
         },
         {
           title: "开通付费",
-          key: "action",
-          dataIndex: "action"
+          key: "openBuy",
+          dataIndex: "openBuy"
         },
         {
           title: "购买次数包",
-          key: "action",
-          dataIndex: "action"
+          key: "Purchases",
+          dataIndex: "Purchases"
         }
       ],
       data: [
         {
           key: "1",
           apiname: "语音识别-普通话",
-          xfStatus: '待开通付费',
+          xfStatus: "待开通付费",
           dyxianzhi: "200万次赠送",
-          tags: ["nice", "developer"]
+          qps: 2,
+          buyTime: "2019-12-23 14:07",
+          matuTime: "2019-12-23 14:07",
+          openBuy: "购买",
+          Purchases: "购买"
         },
         {
           key: "2",
           apiname: "语音识别-英语",
-          xfStatus: '按量付费',
+          xfStatus: "按量付费",
           dyxianzhi: "--",
-          tags: ["loser"]
+          qps: 5,
+          buyTime: "2019-12-23 14:07",
+          matuTime: "2019-12-23 14:07",
+          openBuy: "购买",
+          Purchases: "购买"
         },
         {
           key: "3",
           apiname: "语音识别-粤语",
-          xfStatus: '按次付费',
+          xfStatus: "按次付费",
           dyxianzhi: "1000万次",
-          tags: ["cool", "teacher"]
+          qps: 12,
+          buyTime: "2019-12-23 14:07",
+          matuTime: "2019-12-23 14:07",
+          openBuy: "购买",
+          Purchases: "购买"
         }
       ]
     };
@@ -142,7 +154,7 @@ export default {
         },
         grid: {
           left: "5%",
-          right: "5%",
+          right: "7%",
           bottom: "10%"
         },
         legend: {
@@ -311,6 +323,15 @@ export default {
     .table_container {
       width: 100%;
       flex: 1;
+      /deep/ .ant-table-wrapper{
+        /deep/ .ant-spin-nested-loading{
+          /deep/ .ant-pagination{
+            display: flex;
+            justify-content: center;
+            float: inherit;
+          }
+        }
+      }
     }
   }
 }
