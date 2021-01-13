@@ -456,7 +456,7 @@ export default {
   }
   .nengli_area_container {
     width: 100%;
-    height: 620px;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     .nengli_title_container {

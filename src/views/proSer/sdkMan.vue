@@ -68,8 +68,26 @@
         </div>
       </div>
     </div>
-    <div class="sdk_two_container"></div>
-    <div class="sdk_three_container"></div>
+    <div class="sdk_two_container">
+      <div class="sdk_item"></div>
+      <div class="sdk_item"></div>
+      <div class="sdk_item"></div>
+      <div class="sdk_item"></div>
+    </div>
+    <div class="sdk_three_container">
+      <div class="sqm_container">
+        <div class="sqm_title">授权管理</div>
+        <div class="btn_container">
+          <a-button type="primary" icon="plus" size="big">应用授权</a-button>
+        </div>
+      </div>
+      <div class="table_container">
+        <a-table :columns="sqcolumns" :data-source="sqdata">
+          <a slot="appname" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+          <a slot="operating" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+        </a-table>
+      </div>
+    </div>
     <div class="sdk_four_container"></div>
   </div>
 </template>
@@ -78,7 +96,186 @@
 export default {
   name: "sdkMan",
   data() {
-    return {};
+    return {
+      sqcolumns: [
+        {
+          title: "应用名称",
+          dataIndex: "appname",
+          key: "appname",
+          scopedSlots: { customRender: "appname" },
+          filters: [
+            {
+              text: "Joe",
+              value: "Joe"
+            },
+            {
+              text: "Jim",
+              value: "Jim"
+            },
+            {
+              text: "Submenu",
+              value: "Submenu",
+              children: [
+                {
+                  text: "Green",
+                  value: "Green"
+                },
+                {
+                  text: "Black",
+                  value: "Black"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "APP ID",
+          dataIndex: "appid",
+          key: "appid"
+        },
+        {
+          title: "应用平台",
+          dataIndex: "appPlat",
+          key: "appPlat",
+          filters: [
+            {
+              text: "Joe",
+              value: "Joe"
+            },
+            {
+              text: "Jim",
+              value: "Jim"
+            },
+            {
+              text: "Submenu",
+              value: "Submenu",
+              children: [
+                {
+                  text: "Green",
+                  value: "Green"
+                },
+                {
+                  text: "Black",
+                  value: "Black"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "SDK名称",
+          key: "sdkName",
+          dataIndex: "sdkName",
+          filters: [
+            {
+              text: "Joe",
+              value: "Joe"
+            },
+            {
+              text: "Jim",
+              value: "Jim"
+            },
+            {
+              text: "Submenu",
+              value: "Submenu",
+              children: [
+                {
+                  text: "Green",
+                  value: "Green"
+                },
+                {
+                  text: "Black",
+                  value: "Black"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "已分配/激活",
+          key: "yifenP",
+          dataIndex: "yifenP"
+        },
+        {
+          title: "有效期",
+          key: "validPer",
+          dataIndex: "validPer",
+          filters: [
+            {
+              text: "Joe",
+              value: "Joe"
+            },
+            {
+              text: "Jim",
+              value: "Jim"
+            },
+            {
+              text: "Submenu",
+              value: "Submenu",
+              children: [
+                {
+                  text: "Green",
+                  value: "Green"
+                },
+                {
+                  text: "Black",
+                  value: "Black"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "授权时间",
+          key: "sqTime",
+          dataIndex: "sqTime",
+          defaultSortOrder: "descend",
+          sorter: (a, b) => a.age - b.age
+        },
+        {
+          title: "操作",
+          key: "operating",
+          dataIndex: "operating",
+          slots: { title: "customTitle" },
+          scopedSlots: { customRender: "appname" }
+        }
+      ],
+      sqdata: [
+        {
+          key: "1",
+          appname: "好生活",
+          appid: "243234a4",
+          appPlat: "Android",
+          sdkName: "语音识别Android SDK",
+          yifenP: "6000/1234",
+          validPer: "12个月",
+          sqTime: "2019-12-23 14:07",
+          operating: "查看"
+        },
+        {
+          key: "2",
+          appname: "合生通",
+          appid: "243234a4",
+          appPlat: "iOS",
+          sdkName: "语音识别iOS SDK",
+          yifenP: "6000/1234",
+          validPer: "12个月",
+          sqTime: "2019-12-23 14:07",
+          operating: "查看"
+        },
+        {
+          key: "3",
+          appname: "好生活好房",
+          appid: "243234a4",
+          appPlat: "Android",
+          sdkName: "语音识别Android SDK",
+          yifenP: "6000/1234",
+          validPer: "12个月",
+          sqTime: "2019-12-23 14:07",
+          operating: "查看"
+        }
+      ]
+    };
   },
   mounted() {
     this.changeCircleSty();
@@ -195,13 +392,50 @@ export default {
     width: 100%;
     height: 289px;
     margin-bottom: 20px;
-    background-color: lightcoral;
+    display: flex;
+    justify-content: space-between;
+    .sdk_item {
+      width: 24%;
+      height: 100%;
+      background-color: navy;
+    }
   }
   .sdk_three_container {
     width: 100%;
     height: 571px;
     margin-bottom: 20px;
-    background-color: maroon;
+    display: flex;
+    flex-direction: column;
+    .sqm_container {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .sqm_title {
+        font-size: 15px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #676970;
+        line-height: 21px;
+      }
+      .btn_container {
+        width: 120px;
+        height: 36px;
+      }
+    }
+    .table_container {
+      flex: 1;
+      /deep/ .ant-table-wrapper {
+        /deep/ .ant-spin-nested-loading {
+          /deep/ .ant-pagination {
+            display: flex;
+            justify-content: center;
+            float: inherit;
+          }
+        }
+      }
+    }
   }
   .sdk_four_container {
     width: 100%;
