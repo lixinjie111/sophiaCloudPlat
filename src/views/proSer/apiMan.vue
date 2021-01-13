@@ -34,6 +34,10 @@
           <span slot="usePer" slot-scope="usePer">
             <a-progress :percent="usePer" size="small" status="active" />
           </span>
+          <span slot="tsyPer" slot-scope="tsyPer">
+            <a-icon type="home" />&nbsp;&nbsp;
+            <span :style="tsyPer>24 ? 'color:red' :'color:green' ">{{tsyPer}}%</span>
+          </span>
           <a slot="openBuy" slot-scope="text" href="javascript:;">{{text}}</a>
           <a slot="buyNum" slot-scope="text" href="javascript:;">{{text}}</a>
         </a-table>
@@ -43,7 +47,19 @@
       </div>
     </div>
     <div class="nengli_area_container">
-      <div class="nengli_title_container">能力服务列表</div>
+      <div class="nengli_title_container">
+        <div class="nl_title">能力服务列表</div>
+        <div class="search_container">
+          
+        <a-input-search placeholder="按API名称进行搜索" size="large" @search="onSearch">
+          <a-button slot="enterButton">
+            <a-icon type="search" />
+          </a-button>
+        </a-input-search>
+
+          <!-- <a-input-search placeholder="按API名称进行搜索" enter-button /> -->
+        </div>
+      </div>
       <div class="table_container">
         <a-table :columns="nlcolumns" :data-source="nldata">
           <a slot="apiname" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
@@ -164,7 +180,8 @@ export default {
         {
           title: "同上月相比",
           key: "tsyPer",
-          dataIndex: "tsyPer"
+          dataIndex: "tsyPer",
+          scopedSlots: { customRender: "tsyPer" }
         },
         {
           title: "使用率占比",
@@ -191,7 +208,7 @@ export default {
           servName: "语音识别-普通话",
           fwNum: "6,567千次",
           syNum: "6,567千次",
-          tsyPer: "50%",
+          tsyPer: 50,
           usePer: 45,
           openBuy: "购买",
           buyNum: "购买"
@@ -201,7 +218,7 @@ export default {
           servName: "语音识别-英语",
           fwNum: "567小时",
           syNum: "6,567千次",
-          tsyPer: "30%",
+          tsyPer: 30,
           usePer: 70,
           openBuy: "购买",
           buyNum: "购买"
@@ -211,8 +228,8 @@ export default {
           servName: "语音识别-粤语",
           fwNum: "567小时",
           syNum: "6,567千次",
-          tsyPer: "24%",
-          usePer:50,
+          tsyPer: 24,
+          usePer: 50,
           openBuy: "购买",
           buyNum: "购买"
         }
@@ -447,11 +464,18 @@ export default {
       height: 57px;
       display: flex;
       align-items: center;
-      font-size: 15px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #676970;
-      line-height: 21px;
+      justify-content: space-between;
+      .nl_title {
+        font-size: 15px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #676970;
+        line-height: 21px;
+      }
+      .search_container {
+        width: 288px;
+        height: 32px;
+      }
     }
     .table_container {
       width: 100%;
