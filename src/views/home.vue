@@ -15,65 +15,23 @@
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" @click="menuHandleClick">
-        <!--应用管理部分-->
-        <a-menu-item disabled="true" v-if="!collapsed">
-          <span>应用管理</span>
-        </a-menu-item>
-        <a-sub-menu key="sub1">
-          <span slot="title">
-            <a-icon type="user" />
-            <span>我的应用</span>
-          </span>
-          <a-menu-item key="1">应用1</a-menu-item>
-          <a-menu-item key="2">应用2</a-menu-item>
-          <a-menu-item key="3">应用3</a-menu-item>
-        </a-sub-menu>
-        <!--产品服务部分-->
-        <a-menu-item disabled="true" v-if="!collapsed">
-          <span>产品服务</span>
-        </a-menu-item>
-        <a-sub-menu v-for="item in proServiceList" :key="item.subKey">
-          <span slot="title">
-            <a-icon type="user" />
-            <span>{{ item.title }}</span>
-          </span>
-          <a-menu-item v-for="item1 in item.menuItmList" :key="item1.itemKey">
-            {{
-            item1.title
-            }}
+      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" @click="menuHandleClick" :inlineCollapsed='true'>
+        <template  v-for="item in menuList">
+          <a-menu-item disabled="true" v-show="!collapsed"  v-if="item.list.length>0" :key="item.moduleTitle">
+            <span >{{item.moduleTitle}}</span>
           </a-menu-item>
-        </a-sub-menu>
-        <!--数据服务部分-->
-        <a-menu-item disabled="true" v-if="!collapsed">
-          <span>数据服务</span>
-        </a-menu-item>
-        <a-sub-menu v-for="item in dataSericeList" :key="item.subKey">
-          <span slot="title">
+          <a-menu-item  v-show="!collapsed" v-else :key="item.moduleTitle">
             <a-icon type="user" />
-            <span>{{ item.title }}</span>
-          </span>
-        </a-sub-menu>
-        <!--工具服务部分-->
-        <a-menu-item disabled="true" v-if="!collapsed">
-          <span>工具服务</span>
-        </a-menu-item>
-        <a-sub-menu v-for="item in toolSericeList" :key="item.subKey">
-          <span slot="title">
-            <a-icon type="user" />
-            <span>{{ item.title }}</span>
-          </span>
-        </a-sub-menu>
-        <!--系统管理部分-->
-        <a-menu-item disabled="true" v-if="!collapsed">
-          <span>系统管理</span>
-        </a-menu-item>
-        <a-sub-menu v-for="item in systemManList" :key="item.subKey">
-          <span slot="title">
-            <a-icon type="user" />
-            <span>{{ item.title }}</span>
-          </span>
-        </a-sub-menu>
+            <span >{{item.moduleTitle}}</span>
+          </a-menu-item>
+          <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
+              <span slot="title">
+                <a-icon type="user" />
+                <span>{{ subItem.title }}</span>
+              </span>
+              <a-menu-item v-for="item1 in subItem.menuItmList" :key="item1.itemKey" >{{ item1.title}}</a-menu-item>
+          </a-sub-menu>
+        </template>
       </a-menu>
     </a-layout-sider>
     <a-layout class="cloudContainer">
@@ -85,10 +43,7 @@
         :style="{
           margin: '84px 16px 24px 16px',
         }">
-            <a-breadcrumb-item>Home</a-breadcrumb-item>
-            <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>
-            <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>
-            <a-breadcrumb-item>An Application</a-breadcrumb-item>
+            <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
         </a-breadcrumb>
       <a-layout-content
         :style="{
@@ -107,152 +62,198 @@
 export default {
   data() {
     return {
-      title: "Vue Admin",
+      title: "Shopia云服务平台",
       logo:
         "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
       collapsed: false,
-      proServiceList: [
+      breadArr:[],
+      menuList:[
         {
-          subKey: "pro1",
-          title: "自然语言处理",
-          menuItmList: [
+          moduleTitle:"概览",
+          list: [
+          ],
+        },
+        {
+          moduleTitle:"应用管理",
+          list: [
             {
-              title: "API管理",
-              itemKey: "yuyanAPI"
+              subKey: "myYingyong",
+              title: "我的应用",
+              menuItmList: [
+                {
+                  title: "应用1",
+                  itemKey: "yingyong1"
+                },
+                {
+                  title: "应用2",
+                  itemKey: "yingyong2"
+                },
+                {
+                  title: "应用3",
+                  itemKey: "yingyong3"
+                }
+              ]
+            },
+            
+          ],
+        },
+        {
+           moduleTitle:"产品服务",
+           list: [
+            {
+              subKey: "pro1",
+              title: "自然语言处理",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "yuyanAPI",
+                  path: "/apiMan"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "yuyanSDK",
+                  path: "/sdkMan"
+                }
+              ]
             },
             {
-              title: "SDK管理",
-              itemKey: "yuyanSDK"
+              subKey: "pro2",
+              title: "语音技术",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "yuyinAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "yuyinSDK"
+                }
+              ]
+            },
+            {
+              subKey: "pro3",
+              title: "人脸识别",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "renlianAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "renlianSDK"
+                }
+              ]
+            },
+            {
+              subKey: "pro4",
+              title: "人体分析",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "rentiAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "rentiSDK"
+                }
+              ]
+            },
+            {
+              subKey: "pro5",
+              title: "文字识别",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "wenziAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "wenziSDK"
+                }
+              ]
+            },
+            {
+              subKey: "pro6",
+              title: "图像技术",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "tuxiangAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "tuxiangSDK"
+                }
+              ]
+            },
+            {
+              subKey: "pro7",
+              title: "视频技术",
+              menuItmList: [
+                {
+                  title: "API管理",
+                  itemKey: "shipinAPI"
+                },
+                {
+                  title: "SDK管理",
+                  itemKey: "shipinSDK"
+                }
+              ]
+            }
+          ],
+        },
+        {
+           moduleTitle:"数据服务",
+           list: [
+            {
+              subKey: "dataSer1",
+              title: "智能推荐"
+            },
+            {
+              subKey: "dataSer2",
+              title: "用户画像"
+            }
+          ],
+        },
+        {
+           moduleTitle:"工具服务",
+           list:  [
+            {
+              subKey: "toolSer1",
+              title: "风控管理"
+            },
+            {
+              subKey: "toolSer2",
+              title: "财税计算"
+            },
+            {
+              subKey: "toolSer3",
+              title: "出行工具"
+            }
+          ],
+        },
+        {
+           moduleTitle:"系统管理",
+           list:  [
+            {
+              subKey: "sys1",
+              title: "企业设置"
+            },
+            {
+              subKey: "sys2",
+              title: "个人设置"
+            },
+            {
+              subKey: "sys3",
+              title: "消息中心"
+            },
+            {
+              subKey: "sys4",
+              title: "日志管理"
             }
           ]
         },
-        {
-          subKey: "pro2",
-          title: "语音技术",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "yuyinAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "yuyinSDK"
-            }
-          ]
-        },
-        {
-          subKey: "pro3",
-          title: "人脸识别",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "renlianAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "renlianSDK"
-            }
-          ]
-        },
-        {
-          subKey: "pro4",
-          title: "人体分析",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "rentiAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "rentiSDK"
-            }
-          ]
-        },
-        {
-          subKey: "pro5",
-          title: "文字识别",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "wenziAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "wenziSDK"
-            }
-          ]
-        },
-        {
-          subKey: "pro6",
-          title: "图像技术",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "tuxiangAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "tuxiangSDK"
-            }
-          ]
-        },
-        {
-          subKey: "pro7",
-          title: "视频技术",
-          menuItmList: [
-            {
-              title: "API管理",
-              itemKey: "shipinAPI"
-            },
-            {
-              title: "SDK管理",
-              itemKey: "shipinSDK"
-            }
-          ]
-        }
       ],
-      dataSericeList: [
-        {
-          subKey: "dataSer1",
-          title: "智能推荐"
-        },
-        {
-          subKey: "dataSer2",
-          title: "用户画像"
-        }
-      ],
-      toolSericeList: [
-        {
-          subKey: "toolSer1",
-          title: "风控管理"
-        },
-        {
-          subKey: "toolSer2",
-          title: "财税计算"
-        },
-        {
-          subKey: "toolSer3",
-          title: "出行工具"
-        }
-      ],
-      systemManList: [
-        {
-          subKey: "sys1",
-          title: "企业设置"
-        },
-        {
-          subKey: "sys2",
-          title: "个人设置"
-        },
-        {
-          subKey: "sys3",
-          title: "消息中心"
-        },
-        {
-          subKey: "sys4",
-          title: "日志管理"
-        }
-      ]
     };
   },
   mounted() {
@@ -266,28 +267,42 @@ export default {
     showHeader() {
       var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];
       if (this.collapsed) {
-        cloudHeaderDom.style = ` width: calc(100% - 80px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
+        cloudHeaderDom.style = ` width: calc(100% - 80px);transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       } else {
-        cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
+        cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       }
     },
     menuHandleClick(e) {
         console.log(e)
-      var keyPathList = e.keyPath || [];
-      //console.log(keyPathList, "keyPathList");
-      for (var i = 0; i < keyPathList.length; i++) {
-        if (keyPathList[1].indexOf("pro") != -1) {
-          if (keyPathList[0].indexOf("API") != -1) {
-            this.$router.push({
-              path: "/apiMan"
-            });
-          } else if (keyPathList[0].indexOf("SDK") != -1) {
-            this.$router.push({
-              path: "/sdkMan"
-            });
-          }
+        this.breadArr=[];
+        if(e.key=="概览"){
+          this.breadArr.push('概览');
+          this.$router.push({
+            path: ''
+          });
+          return;
         }
-      }
+        this.menuList.forEach(item=>{
+          if(item.list.length>0){
+              item.list.forEach(subItem=>{
+                if(subItem.title==e.keyPath[1]){
+                    this.breadArr.push(item.moduleTitle);
+                    this.breadArr.push(subItem.title);
+                    subItem.menuItmList.forEach(child=>{
+                      if(child.itemKey==e.keyPath[0]){
+                        this.breadArr.push(child.title);
+                        console.log(this.breadArr)
+                        this.$router.push({
+                          path: child.path
+                        });
+                      }
+                  })
+                }
+              })
+          }else{
+           
+          }
+        })
     }
   }
 };
