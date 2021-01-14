@@ -33,6 +33,13 @@ video {
   object-fit: contain;
   object-position: center center;
 }
+input::-webkit-input-placeholder { 
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #7A8499;
+}
 html {overflow-x: hidden;height: 100%;font-size: 14px;-webkit-tap-highlight-color: transparent;}
 body {font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;font-size: 14px;line-height:1.5;-webkit-text-size-adjust: none;
     background-color: #f7f7f7;color: #000;-webkit-overflow-scrolling: touch;height: 100%;}
+

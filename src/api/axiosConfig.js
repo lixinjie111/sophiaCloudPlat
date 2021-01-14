@@ -94,19 +94,19 @@ function axiosFilter(vm) {
                     break;
             }
             case '1000': {   // 登录失效
-                window.location.href = '#/login';
+                //window.location.href = '#/login';
                 // return Promise.resolve(response);
                 break;
             }
             default: {
                 // vm.$message.error(response.data.message);
                 if(returnMessage) {
-                    vm.$message({
-                        type: 'error',
-                        duration: '1500',
-                        message: response.data.msg||response.data.message,
-                        showClose: true
-                    });
+                    // vm.$message({
+                    //     type: 'error',
+                    //     duration: '1500',
+                    //     message: response.data.msg||response.data.message,
+                    //     showClose: true
+                    // });
                 }
                 return Promise.reject(response);
             }
@@ -116,12 +116,12 @@ function axiosFilter(vm) {
         if (axios.isCancel(error)) {
             console.log("请求被取消"+error); //请求如果被取消，这里是返回取消的message
         } else {
-            vm.$message({
-                type: 'error',
-                duration: '1500',
-                message: '网络异常,请稍候重试!',
-                showClose: true
-            });
+            // vm.$message({
+            //     type: 'error',
+            //     duration: '1500',
+            //     message: '网络异常,请稍候重试!',
+            //     showClose: true
+            // });
         }
         return Promise.reject(error);
     });

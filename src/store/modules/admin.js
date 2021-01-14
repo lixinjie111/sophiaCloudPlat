@@ -28,11 +28,13 @@ const admin = {
 		goLogin({commit}, loginForm) {
 			return new Promise((resolve, reject) => {
 				requestLogin(loginForm).then(res => {
+					console.log(res)
 					if(res.code == 200000) {
 						setAuthInfo(res.data);
 					}
 					resolve(res);
 				}).catch(error => {
+					console.log(error)
 					reject(error);
 				});
 			}).catch(error => {
