@@ -88,7 +88,27 @@
         </a-table>
       </div>
     </div>
-    <div class="sdk_four_container"></div>
+    <div class="sdk_four_container">
+      <div class="sdk_title">SDK资源</div>
+      <div class="sdk_content_container">
+        <div class="sdk_content_item" v-for="(item,index) in sdkSorceList" :key="index">
+          <div class="sdk_title1">{{item.sdkName}}</div>
+          <div class="sdk_type_logo">
+            <a-icon type="android" :style="{ fontSize: '20px', color: '#08c' }" />
+          </div>
+          <div class="sdk_desc">
+            <div>{{item.sdkDsc}}</div>
+            <div>{{item.date}}</div>
+          </div>
+          <div class="use_intro">
+            <a href>使用说明</a>
+          </div>
+          <div class="down_load_btn">
+            <a-button type="primary" icon="download" :size="size">{{item.btn}}</a-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -274,6 +294,39 @@ export default {
           sqTime: "2019-12-23 14:07",
           operating: "查看"
         }
+      ],
+      size: "large",
+      sdkSorceList: [
+        {
+          sdkName: "语音识别Android SDK",
+          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
+          date: "2020-01-08",
+          btn: "下载"
+        },
+        {
+          sdkName: "语音识别Android SDK",
+          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
+          date: "2020-01-08",
+          btn: "下载"
+        },
+        {
+          sdkName: "语音识别Android SDK",
+          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
+          date: "2020-01-08",
+          btn: "下载"
+        },
+        {
+          sdkName: "语音识别Android SDK",
+          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
+          date: "2020-01-08",
+          btn: "下载"
+        },
+        {
+          sdkName: "语音识别Android SDK",
+          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
+          date: "2020-01-08",
+          btn: "下载"
+        }
       ]
     };
   },
@@ -440,8 +493,67 @@ export default {
   .sdk_four_container {
     width: 100%;
     min-height: 300px;
-    background-color: mediumorchid;
-    margin-bottom: 20pxsss;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    .sdk_title {
+      width: 100%;
+      height: 51px;
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #676970;
+      line-height: 21px;
+    }
+    .sdk_content_container {
+      flex: 1;
+      width: 100%;
+      padding: 0 24px;
+      box-sizing: border-box;
+      .sdk_content_item {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        .sdk_title1,
+        .sdk_type_logo,
+        .use_intro,
+        .down_load_btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .sdk_desc {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .sdk_title1 {
+          width: 390px;
+          height: 100%;
+        }
+        .sdk_type_logo {
+          width: 100px;
+          height: 100%;
+        }
+        .sdk_desc {
+          width: 708px;
+          height: 100%;
+        }
+        .use_intro {
+          width: 227px;
+          height: 100%;
+        }
+        .down_load_btn {
+          width: 217px;
+          height: 100%;
+        }
+      }
+    }
   }
 }
 </style>
