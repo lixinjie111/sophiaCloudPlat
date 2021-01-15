@@ -48,24 +48,17 @@ router.beforeEach((to, from, next) => {
     window.cancleSource.cancel && window.cancleSource.cancel()
     window.cancleSource = window.cancelToken.source()
     NProgress.start();
-    next();
-    // const ADMINID = getAdminId();
-    // if(ADMINID) {
-    //     // 回填用户信息
-    //     store.dispatch('setAuthInfo', getAuthInfo());
-    //     if(to.path === '/login') {
-    //         next({path: '/'});
-    //     }else {
-    //         next();
-    //     }
-    // }else {
-    //     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-    //         next()
-    //     } else {
-    //         next('/login'); // 否则全部重定向到登录页
-    //     }
-    //     NProgress.done()
-    // }
+    var ykToken=localStorage.getItem('yk-token')
+    if(ykToken) {
+        next();
+    }else {
+        if(to.path === '/login') {
+            next();
+        }else {
+            next('/login');
+        }
+    }
+     NProgress.done()
 });
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
