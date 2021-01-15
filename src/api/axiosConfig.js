@@ -20,7 +20,7 @@ function axiosFilter(vm) {
       // withCredentials: true,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        //'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
+        'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
       },
       responseType: 'json',
       transformResponse: [function(data) { //后端发送过来的数据
@@ -128,7 +128,7 @@ function axiosFilter(vm) {
 }
 
 function loginOut() {
-    removeAuthInfo();
+    //removeAuthInfo();
     isOutLogin = true;
     window.location.href = '/';
 }

@@ -56,7 +56,11 @@
                     <template v-if="stepIndex==1">
                         <div class="title">找回密码</div>
                         <div class="email">
-                            <img src="../../assets/images/login/phone.png" class="user_img" style="width: 16px;height: 16px;"><span class="tipMsg">+86</span><input type="text" v-model="tel" placeholder="请输入您的手机号" >
+                            <div  class="user_img" style="width: 16px;">
+                                <img src="../../assets/images/login/phone.png" >
+                            </div>    
+                            <span class="tipMsg">+86</span><input type="text" v-model="tel" placeholder="请输入您的手机号" >
+                             
                         </div>
                         <div class="checkMa">
                         <div class="tipMsg" v-show="checkMaShow">验证码错误，请重新输入</div>
@@ -85,7 +89,9 @@
                     <template v-if="stepIndex==3">
                         <div class="title">密码重置</div>
                         <div class="resetPwd">
-                            <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;">
+                            <div  class="pws_img" style="width: 16px;">
+                                <img src="../../assets/images/login/pws.png">
+                            </div>
                             <input type="password" v-model="resetPwd" placeholder="请设置新密码" @input="inputCk" @focus="toolTip=true" @blur="toolTip=false">
                             <a-tooltip placement="right"  overlayClassName='overlayTip' v-model='toolTip'>
                                 <template slot="title" >
@@ -110,7 +116,9 @@
                         </div>
                         <div class="surePwd">
                             <div class="sureTip" v-show="sureTip">两次输入密码不一致</div>
-                            <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;">
+                            <div  class="pws_img" style="width: 16px;">
+                                <img src="../../assets/images/login/pws.png">
+                            </div>
                             <input type="password"  v-model="surePwd" placeholder="请再次确认新密码" @input="sureInput">
                         </div>
                         <div class="submit" @click="handleNext2">

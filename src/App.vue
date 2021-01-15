@@ -5,13 +5,10 @@
 </template>
 
 <script>
-import moment from 'moment';
-import 'moment/locale/zh-cn';
 export default {
   	name: 'App',
   	data() {
       return {
-        moment
       }
     },
 }
@@ -20,10 +17,6 @@ export default {
 <style lang="scss">
 #app {
 	height: 100%;
-}
-img{
-    width: 100%;
-    display: block;
 }
 ::-webkit-scrollbar {
     position: absolute;

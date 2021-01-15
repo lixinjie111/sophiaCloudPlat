@@ -23,23 +23,15 @@ NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
 
 Vue.config.productionTip = false;
 
-import 'xe-utils'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
-Vue.use(VXETable);
-// import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
-// VXETable.use(VXETablePluginExportPDF)
-// import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
-// VXETable.use(VXETablePluginExportXLSX)
 
 // 全局静态资源
-import $ from 'jquery';
-import htmlToPdf from '@/assets/js/utils/htmlToPdf';
-Vue.use(htmlToPdf);
+// import $ from 'jquery';
+// import htmlToPdf from '@/assets/js/utils/htmlToPdf';
+// Vue.use(htmlToPdf);
 import '@/assets/scss/reset.scss';
-import '@/assets/scss/public.scss';
-import '@/assets/scss/element-ui-reset.scss';
-import '@/assets/icon-font/iconfont.css';
+// import '@/assets/scss/public.scss';
+// import '@/assets/scss/element-ui-reset.scss';
+// import '@/assets/icon-font/iconfont.css';
 
 // 权限
 import { setAuthInfo, getAdminId, getAuthInfo, removeAuthInfo } from '@/session/index';
