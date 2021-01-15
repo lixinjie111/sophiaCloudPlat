@@ -24,13 +24,20 @@
             <a-icon type="user" />
             <span >{{item.moduleTitle}}</span>
           </a-menu-item>
-          <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
+          <template v-if="item.moduleTitle == '系统管理'">
+            <a-menu-item v-for="subItem in item.list" :key="subItem.title" style="padding-left: 44px !important;">
+              <span>{{ subItem.title }}</span>
+            </a-menu-item>
+          </template>
+          <template v-else>
+            <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
               <span slot="title">
                 <a-icon type="user" />
                 <span>{{ subItem.title }}</span>
               </span>
               <a-menu-item v-for="item1 in subItem.menuItmList" :key="item1.itemKey" >{{ item1.title}}</a-menu-item>
           </a-sub-menu>
+          </template>
         </template>
       </a-menu>
     </a-layout-sider>
