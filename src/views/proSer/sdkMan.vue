@@ -455,7 +455,7 @@ export default {
   }
   .sdk_three_container {
     width: 100%;
-    height: 571px;
+    min-height: 300px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
