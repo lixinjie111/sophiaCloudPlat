@@ -274,9 +274,9 @@ export default {
     showHeader() {
       var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];
       if (this.collapsed) {
-        cloudHeaderDom.style = ` width: calc(100% - 80px);transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;`;
+        cloudHeaderDom.style = ` width: calc(100% - 80px);transition: width 0.29s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       } else {
-        cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;`;
+        cloudHeaderDom.style = ` width: calc(100% - 250px);transition: width 0.2s cubic-bezier(0.2, 0, 0, 1) 0s;`;
       }
     },
     menuHandleClick(e) {
@@ -379,7 +379,6 @@ export default {
   }
   .logo {
     height: 50px;
-    background: rgba(255, 255, 255, 0.2);
     margin: 16px;
     display: flex;
     color: #fff;
