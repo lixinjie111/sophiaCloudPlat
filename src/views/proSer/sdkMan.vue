@@ -78,7 +78,7 @@
       <div class="sqm_container">
         <div class="sqm_title">授权管理</div>
         <div class="btn_container">
-          <a-button type="primary" icon="plus" size="big">应用授权</a-button>
+          <a-button type="primary" icon="plus" size="big" @click="appAuth">应用授权</a-button>
         </div>
       </div>
       <div class="table_container">
@@ -109,10 +109,12 @@
         </div>
       </div>
     </div>
+    <vAuthPop v-show="ifShowPop" @closeMe='closePopWin'></vAuthPop>
   </div>
 </template>
 
 <script>
+import vAuthPop from './authPop';
 export default {
   name: "sdkMan",
   data() {
@@ -327,14 +329,25 @@ export default {
           date: "2020-01-08",
           btn: "下载"
         }
-      ]
+      ],
+      ifShowPop:false
     };
+  },
+  components:{
+    vAuthPop
   },
   mounted() {
     this.changeCircleSty();
   },
   methods: {
-    changeCircleSty() {}
+    changeCircleSty() {},
+    appAuth(){
+        console.log('qq')
+        this.ifShowPop = true;
+    },
+    closePopWin(arg){
+        this.ifShowPop = arg;
+    }
   }
 };
 </script>

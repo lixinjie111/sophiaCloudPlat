@@ -368,7 +368,7 @@ export default {
       background: #fff;
       justify-content: space-between;
       padding: 0;
-      z-index: 99999 !important;
+      z-index: 1 !important;
       .headerRight {
         margin-right: 24px;
         width: 500px;
