@@ -5,6 +5,8 @@ const Home = resolve => require(['@/views/home'], resolve)
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
 const sdkMan = resolve => require(['@/views/proSer/sdkMan'], resolve);
+//SDK申请页面
+const sdkApply = resolve => require(['@/views/proSer/sdkApply'],resolve);
 
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
@@ -25,6 +27,11 @@ export const menuRouterMap = [{
             name: "sdkMan",
             path: "/sdkMan",
             component: sdkMan
+        },
+        {
+            name:'sdkApply',
+            path: "/sdkApply",
+            component: sdkApply
         }
     ]
 }];

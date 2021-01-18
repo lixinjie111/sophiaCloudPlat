@@ -10,11 +10,11 @@
       <div class="auth_pop_content">
         <div class="auth_content">
           <div class="label_title_container">
-            <div class="label">应用名称</div>
-            <div class="label">APP ID</div>
-            <div class="label">应用包名</div>
-            <div class="label">应用平台</div>
-            <div class="label">分配授权</div>
+            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;应用名称</div>
+            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;APP ID</div>
+            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;应用包名</div>
+            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;应用平台</div>
+            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;分配授权</div>
           </div>
           <div class="input_container">
             <div class="input_cls">

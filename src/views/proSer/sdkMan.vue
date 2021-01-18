@@ -4,7 +4,7 @@
       <div class="title_btn_container">
         <div class="title">SDK管理</div>
         <div class="btn_container">
-          <a-button type="primary" style="width:100%;height:100%;">申请</a-button>
+          <a-button type="primary" style="width:100%;height:100%;" @click="sdkApply">申请</a-button>
         </div>
       </div>
       <div class="echarts_container">
@@ -347,6 +347,11 @@ export default {
     },
     closePopWin(arg){
         this.ifShowPop = arg;
+    },
+    sdkApply(){
+        this.$router.push({
+            path:'/sdkApply'
+        });
     }
   }
 };
