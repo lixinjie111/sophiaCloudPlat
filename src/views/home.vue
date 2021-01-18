@@ -26,7 +26,7 @@
           </a-menu-item>
           <template v-if="item.moduleTitle == '系统管理'">
             <a-menu-item v-for="subItem in item.list" :key="subItem.title" style="padding-left: 44px !important;">
-              <span>{{ subItem.title }}</span>
+              <span v-if="!collapsed">{{ subItem.title }}</span>
             </a-menu-item>
           </template>
           <template v-else>

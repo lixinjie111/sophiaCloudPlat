@@ -69,10 +69,66 @@
       </div>
     </div>
     <div class="sdk_two_container">
-      <div class="sdk_item"></div>
-      <div class="sdk_item"></div>
-      <div class="sdk_item"></div>
-      <div class="sdk_item"></div>
+      <div class="sdk_item">
+        <div class="sdk_title2">语音识别Android SDK</div>
+        <div class="total_num_container">
+          <span>6,000</span>授权总数
+        </div>
+        <div class="per_container">
+          <span class="per_title">已分配/剩余</span>
+          <span class="per_value">80.23%</span>
+        </div>
+        <div class="per_compent_container">
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+        </div>
+        <div class="yijihuo_text">已激活</div>
+        <div class="yijihuo_echarts" id="sdkEcharts1"></div>
+      </div>
+      <div class="sdk_item">
+        <div class="sdk_title2">语音识别Android SDK</div>
+        <div class="total_num_container">
+          <span>6,000</span>授权总数
+        </div>
+        <div class="per_container">
+          <span class="per_title">已分配/剩余</span>
+          <span class="per_value">80.23%</span>
+        </div>
+        <div class="per_compent_container">
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+        </div>
+        <div class="yijihuo_text">已激活</div>
+        <div class="yijihuo_echarts" id="sdkEcharts2"></div>
+      </div>
+      <div class="sdk_item">
+        <div class="sdk_title2">语音识别Android SDK</div>
+        <div class="total_num_container">
+          <span>6,000</span>授权总数
+        </div>
+        <div class="per_container">
+          <span class="per_title">已分配/剩余</span>
+          <span class="per_value">80.23%</span>
+        </div>
+        <div class="per_compent_container">
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+        </div>
+        <div class="yijihuo_text">已激活</div>
+        <div class="yijihuo_echarts" id="sdkEcharts3"></div>
+      </div>
+      <div class="sdk_item">
+        <div class="sdk_title2">语音识别Android SDK</div>
+        <div class="total_num_container">
+          <span>6,000</span>授权总数
+        </div>
+        <div class="per_container">
+          <span class="per_title">已分配/剩余</span>
+          <span class="per_value">80.23%</span>
+        </div>
+        <div class="per_compent_container">
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+        </div>
+        <div class="yijihuo_text">已激活</div>
+        <div class="yijihuo_echarts" id="sdkEcharts4"></div>
+      </div>
     </div>
     <div class="sdk_three_container">
       <div class="sqm_container">
@@ -109,12 +165,12 @@
         </div>
       </div>
     </div>
-    <vAuthPop v-show="ifShowPop" @closeMe='closePopWin'></vAuthPop>
+    <vAuthPop v-show="ifShowPop" @closeMe="closePopWin"></vAuthPop>
   </div>
 </template>
 
 <script>
-import vAuthPop from './authPop';
+import vAuthPop from "./authPop";
 export default {
   name: "sdkMan",
   data() {
@@ -330,28 +386,260 @@ export default {
           btn: "下载"
         }
       ],
-      ifShowPop:false
+      ifShowPop: false
     };
   },
-  components:{
+  components: {
     vAuthPop
   },
   mounted() {
-    this.changeCircleSty();
+    this.initEcharts();
   },
   methods: {
-    changeCircleSty() {},
-    appAuth(){
-        console.log('qq')
-        this.ifShowPop = true;
+    appAuth() {
+      this.ifShowPop = true;
     },
-    closePopWin(arg){
-        this.ifShowPop = arg;
+    closePopWin(arg) {
+      this.ifShowPop = arg;
     },
-    sdkApply(){
-        this.$router.push({
-            path:'/sdkApply'
-        });
+    sdkApply() {
+      this.$router.push({
+        path: "/sdkApply"
+      });
+    },
+    initEcharts() {
+      this.initEcharts1();
+      this.initEcharts2();
+      this.initEcharts3();
+      this.initEcharts4();
+    },
+    initEcharts1() {
+      var myChart = this.$echarts.init(document.getElementById("sdkEcharts1"));
+      var option = {
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
+        },
+        grid: {
+          left: "13%",
+          right: "10%",
+          bottom: "18%",
+          top: "10%"
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: [820, 932, 901],
+            type: "line",
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#2a55f0"
+                  },
+                  {
+                    offset: 1,
+                    color: "hsl(227, 63%, 90%)"
+                  }
+                ],
+                global: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: "#2a55f0",
+                lineStyle: {
+                  color: "#2a55f0"
+                }
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    initEcharts2() {
+      var myChart = this.$echarts.init(document.getElementById("sdkEcharts2"));
+      var option = {
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
+        },
+        grid: {
+          left: "13%",
+          right: "10%",
+          bottom: "18%",
+          top: "10%"
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: [820, 932, 901],
+            type: "line",
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#2a55f0"
+                  },
+                  {
+                    offset: 1,
+                    color: "hsl(227, 63%, 90%)"
+                  }
+                ],
+                global: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: "#2a55f0",
+                lineStyle: {
+                  color: "#2a55f0"
+                }
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    initEcharts3() {
+      var myChart = this.$echarts.init(document.getElementById("sdkEcharts3"));
+      var option = {
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
+        },
+        grid: {
+          left: "13%",
+          right: "10%",
+          bottom: "18%",
+          top: "10%"
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: [820, 932, 901],
+            type: "line",
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#2a55f0"
+                  },
+                  {
+                    offset: 1,
+                    color: "hsl(227, 63%, 90%)"
+                  }
+                ],
+                global: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: "#2a55f0",
+                lineStyle: {
+                  color: "#2a55f0"
+                }
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    initEcharts4() {
+      var myChart = this.$echarts.init(document.getElementById("sdkEcharts4"));
+      var option = {
+        tooltip: {
+          show: true
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
+        },
+        grid: {
+          left: "13%",
+          right: "10%",
+          bottom: "18%",
+          top: "10%"
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: [820, 932, 901],
+            type: "line",
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#2a55f0"
+                  },
+                  {
+                    offset: 1,
+                    color: "hsl(227, 63%, 90%)"
+                  }
+                ],
+                global: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: "#2a55f0",
+                lineStyle: {
+                  color: "#2a55f0"
+                }
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
     }
   }
 };
@@ -377,7 +665,7 @@ export default {
         font-size: 15px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
-        color: #676970;
+        color: #9badee;
       }
       .btn_container {
         width: 120px;
@@ -468,7 +756,49 @@ export default {
     .sdk_item {
       width: 24%;
       height: 100%;
-      background-color: navy;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: PingFangSC-Medium, PingFang SC;
+      .sdk_title2 {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 550;
+        margin-bottom: 12px;
+      }
+      .total_num_container {
+        font-size: 14px;
+        color: rgba(117, 116, 114, 0.973);
+        margin-bottom: 10px;
+        span {
+          font-size: 19px;
+          font-weight: 550;
+          margin-right: 5px;
+          color: black;
+          margin-right: 10px;
+        }
+      }
+      .per_container {
+        font-size: 14px;
+        color: rgba(117, 116, 114, 0.973);
+        margin-bottom: 10px;
+        .per_title {
+          margin-right: 185px;
+        }
+      }
+      .per_compent_container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .yijihuo_text {
+        margin-bottom: 12px;
+        color: rgba(117, 116, 114, 0.973);
+      }
+      .yijihuo_echarts {
+        width: 100%;
+        height: 100px;
+      }
     }
   }
   .sdk_three_container {
