@@ -435,7 +435,7 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901],
+            data: [720, 132, 721],
             type: "line",
             areaStyle: {
               color: {
@@ -492,7 +492,7 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901],
+            data: [20, 332, 119],
             type: "line",
             areaStyle: {
               color: {
@@ -549,7 +549,7 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901],
+            data: [90, 132, 901],
             type: "line",
             areaStyle: {
               color: {
@@ -606,7 +606,7 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901],
+            data: [120, 32, 401],
             type: "line",
             areaStyle: {
               color: {
