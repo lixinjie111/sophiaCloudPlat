@@ -1,5 +1,5 @@
 <template>
-  <div class="sdkMan_container">
+  <div class="sdkMan_container" style="padding: 24px;box-sizing: border-box;">
     <div class="sdk_one_container">
       <div class="title_btn_container">
         <div class="title">SDK管理</div>
@@ -79,7 +79,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts1"></div>
@@ -94,7 +94,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts2"></div>
@@ -109,7 +109,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts3"></div>
@@ -124,7 +124,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts4"></div>
@@ -154,7 +154,7 @@
           </div>
           <div class="sdk_desc">
             <div>{{item.sdkDsc}}</div>
-            <div>{{item.date}}</div>
+            <div class="sdk_desc_date">{{item.date}}</div>
           </div>
           <div class="use_intro">
             <a href>使用说明</a>
@@ -435,7 +435,7 @@ export default {
         },
         series: [
           {
-            data: [720, 132, 721],
+            data: [320, 132, 321],
             type: "line",
             areaStyle: {
               color: {
@@ -665,7 +665,7 @@ export default {
         font-size: 15px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
-        color: #9badee;
+        color: #676970;
       }
       .btn_container {
         width: 120px;
@@ -866,6 +866,7 @@ export default {
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         .sdk_title1,
         .sdk_type_logo,
         .use_intro,
@@ -879,10 +880,16 @@ export default {
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          .sdk_desc_date {
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 7px;
+          }
         }
         .sdk_title1 {
           width: 390px;
           height: 100%;
+          display: flex;
+          justify-content: flex-start;
         }
         .sdk_type_logo {
           width: 100px;

@@ -49,7 +49,7 @@
         <div class="input_right">
           <div class="input_container btn_container" style="margin-top:35px;">
             <div class="apply_btn">立即申请</div>
-            <div class="cancel_btn">取消</div>
+            <div class="cancel_btn" @click="cancel">取消</div>
           </div>
         </div>
       </div>
@@ -59,7 +59,12 @@
 
 <script>
 export default {
-  name: "sdkApply"
+  name: "sdkApply",
+  methods:{
+    cancel(){
+      this.$router.go(-1);
+    }
+  }
 };
 </script>
 
@@ -67,6 +72,8 @@ export default {
 .sdkApply_container {
   width: 100%;
   height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   .sdk_apply_title_container {
@@ -119,10 +126,16 @@ export default {
             background: #0376fd;
             color: #ffffff;
             margin-right: 53px;
+            &:hover{
+              cursor: pointer;
+            }
           }
           .cancel_btn {
             background: #e7f3fb;
             color: #0079ff;
+            &:hover{
+              cursor: pointer;
+            }
           }
         }
       }
