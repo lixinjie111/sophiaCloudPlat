@@ -435,7 +435,7 @@ export default {
         },
         series: [
           {
-            data: [720, 132, 721],
+            data: [320, 132, 321],
             type: "line",
             areaStyle: {
               color: {
@@ -665,7 +665,7 @@ export default {
         font-size: 15px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
-        color: #9badee;
+        color: #676970;
       }
       .btn_container {
         width: 120px;
