@@ -54,7 +54,15 @@
         </div>
       </div>
     </div>
-    <div class="diaoyon_inter_container"></div>
+    <div class="diaoyon_inter_container">
+      <div class="radio_container">
+        <a-radio-group v-model="timeRadioVal">
+          <a-radio :value="1">按时</a-radio>
+          <a-radio :value="2">按日</a-radio>
+        </a-radio-group>
+      </div>
+      <div class="line_echarts_container" id="timeEchartsId"></div>
+    </div>
   </div>
 </template>
 
@@ -66,10 +74,65 @@ export default {
     return {
       locale,
       jkValue: [],
-      plainOptions: ["调用成功", "调用失败"]
+      plainOptions: ["调用成功", "调用失败"],
+      timeRadioVal: []
     };
   },
-  methods: {}
+  mounted() {
+    this.initLineEcharts();
+  },
+  methods: {
+    initLineEcharts() {
+      var myChart = this.$echarts.init(document.getElementById("timeEchartsId"));
+      var option = {
+        tooltip: {
+          trigger: "axis"
+        },
+        legend: {
+          data: ["调用成功", "调用失败"],
+           bottom:'1%'
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "13%",
+          containLabel: true
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            name: "调用成功",
+            type: "line",
+            data: [120, 132, 101, 134, 90, 230, 210],
+            itemStyle: {
+              normal: {
+                color: "#08C971"   
+              }
+            }
+          },
+          {
+            name: "调用失败",
+            type: "line",
+            data: [20, 2, 11, 34, 21, 30, 10],
+            itemStyle: {
+              normal: {
+                color: "#F64D15"
+              }
+            }
+          }
+        ]
+      };
+
+      myChart.setOption(option);
+    }
+  }
 };
 </script>
 
@@ -126,6 +189,24 @@ export default {
         height: 26px;
         margin-top: 30px;
       }
+    }
+  }
+  .diaoyon_inter_container {
+    min-height: 450px;
+    padding: 8px 78px 26px 83px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .radio_container {
+      width: 100%;
+      margin-bottom: 11px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .line_echarts_container {
+      width: 957px;
+      height: 375px;
     }
   }
 }
