@@ -79,7 +79,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts1"></div>
@@ -94,7 +94,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts2"></div>
@@ -109,7 +109,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts3"></div>
@@ -124,7 +124,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" />
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts4"></div>
