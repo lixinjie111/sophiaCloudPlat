@@ -79,7 +79,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts1"></div>
@@ -94,7 +94,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts2"></div>
@@ -109,7 +109,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts3"></div>
@@ -124,7 +124,7 @@
           <span class="per_value">80.23%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active"/>
+          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts4"></div>
@@ -880,7 +880,7 @@ export default {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          .sdk_desc_date{
+          .sdk_desc_date {
             color: rgba(0, 0, 0, 0.5);
             margin-top: 7px;
           }
@@ -888,6 +888,8 @@ export default {
         .sdk_title1 {
           width: 390px;
           height: 100%;
+          display: flex;
+          justify-content: flex-start;
         }
         .sdk_type_logo {
           width: 100px;
