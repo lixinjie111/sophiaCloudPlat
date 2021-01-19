@@ -2,6 +2,9 @@
 const Login = resolve => require(['@/views/login/index'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
+//我的应用监控报表
+const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
+
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
 const sdkMan = resolve => require(['@/views/proSer/sdkMan'], resolve);
@@ -32,6 +35,11 @@ export const menuRouterMap = [{
             name:'sdkApply',
             path: "/sdkApply",
             component: sdkApply
+        },
+        {
+            name:'monRep',
+            path: "/monRep",
+            component: monRep
         }
     ]
 }];

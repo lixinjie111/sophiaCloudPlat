@@ -95,8 +95,9 @@ export default {
                   itemKey: "yingyong2"
                 },
                 {
-                  title: "应用3",
-                  itemKey: "yingyong3"
+                  title: "监控报表",
+                  itemKey: "yingyong3",
+                  path: "/monRep"
                 }
               ]
             },
