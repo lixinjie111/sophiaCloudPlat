@@ -46,7 +46,7 @@
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight"></div>
       </a-layout-header>
-        <a-breadcrumb
+        <a-breadcrumb 
         :style="{
           margin: '84px 16px 24px 16px',
         }">
@@ -55,6 +55,7 @@
       <a-layout-content
         :style="{
           margin: '0px 16px 24px 16px',
+          padding: '24px',
           background: '#fff',
           minHeight:'auto'
         }"
@@ -91,19 +92,16 @@ export default {
                   itemKey: "yingyong1"
                 },
                 {
-                  title: "应用列表",
-                  itemKey: "yingyong2",
-                  path: '/application/list'
+                  title: "应用2",
+                  itemKey: "yingyong2"
                 },
-
                 {
-                  title: "监控报表",
-                  itemKey: "yingyong3",
-                  path: "/monRep"
+                  title: "应用3",
+                  itemKey: "yingyong3"
                 }
               ]
             },
-
+            
           ],
         },
         {
@@ -309,7 +307,7 @@ export default {
                 }
               })
           }else{
-
+           
           }
         })
     }
