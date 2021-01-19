@@ -154,7 +154,7 @@
           </div>
           <div class="sdk_desc">
             <div>{{item.sdkDsc}}</div>
-            <div>{{item.date}}</div>
+            <div class="sdk_desc_date">{{item.date}}</div>
           </div>
           <div class="use_intro">
             <a href>使用说明</a>
@@ -866,6 +866,7 @@ export default {
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         .sdk_title1,
         .sdk_type_logo,
         .use_intro,
@@ -879,6 +880,10 @@ export default {
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          .sdk_desc_date{
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 7px;
+          }
         }
         .sdk_title1 {
           width: 390px;
