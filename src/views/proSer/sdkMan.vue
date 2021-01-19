@@ -1,5 +1,5 @@
 <template>
-  <div class="sdkMan_container">
+  <div class="sdkMan_container" style="padding: 24px;box-sizing: border-box;">
     <div class="sdk_one_container">
       <div class="title_btn_container">
         <div class="title">SDK管理</div>

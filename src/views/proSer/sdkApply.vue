@@ -67,6 +67,8 @@ export default {
 .sdkApply_container {
   width: 100%;
   height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   .sdk_apply_title_container {
