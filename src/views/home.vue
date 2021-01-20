@@ -397,7 +397,7 @@ export default {
                       this.$router.push({
                         path: child.path,
                         query:{
-                          params:chid.serviceModel
+                          serviceModel:child.serviceModel
                         }
                       });
                     }

@@ -3,17 +3,17 @@
     <div class="sdk_apply_title_container">SDK申请</div>
     <div class="sdk_apply_content_container">
       <div class="content_item content_item1">
-        <div class="label_left"><span style="color:#FF504E;">*</span>&nbsp;SDK选择</div>
+        <div class="label_left">
+          <span style="color:#FF504E;">*</span>&nbsp;SDK选择
+        </div>
         <div class="input_right">
-          <a-checkbox>语音识别Android SDK</a-checkbox>
-          <a-checkbox>语音识别iOS SDK</a-checkbox>
-          <a-checkbox>在线语音合成Android SDK</a-checkbox>
-          <a-checkbox>在线语音合成Android SDK</a-checkbox>
-          <a-checkbox>语音识别Linux SDK</a-checkbox>
+          <a-checkbox-group :options="sdkChioceList" @change="onChangeSdk" />
         </div>
       </div>
       <div class="content_item">
-        <div class="label_left"><span style="color:#FF504E;">*</span>&nbsp;版本类型</div>
+        <div class="label_left">
+          <span style="color:#FF504E;">*</span>&nbsp;版本类型
+        </div>
         <div class="input_right">
           <div class="input_container">
             <a-input placeholder="测试版" />
@@ -21,7 +21,9 @@
         </div>
       </div>
       <div class="content_item">
-        <div class="label_left"><span style="color:#FF504E;">*</span>&nbsp;授权配额</div>
+        <div class="label_left">
+          <span style="color:#FF504E;">*</span>&nbsp;授权配额
+        </div>
         <div class="input_right">
           <div class="input_container">
             <a-input placeholder="10000次" />
@@ -29,7 +31,9 @@
         </div>
       </div>
       <div class="content_item">
-        <div class="label_left"><span style="color:#FF504E;">*</span>&nbsp;有效期</div>
+        <div class="label_left">
+          <span style="color:#FF504E;">*</span>&nbsp;有效期
+        </div>
         <div class="input_right">
           <div class="input_container">
             <a-input placeholder="1个月" />
@@ -37,7 +41,9 @@
         </div>
       </div>
       <div class="content_item content_item5">
-        <div class="label_left"><span style="color:#FF504E;">*</span>&nbsp;应用场景描述</div>
+        <div class="label_left">
+          <span style="color:#FF504E;">*</span>&nbsp;应用场景描述
+        </div>
         <div class="input_right">
           <div class="input_container">
             <a-textarea placeholder="请输入应用场景描述" style="width:100%;height:100%;" />
@@ -48,7 +54,7 @@
         <div class="label_left"></div>
         <div class="input_right">
           <div class="input_container btn_container" style="margin-top:35px;">
-            <div class="apply_btn">立即申请</div>
+            <div class="apply_btn" @click="submitApply">立即申请</div>
             <div class="cancel_btn" @click="cancel">取消</div>
           </div>
         </div>
@@ -58,11 +64,64 @@
 </template>
 
 <script>
+import { getSdkmodeList, sdkApply } from "../../api/proSer/index";
 export default {
   name: "sdkApply",
-  methods:{
-    cancel(){
+  data() {
+    return {
+      sdkChioceList: [],
+      hasChicedSdk: null
+    };
+  },
+  created() {
+    this.getSdkType();
+  },
+  methods: {
+    getSdkType() {
+      var sdkTypeParm = {
+        serviceModel: this.$route.query.serviceType
+      };
+      getSdkmodeList(sdkTypeParm)
+        .then(res => {
+          if (res.code == 200000) {
+            var newSdkList = [];
+            var sdkTypeData = res.data || [];
+            sdkTypeData.forEach(item => {
+              newSdkList.push({
+                label: item.serviceName,
+                value: item.serviceId
+              });
+            });
+            this.sdkChioceList = newSdkList;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    onChangeSdk(chicArg) {
+      this.hasChicedSdk = chicArg;
+    },
+    cancel() {
       this.$router.go(-1);
+    },
+    submitApply() {
+      var sdkApplyParm = {};
+      sdkApply(sdkApplyParm)
+        .then(res => {
+          if (res.code == 200000) {
+            this.$router.go(-1);
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
     }
   }
 };
@@ -126,14 +185,14 @@ export default {
             background: #0376fd;
             color: #ffffff;
             margin-right: 53px;
-            &:hover{
+            &:hover {
               cursor: pointer;
             }
           }
           .cancel_btn {
             background: #e7f3fb;
             color: #0079ff;
-            &:hover{
+            &:hover {
               cursor: pointer;
             }
           }
@@ -150,6 +209,11 @@ export default {
         flex: 1;
         display: flex;
         flex-wrap: wrap;
+        /deep/ .ant-checkbox-group {
+          /deep/ .ant-checkbox-group-item {
+            margin-bottom: 8px;
+          }
+        }
         .input_container {
           width: 360px;
           height: 141px;

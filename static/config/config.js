@@ -1,3 +1,3 @@
 window.config = {
-	url: "https://www.yzsophia.com",  	//测试
+	url: "https://www.yzsophia.com"
 };

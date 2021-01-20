@@ -4,7 +4,7 @@
       <div class="title_btn_container">
         <div class="title">SDK管理</div>
         <div class="btn_container">
-          <a-button type="primary" style="width:100%;height:100%;" @click="sdkApply">申请</a-button>
+          <a-button type="primary" style="width:100%;height:100%;" @click="sdkApplyfn">申请</a-button>
         </div>
       </div>
       <div class="echarts_container">
@@ -171,6 +171,7 @@
 
 <script>
 import vAuthPop from "./authPop";
+import {sdkApply,getSdkApplyList,sdkAuth,getSdkAuthList} from '../../api/proSer/index';
 export default {
   name: "sdkMan",
   data() {
@@ -386,11 +387,15 @@ export default {
           btn: "下载"
         }
       ],
-      ifShowPop: false
+      ifShowPop: false,
+      routerData:null
     };
   },
   components: {
     vAuthPop
+  },
+  created(){
+    this.routerData = this.$route.query.serviceModel;
   },
   mounted() {
     this.initEcharts();
@@ -402,16 +407,36 @@ export default {
     closePopWin(arg) {
       this.ifShowPop = arg;
     },
-    sdkApply() {
+    sdkApplyfn() {
       this.$router.push({
-        path: "/sdkApply"
+        path: "/sdkApply",
+        query:{
+          serviceType:this.routerData
+        }
       });
     },
     initEcharts() {
-      this.initEcharts1();
-      this.initEcharts2();
-      this.initEcharts3();
-      this.initEcharts4();
+      // this.initEcharts1();
+      // this.initEcharts2();
+      // this.initEcharts3();
+      // this.initEcharts4();
+      this.getPageData();
+    },
+    getPageData(){
+      this.getSdkApplyList();
+      // this.getSdkAuthList();
+    },
+    getSdkApplyList(){
+      var getParms = {
+        pageNum :1,
+        pageSize :100,
+        serviceModel:this.routerData
+      };
+      getSdkApplyList(getParms).then(res=>{
+        console.log(res,'zjj111')
+      }).catch(err=>{
+        console.log(err)
+      });
     },
     initEcharts1() {
       var myChart = this.$echarts.init(document.getElementById("sdkEcharts1"));

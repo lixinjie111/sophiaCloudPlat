@@ -1,7 +1,6 @@
 
 let HTTPURL = '';
-let urlData = '';
-let urlData1 = '';
+var devUrl = 'https://10.16.46.11:8101/admin';
 
 if(process.env.NODE_ENV == 'development') { // 开发环境
     HTTPURL = window.config.url;
@@ -9,5 +8,5 @@ if(process.env.NODE_ENV == 'development') { // 开发环境
     HTTPURL = window.config.url;
 }
 export {
-	HTTPURL
+	HTTPURL,devUrl
 }
