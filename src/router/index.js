@@ -17,6 +17,10 @@ const sdkApply = resolve => require(['@/views/proSer/sdkApply'], resolve);
 const businessSet = resolve => require(['@/views/businessSet/index'],resolve);
 const user = resolve => require(['@/views/user/index'],resolve);
 
+//数据服务智能推荐
+const recommendationAppList = resolve => require(['@/views/recommendation/application/list'], resolve);
+const recommendationAppData = resolve => require(['@/views/recommendation/application/data'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         // { path: '*', redirect: '/404' }
@@ -60,6 +64,16 @@ export const menuRouterMap = [{
             name:'monRep',
             path: "/monRep",
             component: monRep
+        },
+        {
+          name: "recommendationAppList",
+          path: "/recommendation/application/list",
+          component: recommendationAppList
+        },
+        {
+          name: "recommendationAppData",
+          path: "/recommendation/application/data",
+          component: recommendationAppData
         }
     ]
 }];
