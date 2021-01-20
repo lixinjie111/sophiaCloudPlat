@@ -29,7 +29,7 @@ Vue.config.productionTip = false;
 // import htmlToPdf from '@/assets/js/utils/htmlToPdf';
 // Vue.use(htmlToPdf);
 import '@/assets/scss/reset.scss';
-// import '@/assets/scss/public.scss';
+import '@/assets/scss/public.scss';
 // import '@/assets/scss/element-ui-reset.scss';
 // import '@/assets/icon-font/iconfont.css';
 

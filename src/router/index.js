@@ -8,6 +8,10 @@ const sdkMan = resolve => require(['@/views/proSer/sdkMan'], resolve);
 //SDK申请页面
 const sdkApply = resolve => require(['@/views/proSer/sdkApply'],resolve);
 
+//系统管理
+const businessSet = resolve => require(['@/views/businessSet/index'],resolve);
+const user = resolve => require(['@/views/user/index'],resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         // { path: '*', redirect: '/404' }
@@ -32,6 +36,16 @@ export const menuRouterMap = [{
             name:'sdkApply',
             path: "/sdkApply",
             component: sdkApply
+        },
+        {
+            name:'businessSet',
+            path: "/businessSet",
+            component: businessSet
+        },
+        {
+            name:'user',
+            path: "/user",
+            component: user
         }
     ]
 }];
