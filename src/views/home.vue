@@ -15,26 +15,45 @@
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" @click="menuHandleClick" :inlineCollapsed='true'>
-        <template  v-for="item in menuList">
-          <a-menu-item disabled="true" v-show="!collapsed"  v-if="item.list.length>0" :key="item.moduleTitle">
-            <span >{{item.moduleTitle}}</span>
+      <a-menu
+        theme="dark"
+        mode="inline"
+        :default-selected-keys="['1']"
+        @click="menuHandleClick"
+        :inlineCollapsed="true"
+      >
+        <template v-for="item in menuList">
+          <a-menu-item
+            disabled="true"
+            v-show="!collapsed"
+            v-if="item.list.length>0"
+            :key="item.moduleTitle"
+          >
+            <span>{{item.moduleTitle}}</span>
           </a-menu-item>
-          <a-menu-item  v-show="!collapsed" v-else :key="item.moduleTitle">
+          <a-menu-item v-show="!collapsed" v-else :key="item.moduleTitle">
             <a-icon type="user" />
-            <span >{{item.moduleTitle}}</span>
+            <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <template v-if="item.moduleTitle == '系统管理'">
-             <template  v-for="subItem in item.list" >
-                <a-menu-item :key="subItem.title" v-if="subItem.title=='企业设置' " style="padding-left: 44px !important;">
-                  <a-icon type="user" /><span v-if="!collapsed">{{ subItem.title }}</span>
-                </a-menu-item>
-                <a-sub-menu v-else :key="subItem.title">
-                  <span slot="title">
-                    <a-icon type="user" />
-                    <span>{{ subItem.title }}</span>
-                  </span>
-                  <a-menu-item v-for="item1 in subItem.menuItmList" :key="item1.itemKey" >{{ item1.title}}</a-menu-item>
+            <template v-for="subItem in item.list">
+              <a-menu-item
+                :key="subItem.title"
+                v-if="subItem.title=='企业设置' "
+                style="padding-left: 44px !important;"
+              >
+                <a-icon type="user" />
+                <span v-if="!collapsed">{{ subItem.title }}</span>
+              </a-menu-item>
+              <a-sub-menu v-else :key="subItem.title">
+                <span slot="title">
+                  <a-icon type="user" />
+                  <span>{{ subItem.title }}</span>
+                </span>
+                <a-menu-item
+                  v-for="item1 in subItem.menuItmList"
+                  :key="item1.itemKey"
+                >{{ item1.title}}</a-menu-item>
               </a-sub-menu>
             </template>
           </template>
@@ -44,8 +63,11 @@
                 <a-icon type="user" />
                 <span>{{ subItem.title }}</span>
               </span>
-              <a-menu-item v-for="item1 in subItem.menuItmList" :key="item1.itemKey" >{{ item1.title}}</a-menu-item>
-          </a-sub-menu>
+              <a-menu-item
+                v-for="item1 in subItem.menuItmList"
+                :key="item1.itemKey"
+              >{{ item1.title}}</a-menu-item>
+            </a-sub-menu>
           </template>
         </template>
       </a-menu>
@@ -55,12 +77,11 @@
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight"></div>
       </a-layout-header>
-        <a-breadcrumb
-        :style="{
+      <a-breadcrumb :style="{
           margin: '84px 16px 24px 16px',
         }">
-            <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
-        </a-breadcrumb>
+        <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
+      </a-breadcrumb>
       <a-layout-content
         :style="{
           margin: '0px 16px 24px 16px',
@@ -81,15 +102,14 @@ export default {
       logo:
         "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
       collapsed: false,
-      breadArr:[],
-      menuList:[
+      breadArr: [],
+      menuList: [
         {
-          moduleTitle:"概览",
-          list: [
-          ],
+          moduleTitle: "概览",
+          list: []
         },
         {
-          moduleTitle:"应用管理",
+          moduleTitle: "应用管理",
           list: [
             {
               subKey: "myYingyong",
@@ -98,12 +118,12 @@ export default {
                 {
                   title: "概览",
                   itemKey: "yingyong1",
-                  path: ''
+                  path: ""
                 },
                 {
                   title: "应用列表",
                   itemKey: "yingyong2",
-                  path: '/application/list'
+                  path: "/application/list"
                 },
 
                 {
@@ -112,13 +132,12 @@ export default {
                   path: "/monRep"
                 }
               ]
-            },
-
-          ],
+            }
+          ]
         },
         {
-           moduleTitle:"产品服务",
-           list: [
+          moduleTitle: "产品服务",
+          list: [
             {
               subKey: "pro1",
               title: "自然语言处理",
@@ -126,12 +145,14 @@ export default {
                 {
                   title: "API管理",
                   itemKey: "yuyanAPI",
-                  path: "/apiMan"
+                  path: "/apiMan",
+                  serviceModel: 1
                 },
                 {
                   title: "SDK管理",
                   itemKey: "yuyanSDK",
-                  path: "/sdkMan"
+                  path: "/sdkMan",
+                  serviceModel: 1
                 }
               ]
             },
@@ -142,12 +163,14 @@ export default {
                 {
                   title: "API管理",
                   itemKey: "yuyinAPI",
-                  path: "/apiMan"
+                  path: "/apiMan",
+                  serviceModel: 2
                 },
                 {
                   title: "SDK管理",
                   itemKey: "yuyinSDK",
                   path: "/sdkMan",
+                  serviceModel: 2
                 }
               ]
             },
@@ -157,11 +180,15 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "renlianAPI"
+                  itemKey: "renlianAPI",
+                  path: "/apiMan",
+                  serviceModel: 3
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "renlianSDK"
+                  itemKey: "renlianSDK",
+                  path: "/sdkMan",
+                  serviceModel: 3
                 }
               ]
             },
@@ -171,11 +198,15 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "rentiAPI"
+                  itemKey: "rentiAPI",
+                  path: "/apiMan",
+                  serviceModel: 4
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "rentiSDK"
+                  itemKey: "rentiSDK",
+                  path: "/sdkMan",
+                  serviceModel: 4
                 }
               ]
             },
@@ -185,11 +216,15 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "wenziAPI"
+                  itemKey: "wenziAPI",
+                  path: "/apiMan",
+                  serviceModel: 5
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "wenziSDK"
+                  itemKey: "wenziSDK",
+                  path: "/sdkMan",
+                  serviceModel: 5
                 }
               ]
             },
@@ -199,11 +234,15 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "tuxiangAPI"
+                  itemKey: "tuxiangAPI",
+                  path: "/apiMan",
+                  serviceModel: 6
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "tuxiangSDK"
+                  itemKey: "tuxiangSDK",
+                  path: "/sdkMan",
+                  serviceModel: 6
                 }
               ]
             },
@@ -213,18 +252,22 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "shipinAPI"
+                  itemKey: "shipinAPI",
+                  path: "/apiMan",
+                  serviceModel: 7
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "shipinSDK"
+                  itemKey: "shipinSDK",
+                  path: "/sdkMan",
+                  serviceModel: 7
                 }
               ]
             }
-          ],
+          ]
         },
         {
-          moduleTitle:"数据服务",
+          moduleTitle: "数据服务",
           list: [
             {
               subKey: "dataSer1",
@@ -236,13 +279,13 @@ export default {
                   path: "/recommendation/application/list"
                 },
                 {
-                  title: "获取推荐结果",
+                  title: "获取推荐结果"
                 },
                 {
-                  title: "数据管理",
+                  title: "数据管理"
                 },
                 {
-                  title: "推荐池物品",
+                  title: "推荐池物品"
                 }
               ]
             },
@@ -250,11 +293,11 @@ export default {
               subKey: "dataSer2",
               title: "用户画像"
             }
-          ],
+          ]
         },
         {
-           moduleTitle:"工具服务",
-           list:  [
+          moduleTitle: "工具服务",
+          list: [
             {
               subKey: "toolSer1",
               title: "风控管理"
@@ -267,33 +310,33 @@ export default {
               subKey: "toolSer3",
               title: "出行工具"
             }
-          ],
+          ]
         },
         {
-           moduleTitle:"系统管理",
-           list:  [
+          moduleTitle: "系统管理",
+          list: [
             {
               subKey: "sys1",
               title: "企业设置",
-              path: '/businessSet'
+              path: "/businessSet"
             },
             {
               subKey: "sys2",
               title: "个人设置",
-               menuItmList: [
+              menuItmList: [
                 {
                   title: "基本资料",
                   itemKey: "ziliao",
-                  path: '/user'
+                  path: "/user"
                 },
                 {
                   title: "实名认证",
-                  itemKey: "renzheng",
+                  itemKey: "renzheng"
                 },
 
                 {
                   title: "安全设置",
-                  itemKey: "safeSet",
+                  itemKey: "safeSet"
                 }
               ]
             },
@@ -306,8 +349,8 @@ export default {
               title: "日志管理"
             }
           ]
-        },
-      ],
+        }
+      ]
     };
   },
   mounted() {
@@ -327,45 +370,44 @@ export default {
       }
     },
     menuHandleClick(e) {
-        console.log(e)
-        this.breadArr=[];
-        if(e.key=='企业设置'){
-          this.breadArr.splice(0,0,'系统管理','企业设置');
-          this.$router.push({
-            path: '/businessSet'
-          });
-        } else if(e.key=="概览"){
-          this.breadArr.push('概览');
-          this.$router.push({
-            path: ''
-          });
-        }else {
-          this.menuList.forEach(item=>{
-            if(item.list.length>0){
-                item.list.forEach(subItem=>{
-                  if(subItem.title==e.keyPath[1]){
-                      this.breadArr.push(item.moduleTitle);
-                      this.breadArr.push(subItem.title);
-                      subItem.menuItmList.forEach(child=>{
-                        if(child.itemKey==e.keyPath[0]){
-                          this.breadArr.push(child.title);
-                          console.log(this.breadArr)
-                          if(child.path){
-                             this.$router.push({
-                              path: child.path,
-                              // query:{
-                              //   params:chid.key
-                              // }
-                            });
-                          }
+      console.log(e);
+      this.breadArr = [];
+      if (e.key == "企业设置") {
+        this.breadArr.splice(0, 0, "系统管理", "企业设置");
+        this.$router.push({
+          path: "/businessSet"
+        });
+      } else if (e.key == "概览") {
+        this.breadArr.push("概览");
+        this.$router.push({
+          path: ""
+        });
+      } else {
+        this.menuList.forEach(item => {
+          if (item.list.length > 0) {
+            item.list.forEach(subItem => {
+              if (subItem.title == e.keyPath[1]) {
+                this.breadArr.push(item.moduleTitle);
+                this.breadArr.push(subItem.title);
+                subItem.menuItmList.forEach(child => {
+                  if (child.itemKey == e.keyPath[0]) {
+                    this.breadArr.push(child.title);
+                    console.log(child, "child");
+                    if (child.path) {
+                      this.$router.push({
+                        path: child.path,
+                        query:{
+                          params:chid.serviceModel
                         }
-                    })
+                      });
+                    }
                   }
-                })
-            }
-          })
-        }
-        
+                });
+              }
+            });
+          }
+        });
+      }
     }
   }
 };
