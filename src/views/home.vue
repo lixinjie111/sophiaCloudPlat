@@ -25,9 +25,18 @@
             <span >{{item.moduleTitle}}</span>
           </a-menu-item>
           <template v-if="item.moduleTitle == '系统管理'">
-            <a-menu-item v-for="subItem in item.list" :key="subItem.title" style="padding-left: 44px !important;">
-              <span v-if="!collapsed">{{ subItem.title }}</span>
-            </a-menu-item>
+             <template  v-for="subItem in item.list" >
+                <a-menu-item :key="subItem.title" v-if="subItem.title=='企业设置' " style="padding-left: 44px !important;">
+                  <a-icon type="user" /><span v-if="!collapsed">{{ subItem.title }}</span>
+                </a-menu-item>
+                <a-sub-menu v-else :key="subItem.title">
+                  <span slot="title">
+                    <a-icon type="user" />
+                    <span>{{ subItem.title }}</span>
+                  </span>
+                  <a-menu-item v-for="item1 in subItem.menuItmList" :key="item1.itemKey" >{{ item1.title}}</a-menu-item>
+              </a-sub-menu>
+            </template>
           </template>
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
@@ -87,8 +96,9 @@ export default {
               title: "我的应用",
               menuItmList: [
                 {
-                  title: "应用1",
-                  itemKey: "yingyong1"
+                  title: "概览",
+                  itemKey: "yingyong1",
+                  path: ''
                 },
                 {
                   title: "应用列表",
@@ -131,11 +141,13 @@ export default {
               menuItmList: [
                 {
                   title: "API管理",
-                  itemKey: "yuyinAPI"
+                  itemKey: "yuyinAPI",
+                  path: "/apiMan"
                 },
                 {
                   title: "SDK管理",
-                  itemKey: "yuyinSDK"
+                  itemKey: "yuyinSDK",
+                  path: "/sdkMan",
                 }
               ]
             },
@@ -246,11 +258,28 @@ export default {
            list:  [
             {
               subKey: "sys1",
-              title: "企业设置"
+              title: "企业设置",
+              path: '/businessSet'
             },
             {
               subKey: "sys2",
-              title: "个人设置"
+              title: "个人设置",
+               menuItmList: [
+                {
+                  title: "基本资料",
+                  itemKey: "ziliao",
+                  path: '/user'
+                },
+                {
+                  title: "实名认证",
+                  itemKey: "renzheng",
+                },
+
+                {
+                  title: "安全设置",
+                  itemKey: "safeSet",
+                }
+              ]
             },
             {
               subKey: "sys3",
@@ -284,34 +313,43 @@ export default {
     menuHandleClick(e) {
         console.log(e)
         this.breadArr=[];
-        if(e.key=="概览"){
+        if(e.key=='企业设置'){
+          this.breadArr.splice(0,0,'系统管理','企业设置');
+          this.$router.push({
+            path: '/businessSet'
+          });
+        } else if(e.key=="概览"){
           this.breadArr.push('概览');
           this.$router.push({
             path: ''
           });
-          return;
+        }else {
+          this.menuList.forEach(item=>{
+            if(item.list.length>0){
+                item.list.forEach(subItem=>{
+                  if(subItem.title==e.keyPath[1]){
+                      this.breadArr.push(item.moduleTitle);
+                      this.breadArr.push(subItem.title);
+                      subItem.menuItmList.forEach(child=>{
+                        if(child.itemKey==e.keyPath[0]){
+                          this.breadArr.push(child.title);
+                          console.log(this.breadArr)
+                          if(child.path){
+                             this.$router.push({
+                              path: child.path,
+                              // query:{
+                              //   params:chid.key
+                              // }
+                            });
+                          }
+                        }
+                    })
+                  }
+                })
+            }
+          })
         }
-        this.menuList.forEach(item=>{
-          if(item.list.length>0){
-              item.list.forEach(subItem=>{
-                if(subItem.title==e.keyPath[1]){
-                    this.breadArr.push(item.moduleTitle);
-                    this.breadArr.push(subItem.title);
-                    subItem.menuItmList.forEach(child=>{
-                      if(child.itemKey==e.keyPath[0]){
-                        this.breadArr.push(child.title);
-                        console.log(this.breadArr)
-                        this.$router.push({
-                          path: child.path
-                        });
-                      }
-                  })
-                }
-              })
-          }else{
-
-          }
-        })
+        
     }
   }
 };
