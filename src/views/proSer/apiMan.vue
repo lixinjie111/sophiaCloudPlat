@@ -43,7 +43,10 @@
         </a-table>
       </div>
       <div class="expan_btn_container">
-        <div class="btn_container1" @click="expanfangwen"></div>
+        <div class="btn_container1" @click="expanfangwen">
+          <a-icon type="down-circle" :style="{ fontSize: '16px', color: '#6495fa' }" v-show="!ifShowDetail"></a-icon>
+          <a-icon type="up-circle" :style="{ fontSize: '16px', color: '#6495fa' }" v-show="ifShowDetail"></a-icon>
+        </div>
       </div>
     </div>
     <div class="nengli_area_container">
@@ -354,7 +357,7 @@ export default {
               ],
               itemStyle: {
                 normal: {
-                  color: "#5B8FF9"
+                  color: "#61D7A7"
                 }
               }
             }
@@ -380,6 +383,8 @@ export default {
 .apiMan_container {
   width: 100%;
   height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
   .select_area_container {
     width: 100%;
     height: 80px;
@@ -447,7 +452,10 @@ export default {
       .btn_container1 {
         width: 19px;
         height: 19px;
-        background-color: #6495fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
         &:hover {
           cursor: pointer;
         }

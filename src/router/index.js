@@ -2,11 +2,16 @@
 const Login = resolve => require(['@/views/login/index'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
+//我的应用监控报表
+const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
+
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
 const sdkMan = resolve => require(['@/views/proSer/sdkMan'], resolve);
+// 我的应用
+const applicationList = resolve => require(['@/views/application/list'], resolve);
 //SDK申请页面
-const sdkApply = resolve => require(['@/views/proSer/sdkApply'],resolve);
+const sdkApply = resolve => require(['@/views/proSer/sdkApply'], resolve);
 
 //系统管理
 const businessSet = resolve => require(['@/views/businessSet/index'],resolve);
@@ -21,7 +26,11 @@ export const menuRouterMap = [{
     path: "/",
     name: "home",
     component: Home,
-    children: [
+    children: [{
+            name: "applicationList",
+            path: "application/list",
+            component: applicationList
+        },
         {
             name: "apiMan",
             path: "/apiMan",
@@ -33,7 +42,7 @@ export const menuRouterMap = [{
             component: sdkMan
         },
         {
-            name:'sdkApply',
+            name: 'sdkApply',
             path: "/sdkApply",
             component: sdkApply
         },
@@ -46,6 +55,11 @@ export const menuRouterMap = [{
             name:'user',
             path: "/user",
             component: user
+        },
+        {
+            name:'monRep',
+            path: "/monRep",
+            component: monRep
         }
     ]
 }];
