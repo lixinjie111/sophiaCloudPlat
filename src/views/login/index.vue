@@ -63,8 +63,11 @@
                              
                         </div>
                         <div class="checkMa">
-                        <div class="tipMsg" v-show="checkMaShow">验证码错误，请重新输入</div>
-                            <input type="text"  v-model="checkMa" placeholder="请输入图形验证码" > <img src="../../assets/images/login/ma.png" class="pws_img" style="width: 99px;">
+                        <div class="tipMsg" v-show="checkMaShow">{{verifyCodeMsg}}</div>
+                            <input type="text"  v-model="checkMa" placeholder="请输入图形验证码" >
+                            <div  class="pws_img" style="width: 115px;cursor:pointer" @click="resetMa">
+                                <img :src="imgUrl" >
+                            </div>
                         </div>
                         <div class="submit" @click="handleNext">
                             <span style="margin-right:5px">下一步</span>
@@ -133,12 +136,12 @@
 </template>
 
 <script>
-import md5 from 'js-md5'
 import { mapActions } from 'vuex';
-import { removeAuthInfo } from '@/session/index';
+import { getVerificationCode,verifyPhone} from '@/api/login';
 export default {
     data() {
         return {
+            verifyCodeMsg:'',
             tip1:0,
             tip2:0,
             tip3:0,
@@ -163,16 +166,32 @@ export default {
             checkTelMa:'',
             loading: false,
             sendMessage: '发送验证码',
-            countdown : 60
+            countdown : 60,
+            uuid:'',
+            imgUrl:''
         }
     },
     created() {
-        // let _data = localStorage.getItem("yk-token");
-        // if(_data) {
-        //     this.$router.push({ path: '/' });
-        // }
+       this.resetMa();
     },
     methods: {
+        resetMa(){
+            this.uuid=this.getUUID();
+            let _param ={
+                uuid:this.uuid,
+            };
+            getVerificationCode(_param).then(res => {
+                 this.imgUrl=window.URL.createObjectURL(res);
+            }).catch(err => {
+
+            })
+        },
+        getUUID() {
+            return 'xxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
+        },
         settime() {
             if(sendMsg){
                  if (this.countdown == 0) {
@@ -261,7 +280,23 @@ export default {
            
         },
         handleNext(){
-            this.stepIndex=2;
+            let _param ={
+                uuid:this.uuid,
+                phone:this.tel,
+                verifyCode:this.checkMa,
+            };
+            verifyPhone(_param).then(res => {
+                if(res.code == 200000) {
+                    this.stepIndex=2;
+                    this.checkMaShow=false;
+                }else {
+                    this.checkMaShow=true;
+                    this.verifyCodeMsg=res.message;
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+            //this.stepIndex=2;
         },
         handleNext1(){
             this.stepIndex=3;

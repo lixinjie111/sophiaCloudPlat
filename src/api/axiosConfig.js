@@ -108,7 +108,7 @@ function axiosFilter(vm) {
                     //     showClose: true
                     // });
                 }
-                return Promise.reject(response);
+                return Promise.resolve(response);
             }
         }
     }, function(error) {
