@@ -1,5 +1,5 @@
 <template>
-  <div class="best_list_container">
+  <div class="app_list_container">
     <div class="top">
       <div>应用列表</div>
       <div>
@@ -166,41 +166,41 @@
         sceneForm: {
           apply: '',
           scene: '',
-          start:'',
+          start: '',
           location: ''
         },
         applyList: [{
           label: '推荐商品',
-          value:'1'
-        },{
+          value: '1'
+        }, {
           label: '推荐用户',
-          value:'2'
-        },{
+          value: '2'
+        }, {
           label: '推荐用户',
-          value:'3'
+          value: '3'
         }],
         sceneList: [{
           label: '个性化推荐',
-          value:'1'
-        },{
+          value: '1'
+        }, {
           label: '相关推荐',
-          value:'2'
-        },{
+          value: '2'
+        }, {
           label: '热点推荐',
-          value:'3'
+          value: '3'
         }, {
           label: '主题推荐',
           value: '4'
         }],
         startList: [{
           label: '历史数据',
-          value:'1'
-        },{
+          value: '1'
+        }, {
           label: '增量数据',
-          value:'2'
-        },{
+          value: '2'
+        }, {
           label: '历史+增量数据',
-          value:'3'
+          value: '3'
         }],
       };
     },
@@ -224,7 +224,7 @@
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.selectedRowKeys = selectedRowKeys;
       },
-      next(e) {
+      next() {
         this.$refs.createForm.validate(valid => {
           if (valid) {
             this.nextLoading = true;
@@ -232,6 +232,9 @@
               this.nextLoading = false;
               this.createModalShow = false;
               this.sceneModalShow = true;
+              this.$router.push({
+                path: '/recommendation/application/data'
+              });
             }, 1000);
           } else {
             console.log('error submit!!');
@@ -239,7 +242,7 @@
           }
         });
       },
-      create(e) {
+      create() {
         this.$refs.createForm.validate(valid => {
           if (valid) {
             this.createLoading = true;
@@ -266,7 +269,9 @@
   };
 </script>
 <style scoped lang="scss">
-  .best_list_container {
+  .app_list_container {
+    padding: 20px;
+
     .top {
       margin-bottom: 20px;
       display: flex;

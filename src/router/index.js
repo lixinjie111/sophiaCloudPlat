@@ -20,6 +20,7 @@ const user = resolve => require(['@/views/user/index'],resolve);
 //数据服务智能推荐
 const recommendationAppList = resolve => require(['@/views/recommendation/application/list'], resolve);
 const recommendationAppData = resolve => require(['@/views/recommendation/application/data'], resolve);
+const recommendationAppScene = resolve => require(['@/views/recommendation/application/scene'], resolve);
 
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
@@ -74,6 +75,11 @@ export const menuRouterMap = [{
           name: "recommendationAppData",
           path: "/recommendation/application/data",
           component: recommendationAppData
+        },
+        {
+          name: "recommendationAppData",
+          path: "/recommendation/application/scene",
+          component: recommendationAppScene
         }
     ]
 }];
