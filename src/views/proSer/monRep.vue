@@ -83,14 +83,16 @@ export default {
   },
   methods: {
     initLineEcharts() {
-      var myChart = this.$echarts.init(document.getElementById("timeEchartsId"));
+      var myChart = this.$echarts.init(
+        document.getElementById("timeEchartsId")
+      );
       var option = {
         tooltip: {
           trigger: "axis"
         },
         legend: {
           data: ["调用成功", "调用失败"],
-           bottom:'1%'
+          bottom: "1%"
         },
         grid: {
           left: "3%",
@@ -113,7 +115,7 @@ export default {
             data: [120, 132, 101, 134, 90, 230, 210],
             itemStyle: {
               normal: {
-                color: "#08C971"   
+                color: "#08C971"
               }
             }
           },
@@ -168,9 +170,9 @@ export default {
       align-items: center;
       margin-bottom: 16px;
       .label {
-        width: 60px;
+        width: 73px;
         margin-right: 71px;
-        font-size: 12px;
+        font-size: 14px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #676970;

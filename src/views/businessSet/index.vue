@@ -47,7 +47,7 @@
                                 </a-button>
                            </div>
                            <div class="busTable" style="margin-top:20px">
-                               <a-table :columns="columns" :data-source="data">
+                               <a-table :columns="columns" :data-source="userIndata">
                                     <span slot="reveive" slot-scope="isCheck,record">
                                        <a-switch :checked="isCheck" @change="onChange(record)" />
                                     </span>
@@ -104,20 +104,23 @@ export default {
                     scopedSlots: { customRender: 'action' },
                 },
             ],
-            data : [
+            userIndata : [
                 {
+                    key:'1',
                     name: 'John Brown',
                     number: 13232345432,
                     creatTime: '2020-12-26 11:43:25',
                     isCheck: true,
                 },
                 {
+                    key:'2',
                     name: 'Jim Green',
                     number: 13232345432,
                     creatTime:  '2020-12-26 11:43:25',
                     isCheck: true,
                 },
                 {
+                    key:'3',
                     name: 'Joe Black',
                     number: 13232345432,
                     creatTime: '2020-12-26 11:43:25',
