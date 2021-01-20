@@ -10,7 +10,7 @@
           <a-checkbox-group :options="sdkChioceList" @change="onChangeSdk" />
         </div>
       </div>
-      <div class="content_item">
+      <!-- <div class="content_item">
         <div class="label_left">
           <span style="color:#FF504E;">*</span>&nbsp;版本类型
         </div>
@@ -19,14 +19,14 @@
             <a-input placeholder="测试版" />
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="content_item">
         <div class="label_left">
           <span style="color:#FF504E;">*</span>&nbsp;授权配额
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input placeholder="10000次" />
+            <a-input-number placeholder="10000次" v-model="sqNum" style="width:100%;"/>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input placeholder="1个月" />
+            <a-input-number v-model="effTime" placeholder="1个月" style="width:100%;"/>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-textarea placeholder="请输入应用场景描述" style="width:100%;height:100%;" />
+            <a-textarea v-model="scenDesc" placeholder="请输入应用场景描述" style="width:100%;height:100%;" />
           </div>
         </div>
       </div>
@@ -70,7 +70,10 @@ export default {
   data() {
     return {
       sdkChioceList: [],
-      hasChicedSdk: null
+      hasChicedSdk: null,
+      sqNum:null,
+      scenDesc:null,
+      effTime:null
     };
   },
   created() {
@@ -109,10 +112,17 @@ export default {
       this.$router.go(-1);
     },
     submitApply() {
-      var sdkApplyParm = {};
+      var sdkApplyParm = {
+          serviceList:this.hasChicedSdk,
+          effectiveTime:this.effTime,
+          authorizationCount:this.sqNum,
+          applicationScenarioDescription:this.scenDesc,
+          serviceModel: this.$route.query.serviceType
+      };
       sdkApply(sdkApplyParm)
         .then(res => {
           if (res.code == 200000) {
+            this.$message.success(res.data);
             this.$router.go(-1);
           } else {
             this.$message.error("请求失败！");

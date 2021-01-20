@@ -10,13 +10,13 @@
       <div class="echarts_container">
         <div class="sq_text_container">
           <div class="text_title">授权总数</div>
-          <div class="sq_num">601,986,875</div>
+          <div class="sq_num">{{sdkManData.authorizationCount}}</div>
         </div>
         <div class="echarts1_container">
           <div class="echarts_class">
             <a-progress
               stroke-linecap="square"
-              :percent="75"
+              :percent="sdkManData.assignAuthorizationInfo.assignAuthorizationPercentage"
               type="circle"
               :width="64"
               :showInfo="false"
@@ -26,15 +26,15 @@
           </div>
           <div class="echarts_text_container">
             <div class="text_title1">已分配</div>
-            <div class="text_num1">370,221,928</div>
-            <div class="per_num1">占比 61.5%</div>
+            <div class="text_num1">{{sdkManData.assignAuthorizationInfo.assignAuthorizationCount}}</div>
+            <div class="per_num1">占比 {{sdkManData.assignAuthorizationInfo.assignAuthorizationPercentage}}%</div>
           </div>
         </div>
         <div class="echarts2_container">
           <div class="echarts_class">
             <a-progress
               stroke-linecap="square"
-              :percent="75"
+              :percent="sdkManData.usedInfo.usedCountPercentage"
               type="circle"
               :width="64"
               :showInfo="false"
@@ -44,15 +44,15 @@
           </div>
           <div class="echarts_text_container">
             <div class="text_title1">已分配</div>
-            <div class="text_num1">370,221,928</div>
-            <div class="per_num1">占比 61.5%</div>
+            <div class="text_num1">{{sdkManData.usedInfo.usedCount}}</div>
+            <div class="per_num1">占比 {{sdkManData.usedInfo.usedCountPercentage}}%</div>
           </div>
         </div>
         <div class="echarts3_container">
           <div class="echarts_class">
             <a-progress
               stroke-linecap="square"
-              :percent="75"
+              :percent="sdkManData.surplusInfo.surplusPercentage"
               type="circle"
               :width="64"
               :showInfo="false"
@@ -62,72 +62,27 @@
           </div>
           <div class="echarts_text_container">
             <div class="text_title1">已分配</div>
-            <div class="text_num1">370,221,928</div>
-            <div class="per_num1">占比 61.5%</div>
+            <div class="text_num1">{{sdkManData.surplusInfo.surplusCount}}</div>
+            <div class="per_num1">占比 {{sdkManData.surplusInfo.surplusPercentage}}%</div>
           </div>
         </div>
       </div>
     </div>
     <div class="sdk_two_container">
-      <div class="sdk_item">
-        <div class="sdk_title2">语音识别Android SDK</div>
+      <div class="sdk_item" v-for="(item,index) in sdkApyList" :key="index">
+        <div class="sdk_title2">{{item.serviceName}}</div>
         <div class="total_num_container">
-          <span>6,000</span>授权总数
+          <span>{{item.authorizationCount}}</span>授权总数
         </div>
         <div class="per_container">
           <span class="per_title">已分配/剩余</span>
-          <span class="per_value">80.23%</span>
+          <span class="per_value">{{item.surplusPercentage}}%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
+          <a-progress :percent="item.surplusPercentage" stroke-linecap="square" :showInfo="false" status="active" />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts1"></div>
-      </div>
-      <div class="sdk_item">
-        <div class="sdk_title2">语音识别Android SDK</div>
-        <div class="total_num_container">
-          <span>6,000</span>授权总数
-        </div>
-        <div class="per_container">
-          <span class="per_title">已分配/剩余</span>
-          <span class="per_value">80.23%</span>
-        </div>
-        <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
-        </div>
-        <div class="yijihuo_text">已激活</div>
-        <div class="yijihuo_echarts" id="sdkEcharts2"></div>
-      </div>
-      <div class="sdk_item">
-        <div class="sdk_title2">语音识别Android SDK</div>
-        <div class="total_num_container">
-          <span>6,000</span>授权总数
-        </div>
-        <div class="per_container">
-          <span class="per_title">已分配/剩余</span>
-          <span class="per_value">80.23%</span>
-        </div>
-        <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
-        </div>
-        <div class="yijihuo_text">已激活</div>
-        <div class="yijihuo_echarts" id="sdkEcharts3"></div>
-      </div>
-      <div class="sdk_item">
-        <div class="sdk_title2">语音识别Android SDK</div>
-        <div class="total_num_container">
-          <span>6,000</span>授权总数
-        </div>
-        <div class="per_container">
-          <span class="per_title">已分配/剩余</span>
-          <span class="per_value">80.23%</span>
-        </div>
-        <div class="per_compent_container">
-          <a-progress :percent="80.23" stroke-linecap="square" :showInfo="false" status="active" />
-        </div>
-        <div class="yijihuo_text">已激活</div>
-        <div class="yijihuo_echarts" id="sdkEcharts4"></div>
       </div>
     </div>
     <div class="sdk_three_container">
@@ -171,7 +126,13 @@
 
 <script>
 import vAuthPop from "./authPop";
-import {sdkApply,getSdkApplyList,sdkAuth,getSdkAuthList} from '../../api/proSer/index';
+import {
+  sdkApply,
+  getSdkApplyList,
+  sdkAuth,
+  getSdkAuthList,
+  getSdkManagement
+} from "../../api/proSer/index";
 export default {
   name: "sdkMan",
   data() {
@@ -388,17 +349,19 @@ export default {
         }
       ],
       ifShowPop: false,
-      routerData:null
+      routerData: null,
+      sdkApyList:[],
+      sdkManData:null
     };
   },
   components: {
     vAuthPop
   },
-  created(){
+  created() {
     this.routerData = this.$route.query.serviceModel;
   },
   mounted() {
-    this.initEcharts();
+    this.getPageData();
   },
   methods: {
     appAuth() {
@@ -410,33 +373,54 @@ export default {
     sdkApplyfn() {
       this.$router.push({
         path: "/sdkApply",
-        query:{
-          serviceType:this.routerData
+        query: {
+          serviceType: this.routerData
         }
       });
     },
-    initEcharts() {
-      // this.initEcharts1();
-      // this.initEcharts2();
-      // this.initEcharts3();
-      // this.initEcharts4();
-      this.getPageData();
-    },
-    getPageData(){
+    getPageData() {
+      this.getSdkManagement();
       this.getSdkApplyList();
       // this.getSdkAuthList();
     },
-    getSdkApplyList(){
+    getSdkManagement(){
       var getParms = {
-        pageNum :1,
-        pageSize :100,
-        serviceModel:this.routerData
+        serviceModel: this.routerData
       };
-      getSdkApplyList(getParms).then(res=>{
-        console.log(res,'zjj111')
-      }).catch(err=>{
-        console.log(err)
-      });
+      getSdkManagement(getParms).then(res => {
+          console.log(res, "圆圈部分数据");
+          if (res.code == 200000) {
+            var sdkManData = res.data || {};
+            this.sdkManData = sdkManData;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    getSdkApplyList() {
+      var getParms = {
+        pageNum: 1,
+        pageSize: 100,
+        serviceModel: this.routerData
+      };
+      getSdkApplyList(getParms)
+        .then(res => {
+          console.log(res, "zjj111");
+          if (res.code == 200000) {
+            var sdkApplyData = res.data;
+            var sdkAppllList = sdkApplyData.list || [];
+            this.sdkApyList = sdkAppllList;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
     },
     initEcharts1() {
       var myChart = this.$echarts.init(document.getElementById("sdkEcharts1"));
@@ -774,16 +758,17 @@ export default {
   }
   .sdk_two_container {
     width: 100%;
-    height: 289px;
+    min-height: 289px;
     margin-bottom: 20px;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     .sdk_item {
       width: 24%;
       height: 100%;
       padding: 10px;
       box-sizing: border-box;
       font-family: PingFangSC-Medium, PingFang SC;
+      margin-right: 15px;
       .sdk_title2 {
         width: 100%;
         font-size: 16px;

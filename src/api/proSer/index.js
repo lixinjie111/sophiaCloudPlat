@@ -20,4 +20,7 @@ export const getSdkAuthList = params => {
 export const getSdkmodeList = params => { 
     return axios.get(`${devUrl}/service/modelList`, {params: params}).then(res => res.data);
 };
-
+//SDK管理 
+export const getSdkManagement = params => { 
+    return axios.get(`${devUrl}/sdk/sdkManagement`, {params: params}).then(res => res.data);
+};
