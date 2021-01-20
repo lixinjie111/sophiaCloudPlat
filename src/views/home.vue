@@ -212,11 +212,27 @@ export default {
           ],
         },
         {
-           moduleTitle:"数据服务",
-           list: [
+          moduleTitle:"数据服务",
+          list: [
             {
               subKey: "dataSer1",
-              title: "智能推荐"
+              title: "智能推荐",
+              menuItmList: [
+                {
+                  title: "推荐应用",
+                  itemKey: "tuijianyingyong",
+                  path: "/recommendation/application/list"
+                },
+                {
+                  title: "获取推荐结果",
+                },
+                {
+                  title: "数据管理",
+                },
+                {
+                  title: "推荐池物品",
+                }
+              ]
             },
             {
               subKey: "dataSer2",
