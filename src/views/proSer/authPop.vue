@@ -212,7 +212,6 @@ export default {
         });
     },
     getPageData() {
-      console.log("5555555");
       var pageData = this.sqDetail;
       if (pageData.vType == "add") {
         this.getAppNameList();

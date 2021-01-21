@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="table_container">
-        <a-table :columns="sqcolumns" :data-source="sqdata">
+        <a-table :columns="sqcolumns" :data-source="sqdata" @change="changePage">
           <a slot="appName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="operating" class="ant-dropdown-link" slot-scope="text,record" @click="viewDeatil(record)">{{ text }}</a>
         </a-table>
@@ -282,7 +282,7 @@ export default {
     getPageData() {
       this.getSdkManagement();
       this.getSdkApplyList();
-      this.getSdkAuthList();
+      this.getSdkAuthList({current:1,pageSize:10});
     },
     getSdkManagement() {
       var getParms = {
@@ -324,10 +324,10 @@ export default {
           console.log(err, "err");
         });
     },
-    getSdkAuthList() {
+    getSdkAuthList(pagination) {
       var getParms = {
-        pageNum: 1,
-        pageSize: 10,
+        pageNum: pagination.current,
+        pageSize: pagination.pageSize,
         serviceModel: this.routerData
       };
       getSdkAuthList(getParms)
@@ -575,6 +575,12 @@ export default {
         ]
       };
       myChart.setOption(option);
+    },
+    changePage(pagination, filters, sorter){
+      console.log(pagination,'pagination')
+      console.log(filters,'filters')
+      console.log(sorter,'sorter')
+      this.getSdkAuthList(pagination);
     }
   }
 };
