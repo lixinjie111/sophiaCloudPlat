@@ -3,12 +3,12 @@
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <div class="index c-mr-20">{{index+1}}</div>
       <div class="c-mr-20">数据源：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.source" @change="tradeChange" style="width:200px">
+      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.source" @change="sourceChange" style="width:200px">
         <a-select-option value="1">合生通数据01</a-select-option>
         <a-select-option value="2">合生通数据02</a-select-option>
       </a-select>
       <div class="c-mr-20">数据源表：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.table" @change="tradeChange" style="width:200px">
+      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.table" @change="tableChange" style="width:200px">
         <a-select-option value="1">商管专题数据1</a-select-option>
         <a-select-option value="2">商管专题数据2</a-select-option>
       </a-select>
@@ -18,10 +18,10 @@
         ok-text="是"
         cancel-text="否"
         @confirm="del(index)">
-        <a-button shape="circle" icon="close"/>
+        <a-button icon="close"/>
       </a-popconfirm>
     </div>
-    <a-button type="dashed" class="add_btn" @click="add" style="">
+    <a-button type="dashed" class="add_btn" @click="add">
       <a-icon type="plus"/>
     </a-button>
   </div>
@@ -53,8 +53,13 @@
         })
       },
       del(index) {
-
         this.addList.splice(index, 1);
+      },
+      sourceChange() {
+
+      },
+      tableChange() {
+
       }
     }
   }
