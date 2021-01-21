@@ -24,7 +24,11 @@
         </div>
       </div>
     </a-card>
-    <div class="btns">
+    <div class="btns" v-if="type == 'edit'">
+      <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
+      <a-button @click="cancel">取消</a-button>
+    </div>
+    <div class="btns" v-else>
       <a-button type="primary" class="c-mr-20" @click="test">测试</a-button>
       <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
       <a-button @click="cancel">取消</a-button>
@@ -39,6 +43,12 @@
   export default {
     name: "scene",
     components: {AddGoods, AddBestGoods},
+    props: {
+      type: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         goodsList: [],

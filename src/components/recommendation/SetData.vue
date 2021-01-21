@@ -30,7 +30,11 @@
         <AddData :list="actionAddList"></AddData>
       </div>
     </a-card>
-    <div class="btns">
+    <div class="btns" v-if="type == 'edit'">
+      <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
+      <a-button @click="cancel">取消</a-button>
+    </div>
+    <div class="btns" v-else>
       <a-button type="primary" class="c-mr-20" @click="save">配置规则</a-button>
       <a-button @click="cancel">取消</a-button>
     </div>
@@ -43,6 +47,12 @@
   export default {
     name: "setData",
     components: {AddData},
+    props: {
+      type: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         userHistoryList: [],

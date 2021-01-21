@@ -18,8 +18,8 @@
       :pagination="{showQuickJumper: true, showSizeChanger: true}">
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link">报表</a-button>
-        <a-button type="link">详情</a-button>
-        <a-button type="link">配置</a-button>
+        <a-button type="link" @click="toDetail">详情</a-button>
+        <a-button type="link" @click="sceneModalShow = true">配置</a-button>
         <a-button type="link" style="color:red;">删除</a-button>
       </template>
     </a-table>
@@ -34,7 +34,7 @@
       </template>
       <CreateForm ref="createForm"></CreateForm>
     </a-modal>
-    <a-modal v-model="sceneModalShow" title="创建应用">
+    <a-modal v-model="sceneModalShow" title="选择业务场景">
       <template slot="footer">
         <a-button type="primary" :loading="setLoading" @click="setting">
           配置数据
@@ -116,6 +116,11 @@
       },
     },
     methods: {
+      toDetail() {
+        this.$router.push({
+          path: '/recommendation/application/detail'
+        });
+      },
       add() {
         this.createModalShow = true;
       },
