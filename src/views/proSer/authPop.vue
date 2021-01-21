@@ -31,7 +31,12 @@
           </div>
           <div class="input_container">
             <div class="input_cls">
-              <a-select placeholder="请选择SDK名称" style="width:100%" @change="handleSdkChange">
+              <a-select
+                :disabled="ifdisSdkNam"
+                style="width:100%"
+                @change="handleSdkChange"
+                v-model="sdkNameVal"
+              >
                 <a-select-option
                   v-for="(item) in sdkNameList"
                   :key="item.serviceId"
@@ -40,7 +45,12 @@
               </a-select>
             </div>
             <div class="input_cls">
-              <a-select placeholder="请选择应用名称" style="width:100%" @change="handleAppListChange">
+              <a-select
+                style="width:100%"
+                :disabled="ifDisAppNam"
+                @change="handleAppListChange"
+                v-model="appNameVal"
+              >
                 <a-select-option
                   v-for="(item) in appNameList"
                   :key="item.id"
@@ -49,18 +59,18 @@
               </a-select>
             </div>
             <div class="input_cls">
-              <a-input v-model="appId" :disabled="true"/>
+              <a-input v-model="appId" :disabled="true" />
             </div>
             <div class="input_cls">
               <a-input v-model="appPackName" :disabled="true" />
             </div>
             <div class="input_cls">
-              <a-input v-model="apPlat" :disabled="true"/>
+              <a-input v-model="apPlat" :disabled="true" />
             </div>
             <div class="input_cls auth_num">
               <div class="top_input">
                 <div class="input_cls1">
-                  <a-input v-model="sqNum" />
+                  <a-input v-model="sqNum" :disabled="ifDisSq" />
                 </div>
                 <div class="input_text">个</div>
               </div>
@@ -69,10 +79,11 @@
           </div>
         </div>
         <div class="auth_btn_container">
-          <div class="btn_container">
+          <div class="btn_container" v-if="ifShowOptioBtn">
             <div class="btn1" @click="authApp">授权应用</div>
             <div class="btn2" @click="cancel">取消</div>
           </div>
+          <a-button type="primary" v-else size="large" @click="closePopWin">确定</a-button>
         </div>
       </div>
     </div>
@@ -80,25 +91,30 @@
 </template>
 
 <script>
-import { getAppList,getSdkNameList,sdkAuth} from "../../api/proSer/index";
+import { getAppList, getSdkNameList, sdkAuth } from "../../api/proSer/index";
 export default {
   name: "authPop",
   data() {
     return {
       sdkNameList: [],
       appNameList: [],
-      appId:'',
-      appName:'',
-      appPackName:'',
-      apPlat:'',
-      sqNum:0,
-      serviceId:''
+      appId: "",
+      appName: "",
+      appPackName: "",
+      apPlat: "",
+      sqNum: 0,
+      serviceId: "",
+      sdkNameVal: "",
+      appNameVal: "",
+      ifdisSdkNam: false,
+      ifDisAppNam: false,
+      ifDisSq: false,
+      ifShowOptioBtn: true
     };
   },
-  props:['serviceModel'],
+  props: ["serviceModel", "sqDetail"],
   created() {
-    this.getAppNameList();
-    this.getSdkNameList();
+    this.getPageData();
   },
   methods: {
     closePop() {
@@ -107,26 +123,30 @@ export default {
     cancel() {
       this.closePop();
     },
+    closePopWin(){
+      this.closePop();
+    },
     authApp() {
       var authParms = {
-        appId:this.appId,
-        appName:this.appName,
-        serviceId:this.serviceId,
-        serviceModel:this.serviceModel,
-        assignAuthorizationCount:this.sqNum
+        appId: this.appId,
+        appName: this.appName,
+        serviceId: this.serviceId,
+        serviceModel: this.serviceModel,
+        assignAuthorizationCount: this.sqNum
       };
-      sdkAuth(authParms).then(res=>{
-        if(res.code == 200000){
-          this.$message.success('授权成功！');
-          this.closePop();
-        }
-        else{
-           this.$message.error("请求失败！");
-        }
-      }).catch(err=>{
-         this.$message.error("请求失败！");
-         console.log(err,'err')
-      });
+      sdkAuth(authParms)
+        .then(res => {
+          if (res.code == 200000) {
+            this.$message.success("授权成功！");
+            this.closePop();
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
     },
     handleSdkChange(value) {
       this.serviceId = value;
@@ -134,27 +154,23 @@ export default {
     },
     handleAppListChange(value) {
       var appNameDataList = this.appNameList || [];
-      appNameDataList.forEach(item=>{
-        if(item.appId == value){
+      appNameDataList.forEach(item => {
+        if (item.appId == value) {
           this.appId = value;
           this.appName = item.appName;
-          if(item.packageAndroid){
-            this.appPackName = item.packageAndroid
+          if (item.packageAndroid) {
+            this.appPackName = item.packageAndroid;
+          } else if (item.packageIos) {
+            this.appPackName = item.packageIos;
+          } else {
+            this.appPackName = "";
           }
-          else if(item.packageIos){
-            this.appPackName = item.packageIos
-          }
-          else{
-            this.appPackName = '';
-          }
-          if(this.appPackName.toLowerCase().indexOf('android') != -1){
-            this.apPlat = '安卓';
-          }
-          else if(this.appPackName.toLowerCase().indexOf('ios') != -1){
-            this.apPlat = 'IOS';
-          }
-          else{
-            this.apPlat = '未知';
+          if (this.appPackName.toLowerCase().indexOf("android") != -1) {
+            this.apPlat = "安卓";
+          } else if (this.appPackName.toLowerCase().indexOf("ios") != -1) {
+            this.apPlat = "IOS";
+          } else {
+            this.apPlat = "未知";
           }
         }
       });
@@ -180,7 +196,7 @@ export default {
     },
     getSdkNameList() {
       var sdkNameListParm = {
-        serviceModel:this.serviceModel
+        serviceModel: this.serviceModel
       };
       getSdkNameList(sdkNameListParm)
         .then(res => {
@@ -194,6 +210,29 @@ export default {
           this.$message.error("请求失败！");
           console.log(err);
         });
+    },
+    getPageData() {
+      console.log("5555555");
+      var pageData = this.sqDetail;
+      if (pageData.vType == "add") {
+        this.getAppNameList();
+        this.getSdkNameList();
+        this.ifdisSdkNam = false;
+        this.ifDisAppNam = false;
+        this.ifDisSq = false;
+        this.ifShowOptioBtn = true;
+      } else if (pageData.vType == "view") {
+        this.sdkNameVal = pageData.serviceName;
+        this.appNameVal = pageData.appName;
+        this.appId = pageData.appId;
+        this.appPackName = pageData.serviceName;
+        this.apPlat = pageData.applicationPlatform;
+        this.sqNum = pageData.assignAuthorizationCount;
+        this.ifdisSdkNam = true;
+        this.ifDisAppNam = true;
+        this.ifDisSq = true;
+        this.ifShowOptioBtn = false;
+      }
     }
   }
 };

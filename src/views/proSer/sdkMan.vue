@@ -102,7 +102,7 @@
       <div class="table_container">
         <a-table :columns="sqcolumns" :data-source="sqdata">
           <a slot="appName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-          <a slot="operating" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+          <a slot="operating" class="ant-dropdown-link" slot-scope="text,record" @click="viewDeatil(record)">{{ text }}</a>
         </a-table>
       </div>
     </div>
@@ -127,7 +127,7 @@
         </div>
       </div>
     </div>
-    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin" :serviceModel='serviceModelFn'></vAuthPop>
+    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin" :serviceModel='serviceModelFn' :sqDetail="sqDetailData"></vAuthPop>
   </div>
 </template>
 
@@ -242,7 +242,8 @@ export default {
         surplusInfo:{},
         usedInfo:{}
       },
-      serviceModelFn:null
+      serviceModelFn:null,
+      sqDetailData:{}
     };
   },
   components: {
@@ -257,6 +258,14 @@ export default {
   },
   methods: {
     appAuth() {
+      this.sqDetailData = {
+        vType:'add'
+      };
+      this.ifShowPop = true;
+    },
+    viewDeatil(re){
+      re.vType='view';
+      this.sqDetailData = re;
       this.ifShowPop = true;
     },
     closePopWin(arg) {
