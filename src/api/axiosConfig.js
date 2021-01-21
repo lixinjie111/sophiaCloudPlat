@@ -78,8 +78,8 @@ function axiosFilter(vm) {
         if(!response.data.code){
             return Promise.resolve(response);
         }
-        let returnStatus = response.data.code,
-            returnMessage = response.data.msg||response.data.message;
+        var returnStatus = response.data.code;
+        var returnMessage = response.data.msg||response.data.message;
         switch (returnStatus.toString()) {
             case '200000': {
                     return Promise.resolve(response);
@@ -96,7 +96,7 @@ function axiosFilter(vm) {
             case '1000': {   // 登录失效
                 //window.location.href = '#/login';
                 router.push({
-                    path:'/login';
+                    path:'/login'
                 })
                 // return Promise.resolve(response);
                 break;
