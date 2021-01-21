@@ -32,23 +32,7 @@
           下一步
         </a-button>
       </template>
-      <div class="create_form_box">
-        <a-form-model ref="createForm" :model="createForm" :rules="createFormRules">
-          <a-form-model-item label="应用名称" prop="name">
-            <a-input placeholder="请输入应用名称" v-model="createForm.name" :maxLength="14"/>
-          </a-form-model-item>
-          <a-form-model-item label="所属行业" prop="trade">
-            <a-select placeholder="请选择行业" v-model="createForm.trade" @change="tradeChange">
-              <a-select-option value="1">教育培训</a-select-option>
-              <a-select-option value="2">文化娱乐</a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item label="应用描述" prop="description">
-            <a-textarea v-model="createForm.description" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入应用描述"
-                        :maxLength="100"/>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
+      <CreateForm ref="createForm"></CreateForm>
     </a-modal>
     <a-modal v-model="sceneModalShow" title="创建应用">
       <template slot="footer">
@@ -59,38 +43,14 @@
           取消
         </a-button>
       </template>
-      <div class="scene_form_box">
-        <a-form-model ref="sceneForm" :model="sceneForm">
-          <a-form-model-item label="应用类型">
-            <a-radio-group v-model="sceneForm.apply">
-              <a-radio :value="item.value" v-for="(item,index) in applyList" :key="index">
-                {{item.label}}
-              </a-radio>
-            </a-radio-group>
-          </a-form-model-item>
-          <a-form-model-item label="场景类型">
-            <a-radio-group v-model="sceneForm.scene">
-              <a-radio :value="item.value" v-for="(item,index) in sceneList" :key="index">
-                {{item.label}}
-              </a-radio>
-            </a-radio-group>
-          </a-form-model-item>
-          <a-form-model-item label="启动方式">
-            <a-radio-group v-model="sceneForm.start">
-              <a-radio :value="item.value" v-for="(item,index) in startList" :key="index">
-                {{item.label}}
-              </a-radio>
-            </a-radio-group>
-          </a-form-model-item>
-          <a-form-model-item label="推荐位置">
-            <a-input placeholder="请输入推荐位置" v-model="sceneForm.location" :maxLength="14"/>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
+      <SceneForm ref="sceneForm"></SceneForm>
     </a-modal>
   </div>
 </template>
 <script>
+  import CreateForm from "@/components/recommendation/CreateForm";
+  import SceneForm from "@/components/recommendation/SceneForm";
+
   const data = [];
   for (let i = 0; i < 46; i++) {
     data.push({
@@ -105,6 +65,7 @@
   }
 
   export default {
+    components: {CreateForm, SceneForm},
     data() {
       return {
         data,
@@ -145,63 +106,8 @@
         createModalShow: false,
         createLoading: false,
         nextLoading: false,
-        createForm: {
-          name: '',
-          trade: '',
-          description: ''
-        },
-        createFormRules: {
-          name: [
-            {required: true, message: '请输入应用名称', trigger: 'blur'}
-          ],
-          trade: [
-            {required: true, message: '请选择行业', trigger: 'change'}
-          ],
-          description: [
-            {required: true, message: '请输入应用描述', trigger: 'blur'}
-          ],
-        },
         sceneModalShow: false,
-        setLoading: false,
-        sceneForm: {
-          apply: '',
-          scene: '',
-          start: '',
-          location: ''
-        },
-        applyList: [{
-          label: '推荐商品',
-          value: '1'
-        }, {
-          label: '推荐用户',
-          value: '2'
-        }, {
-          label: '推荐用户',
-          value: '3'
-        }],
-        sceneList: [{
-          label: '个性化推荐',
-          value: '1'
-        }, {
-          label: '相关推荐',
-          value: '2'
-        }, {
-          label: '热点推荐',
-          value: '3'
-        }, {
-          label: '主题推荐',
-          value: '4'
-        }],
-        startList: [{
-          label: '历史数据',
-          value: '1'
-        }, {
-          label: '增量数据',
-          value: '2'
-        }, {
-          label: '历史+增量数据',
-          value: '3'
-        }],
+        setLoading: false
       };
     },
     computed: {
@@ -225,16 +131,13 @@
         this.selectedRowKeys = selectedRowKeys;
       },
       next() {
-        this.$refs.createForm.validate(valid => {
+        this.$refs.createForm.$refs.createForm.validate(valid => {
           if (valid) {
             this.nextLoading = true;
             setTimeout(() => {
               this.nextLoading = false;
               this.createModalShow = false;
               this.sceneModalShow = true;
-              this.$router.push({
-                path: '/recommendation/application/data'
-              });
             }, 1000);
           } else {
             console.log('error submit!!');
@@ -243,7 +146,7 @@
         });
       },
       create() {
-        this.$refs.createForm.validate(valid => {
+        this.$refs.createForm.$refs.createForm.validate(valid => {
           if (valid) {
             this.createLoading = true;
             setTimeout(() => {
@@ -260,7 +163,9 @@
         console.log(value);
       },
       setting() {
-
+        this.$router.push({
+          path: '/recommendation/application/data'
+        });
       },
       cancelSetting() {
         this.sceneModalShow = false;
