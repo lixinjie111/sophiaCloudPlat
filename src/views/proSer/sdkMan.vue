@@ -27,7 +27,9 @@
           <div class="echarts_text_container">
             <div class="text_title1">已分配</div>
             <div class="text_num1">{{sdkManData.assignAuthorizationInfo.assignAuthorizationCount}}</div>
-            <div class="per_num1">占比 {{sdkManData.assignAuthorizationInfo.assignAuthorizationPercentage}}%</div>
+            <div
+              class="per_num1"
+            >占比 {{sdkManData.assignAuthorizationInfo.assignAuthorizationPercentage}}%</div>
           </div>
         </div>
         <div class="echarts2_container">
@@ -79,7 +81,12 @@
           <span class="per_value">{{item.surplusPercentage}}%</span>
         </div>
         <div class="per_compent_container">
-          <a-progress :percent="item.surplusPercentage" stroke-linecap="square" :showInfo="false" status="active" />
+          <a-progress
+            :percent="item.surplusPercentage"
+            stroke-linecap="square"
+            :showInfo="false"
+            status="active"
+          />
         </div>
         <div class="yijihuo_text">已激活</div>
         <div class="yijihuo_echarts" id="sdkEcharts1"></div>
@@ -120,7 +127,7 @@
         </div>
       </div>
     </div>
-    <vAuthPop v-show="ifShowPop" @closeMe="closePopWin"></vAuthPop>
+    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin"></vAuthPop>
   </div>
 </template>
 
@@ -350,8 +357,12 @@ export default {
       ],
       ifShowPop: false,
       routerData: null,
-      sdkApyList:[],
-      sdkManData:null
+      sdkApyList: [],
+      sdkManData: {
+        assignAuthorizationInfo:{},
+        surplusInfo:{},
+        usedInfo:{}
+      }
     };
   },
   components: {
@@ -381,13 +392,14 @@ export default {
     getPageData() {
       this.getSdkManagement();
       this.getSdkApplyList();
-      // this.getSdkAuthList();
+      this.getSdkAuthList();
     },
-    getSdkManagement(){
+    getSdkManagement() {
       var getParms = {
         serviceModel: this.routerData
       };
-      getSdkManagement(getParms).then(res => {
+      getSdkManagement(getParms)
+        .then(res => {
           console.log(res, "圆圈部分数据");
           if (res.code == 200000) {
             var sdkManData = res.data || {};
@@ -395,7 +407,8 @@ export default {
           } else {
             this.$message.error("请求失败！");
           }
-        }).catch(err => {
+        })
+        .catch(err => {
           this.$message.error("请求失败！");
           console.log(err, "err");
         });
@@ -408,11 +421,29 @@ export default {
       };
       getSdkApplyList(getParms)
         .then(res => {
-          console.log(res, "zjj111");
           if (res.code == 200000) {
             var sdkApplyData = res.data;
             var sdkAppllList = sdkApplyData.list || [];
             this.sdkApyList = sdkAppllList;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    getSdkAuthList() {
+      var getParms = {
+        pageNum: 1,
+        pageSize: 10,
+        serviceModel: this.routerData
+      };
+      getSdkAuthList(getParms)
+        .then(res => {
+          if (res.code == 200000) {
+            console.log(res.data,'3333333')
           } else {
             this.$message.error("请求失败！");
           }

@@ -24,3 +24,7 @@ export const getSdkmodeList = params => {
 export const getSdkManagement = params => { 
     return axios.get(`${devUrl}/sdk/sdkManagement`, {params: params}).then(res => res.data);
 };
+//企业应用列表   
+export const getAppList = params => { 
+    return axios.get(`${devUrl}/app/list`, {params: params}).then(res => res.data);
+};

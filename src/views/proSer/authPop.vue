@@ -10,6 +10,7 @@
       <div class="auth_pop_content">
         <div class="auth_content">
           <div class="label_title_container">
+            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;SDK名称</div>
             <div class="label"><span style="color:#FF504E;">*</span>&nbsp;应用名称</div>
             <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;APP ID</div>
             <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;应用包名</div>
@@ -18,11 +19,13 @@
           </div>
           <div class="input_container">
             <div class="input_cls">
-              <a-select default-value="lucy" style="width:100%" @change="handleChange">
-                <a-select-option value="jack">Jack</a-select-option>
-                <a-select-option value="lucy">Lucy</a-select-option>
-                <a-select-option value="disabled" disabled>Disabled</a-select-option>
-                <a-select-option value="Yiminghe">yiminghe</a-select-option>
+              <a-select placeholder="请选择SDK名称" style="width:100%" @change="handleSdkChange">
+                <a-select-option v-for="(item) in sdkNameList" :key="item.id" :value="item.appName">{{item.appName}}</a-select-option>
+              </a-select>
+            </div>
+            <div class="input_cls">
+              <a-select placeholder="请选择应用名称" style="width:100%" @change="handleAppListChange">
+                <a-select-option v-for="(item) in appNameList" :key="item.id" :value="item.appName">{{item.appName}}</a-select-option>
               </a-select>
             </div>
             <div class="input_cls">
@@ -55,7 +58,18 @@
 </template>
 
 <script>
+import {getAppList} from "../../api/proSer/index";
 export default {
+  name:'authPop',
+  data(){
+    return{
+      sdkNameList:[],
+      appNameList:[]
+    }
+  },
+  created(){
+    this.getAppNameList();
+  },
   methods: {
     closePop() {
       this.$emit("closeMe", false);
@@ -66,8 +80,30 @@ export default {
     authApp() {
       this.closePop();
     },
-    handleChange(value) {
+    handleSdkChange(value){
       console.log(`selected ${value}`);
+    },
+    handleAppListChange(value) {
+      console.log(`selected ${value}`);
+    },
+    getAppNameList(){
+      var appListParm = {
+        pageIndex:1,
+        pageSize:100
+      };
+      getAppList(appListParm).then(res=>{
+        console.log(res,'应用列表')
+        if(res.code == 2000000){
+          var appListData = res.data || [];
+          this.appNameList = appListData;
+        }
+        else{
+          this.$message.error("请求失败！");
+        }
+      }).catch(err=>{
+         this.$message.error("请求失败！");
+         console.log(err);
+      });
     }
   }
 };
@@ -87,7 +123,7 @@ export default {
   justify-content: center;
   .authPop_content_container {
     width: 591px;
-    height: 491px;
+    min-height: 491px;
     background: #ffffff;
     display: flex;
     flex-direction: column;
