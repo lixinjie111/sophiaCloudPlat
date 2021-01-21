@@ -101,7 +101,7 @@
       </div>
       <div class="table_container">
         <a-table :columns="sqcolumns" :data-source="sqdata">
-          <a slot="appname" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+          <a slot="appName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="operating" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
         </a-table>
       </div>
@@ -127,7 +127,7 @@
         </div>
       </div>
     </div>
-    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin"></vAuthPop>
+    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin" :serviceModel='serviceModelFn'></vAuthPop>
   </div>
 </template>
 
@@ -147,135 +147,48 @@ export default {
       sqcolumns: [
         {
           title: "应用名称",
-          dataIndex: "appname",
-          key: "appname",
-          scopedSlots: { customRender: "appname" },
-          filters: [
-            {
-              text: "Joe",
-              value: "Joe"
-            },
-            {
-              text: "Jim",
-              value: "Jim"
-            },
-            {
-              text: "Submenu",
-              value: "Submenu",
-              children: [
-                {
-                  text: "Green",
-                  value: "Green"
-                },
-                {
-                  text: "Black",
-                  value: "Black"
-                }
-              ]
-            }
-          ]
+          dataIndex: "appName",
+          key: "appName",
+          scopedSlots: { customRender: "appName" },
+          filters: []
         },
         {
           title: "APP ID",
-          dataIndex: "appid",
-          key: "appid"
+          dataIndex: "appId",
+          key: "appId"
         },
         {
           title: "应用平台",
-          dataIndex: "appPlat",
-          key: "appPlat",
-          filters: [
-            {
-              text: "Joe",
-              value: "Joe"
-            },
-            {
-              text: "Jim",
-              value: "Jim"
-            },
-            {
-              text: "Submenu",
-              value: "Submenu",
-              children: [
-                {
-                  text: "Green",
-                  value: "Green"
-                },
-                {
-                  text: "Black",
-                  value: "Black"
-                }
-              ]
-            }
-          ]
+          dataIndex: "applicationPlatform",
+          key: "applicationPlatform",
+          filters: []
         },
         {
           title: "SDK名称",
-          key: "sdkName",
-          dataIndex: "sdkName",
-          filters: [
-            {
-              text: "Joe",
-              value: "Joe"
-            },
-            {
-              text: "Jim",
-              value: "Jim"
-            },
-            {
-              text: "Submenu",
-              value: "Submenu",
-              children: [
-                {
-                  text: "Green",
-                  value: "Green"
-                },
-                {
-                  text: "Black",
-                  value: "Black"
-                }
-              ]
-            }
-          ]
+          key: "serviceName",
+          dataIndex: "serviceName",
+          filters: []
         },
         {
-          title: "已分配/激活",
-          key: "yifenP",
-          dataIndex: "yifenP"
+          title: "已分配",
+          key: "assignAuthorizationCount",
+          dataIndex: "assignAuthorizationCount"
+        },
+        {
+          title: "激活",
+          key: "usedCount",
+          dataIndex: "usedCount"
         },
         {
           title: "有效期",
-          key: "validPer",
-          dataIndex: "validPer",
-          filters: [
-            {
-              text: "Joe",
-              value: "Joe"
-            },
-            {
-              text: "Jim",
-              value: "Jim"
-            },
-            {
-              text: "Submenu",
-              value: "Submenu",
-              children: [
-                {
-                  text: "Green",
-                  value: "Green"
-                },
-                {
-                  text: "Black",
-                  value: "Black"
-                }
-              ]
-            }
-          ]
+          key: "effectiveTime",
+          dataIndex: "effectiveTime",
+          filters: []
         },
         {
           title: "授权时间",
-          key: "sqTime",
-          dataIndex: "sqTime",
+          key: "createTime",
+          dataIndex: "createTime",
           defaultSortOrder: "descend",
           sorter: (a, b) => a.age - b.age
         },
@@ -284,44 +197,10 @@ export default {
           key: "operating",
           dataIndex: "operating",
           slots: { title: "customTitle" },
-          scopedSlots: { customRender: "appname" }
+          scopedSlots: { customRender: "operating" }
         }
       ],
-      sqdata: [
-        {
-          key: "1",
-          appname: "好生活",
-          appid: "243234a4",
-          appPlat: "Android",
-          sdkName: "语音识别Android SDK",
-          yifenP: "6000/1234",
-          validPer: "12个月",
-          sqTime: "2019-12-23 14:07",
-          operating: "查看"
-        },
-        {
-          key: "2",
-          appname: "合生通",
-          appid: "243234a4",
-          appPlat: "iOS",
-          sdkName: "语音识别iOS SDK",
-          yifenP: "6000/1234",
-          validPer: "12个月",
-          sqTime: "2019-12-23 14:07",
-          operating: "查看"
-        },
-        {
-          key: "3",
-          appname: "好生活好房",
-          appid: "243234a4",
-          appPlat: "Android",
-          sdkName: "语音识别Android SDK",
-          yifenP: "6000/1234",
-          validPer: "12个月",
-          sqTime: "2019-12-23 14:07",
-          operating: "查看"
-        }
-      ],
+      sqdata: [],
       size: "large",
       sdkSorceList: [
         {
@@ -362,7 +241,8 @@ export default {
         assignAuthorizationInfo:{},
         surplusInfo:{},
         usedInfo:{}
-      }
+      },
+      serviceModelFn:null
     };
   },
   components: {
@@ -370,6 +250,7 @@ export default {
   },
   created() {
     this.routerData = this.$route.query.serviceModel;
+    this.serviceModelFn = this.$route.query.serviceModel;
   },
   mounted() {
     this.getPageData();
@@ -443,7 +324,12 @@ export default {
       getSdkAuthList(getParms)
         .then(res => {
           if (res.code == 200000) {
-            console.log(res.data,'3333333')
+            var sdkAuthListData = res.data.list || [];
+            sdkAuthListData.forEach(element => {
+              element.key=element.appId;
+              element.operating='查看';
+            });
+            this.sqdata = sdkAuthListData;
           } else {
             this.$message.error("请求失败！");
           }

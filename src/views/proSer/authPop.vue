@@ -10,36 +10,58 @@
       <div class="auth_pop_content">
         <div class="auth_content">
           <div class="label_title_container">
-            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;SDK名称</div>
-            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;应用名称</div>
-            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;APP ID</div>
-            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;应用包名</div>
-            <div class="label"><span style="color:#FF504E;"></span>&nbsp;&nbsp;应用平台</div>
-            <div class="label"><span style="color:#FF504E;">*</span>&nbsp;分配授权</div>
+            <div class="label">
+              <span style="color:#FF504E;">*</span>&nbsp;SDK名称
+            </div>
+            <div class="label">
+              <span style="color:#FF504E;">*</span>&nbsp;应用名称
+            </div>
+            <div class="label">
+              <span style="color:#FF504E;"></span>&nbsp;&nbsp;APP ID
+            </div>
+            <div class="label">
+              <span style="color:#FF504E;"></span>&nbsp;&nbsp;应用包名
+            </div>
+            <div class="label">
+              <span style="color:#FF504E;"></span>&nbsp;&nbsp;应用平台
+            </div>
+            <div class="label">
+              <span style="color:#FF504E;">*</span>&nbsp;分配授权
+            </div>
           </div>
           <div class="input_container">
             <div class="input_cls">
               <a-select placeholder="请选择SDK名称" style="width:100%" @change="handleSdkChange">
-                <a-select-option v-for="(item) in sdkNameList" :key="item.id" :value="item.appName">{{item.appName}}</a-select-option>
+                <a-select-option
+                  v-for="(item) in sdkNameList"
+                  :key="item.serviceId"
+                  :value="item.serviceId"
+                >{{item.serviceName}}</a-select-option>
               </a-select>
             </div>
             <div class="input_cls">
               <a-select placeholder="请选择应用名称" style="width:100%" @change="handleAppListChange">
-                <a-select-option v-for="(item) in appNameList" :key="item.id" :value="item.appName">{{item.appName}}</a-select-option>
+                <a-select-option
+                  v-for="(item) in appNameList"
+                  :key="item.id"
+                  :value="item.appId"
+                >{{item.appName}}</a-select-option>
               </a-select>
             </div>
             <div class="input_cls">
-              <a-input placeholder="请输入APP ID" />
+              <a-input v-model="appId" :disabled="true"/>
             </div>
             <div class="input_cls">
-              <a-input placeholder="请输入应用包名" />
+              <a-input v-model="appPackName" :disabled="true" />
             </div>
             <div class="input_cls">
-              <a-input placeholder="请输入应用平台" />
+              <a-input v-model="apPlat" :disabled="true"/>
             </div>
             <div class="input_cls auth_num">
               <div class="top_input">
-                <div class="input_cls1"> <a-input /></div>
+                <div class="input_cls1">
+                  <a-input v-model="sqNum" />
+                </div>
                 <div class="input_text">个</div>
               </div>
               <div class="bottom_desc">剩余可分配数量：10000</div>
@@ -58,17 +80,25 @@
 </template>
 
 <script>
-import {getAppList} from "../../api/proSer/index";
+import { getAppList,getSdkNameList,sdkAuth} from "../../api/proSer/index";
 export default {
-  name:'authPop',
-  data(){
-    return{
-      sdkNameList:[],
-      appNameList:[]
-    }
+  name: "authPop",
+  data() {
+    return {
+      sdkNameList: [],
+      appNameList: [],
+      appId:'',
+      appName:'',
+      appPackName:'',
+      apPlat:'',
+      sqNum:0,
+      serviceId:''
+    };
   },
-  created(){
+  props:['serviceModel'],
+  created() {
     this.getAppNameList();
+    this.getSdkNameList();
   },
   methods: {
     closePop() {
@@ -78,32 +108,92 @@ export default {
       this.closePop();
     },
     authApp() {
-      this.closePop();
-    },
-    handleSdkChange(value){
-      console.log(`selected ${value}`);
-    },
-    handleAppListChange(value) {
-      console.log(`selected ${value}`);
-    },
-    getAppNameList(){
-      var appListParm = {
-        pageIndex:1,
-        pageSize:100
+      var authParms = {
+        appId:this.appId,
+        appName:this.appName,
+        serviceId:this.serviceId,
+        serviceModel:this.serviceModel,
+        assignAuthorizationCount:this.sqNum
       };
-      getAppList(appListParm).then(res=>{
-        console.log(res,'应用列表')
-        if(res.code == 2000000){
-          var appListData = res.data || [];
-          this.appNameList = appListData;
+      sdkAuth(authParms).then(res=>{
+        if(res.code == 200000){
+          this.$message.success('授权成功！');
+          this.closePop();
         }
         else{
-          this.$message.error("请求失败！");
+           this.$message.error("请求失败！");
         }
       }).catch(err=>{
          this.$message.error("请求失败！");
-         console.log(err);
+         console.log(err,'err')
       });
+    },
+    handleSdkChange(value) {
+      this.serviceId = value;
+      console.log(`selected ${value}`);
+    },
+    handleAppListChange(value) {
+      var appNameDataList = this.appNameList || [];
+      appNameDataList.forEach(item=>{
+        if(item.appId == value){
+          this.appId = value;
+          this.appName = item.appName;
+          if(item.packageAndroid){
+            this.appPackName = item.packageAndroid
+          }
+          else if(item.packageIos){
+            this.appPackName = item.packageIos
+          }
+          else{
+            this.appPackName = '';
+          }
+          if(this.appPackName.toLowerCase().indexOf('android') != -1){
+            this.apPlat = '安卓';
+          }
+          else if(this.appPackName.toLowerCase().indexOf('ios') != -1){
+            this.apPlat = 'IOS';
+          }
+          else{
+            this.apPlat = '未知';
+          }
+        }
+      });
+    },
+    getAppNameList() {
+      var appListParm = {
+        pageIndex: 1,
+        pageSize: 100
+      };
+      getAppList(appListParm)
+        .then(res => {
+          if (res.code == 200000) {
+            var appListData = res.data || [];
+            this.appNameList = appListData;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err);
+        });
+    },
+    getSdkNameList() {
+      var sdkNameListParm = {
+        serviceModel:this.serviceModel
+      };
+      getSdkNameList(sdkNameListParm)
+        .then(res => {
+          if (res.code == 200000) {
+            this.sdkNameList = res.data || [];
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err);
+        });
     }
   }
 };
@@ -216,7 +306,7 @@ export default {
       .auth_btn_container {
         margin-top: 71px;
         width: 100%;
-        height: 26px;
+        height: 32px;
         display: flex;
         justify-content: center;
         .btn_container {

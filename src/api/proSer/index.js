@@ -28,3 +28,7 @@ export const getSdkManagement = params => {
 export const getAppList = params => { 
     return axios.get(`${devUrl}/app/list`, {params: params}).then(res => res.data);
 };
+//获取SDK名称列表接口
+export const getSdkNameList = params => {
+    return axios.get(`${devUrl}/sdk/authorizationSDK`, {params: params}).then(res => res.data);
+}
