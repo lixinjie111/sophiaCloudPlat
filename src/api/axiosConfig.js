@@ -7,7 +7,7 @@ import Qs from 'qs'
 // 权限
 import { removeAuthInfo } from '@/session/index';
 import store from '../store/index';
-
+import router from '../router/index';
 // 避免在账号登录失效后提示多次
 let isOutLogin = true;
 /**
@@ -95,6 +95,9 @@ function axiosFilter(vm) {
             }
             case '1000': {   // 登录失效
                 //window.location.href = '#/login';
+                router.push({
+                    path:'/login';
+                })
                 // return Promise.resolve(response);
                 break;
             }

@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="findPanel" v-if="findPwd">
-                    <template v-if="stepIndex==1">
+                    <div v-show="stepIndex==1">
                         <div class="title">找回密码</div>
                         <div class="email">
                             <div  class="user_img" style="width: 16px;">
@@ -73,23 +73,23 @@
                             <span style="margin-right:5px">下一步</span>
                             <img src="../../assets/images/login/Shape.png" style="width: 16px;">
                         </div>
-                    </template>
-                    <template v-if="stepIndex==2">
+                    </div>
+                    <div v-show="stepIndex==2">
                         <div class="title">身份验证</div>
                         <div class="sendTip">
                             向手机+86 <span>{{getTel}}</span>发送验证码
                         </div>
                          <div class="checkSendMa">
-                            <div class="tipMsg" v-show="idVertify">验证码错误，请重新输入</div>
+                            <div class="tipMsg" v-show="idVertify">{{idVertifyMsg}}</div>
                             <input type="text"  v-model="idVertifyMa" placeholder="请输入六位验证码" > 
-                            <input type="text" class="sendMsg"  id="sendMsg"  @click="settime()" v-model="sendMessage">
+                            <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
                         </div>
                         <div class="submit" @click="handleNext1">
                             <span style="margin-right:5px">下一步</span>
                             <img src="../../assets/images/login/Shape.png" style="width: 16px;">
                         </div>
-                    </template>
-                    <template v-if="stepIndex==3">
+                    </div>
+                    <div v-if="stepIndex==3">
                         <div class="title">密码重置</div>
                         <div class="resetPwd">
                             <div  class="pws_img" style="width: 16px;">
@@ -128,7 +128,7 @@
                             <span style="margin-right:5px">下一步</span>
                             <img src="../../assets/images/login/Shape.png" style="width: 16px;">
                         </div>
-                    </template>
+                    </div>
                 </div>
                 
 			</div>
@@ -137,11 +137,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { getVerificationCode,verifyPhone} from '@/api/login';
+import { getVerificationCode,verifyPhone,sendMessage,verifyPhoneNodeCode,resetPasswords} from '@/api/login';
 export default {
     data() {
         return {
             verifyCodeMsg:'',
+            idVertifyMsg:'',
             tip1:0,
             tip2:0,
             tip3:0,
@@ -151,7 +152,7 @@ export default {
             surePwd:'',
             idVertify:false,
             idVertifyMa:'',
-            getTel:'138****12',
+            getTel:'',
             stepIndex:1,
             useTel:'136******78',
             coverBg:false,
@@ -168,11 +169,13 @@ export default {
             sendMessage: '发送验证码',
             countdown : 60,
             uuid:'',
-            imgUrl:''
+            imgUrl:'',
+            findName:'',
+            timer:null,
         }
     },
     created() {
-       this.resetMa();
+
     },
     methods: {
         resetMa(){
@@ -192,7 +195,25 @@ export default {
                 return v.toString(16);
             });
         },
+        sendMeg(){
+            let _param ={
+                phone:this.tel,
+                type:1,
+            };
+            sendMessage(_param).then(res => {
+                if(res.code == 200000) {
+                    this.settime();
+                    this.idVertify=false;
+                }else {
+                    this.idVertify=true;
+                    this.idVertifyMsg=res.message;
+                }
+            }).catch(err => {
+
+            })
+        },
         settime() {
+            var sendMsg=document.getElementById('sendMsg');
             if(sendMsg){
                  if (this.countdown == 0) {
                     sendMsg.removeAttribute("disabled");
@@ -204,7 +225,7 @@ export default {
                     this.sendMessage="重新发送(" + this.countdown + ")";
                     this.countdown--;
                 }
-                setTimeout(()=> {
+                this.timer=setTimeout(()=> {
                     this.settime(); 
                 },1000)
             }
@@ -213,7 +234,23 @@ export default {
             if(this.surePwd==this.resetPwd){
                  this.sureTip=false;
                 if(this.tip1==2&&this.tip2==2&&this.tip3==2){
-                    this.findPwd=false;
+                    let _param ={
+                        phone:this.tel,
+                        noteCode:this.idVertifyMa,
+                        password:this.resetPwd,
+                    };
+                    resetPasswords(_param).then(res => {
+                        if(res.code == 200000) {
+                             this.findPwd=false;
+                            this.stepIndex=1;
+                            this.$message.success('重置成功');
+                        }else {
+                            this.$message.success('重置失败');
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                    
                 }else{
                     this.toolTip=true;
                 }
@@ -264,8 +301,14 @@ export default {
             }
             let reTest3=false;
             if(this.resetPwd.length>=6&&this.resetPwd.length<=20){
-                 reTest3=true;
-                 this.tip1=2;
+                if(this.resetPwd==this.findName){
+                    reTest3=false;
+                    this.tip1=1;
+                }else{
+                     reTest3=true;
+                    this.tip1=2;
+                    //return false;
+                }
             }else{
                 reTest3=false;
                 this.tip1=1;
@@ -287,8 +330,13 @@ export default {
             };
             verifyPhone(_param).then(res => {
                 if(res.code == 200000) {
-                    this.stepIndex=2;
+                   this.stepIndex=2;
                     this.checkMaShow=false;
+                    var tel = this.tel;
+                    tel = "" + tel;
+                    var ary = tel.split("");
+                    ary.splice(3,4,"****");
+                    this.getTel=ary.join("");
                 }else {
                     this.checkMaShow=true;
                     this.verifyCodeMsg=res.message;
@@ -296,14 +344,46 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
-            //this.stepIndex=2;
         },
         handleNext1(){
-            this.stepIndex=3;
+            let _param ={
+                phone:this.tel,
+                noteCode:this.idVertifyMa,
+            };
+            verifyPhoneNodeCode(_param).then(res => {
+                if(res.code == 200000) {
+                    var sendMsg=document.getElementById('sendMsg');
+                    sendMsg.removeAttribute("disabled");
+                    this.findName=res.data;
+                    this.idVertify=false;
+                    this.stepIndex=3;
+                    clearTimeout(this.timer);
+                }else {
+                    this.idVertify=true;
+                    this.idVertifyMsg=res.message;
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         },
         forgetPwd(){
+            this.resetMa();
             this.stepIndex=1;
             this.findPwd=true;
+
+            this.checkMa='';
+            this.tel='';
+            this.verifyCodeMsg='';
+            this.getTel='';
+            this.idVertifyMa='';
+            this.idVertifyMsg='';
+            this.tip1=0;
+            this.tip2=0;
+            this.tip3=0;
+            this.resetPwd='';
+            this.toolTip=false;
+            this.surePwd='';
+            this.sendMessage='发送验证码';
         },
         closeDialog(){
             this.coverBg=false;
