@@ -117,10 +117,10 @@
         <div class="sdk_content_item" v-for="(item,index) in sdkSorceList" :key="index">
           <div class="sdk_title1">{{item.serviceName}}</div>
           <div class="sdk_type_logo">
-            <img :src="item.logoIcon" class="logoIcon" />
+            <img :src="item.iconUrl" class="logoIcon" />
           </div>
           <div class="sdk_desc">
-            <div>{{item.sdkDsc}}</div>
+            <div>{{item.serviceDesc}}</div>
             <div class="sdk_desc_date">{{item.createTime}}</div>
           </div>
           <div class="use_intro">
@@ -131,7 +131,7 @@
               type="primary"
               icon="download"
               size="large"
-              @click="downLoad(item.downLoadUrl)"
+              @click="downLoad(item.sdkDowmLoadUrl)"
             >下载</a-button>
           </div>
         </div>
@@ -223,7 +223,9 @@ export default {
       routerData: null,
       sdkApyList: [],
       sdkManData: {
-        assignAuthorizationInfo: {},
+        assignAuthorizationInfo: {
+          assignAuthorizationPercentage: ""
+        },
         surplusInfo: {},
         usedInfo: {}
       },
@@ -279,7 +281,6 @@ export default {
       };
       getSdkManagement(getParms)
         .then(res => {
-          console.log(res, "圆圈部分数据");
           if (res.code == 200000) {
             var sdkManData = res.data || {};
             this.sdkManData = sdkManData;
@@ -305,10 +306,9 @@ export default {
             var sdkAppllList = sdkApplyData.list || [];
             this.sdkApyList = sdkAppllList;
             setTimeout(() => {
-              sdkAppllList.forEach(item=>{
-                console.log(item,'sssssssss')
-                this.initEcharts1(item,`sdkEcharts${item.id}`);
-              })
+              sdkAppllList.forEach(item => {
+                this.initEcharts1(item.totalDataList, `sdkEcharts${item.id}`);
+              });
             }, 1000);
           } else {
             this.$message.error("请求失败！");
@@ -361,7 +361,13 @@ export default {
           console.log(err, "err");
         });
     },
-    initEcharts1(echData,echId) {
+    initEcharts1(echData = [], echId) {
+      var xData = [];
+      var yData = [];
+      echData.forEach(item => {
+        xData.push(item.createTime);
+        yData.push(item.count);
+      });
       var myChart = this.$echarts.init(document.getElementById(echId));
       var option = {
         tooltip: {
@@ -370,7 +376,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
+          data: xData
         },
         grid: {
           left: "13%",
@@ -383,7 +389,7 @@ export default {
         },
         series: [
           {
-            data: [320, 132, 321],
+            data: yData,
             type: "line",
             areaStyle: {
               color: {
@@ -678,6 +684,14 @@ export default {
         .sdk_type_logo {
           width: 100px;
           height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .logoIcon {
+            display: block;
+            width: 30px;
+            height: 30px;
+          }
         }
         .sdk_desc {
           width: 708px;
