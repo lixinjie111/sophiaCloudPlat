@@ -19,14 +19,14 @@
             <a-input placeholder="测试版" />
           </div>
         </div>
-      </div> -->
+      </div>-->
       <div class="content_item">
         <div class="label_left">
           <span style="color:#FF504E;">*</span>&nbsp;授权配额
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input-number placeholder="10000次" v-model="sqNum" style="width:100%;"/>
+            <a-input-number placeholder="10000次" v-model="sqNum" style="width:100%;" />
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input-number v-model="effTime" placeholder="1个月" style="width:100%;"/>
+            <a-input-number v-model="effTime" placeholder="1个月" style="width:100%;" />
           </div>
         </div>
       </div>
@@ -71,13 +71,18 @@ export default {
     return {
       sdkChioceList: [],
       hasChicedSdk: null,
-      sqNum:null,
-      scenDesc:null,
-      effTime:null
+      sqNum: null,
+      scenDesc: null,
+      effTime: null
     };
   },
   created() {
     this.getSdkType();
+    this.$message.config({
+      top: `450px`,
+      duration: 2,
+      maxCount: 3
+    });
   },
   methods: {
     getSdkType() {
@@ -112,12 +117,25 @@ export default {
       this.$router.go(-1);
     },
     submitApply() {
+      if (!this.hasChicedSdk) {
+        this.$message.error("SDK选择不能为空！");
+        return;
+      } else if (!this.sqNum) {
+        this.$message.error("授权配额不能为空！");
+        return;
+      } else if (!this.effTime) {
+        this.$message.error("有效期不能为空！");
+        return;
+      } else if (!this.scenDesc) {
+        this.$message.error("应用场景描述不能为空！");
+        return;
+      }
       var sdkApplyParm = {
-          serviceList:this.hasChicedSdk,
-          effectiveTime:this.effTime,
-          authorizationCount:this.sqNum,
-          applicationScenarioDescription:this.scenDesc,
-          serviceModel: this.$route.query.serviceType
+        serviceList: this.hasChicedSdk,
+        effectiveTime: this.effTime,
+        authorizationCount: this.sqNum,
+        applicationScenarioDescription: this.scenDesc,
+        serviceModel: this.$route.query.serviceType
       };
       sdkApply(sdkApplyParm)
         .then(res => {

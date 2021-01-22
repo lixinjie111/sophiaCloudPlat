@@ -96,8 +96,8 @@ export default {
   name: "authPop",
   data() {
     return {
-      sdkNameList: [],
-      appNameList: [],
+      sdkNameList: [{}],
+      appNameList: [{}],
       appId: "",
       appName: "",
       appPackName: "",
@@ -114,6 +114,11 @@ export default {
   },
   props: ["serviceModel", "sqDetail"],
   created() {
+    this.$message.config({
+      top: `450px`,
+      duration: 2,
+      maxCount: 3
+    });
     this.getPageData();
   },
   methods: {
@@ -123,10 +128,20 @@ export default {
     cancel() {
       this.closePop();
     },
-    closePopWin(){
+    closePopWin() {
       this.closePop();
     },
     authApp() {
+      if (!this.serviceId) {
+        this.$message.error("SDK名称不能为空！");
+        return;
+      } else if (!this.appName) {
+        this.$message.error("应用名称不能为空！");
+        return;
+      } else if (!this.sqNum) {
+        this.$message.error("分配授权不能为空！");
+        return;
+      }
       var authParms = {
         appId: this.appId,
         appName: this.appName,
