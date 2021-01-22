@@ -75,7 +75,19 @@
     <a-layout class="cloudContainer">
       <a-layout-header class="cloudHeader">
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
-        <div class="headerRight"></div>
+        <div class="headerRight">
+          <div class="avtor"><img src="../assets/images/login/header.jpg" alt=""></div>
+          <a-dropdown>
+            <div class="ant-dropdown-link" @click="e => e.preventDefault()">
+              {{sysAdminName}}<a-icon type="down" />
+            </div>
+            <a-menu slot="overlay">
+              <a-menu-item @click="logout">
+                退出
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </div>
       </a-layout-header>
       <a-breadcrumb :style="{
           margin: '84px 16px 24px 16px',
@@ -99,10 +111,10 @@ export default {
   data() {
     return {
       title: "Shopia云服务平台",
-      logo:
-        "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
+      logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
       collapsed: false,
       breadArr: [],
+      sysAdminName:'Jack',
       menuList: [
         {
           moduleTitle: "概览",
@@ -357,6 +369,10 @@ export default {
     this.showHeader();
   },
   methods: {
+    logout(){
+      this.$router.push({path:"/login"})
+      localStorage.removeItem('yk-token');
+    },
     collapse() {
       this.collapsed = !this.collapsed;
       this.showHeader();
@@ -469,9 +485,25 @@ export default {
       z-index: 1 !important;
       .headerRight {
         margin-right: 24px;
-        width: 500px;
+        width: 50%;
         height: 100%;
-        background: #000;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .avtor{
+          width: 43px;
+          height: 43px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-right: 16px;
+        }
+        .ant-dropdown-link{
+          cursor: pointer;
+          font-size: 16px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 500;
+          color: #494A4B;
+        }
       }
     }
   }
