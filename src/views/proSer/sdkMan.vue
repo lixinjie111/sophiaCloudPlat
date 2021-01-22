@@ -89,7 +89,7 @@
           />
         </div>
         <div class="yijihuo_text">已激活</div>
-        <div class="yijihuo_echarts" id="sdkEcharts1"></div>
+        <div class="yijihuo_echarts" :id="'sdkEcharts'+item.id"></div>
       </div>
     </div>
     <div class="sdk_three_container">
@@ -102,7 +102,12 @@
       <div class="table_container">
         <a-table :columns="sqcolumns" :data-source="sqdata" @change="changePage">
           <a slot="appName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-          <a slot="operating" class="ant-dropdown-link" slot-scope="text,record" @click="viewDeatil(record)">{{ text }}</a>
+          <a
+            slot="operating"
+            class="ant-dropdown-link"
+            slot-scope="text,record"
+            @click="viewDeatil(record)"
+          >{{ text }}</a>
         </a-table>
       </div>
     </div>
@@ -110,24 +115,34 @@
       <div class="sdk_title">SDK资源</div>
       <div class="sdk_content_container">
         <div class="sdk_content_item" v-for="(item,index) in sdkSorceList" :key="index">
-          <div class="sdk_title1">{{item.sdkName}}</div>
+          <div class="sdk_title1">{{item.serviceName}}</div>
           <div class="sdk_type_logo">
-            <a-icon type="android" :style="{ fontSize: '20px', color: '#08c' }" />
+            <img :src="item.logoIcon" class="logoIcon" />
           </div>
           <div class="sdk_desc">
             <div>{{item.sdkDsc}}</div>
-            <div class="sdk_desc_date">{{item.date}}</div>
+            <div class="sdk_desc_date">{{item.createTime}}</div>
           </div>
           <div class="use_intro">
-            <a href>使用说明</a>
+            <a :href="item.useIntro">使用说明</a>
           </div>
           <div class="down_load_btn">
-            <a-button type="primary" icon="download" :size="size">{{item.btn}}</a-button>
+            <a-button
+              type="primary"
+              icon="download"
+              size="large"
+              @click="downLoad(item.downLoadUrl)"
+            >下载</a-button>
           </div>
         </div>
       </div>
     </div>
-    <vAuthPop v-if="ifShowPop" @closeMe="closePopWin" :serviceModel='serviceModelFn' :sqDetail="sqDetailData"></vAuthPop>
+    <vAuthPop
+      v-if="ifShowPop"
+      @closeMe="closePopWin"
+      :serviceModel="serviceModelFn"
+      :sqDetail="sqDetailData"
+    ></vAuthPop>
   </div>
 </template>
 
@@ -138,7 +153,8 @@ import {
   getSdkApplyList,
   sdkAuth,
   getSdkAuthList,
-  getSdkManagement
+  getSdkManagement,
+  getSdkSourceList
 } from "../../api/proSer/index";
 export default {
   name: "sdkMan",
@@ -202,48 +218,17 @@ export default {
       ],
       sqdata: [],
       size: "large",
-      sdkSorceList: [
-        {
-          sdkName: "语音识别Android SDK",
-          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
-          date: "2020-01-08",
-          btn: "下载"
-        },
-        {
-          sdkName: "语音识别Android SDK",
-          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
-          date: "2020-01-08",
-          btn: "下载"
-        },
-        {
-          sdkName: "语音识别Android SDK",
-          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
-          date: "2020-01-08",
-          btn: "下载"
-        },
-        {
-          sdkName: "语音识别Android SDK",
-          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
-          date: "2020-01-08",
-          btn: "下载"
-        },
-        {
-          sdkName: "语音识别Android SDK",
-          sdkDsc: "3.1.6默认识别模型pid为输入法模型1537",
-          date: "2020-01-08",
-          btn: "下载"
-        }
-      ],
+      sdkSorceList: [],
       ifShowPop: false,
       routerData: null,
       sdkApyList: [],
       sdkManData: {
-        assignAuthorizationInfo:{},
-        surplusInfo:{},
-        usedInfo:{}
+        assignAuthorizationInfo: {},
+        surplusInfo: {},
+        usedInfo: {}
       },
-      serviceModelFn:null,
-      sqDetailData:{}
+      serviceModelFn: null,
+      sqDetailData: {}
     };
   },
   components: {
@@ -259,12 +244,12 @@ export default {
   methods: {
     appAuth() {
       this.sqDetailData = {
-        vType:'add'
+        vType: "add"
       };
       this.ifShowPop = true;
     },
-    viewDeatil(re){
-      re.vType='view';
+    viewDeatil(re) {
+      re.vType = "view";
       this.sqDetailData = re;
       this.ifShowPop = true;
     },
@@ -282,7 +267,11 @@ export default {
     getPageData() {
       this.getSdkManagement();
       this.getSdkApplyList();
-      this.getSdkAuthList({current:1,pageSize:10});
+      this.getSdkAuthList({ current: 1, pageSize: 10 });
+      this.getSdkSorceList();
+    },
+    downLoad(url) {
+      window.location.href = url;
     },
     getSdkManagement() {
       var getParms = {
@@ -315,6 +304,12 @@ export default {
             var sdkApplyData = res.data;
             var sdkAppllList = sdkApplyData.list || [];
             this.sdkApyList = sdkAppllList;
+            setTimeout(() => {
+              sdkAppllList.forEach(item=>{
+                console.log(item,'sssssssss')
+                this.initEcharts1(item,`sdkEcharts${item.id}`);
+              })
+            }, 1000);
           } else {
             this.$message.error("请求失败！");
           }
@@ -335,8 +330,8 @@ export default {
           if (res.code == 200000) {
             var sdkAuthListData = res.data.list || [];
             sdkAuthListData.forEach(element => {
-              element.key=element.appId;
-              element.operating='查看';
+              element.key = element.appId;
+              element.operating = "查看";
             });
             this.sqdata = sdkAuthListData;
           } else {
@@ -348,8 +343,26 @@ export default {
           console.log(err, "err");
         });
     },
-    initEcharts1() {
-      var myChart = this.$echarts.init(document.getElementById("sdkEcharts1"));
+    getSdkSorceList() {
+      var sdkSorceListParm = {
+        serviceModel: this.routerData
+      };
+      getSdkSourceList(sdkSorceListParm)
+        .then(res => {
+          console.log(res, "getSdkSourceList");
+          if (res.code == 200000) {
+            var sdkSorListData = res.data || [];
+            this.sdkSorceList = sdkSorListData;
+          } else {
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    initEcharts1(echData,echId) {
+      var myChart = this.$echarts.init(document.getElementById(echId));
       var option = {
         tooltip: {
           show: true
@@ -405,181 +418,10 @@ export default {
       };
       myChart.setOption(option);
     },
-    initEcharts2() {
-      var myChart = this.$echarts.init(document.getElementById("sdkEcharts2"));
-      var option = {
-        tooltip: {
-          show: true
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
-        },
-        grid: {
-          left: "13%",
-          right: "10%",
-          bottom: "18%",
-          top: "10%"
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: [20, 332, 119],
-            type: "line",
-            areaStyle: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "#2a55f0"
-                  },
-                  {
-                    offset: 1,
-                    color: "hsl(227, 63%, 90%)"
-                  }
-                ],
-                global: false
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: "#2a55f0",
-                lineStyle: {
-                  color: "#2a55f0"
-                }
-              }
-            }
-          }
-        ]
-      };
-      myChart.setOption(option);
-    },
-    initEcharts3() {
-      var myChart = this.$echarts.init(document.getElementById("sdkEcharts3"));
-      var option = {
-        tooltip: {
-          show: true
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
-        },
-        grid: {
-          left: "13%",
-          right: "10%",
-          bottom: "18%",
-          top: "10%"
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: [90, 132, 901],
-            type: "line",
-            areaStyle: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "#2a55f0"
-                  },
-                  {
-                    offset: 1,
-                    color: "hsl(227, 63%, 90%)"
-                  }
-                ],
-                global: false
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: "#2a55f0",
-                lineStyle: {
-                  color: "#2a55f0"
-                }
-              }
-            }
-          }
-        ]
-      };
-      myChart.setOption(option);
-    },
-    initEcharts4() {
-      var myChart = this.$echarts.init(document.getElementById("sdkEcharts4"));
-      var option = {
-        tooltip: {
-          show: true
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: ["2020/1/2", "2020/9/3", "2020/12/20"]
-        },
-        grid: {
-          left: "13%",
-          right: "10%",
-          bottom: "18%",
-          top: "10%"
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: [120, 32, 401],
-            type: "line",
-            areaStyle: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "#2a55f0"
-                  },
-                  {
-                    offset: 1,
-                    color: "hsl(227, 63%, 90%)"
-                  }
-                ],
-                global: false
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: "#2a55f0",
-                lineStyle: {
-                  color: "#2a55f0"
-                }
-              }
-            }
-          }
-        ]
-      };
-      myChart.setOption(option);
-    },
-    changePage(pagination, filters, sorter){
-      console.log(pagination,'pagination')
-      console.log(filters,'filters')
-      console.log(sorter,'sorter')
+    changePage(pagination, filters, sorter) {
+      console.log(pagination, "pagination");
+      console.log(filters, "filters");
+      console.log(sorter, "sorter");
       this.getSdkAuthList(pagination);
     }
   }

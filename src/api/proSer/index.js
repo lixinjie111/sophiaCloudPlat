@@ -32,3 +32,7 @@ export const getAppList = params => {
 export const getSdkNameList = params => {
     return axios.get(`${devUrl}/sdk/authorizationSDK`, {params: params}).then(res => res.data);
 }
+//SDK资源列表
+export const getSdkSourceList = params => {
+    return axios.get(`${devUrl}/sdk/sdkResource`, {params: params}).then(res => res.data);
+}
