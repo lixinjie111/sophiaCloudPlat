@@ -129,6 +129,9 @@ export default {
       } else if (!this.scenDesc) {
         this.$message.error("应用场景描述不能为空！");
         return;
+      } else if (this.effTime > 60) {
+        this.$message.error("有效期不能超过60个月！");
+        return;
       }
       var sdkApplyParm = {
         serviceList: this.hasChicedSdk,

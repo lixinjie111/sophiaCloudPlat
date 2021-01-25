@@ -20,6 +20,18 @@
           @openChange="handleOpenChange"
         />
       </div>
+      <div class="select_container close_week">
+        <a-select default-value="clw" style="width:100%">
+          <a-select-option value="jack">Jack</a-select-option>
+          <a-select-option value="clw">近一周</a-select-option>
+          <a-select-option value="disabled" disabled>
+            <!--禁止选中-->
+            Disabled
+          </a-select-option>
+          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+        </a-select>
+      </div>
+
       <div class="btn_container">
         <a-button>重置</a-button>
         <a-button type="primary">查询</a-button>
@@ -44,8 +56,16 @@
       </div>
       <div class="expan_btn_container">
         <div class="btn_container1" @click="expanfangwen">
-          <a-icon type="down-circle" :style="{ fontSize: '16px', color: '#6495fa' }" v-show="!ifShowDetail"></a-icon>
-          <a-icon type="up-circle" :style="{ fontSize: '16px', color: '#6495fa' }" v-show="ifShowDetail"></a-icon>
+          <a-icon
+            type="down-circle"
+            :style="{ fontSize: '16px', color: '#6495fa' }"
+            v-show="!ifShowDetail"
+          ></a-icon>
+          <a-icon
+            type="up-circle"
+            :style="{ fontSize: '16px', color: '#6495fa' }"
+            v-show="ifShowDetail"
+          ></a-icon>
         </div>
       </div>
     </div>
@@ -53,12 +73,11 @@
       <div class="nengli_title_container">
         <div class="nl_title">能力服务列表</div>
         <div class="search_container">
-          
-        <a-input-search placeholder="按API名称进行搜索" size="large" @search="onSearch">
-          <a-button slot="enterButton">
-            <a-icon type="search" />
-          </a-button>
-        </a-input-search>
+          <a-input-search placeholder="按API名称进行搜索" size="large" @search="onSearch">
+            <a-button slot="enterButton">
+              <a-icon type="search" />
+            </a-button>
+          </a-input-search>
 
           <!-- <a-input-search placeholder="按API名称进行搜索" enter-button /> -->
         </div>
@@ -396,10 +415,14 @@ export default {
       height: 32px;
       margin-right: 20px;
     }
+    .close_week{
+      width: 100px;
+      margin-right: 318px;
+    }
     .time_container {
       width: 394px;
       height: 32px;
-      margin-right: 360px;
+      margin-right: 20px;
     }
     .btn_container {
       width: 136px;

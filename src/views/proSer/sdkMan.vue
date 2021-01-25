@@ -140,7 +140,7 @@
     <vAuthPop
       v-if="ifShowPop"
       @closeMe="closePopWin"
-      :serviceModel="serviceModelFn"
+      :serviceModel="routerData"
       :sqDetail="sqDetailData"
     ></vAuthPop>
   </div>
@@ -229,7 +229,6 @@ export default {
         surplusInfo: {},
         usedInfo: {}
       },
-      serviceModelFn: null,
       sqDetailData: {}
     };
   },
@@ -238,10 +237,15 @@ export default {
   },
   created() {
     this.routerData = this.$route.query.serviceModel;
-    this.serviceModelFn = this.$route.query.serviceModel;
   },
   mounted() {
     this.getPageData();
+  },
+  watch: {
+    $route: function(newVal, oldVal) {
+      this.routerData = this.$route.query.serviceModel;
+      this.getPageData();
+    }
   },
   methods: {
     appAuth() {
@@ -257,6 +261,7 @@ export default {
     },
     closePopWin(arg) {
       this.ifShowPop = arg;
+      this.getSdkAuthList({ current: 1, pageSize: 10 });
     },
     sdkApplyfn() {
       this.$router.push({
@@ -549,6 +554,7 @@ export default {
       box-sizing: border-box;
       font-family: PingFangSC-Medium, PingFang SC;
       margin-right: 15px;
+      margin-bottom: 15px;
       .sdk_title2 {
         width: 100%;
         font-size: 16px;

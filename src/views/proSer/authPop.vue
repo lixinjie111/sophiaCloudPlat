@@ -198,7 +198,7 @@ export default {
       getAppList(appListParm)
         .then(res => {
           if (res.code == 200000) {
-            var appListData = res.data || [];
+            var appListData = res.data.list || [];
             this.appNameList = appListData;
           } else {
             this.$message.error("请求失败！");

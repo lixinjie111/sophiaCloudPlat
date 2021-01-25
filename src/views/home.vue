@@ -194,13 +194,13 @@ export default {
                   title: "API管理",
                   itemKey: "renlianAPI",
                   path: "/apiMan",
-                  serviceModel: 3
+                  serviceModel: 6
                 },
                 {
                   title: "SDK管理",
                   itemKey: "renlianSDK",
                   path: "/sdkMan",
-                  serviceModel: 3
+                  serviceModel: 6
                 }
               ]
             },
@@ -212,13 +212,13 @@ export default {
                   title: "API管理",
                   itemKey: "rentiAPI",
                   path: "/apiMan",
-                  serviceModel: 4
+                  serviceModel: 7
                 },
                 {
                   title: "SDK管理",
                   itemKey: "rentiSDK",
                   path: "/sdkMan",
-                  serviceModel: 4
+                  serviceModel: 7
                 }
               ]
             },
@@ -230,13 +230,13 @@ export default {
                   title: "API管理",
                   itemKey: "wenziAPI",
                   path: "/apiMan",
-                  serviceModel: 5
+                  serviceModel: 3
                 },
                 {
                   title: "SDK管理",
                   itemKey: "wenziSDK",
                   path: "/sdkMan",
-                  serviceModel: 5
+                  serviceModel: 3
                 }
               ]
             },
@@ -248,13 +248,13 @@ export default {
                   title: "API管理",
                   itemKey: "tuxiangAPI",
                   path: "/apiMan",
-                  serviceModel: 6
+                  serviceModel: 4
                 },
                 {
                   title: "SDK管理",
                   itemKey: "tuxiangSDK",
                   path: "/sdkMan",
-                  serviceModel: 6
+                  serviceModel: 4
                 }
               ]
             },
@@ -266,13 +266,13 @@ export default {
                   title: "API管理",
                   itemKey: "shipinAPI",
                   path: "/apiMan",
-                  serviceModel: 7
+                  serviceModel: 5
                 },
                 {
                   title: "SDK管理",
                   itemKey: "shipinSDK",
                   path: "/sdkMan",
-                  serviceModel: 7
+                  serviceModel: 5
                 }
               ]
             }
