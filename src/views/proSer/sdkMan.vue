@@ -354,7 +354,6 @@ export default {
       };
       getSdkSourceList(sdkSorceListParm)
         .then(res => {
-          console.log(res, "getSdkSourceList");
           if (res.code == 200000) {
             var sdkSorListData = res.data || [];
             this.sdkSorceList = sdkSorListData;

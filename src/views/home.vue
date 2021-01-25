@@ -21,6 +21,7 @@
         :default-selected-keys="['1']"
         @click="menuHandleClick"
         :inlineCollapsed="true"
+        v-model="selectKeys"
       >
         <template v-for="item in menuList">
           <a-menu-item
@@ -362,8 +363,15 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      selectKeys:[]
     };
+  },
+  watch:{
+    $route:function(a,b){
+      console.log('rrrrrrrrrrrrrr')
+      this.selectKeys = this.selectKeys;
+    }
   },
   mounted() {
     this.showHeader();
@@ -386,8 +394,9 @@ export default {
       }
     },
     menuHandleClick(e) {
-      console.log(e);
-      this.breadArr = [];
+      console.log(e,'zjjjjjjjjjjj');
+      this.breadArr = []; 
+      this.selectKeys = e.key;
       if (e.key == "企业设置") {
         this.breadArr.splice(0, 0, "系统管理", "企业设置");
         this.$router.push({

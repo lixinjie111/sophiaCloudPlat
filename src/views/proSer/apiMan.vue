@@ -2,33 +2,31 @@
   <div class="apiMan_container">
     <div class="select_area_container">
       <div class="select_container">
-        <a-select default-value="lucy" style="width:100%">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled" disabled>
-            <!--禁止选中-->
-            Disabled
-          </a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+        <a-select default-value style="width:100%" @change="chengeSerSelect">
+          <a-select-option
+            v-for="(item) in serListArr"
+            :value="item.serviceId"
+            :key="item.id"
+          >{{item.serviceName}}</a-select-option>
         </a-select>
       </div>
       <div class="time_container">
-        <a-range-picker
-          style="width:100%"
-          separator="-"
-          :locale="locale"
-          @openChange="handleOpenChange"
-        />
+        <el-date-picker
+          v-model="rangeTime"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          style="height:100%"
+          @change="changeDataRange"
+        ></el-date-picker>
       </div>
       <div class="select_container close_week">
-        <a-select default-value="clw" style="width:100%">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="clw">近一周</a-select-option>
-          <a-select-option value="disabled" disabled>
-            <!--禁止选中-->
-            Disabled
-          </a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+        <a-select default-value="cl7" style="width:100%" @change="choiceRange">
+          <a-select-option value="cl7">最近7天</a-select-option>
+          <a-select-option value="by">本月</a-select-option>
+          <a-select-option value="sgy">上个月</a-select-option>
+          <a-select-option value="sgjd">上个季度</a-select-option>
         </a-select>
       </div>
 
@@ -73,18 +71,21 @@
       <div class="nengli_title_container">
         <div class="nl_title">能力服务列表</div>
         <div class="search_container">
-          <a-input-search placeholder="按API名称进行搜索" size="large" @search="onSearch">
+          <a-input-search
+            placeholder="按API名称进行搜索"
+            size="large"
+            v-model="searchName"
+            @search="onSearch"
+          >
             <a-button slot="enterButton">
               <a-icon type="search" />
             </a-button>
           </a-input-search>
-
-          <!-- <a-input-search placeholder="按API名称进行搜索" enter-button /> -->
         </div>
       </div>
       <div class="table_container">
-        <a-table :columns="nlcolumns" :data-source="nldata">
-          <a slot="apiname" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+        <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage">
+          <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
         </a-table>
@@ -95,93 +96,68 @@
 
 <script>
 import locale from "x-intelligent-ui/es/date-picker/locale/zh_CN";
+import moment from "moment";
+import "moment/locale/zh-cn";
+import {
+  apiVisitTrend,
+  apiVisitTrendInfo,
+  serviceList
+} from "../../api/proSer/index";
 export default {
   name: "apiMan",
   data() {
     return {
       locale,
+      moment,
       nlcolumns: [
         {
           title: "API名称",
-          dataIndex: "apiname",
-          key: "apiname",
-          scopedSlots: { customRender: "apiname" }
+          dataIndex: "serviceName",
+          key: "serviceName",
+          scopedSlots: { customRender: "serviceName" }
         },
         {
           title: "消费状态",
-          dataIndex: "xfStatus",
-          key: "xfStatus"
+          dataIndex: "paySta",
+          key: "paySta"
         },
         {
           title: "调用量限制",
-          dataIndex: "dyxianzhi",
-          key: "dyxianzhi"
+          dataIndex: "freeNum",
+          key: "freeNum"
         },
         {
           title: "QPS",
-          key: "qps",
-          dataIndex: "qps"
+          key: "basicQps",
+          dataIndex: "basicQps"
         },
         {
           title: "购买时间",
-          key: "buyTime",
-          dataIndex: "buyTime"
+          key: "paySuccessTime",
+          dataIndex: "paySuccessTime"
         },
         {
           title: "到期时间",
-          key: "matuTime",
-          dataIndex: "matuTime"
+          key: "effectiveTime",
+          dataIndex: "effectiveTime"
         },
         {
           title: "开通付费",
           key: "openBuy",
           dataIndex: "openBuy",
           slots: { title: "customTitle" },
-          scopedSlots: { customRender: "apiname" }
+          scopedSlots: { customRender: "openBuy" }
         },
         {
           title: "购买次数包",
           key: "Purchases",
           dataIndex: "Purchases",
           slots: { title: "customTitle" },
-          scopedSlots: { customRender: "apiname" }
+          scopedSlots: { customRender: "Purchases" }
         }
       ],
-      nldata: [
-        {
-          key: "1",
-          apiname: "语音识别-普通话",
-          xfStatus: "待开通付费",
-          dyxianzhi: "200万次赠送",
-          qps: 2,
-          buyTime: "2019-12-23 14:07",
-          matuTime: "2019-12-23 14:07",
-          openBuy: "购买",
-          Purchases: "购买"
-        },
-        {
-          key: "2",
-          apiname: "语音识别-英语",
-          xfStatus: "按量付费",
-          dyxianzhi: "--",
-          qps: 5,
-          buyTime: "2019-12-23 14:07",
-          matuTime: "2019-12-23 14:07",
-          openBuy: "购买",
-          Purchases: "购买"
-        },
-        {
-          key: "3",
-          apiname: "语音识别-粤语",
-          xfStatus: "按次付费",
-          dyxianzhi: "1000万次",
-          qps: 12,
-          buyTime: "2019-12-23 14:07",
-          matuTime: "2019-12-23 14:07",
-          openBuy: "购买",
-          Purchases: "购买"
-        }
-      ],
+      searchName: "",
+      nldata: [],
       qscolumns: [
         {
           title: "服务名称",
@@ -256,24 +232,143 @@ export default {
           buyNum: "购买"
         }
       ],
-      ifShowDetail: false
+      ifShowDetail: false,
+      serListArr: [],
+      rangeTime:[new Date().getTime() - 3600*1000*24*7,new Date()],
+      serViceId:'',
+      beginDate:'',
+      endDate:''
     };
   },
   mounted() {
-    this.initBarEcharts();
+    this.getPageData();
   },
   methods: {
-    handleOpenChange() {
-      setTimeout(() => {
-        if (document.getElementsByClassName("ant-calendar-range-middle")[0]) {
-          document.getElementsByClassName(
-            "ant-calendar-range-middle"
-          )[0].innerText = "-";
-        }
-      }, 300);
+    getPageData() {
+      this.getServiceList({ current: 1, pageSize: 10, serviceName: "" });
+      this.getSelectList({ current: 1, pageSize: "", serviceName: "" });
+      this.getApiVisitTrend();
+      this.initBarEcharts();
     },
-    initBarEcharts() {
+    chengeSerSelect(e){
+      this.serViceId = e;
+    },
+    choiceRange(e) {
+      if(e == 'cl7'){
+        this.rangeTime = [new Date().getTime() - 3600*1000*24*7,new Date()];
+      }
+      else if(e == 'by'){
+        
+      }
+      else if(e == 'sgy'){}
+      else if(e == 'sgjd'){}
+    },
+    changeDataRange(e){
+      var dateList = e || [];
+      this.beginDate = dateList[0];
+      this.endDate = dateList[1];
+    },
+    changePage(pagination, filters, sorter) {
+      pagination.serviceName = "";
+      this.getServiceList(pagination);
+    },
+    onSearch() {
+      var searchText = this.searchName || "";
+      this.getServiceList({
+        current: 1,
+        pageSize: 10,
+        serviceName: searchText
+      });
+    },
+    getSelectList(pagination) {
+      var serListParm = new FormData();
+      serListParm.append("serviceName", pagination.serviceName);
+      serListParm.append("pageIndex", pagination.current);
+      serListParm.append("pageSize", pagination.pageSize);
+      serviceList(serListParm)
+        .then(res => {
+          if (res.code == 200000) {
+            var serListdata = res.data.list || [];
+            serListdata.unshift({
+              serviceId: "",
+              serviceName: "全部"
+            });
+            this.serListArr = serListdata;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    getApiVisitTrend() {
+      var fwqsParm = new FormData();
+      fwqsParm.append("serviceId",this.serViceId);
+      fwqsParm.append("beginDate", ''); //this.beginDate
+      fwqsParm.append("endDate",'' ); //this.endDate
+      apiVisitTrend(fwqsParm)
+        .then(res => {
+          console.log(res,'趋势')
+          if (res.code == 200000) {
+            var serListdata = res.data || [];
+            this.initBarEcharts(serListdata);
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    getServiceList(pagination) {
+      var serListParm = new FormData();
+      serListParm.append("serviceName", pagination.serviceName);
+      serListParm.append("pageIndex", pagination.current);
+      serListParm.append("pageSize", pagination.pageSize);
+      serviceList(serListParm)
+        .then(res => {
+          if (res.code == 200000) {
+            var serListdata = res.data.list || [];
+            serListdata.forEach(item => {
+              item.key = `itemKey${item.id}`;
+              item.Purchases = "购买";
+              if (item.freeType == 1) {
+                item.paySta = "每日免费限额";
+              } else if (item.freeType == 2) {
+                item.paySta = "一次性免费限额";
+              } else if (item.freeType == 3) {
+                item.paySta = "无限制";
+              }
+
+              if (item.payStatus == 1) {
+                item.openBuy = "";
+              } else {
+                item.openBuy = "购买";
+              }
+            });
+            this.nldata = serListdata;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    initBarEcharts(ecData = []) {
       setTimeout(() => {
+        var xData = [];
+        var yData1 = [];
+        var yData2 = [];
+        ecData.forEach(item=>{
+          xData.push(item.nowTime);
+          yData1.push(item.thisSuccessNum);
+          yData2.push(item.numMonthRatio);
+        });
         var myChart = this.$echarts.init(document.getElementById("barID"));
         var option = {
           tooltip: {
@@ -291,26 +386,13 @@ export default {
             bottom: "10%"
           },
           legend: {
-            data: ["蒸发量", "平均温度"],
+            data: ["API", "同比上涨"],
             left: 10
           },
           xAxis: [
             {
               type: "category",
-              data: [
-                "1月",
-                "2月",
-                "3月",
-                "4月",
-                "5月",
-                "6月",
-                "7月",
-                "8月",
-                "9月",
-                "10月",
-                "11月",
-                "12月"
-              ],
+              data:xData,
               axisPointer: {
                 type: "shadow"
               }
@@ -318,38 +400,20 @@ export default {
           ],
           yAxis: [
             {
-              type: "value",
-              name: "水量",
-              axisLabel: {
-                formatter: "{value} ml"
-              }
+              type: "value"
             },
             {
               type: "value",
-              name: "温度",
               axisLabel: {
-                formatter: "{value} °C"
+                formatter: "{value}%"
               }
             }
           ],
           series: [
             {
-              name: "蒸发量",
+              name: "API",
               type: "bar",
-              data: [
-                2.0,
-                4.9,
-                7.0,
-                23.2,
-                25.6,
-                76.7,
-                135.6,
-                162.2,
-                32.6,
-                20.0,
-                6.4,
-                3.3
-              ],
+              data:yData1,
               itemStyle: {
                 normal: {
                   color: "#5B8FF9"
@@ -357,23 +421,10 @@ export default {
               }
             },
             {
-              name: "平均温度",
+              name: "同比上涨",
               type: "line",
               yAxisIndex: 1,
-              data: [
-                2.0,
-                2.2,
-                3.3,
-                4.5,
-                6.3,
-                10.2,
-                20.3,
-                23.4,
-                23.0,
-                16.5,
-                12.0,
-                6.2
-              ],
+              data:yData2,
               itemStyle: {
                 normal: {
                   color: "#61D7A7"
@@ -415,9 +466,9 @@ export default {
       height: 32px;
       margin-right: 20px;
     }
-    .close_week{
+    .close_week {
       width: 100px;
-      margin-right: 318px;
+      margin-right: 48%;
     }
     .time_container {
       width: 394px;

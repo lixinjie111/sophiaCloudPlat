@@ -1,5 +1,8 @@
 
 import {devUrl} from '../requestUrl';
+
+//SDK部分
+
 //SDK申请
 export const sdkApply = params => { 
     return axios.post(`${devUrl}/sdk/apply`, params).then(res => res.data);
@@ -36,3 +39,18 @@ export const getSdkNameList = params => {
 export const getSdkSourceList = params => {
     return axios.get(`${devUrl}/sdk/sdkResource`, {params: params}).then(res => res.data);
 }
+
+//API部分
+
+//api访问趋势
+export const apiVisitTrend = params => { 
+    return axios.post(`${devUrl}/APIService/apiVisitTrend`, params).then(res => res.data);
+};
+//api访问趋势详情
+export const apiVisitTrendInfo = params => {
+    return axios.get(`${devUrl}/APIService/apiVisitTrendInfo`, {params: params}).then(res => res.data);
+}
+//能力服务列表
+export const serviceList = params => { 
+    return axios.post(`${devUrl}/APIService/serviceList`, params).then(res => res.data);
+};
