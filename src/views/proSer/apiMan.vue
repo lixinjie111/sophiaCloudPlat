@@ -258,10 +258,18 @@ export default {
         this.rangeTime = [new Date().getTime() - 3600*1000*24*7,new Date()];
       }
       else if(e == 'by'){
-        
+        const startDate = moment().month(moment().month()).startOf('month').valueOf();
+        const endDate = moment().month(moment().month()).endOf('month').valueOf();
+        this.rangeTime = [startDate,endDate]
       }
-      else if(e == 'sgy'){}
-      else if(e == 'sgjd'){}
+      else if(e == 'sgy'){
+        const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
+        const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
+        this.rangeTime = [startDate,endDate]
+      }
+      else if(e == 'sgjd'){
+        this.rangeTime = [moment().quarter(moment().quarter() - 1).startOf('quarter'), moment().quarter(moment().quarter() - 1).endOf('quarter')]
+      }
     },
     changeDataRange(e){
       var dateList = e || [];
