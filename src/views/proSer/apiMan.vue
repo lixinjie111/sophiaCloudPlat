@@ -196,7 +196,8 @@ export default {
           title: "开通付费",
           key: "openBuyF",
           dataIndex: "openBuyF",
-          scopedSlots: { customRender: "openBuyF" }
+          scopedSlots: { customRender: "openBuyF" },
+          slots: { title: "customTitle" }
         },
         {
           title: "购买次数包",
@@ -329,6 +330,7 @@ export default {
             var serListdata = res.data.list || [];
             serListdata.forEach(item=>{
               item.key =`serviceId${item.serviceId}`;
+              item.buyNum = "购买";
               if (item.payStatus == 1) {
                 item.openBuyF = "";
               } else {
