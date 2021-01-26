@@ -18,11 +18,12 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           style="height:100%"
+          value-format="yyyy-MM-dd"
           @change="changeDataRange"
         ></el-date-picker>
       </div>
       <div class="select_container close_week">
-        <a-select default-value="cl7" style="width:100%" @change="choiceRange">
+        <a-select v-model="selVal" style="width:100%" @change="choiceRange">
           <a-select-option value="cl7">最近7天</a-select-option>
           <a-select-option value="by">本月</a-select-option>
           <a-select-option value="sgy">上个月</a-select-option>
@@ -31,25 +32,29 @@
       </div>
 
       <div class="btn_container">
-        <a-button>重置</a-button>
-        <a-button type="primary">查询</a-button>
+        <a-button @click="resetFn">重置</a-button>
+        <a-button type="primary" @click="searchFn">查询</a-button>
       </div>
     </div>
     <div class="fangwen_area_container">
       <div class="title_container">访问趋势</div>
       <div class="bar_container" id="barID"></div>
       <div class="fangwen_detail_container" v-show="ifShowDetail">
-        <a-table :columns="qscolumns" :data-source="qsdata">
-          <a slot="servName" slot-scope="text" href="javascript:;">{{text}}</a>
-          <span slot="usePer" slot-scope="usePer">
-            <a-progress :percent="usePer" size="small" status="active" />
+        <a-table :columns="qscolumns" :data-source="qsdata" @change="changeQsTablePag">
+          <a slot="serviceName" slot-scope="text" href="">{{text}}</a>
+          <span slot="successUsageRate" slot-scope="successUsageRate">
+            <a-progress :percent="successUsageRate" size="small" status="active" />
           </span>
-          <span slot="tsyPer" slot-scope="tsyPer">
-            <a-icon type="home" />&nbsp;&nbsp;
-            <span :style="tsyPer>24 ? 'color:red' :'color:green' ">{{tsyPer}}%</span>
+          <span slot="numMonthRatio" slot-scope="numMonthRatio">
+            <!-- <a-icon type="home" />&nbsp;&nbsp; -->
+            <span :style="numMonthRatio < 0 ? 'color:red' :'color:green' ">
+              {{numMonthRatio}}
+              <span v-if="numMonthRatio>0">%</span>
+              <span v-else>/</span>
+            </span>
           </span>
-          <a slot="openBuy" slot-scope="text" href="javascript:;">{{text}}</a>
-          <a slot="buyNum" slot-scope="text" href="javascript:;">{{text}}</a>
+          <a slot="openBuyF" slot-scope="text" href="">{{text}}</a>
+          <a slot="buyNum" slot-scope="text" href="">{{text}}</a>
         </a-table>
       </div>
       <div class="expan_btn_container">
@@ -161,37 +166,37 @@ export default {
       qscolumns: [
         {
           title: "服务名称",
-          dataIndex: "servName",
-          key: "servName",
-          scopedSlots: { customRender: "servName" }
+          dataIndex: "serviceName",
+          key: "serviceName",
+          scopedSlots: { customRender: "serviceName" }
         },
         {
           title: "访问量",
-          dataIndex: "fwNum",
-          key: "fwNum"
+          dataIndex: "totalSuccessNum",
+          key: "totalSuccessNum"
         },
         {
           title: "剩余用量",
-          dataIndex: "syNum",
-          key: "syNum"
+          dataIndex: "remainCount",
+          key: "remainCount"
         },
         {
           title: "同上月相比",
-          key: "tsyPer",
-          dataIndex: "tsyPer",
-          scopedSlots: { customRender: "tsyPer" }
+          key: "numMonthRatio",
+          dataIndex: "numMonthRatio",
+          scopedSlots: { customRender: "numMonthRatio" }
         },
         {
           title: "使用率占比",
-          key: "usePer",
-          dataIndex: "usePer",
-          scopedSlots: { customRender: "usePer" }
+          key: "successUsageRate",
+          dataIndex: "successUsageRate",
+          scopedSlots: { customRender: "successUsageRate" }
         },
         {
           title: "开通付费",
-          key: "openBuy",
-          dataIndex: "openBuy",
-          scopedSlots: { customRender: "openBuy" }
+          key: "openBuyF",
+          dataIndex: "openBuyF",
+          scopedSlots: { customRender: "openBuyF" }
         },
         {
           title: "购买次数包",
@@ -200,44 +205,14 @@ export default {
           scopedSlots: { customRender: "buyNum" }
         }
       ],
-      qsdata: [
-        {
-          key: "1",
-          servName: "语音识别-普通话",
-          fwNum: "6,567千次",
-          syNum: "6,567千次",
-          tsyPer: 50,
-          usePer: 45,
-          openBuy: "购买",
-          buyNum: "购买"
-        },
-        {
-          key: "2",
-          servName: "语音识别-英语",
-          fwNum: "567小时",
-          syNum: "6,567千次",
-          tsyPer: 30,
-          usePer: 70,
-          openBuy: "购买",
-          buyNum: "购买"
-        },
-        {
-          key: "3",
-          servName: "语音识别-粤语",
-          fwNum: "567小时",
-          syNum: "6,567千次",
-          tsyPer: 24,
-          usePer: 50,
-          openBuy: "购买",
-          buyNum: "购买"
-        }
-      ],
+      qsdata: [],
       ifShowDetail: false,
       serListArr: [],
-      rangeTime:[new Date().getTime() - 3600*1000*24*7,new Date()],
+      rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       serViceId:'',
-      beginDate:'',
-      endDate:''
+      beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
+      endDate:moment(new Date()).format('YYYY-MM-DD'),
+      selVal:'cl7'
     };
   },
   mounted() {
@@ -248,27 +223,50 @@ export default {
       this.getServiceList({ current: 1, pageSize: 10, serviceName: "" });
       this.getSelectList({ current: 1, pageSize: "", serviceName: "" });
       this.getApiVisitTrend();
-      this.initBarEcharts();
+      this.getApiVisitedInfo({beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'), endDate:moment(new Date()).format('YYYY-MM-DD'), current: 1, pageSize: 10, serViceId: ""});
+    },
+    resetFn(){
+      this.serViceId = '';
+      this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
+      this.beginDate=moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD');
+      this.endDate=moment(new Date()).format('YYYY-MM-DD');
+      this.selVal='cl7';
+      this.getApiVisitTrend();
+      this.getApiVisitedInfo({beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'), endDate:moment(new Date()).format('YYYY-MM-DD'), current: 1, pageSize: 10, serViceId: ""});
+    },
+    searchFn(){
+      this.getApiVisitTrend();
+      this.getApiVisitedInfo({beginDate:this.beginDate,endDate:this.endDate,current:1,pageSize:10,serViceId:this.serViceId});
     },
     chengeSerSelect(e){
       this.serViceId = e;
     },
     choiceRange(e) {
       if(e == 'cl7'){
-        this.rangeTime = [new Date().getTime() - 3600*1000*24*7,new Date()];
+        this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'by'){
         const startDate = moment().month(moment().month()).startOf('month').valueOf();
         const endDate = moment().month(moment().month()).endOf('month').valueOf();
-        this.rangeTime = [startDate,endDate]
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgy'){
         const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
         const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
-        this.rangeTime = [startDate,endDate]
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgjd'){
-        this.rangeTime = [moment().quarter(moment().quarter() - 1).startOf('quarter'), moment().quarter(moment().quarter() - 1).endOf('quarter')]
+        const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();
+        const endDate = moment().quarter(moment().quarter() - 1).endOf('quarter').valueOf();
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
     },
     changeDataRange(e){
@@ -279,6 +277,12 @@ export default {
     changePage(pagination, filters, sorter) {
       pagination.serviceName = "";
       this.getServiceList(pagination);
+    },
+    changeQsTablePag(pagination, filters, sorter){
+      pagination.serviceId = this.serViceId;
+      pagination.beginDate = this.beginDate;
+      pagination.endDate = this.endDate;
+      this.getApiVisitedInfo(pagination);
     },
     onSearch() {
       var searchText = this.searchName || "";
@@ -311,11 +315,41 @@ export default {
           console.log(err, "err");
         });
     },
+    getApiVisitedInfo(pagination){
+      var fwqsInfoParm = new FormData();
+      fwqsInfoParm.append("serviceId",pagination.serViceId);
+      fwqsInfoParm.append("beginDate", pagination.beginDate); 
+      fwqsInfoParm.append("endDate",pagination.endDate); 
+      fwqsInfoParm.append("pageIndex",pagination.current);  
+      fwqsInfoParm.append("pageSize",pagination.pageSize);  
+      apiVisitTrendInfo(fwqsInfoParm)
+        .then(res => {
+          console.log(res,'趋势详情')
+          if (res.code == 200000) {
+            var serListdata = res.data.list || [];
+            serListdata.forEach(item=>{
+              item.key =`serviceId${item.serviceId}`;
+              if (item.payStatus == 1) {
+                item.openBuyF = "";
+              } else {
+                item.openBuyF = "购买";
+              }
+            });
+            this.qsdata = serListdata;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
     getApiVisitTrend() {
       var fwqsParm = new FormData();
       fwqsParm.append("serviceId",this.serViceId);
-      fwqsParm.append("beginDate", ''); //this.beginDate
-      fwqsParm.append("endDate",'' ); //this.endDate
+      fwqsParm.append("beginDate", this.beginDate); //this.beginDate
+      fwqsParm.append("endDate",this.endDate); //this.endDate
       apiVisitTrend(fwqsParm)
         .then(res => {
           console.log(res,'趋势')
@@ -512,7 +546,7 @@ export default {
     }
     .fangwen_detail_container {
       width: 100%;
-      height: 200px;
+      min-height: 200px;
       margin-top: 15px;
       /deep/ .ant-table-wrapper {
         /deep/ .ant-spin-nested-loading {
