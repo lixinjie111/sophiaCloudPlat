@@ -529,9 +529,8 @@ export default {
       margin-right: 48%;
     }
     .time_container {
-      width: 394px;
+      width: 370px;
       height: 32px;
-      margin-right: 20px;
     }
     .btn_container {
       width: 136px;

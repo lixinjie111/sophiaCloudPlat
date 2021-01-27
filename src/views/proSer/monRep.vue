@@ -5,11 +5,16 @@
       <div class="content_item">
         <div class="label">选择应用：</div>
         <div class="input_container">
-          <a-select default-value="lucy" style="width:100%;height:100%;">
-            <a-select-option value="jack">Jack</a-select-option>
-            <a-select-option value="lucy">Lucy</a-select-option>
-            <a-select-option value="disabled" disabled>Disabled</a-select-option>
-            <a-select-option value="Yiminghe">yiminghe</a-select-option>
+          <a-select
+            style="width:100%"
+            @change="handleAppListChange"
+            v-model="appNameVal"
+          >
+            <a-select-option
+              v-for="(item) in appNameList"
+              :key="item.id"
+              :value="item.appId"
+            >{{item.appName}}</a-select-option>
           </a-select>
         </div>
       </div>
@@ -42,9 +47,16 @@
       <div class="content_item">
         <div class="label">时间段：</div>
         <div class="input_container">
-          <a-range-picker separator="-" :locale="locale">
-            <a-icon slot="suffixIcon" type="schedule" />
-          </a-range-picker>
+          <el-date-picker
+            v-model="rangeTime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            style="height:100%;width:100%;"
+            value-format="yyyy-MM-dd"
+            @change="changeDataRange"
+          ></el-date-picker>
         </div>
       </div>
       <div class="content_item">
@@ -67,21 +79,54 @@
 </template>
 
 <script>
-import locale from "x-intelligent-ui/es/date-picker/locale/zh_CN";
+import { getAppList } from "../../api/proSer/index";
 export default {
   name: "monRep",
   data() {
     return {
-      locale,
       jkValue: [],
       plainOptions: ["调用成功", "调用失败"],
-      timeRadioVal: []
+      timeRadioVal: [],
+      rangeTime: [],
+      appNameList: [{}],
+      appNameVal: ""
     };
   },
   mounted() {
     this.initLineEcharts();
   },
+  created() {
+    this.getPageData();
+  },
   methods: {
+    getPageData() {
+      this.getAppNameList();
+    },
+    getAppNameList() {
+      var appListParm = {
+        pageIndex: 1,
+        pageSize: 100
+      };
+      getAppList(appListParm)
+        .then(res => {
+          if (res.code == 200000) {
+            var appListData = res.data.list || [];
+            this.appNameList = appListData;
+          } else {
+            this.$message.error("请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err);
+        });
+    },
+    changeDataRange(e) {
+      console.log(e, "sssssssqqqqq");
+    },
+    handleAppListChange(e){
+      console.log(e,'aaaaaaaaaa')
+    },
     initLineEcharts() {
       var myChart = this.$echarts.init(
         document.getElementById("timeEchartsId")
