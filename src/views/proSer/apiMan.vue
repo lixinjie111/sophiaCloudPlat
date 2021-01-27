@@ -213,8 +213,18 @@ export default {
       serViceId:'',
       beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
       endDate:moment(new Date()).format('YYYY-MM-DD'),
-      selVal:'cl7'
+      selVal:'cl7',
+      routerData:''
     };
+  },
+  created() {
+    this.routerData = this.$route.query.serviceModel;
+  },
+  watch: {
+    $route: function(newVal, oldVal) {
+      this.routerData = this.$route.query.serviceModel;
+      this.getPageData();
+    }
   },
   mounted() {
     this.getPageData();
@@ -298,6 +308,7 @@ export default {
       serListParm.append("serviceName", pagination.serviceName);
       serListParm.append("pageIndex", pagination.current);
       serListParm.append("pageSize", pagination.pageSize);
+      serListParm.append("serviceModel",this.routerData); 
       serviceList(serListParm)
         .then(res => {
           if (res.code == 200000) {
@@ -322,7 +333,8 @@ export default {
       fwqsInfoParm.append("beginDate", pagination.beginDate); 
       fwqsInfoParm.append("endDate",pagination.endDate); 
       fwqsInfoParm.append("pageIndex",pagination.current);  
-      fwqsInfoParm.append("pageSize",pagination.pageSize);  
+      fwqsInfoParm.append("pageSize",pagination.pageSize);
+      fwqsInfoParm.append("serviceModel",this.routerData);   
       apiVisitTrendInfo(fwqsInfoParm)
         .then(res => {
           console.log(res,'趋势详情')
@@ -350,8 +362,9 @@ export default {
     getApiVisitTrend() {
       var fwqsParm = new FormData();
       fwqsParm.append("serviceId",this.serViceId);
-      fwqsParm.append("beginDate", this.beginDate); //this.beginDate
-      fwqsParm.append("endDate",this.endDate); //this.endDate
+      fwqsParm.append("beginDate", this.beginDate); 
+      fwqsParm.append("endDate",this.endDate); 
+      fwqsParm.append("serviceModel",this.routerData); 
       apiVisitTrend(fwqsParm)
         .then(res => {
           console.log(res,'趋势')
@@ -372,6 +385,7 @@ export default {
       serListParm.append("serviceName", pagination.serviceName);
       serListParm.append("pageIndex", pagination.current);
       serListParm.append("pageSize", pagination.pageSize);
+      serListParm.append("serviceModel",this.routerData); 
       serviceList(serListParm)
         .then(res => {
           if (res.code == 200000) {
