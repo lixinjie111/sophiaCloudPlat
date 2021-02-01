@@ -304,6 +304,7 @@ export default {
       });
     },
     getSelectList(pagination) {
+      this.serListArr = [];
       var serListParm = new FormData();
       serListParm.append("serviceName", pagination.serviceName);
       serListParm.append("pageIndex", pagination.current);
@@ -328,6 +329,7 @@ export default {
         });
     },
     getApiVisitedInfo(pagination){
+      this.qsdata = [];
       var fwqsInfoParm = new FormData();
       fwqsInfoParm.append("serviceId",pagination.serViceId);
       fwqsInfoParm.append("beginDate", pagination.beginDate); 
@@ -381,6 +383,7 @@ export default {
         });
     },
     getServiceList(pagination) {
+      this.nldata = [];
       var serListParm = new FormData();
       serListParm.append("serviceName", pagination.serviceName);
       serListParm.append("pageIndex", pagination.current);
