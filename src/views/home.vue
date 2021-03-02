@@ -70,7 +70,7 @@
                       {{child.title}}
                     </a-menu-item>
                   </a-sub-menu>
-                  <a-menu-item v-else>{{item2.title}}</a-menu-item>
+                  <a-menu-item v-else :key="item2.itemKey">{{item2.title}}</a-menu-item>
               </template>
             </a-sub-menu>
           </template>
