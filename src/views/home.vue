@@ -58,6 +58,22 @@
               </a-sub-menu>
             </template>
           </template>
+          <template v-else-if="item.moduleTitle == '数据服务'">
+            <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
+              <span slot="title">
+                <a-icon type="user" />
+                <span>{{ subItem.title }}</span>
+              </span>
+              <template v-for="item2 in subItem.menuItmList">
+                  <a-sub-menu :title="item2.title" v-if="item2.children">
+                    <a-menu-item v-for="child in item2.children" :key="child.itemKey" >
+                      {{child.title}}
+                    </a-menu-item>
+                  </a-sub-menu>
+                  <a-menu-item v-else :key="item2.itemKey">{{item2.title}}</a-menu-item>
+              </template>
+            </a-sub-menu>
+          </template>
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
               <span slot="title">
@@ -288,18 +304,41 @@ export default {
               title: "智能推荐",
               menuItmList: [
                 {
-                  title: "推荐应用",
+                  title: "推荐应用管理",
                   itemKey: "tuijianyingyong",
-                  path: "/recommendation/application/list"
+                  path: "/recommendation/application/list",
                 },
                 {
-                  title: "获取推荐结果"
+                  title: "推荐场景管理",
+                  itemKey: "tuijianchangjing",
+                  path: "",
                 },
                 {
-                  title: "数据管理"
+                  title: "数据中心",
+                  itemKey: "shujuzhongxin",
+                  children: [
+                    {
+                      title: "数据管理",
+                      itemKey: "tuijuguanli",
+                      path: ""
+                    }
+                  ]
                 },
                 {
-                  title: "推荐池物品"
+                  title: "推荐运营",
+                  itemKey: "tuijianyunying",
+                  children: [
+                    {
+                      title: "推荐测试及结果",
+                      itemKey: "tuijianceshijijieguo",
+                      path: ""
+                    },
+                    {
+                      title: "物品管理",
+                      itemKey: "wupinguanli",
+                      path: ""
+                    }
+                  ]
                 }
               ]
             },
@@ -469,6 +508,7 @@ export default {
         /deep/ .ant-menu-submenu-inline {
           /deep/ .ant-menu-submenu-title {
             padding-left: 44px !important;
+
           }
         }
       }
@@ -481,6 +521,9 @@ export default {
     /deep/ .ant-menu-inline {
       /deep/ .ant-menu-item {
         padding-left: 70px !important;
+      }
+      /deep/ .ant-menu-submenu {
+        padding-left: 26px !important;
       }
     }
   }
