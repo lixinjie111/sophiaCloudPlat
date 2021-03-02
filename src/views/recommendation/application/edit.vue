@@ -30,8 +30,8 @@
 </template>
 
 <script>
-  import CreateForm from "@/components/recommendation/CreateForm";
-  import SceneForm from "@/components/recommendation/SceneForm";
+  import CreateForm from "@/components/recommendation/application/CreateForm";
+  import SceneForm from "@/components/recommendation/scene/SceneForm";
   import SetData from "@/components/recommendation/SetData";
   import SetRules from "@/components/recommendation/SetRules";
 

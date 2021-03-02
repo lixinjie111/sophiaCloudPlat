@@ -1,15 +1,20 @@
 import { requestLogin} from '@/api/login';
+import { userInfo} from '@/api/user';
 import { 
 	setAuthInfo, removeAuthInfo
 } from '@/session/index';
 
 const admin = {
 	state: {
-        token:''
+        token:'',
+        userInfo:{}
 	},
 	mutations: {
 		SET_LOGIN_INFO:(state, loginInfo) => {
 			state.token = loginInfo;
+		},
+		get_user_info:(state,user_info)=>{
+			state.userInfo=user_info;
 		},
 		REMOVE_LOGIN_INFO:(state) => {
 			state.token = "";
@@ -40,6 +45,18 @@ const admin = {
 			}).catch(error => {
 				reject(error);
 			});
+		},
+		getUserInfo({ commit }) {
+			userInfo().then(res => {
+				if(res.code == 200000) {
+				  commit('get_user_info', res.data);
+				  localStorage.setItem("yk-userInfo",JSON.stringify(res.data));
+				}else {
+					
+				}
+			}).catch(err => {
+				console.log(err)
+			})
 		},
 		// 退出
 		goLogOut() {

@@ -372,6 +372,7 @@ export default {
             this.findPwd=true;
 
             this.checkMa='';
+            this.tipShow=false;
             this.tel='';
             this.verifyCodeMsg='';
             this.getTel='';

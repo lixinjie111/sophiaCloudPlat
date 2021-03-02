@@ -34,22 +34,10 @@
       </template>
       <CreateForm ref="createForm"></CreateForm>
     </a-modal>
-    <a-modal v-model="sceneModalShow" title="选择业务场景">
-      <template slot="footer">
-        <a-button type="primary" :loading="setLoading" @click="setting">
-          配置数据
-        </a-button>
-        <a-button @click="cancelSetting">
-          取消
-        </a-button>
-      </template>
-      <SceneForm ref="sceneForm"></SceneForm>
-    </a-modal>
   </div>
 </template>
 <script>
-  import CreateForm from "@/components/recommendation/CreateForm";
-  import SceneForm from "@/components/recommendation/SceneForm";
+  import CreateForm from "@/components/recommendation/application/CreateForm";
 
   const data = [];
   for (let i = 0; i < 46; i++) {
@@ -65,7 +53,7 @@
   }
 
   export default {
-    components: {CreateForm, SceneForm},
+    components: {CreateForm},
     data() {
       return {
         data,
@@ -105,9 +93,7 @@
         exportLoading: false,
         createModalShow: false,
         createLoading: false,
-        nextLoading: false,
-        sceneModalShow: false,
-        setLoading: false
+        nextLoading: false
       };
     },
     computed: {
@@ -141,7 +127,9 @@
             setTimeout(() => {
               this.nextLoading = false;
               this.createModalShow = false;
-              this.sceneModalShow = true;
+              this.$router.push({
+                path: '/recommendation/scene/list'
+              });
             }, 1000);
           } else {
             console.log('error submit!!');
@@ -165,14 +153,6 @@
       },
       tradeChange(value) {
         console.log(value);
-      },
-      setting() {
-        this.$router.push({
-          path: '/recommendation/application/data'
-        });
-      },
-      cancelSetting() {
-        this.sceneModalShow = false;
       }
     }
   };

@@ -23,6 +23,7 @@ const recommendationAppData = resolve => require(['@/views/recommendation/applic
 const recommendationAppScene = resolve => require(['@/views/recommendation/application/scene'], resolve);
 const recommendationAppEdit = resolve => require(['@/views/recommendation/application/edit'], resolve);
 const recommendationAppDetail = resolve => require(['@/views/recommendation/application/detail'], resolve);
+const recommendationSceneList = resolve => require(['@/views/recommendation/scene/list'], resolve);
 
 //数据服务 数据管理
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
@@ -100,6 +101,11 @@ export const menuRouterMap = [{
           name: "recommendationDataList",
           path: "/recommendation/data/list",
           component: recommendationDataList
+        },
+        {
+          name: "recommendationSceneList",
+          path: "/recommendation/scene/list",
+          component: recommendationSceneList
         }
     ]
 }];
