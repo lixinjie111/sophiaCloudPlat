@@ -458,7 +458,16 @@ export default {
                 this.breadArr.push(item.moduleTitle);
                 this.breadArr.push(subItem.title);
                 subItem.menuItmList.forEach(child => {
-                  if (child.itemKey == e.keyPath[0]) {
+                  if(child.children){
+                    child.children.forEach(ele=>{
+                      if(ele.itemKey == e.keyPath[0]){
+                        this.breadArr.push(ele.title)
+                        if(ele.path){
+                          this.$router.push({path:ele.path})
+                        }
+                      }
+                    })
+                  }else if (child.itemKey == e.keyPath[0]) {
                     this.breadArr.push(child.title);
                     console.log(child, "child");
                     if (child.path) {
