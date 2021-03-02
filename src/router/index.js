@@ -24,6 +24,9 @@ const recommendationAppScene = resolve => require(['@/views/recommendation/appli
 const recommendationAppEdit = resolve => require(['@/views/recommendation/application/edit'], resolve);
 const recommendationAppDetail = resolve => require(['@/views/recommendation/application/detail'], resolve);
 
+//数据服务 数据管理
+const recommendationAdminList = resolve => require(['@/views/recommendation/admin/list'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         // { path: '*', redirect: '/404' }
@@ -92,6 +95,11 @@ export const menuRouterMap = [{
           name: "recommendationAppDetail",
           path: "/recommendation/application/detail",
           component: recommendationAppDetail
+        },
+        {
+          name: "recommendationAdminList",
+          path: "/recommendation/admin/list",
+          component: recommendationAdminList
         }
     ]
 }];

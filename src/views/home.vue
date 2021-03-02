@@ -295,7 +295,9 @@ export default {
                   title: "获取推荐结果"
                 },
                 {
-                  title: "数据管理"
+                  title: "数据管理",
+                  itemKey:"dataAdmin",
+                  path:"/recommendation/admin/list"
                 },
                 {
                   title: "推荐池物品"
