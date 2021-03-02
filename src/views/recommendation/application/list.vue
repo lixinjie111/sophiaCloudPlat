@@ -132,7 +132,6 @@
         }, 1000);
       },
       onSelectChange(selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.selectedRowKeys = selectedRowKeys;
       },
       next() {

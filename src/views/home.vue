@@ -58,32 +58,20 @@
               </a-sub-menu>
             </template>
           </template>
-          <template v-else-if="item.moduleTitle == '数据服务'">
-            <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
-              <span slot="title">
-                <a-icon type="user" />
-                <span>{{ subItem.title }}</span>
-              </span>
-              <template v-for="item2 in subItem.menuItmList">
-                  <a-sub-menu :title="item2.title" v-if="item2.children">
-                    <a-menu-item v-for="child in item2.children" :key="child.itemKey" >
-                      {{child.title}}
-                    </a-menu-item>
-                  </a-sub-menu>
-                  <a-menu-item v-else :key="item2.itemKey">{{item2.title}}</a-menu-item>
-              </template>
-            </a-sub-menu>
-          </template>
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
               <span slot="title">
                 <a-icon type="user" />
                 <span>{{ subItem.title }}</span>
               </span>
-              <a-menu-item
-                v-for="item1 in subItem.menuItmList"
-                :key="item1.itemKey"
-              >{{ item1.title}}</a-menu-item>
+              <template v-for="item1 in subItem.menuItmList">
+                  <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.itemKey">
+                    <a-menu-item v-for="child in item1.children" :key="child.itemKey" >
+                      {{child.title}}
+                    </a-menu-item>
+                  </a-sub-menu>
+                  <a-menu-item v-else :key="item1.itemKey">{{item1.title}}</a-menu-item>
+              </template>
             </a-sub-menu>
           </template>
         </template>
@@ -318,7 +306,7 @@ export default {
                   children: [
                     {
                       title: "数据管理",
-                      itemKey: "tuijuguanli",
+                      itemKey: "shujuguanli",
                       path: "/recommendation/data/list"
                     }
                   ]
@@ -450,7 +438,7 @@ export default {
         this.menuList.forEach(item => {
           if (item.list.length > 0) {
             item.list.forEach(subItem => {
-              if (subItem.title == e.keyPath[1]) {
+              if (subItem.title == e.keyPath[e.keyPath.length-1]) {
                 this.breadArr.push(item.moduleTitle);
                 this.breadArr.push(subItem.title);
                 subItem.menuItmList.forEach(child => {
@@ -464,10 +452,6 @@ export default {
                           serviceModel:child.serviceModel
                         }
                       });
-                    }else if(child.children){
-                      child.children.forEach(ele=>{
-                        this.$router.push({name:ele.path})
-                      })
                     }
                   }
                 });
