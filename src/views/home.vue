@@ -65,7 +65,7 @@
                 <span>{{ subItem.title }}</span>
               </span>
               <template v-for="item1 in subItem.menuItmList">
-                  <a-sub-menu :title="item1.title" v-if="item2.children">
+                  <a-sub-menu :title="item1.title" v-if="item1.children">
                     <a-menu-item v-for="child in item1.children" :key="child.itemKey" >
                       {{child.title}}
                     </a-menu-item>
