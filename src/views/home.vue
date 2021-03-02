@@ -464,6 +464,10 @@ export default {
                           serviceModel:child.serviceModel
                         }
                       });
+                    }else if(child.children){
+                      child.children.forEach(ele=>{
+                        this.$router.push({name:ele.path})
+                      })
                     }
                   }
                 });
