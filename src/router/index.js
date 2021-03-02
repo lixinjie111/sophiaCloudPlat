@@ -23,6 +23,7 @@ const recommendationAppData = resolve => require(['@/views/recommendation/applic
 const recommendationAppScene = resolve => require(['@/views/recommendation/application/scene'], resolve);
 const recommendationAppEdit = resolve => require(['@/views/recommendation/application/edit'], resolve);
 const recommendationAppDetail = resolve => require(['@/views/recommendation/application/detail'], resolve);
+const recommendationSceneList = resolve => require(['@/views/recommendation/scene/list'], resolve);
 
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
@@ -92,6 +93,11 @@ export const menuRouterMap = [{
           name: "recommendationAppDetail",
           path: "/recommendation/application/detail",
           component: recommendationAppDetail
+        },
+        {
+          name: "recommendationSceneList",
+          path: "/recommendation/scene/list",
+          component: recommendationSceneList
         }
     ]
 }];

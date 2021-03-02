@@ -58,32 +58,20 @@
               </a-sub-menu>
             </template>
           </template>
-          <template v-else-if="item.moduleTitle == '数据服务'">
-            <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
-              <span slot="title">
-                <a-icon type="user" />
-                <span>{{ subItem.title }}</span>
-              </span>
-              <template v-for="item2 in subItem.menuItmList">
-                  <a-sub-menu :title="item2.title" v-if="item2.children">
-                    <a-menu-item v-for="child in item2.children" :key="child.itemKey" >
-                      {{child.title}}
-                    </a-menu-item>
-                  </a-sub-menu>
-                  <a-menu-item v-else :key="item2.itemKey">{{item2.title}}</a-menu-item>
-              </template>
-            </a-sub-menu>
-          </template>
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
               <span slot="title">
                 <a-icon type="user" />
                 <span>{{ subItem.title }}</span>
               </span>
-              <a-menu-item
-                v-for="item1 in subItem.menuItmList"
-                :key="item1.itemKey"
-              >{{ item1.title}}</a-menu-item>
+              <template v-for="item1 in subItem.menuItmList">
+                  <a-sub-menu :title="item1.title" v-if="item2.children">
+                    <a-menu-item v-for="child in item1.children" :key="child.itemKey" >
+                      {{child.title}}
+                    </a-menu-item>
+                  </a-sub-menu>
+                  <a-menu-item v-else :key="item1.itemKey">{{item1.title}}</a-menu-item>
+              </template>
             </a-sub-menu>
           </template>
         </template>
@@ -310,7 +298,7 @@ export default {
                 {
                   title: "推荐场景管理",
                   itemKey: "tuijianchangjing",
-                  path: "",
+                  path: "/recommendation/scene/list",
                 },
                 {
                   title: "数据中心",
