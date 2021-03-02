@@ -80,7 +80,7 @@
           <div class="avtor"><img src="../assets/images/login/header.jpg" alt=""></div>
           <a-dropdown>
             <div class="ant-dropdown-link" @click="e => e.preventDefault()">
-              {{sysAdminName}}<a-icon type="down" />
+              {{$store.state.userInfo.username}}<a-icon typeusername="down" />
             </div>
             <a-menu slot="overlay">
               <a-menu-item @click="logout">
@@ -108,14 +108,15 @@
   </a-layout>
 </template>
 <script>
+import { userInfo } from '@/api/user';
 export default {
   data() {
     return {
+      userInfomation:{},
       title: "Shopia云服务平台",
       logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
       collapsed: false,
       breadArr: [],
-      sysAdminName:'Jack',
       menuList: [
         {
           moduleTitle: "概览",
@@ -369,14 +370,29 @@ export default {
   },
   watch:{
     $route:function(a,b){
-      console.log('rrrrrrrrrrrrrr')
       this.selectKeys = this.selectKeys;
     }
+  },
+  created(){
+     this.$store.dispatch('getUserInfo');
+      console.log(this.$store.state.userInfo)
   },
   mounted() {
     this.showHeader();
   },
   methods: {
+    getUserInfo(){
+        userInfo().then(res => {
+            if(res.code == 200000) {
+              this.userInfomation=res.data;
+              localStorage.setItem("yk-userInfo",JSON.stringify(res.data));
+            }else {
+                
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
     logout(){
       this.$router.push({path:"/login"})
       localStorage.removeItem('yk-token');

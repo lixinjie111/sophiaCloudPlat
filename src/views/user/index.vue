@@ -1,7 +1,7 @@
 <template>
     <div class="busEt">
         <a-modal
-            title="添加预警通知联系人"
+            title="编辑基本资料"
             :visible="visible"
             :confirm-loading="confirmLoading"
             @ok="handleOk"
@@ -38,27 +38,37 @@
             <a-row>
                 <a-col :span="6">
                    <div class="avtaor">
-                       <img src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" alt="">
+                          <!-- :headers="headers" -->
+                       <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="">
+                      <a-upload
+                            name="file"
+                            :multiple="false"
+                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            @change="handleChange"
+                        >
+                            <span class="uptate">修改头像</span>
+                        </a-upload>
+                       
                    </div>
-                   <p>jack</p>
+                   <p>{{userInfomation.username}}</p>
                 </a-col>
                 <a-col :span="6">
                     <div class="msg">
-                       <p>登录账号：test demo</p>
-                        <p>联系人：jack</p>
-                        <p>个人认证：--</p>
+                       <p>登录账号：{{userInfomation.name}}</p>
+                        <p>联系人：{{userInfomation.username}}</p>
+                        <p>邮箱：{{userInfomation.email}}</p>
                    </div>
                 </a-col>
                 <a-col :span="6">
                      <div class="msg">
-                        <p>账号ID：ewaffffff</p>
-                        <p>联系电话：15322322121</p>
-                        <p>企业认证：北京好生活网络科技有限公司</p>
+                        <p>账号ID：{{userInfomation.userId}}</p>
+                        <p>联系电话：{{userInfomation.mobile}}</p>
+                        <p>企业认证：{{userInfomation.emergencyContactPhone}}</p>
                    </div>
                 </a-col>
                 <a-col :span="6">
                     <div class="msg">
-                       <p>注册时间 ：2020-9-21 12:43:32</p>
+                       <p>注册时间 ：{{userInfomation.createTime}}</p>
                    </div>
                 </a-col>
             </a-row>
@@ -67,15 +77,17 @@
 </template>
 
 <script>
+import { updateInfo} from '@/api/user';
 export default {
     data() {
         return {
+            userInfomation:{},
             ModalText: 'Content of the modal',
             visible: false,
             confirmLoading: false,
             ruleForm: {
-                uName: 'test demo',
-                type: '1',
+                uName: '',
+                type: '0',
                 name: '',
                 tel: '',
             },
@@ -91,8 +103,23 @@ export default {
         }
     },
     created() {
+        this.initInfo();
     },
     methods: {
+        initInfo(){
+            this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
+            this.ruleForm.uName=this.userInfomation.name;
+        },
+        handleChange(info) {
+            if (info.file.status !== 'uploading') {
+                console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(`${info.file.name}上传成功`);
+            } else if (info.file.status === 'error') {
+                this.$message.error(`${info.file.name}上传失败`);
+            }
+        },
        callback(key) {
             console.log(key);
        },
@@ -107,12 +134,29 @@ export default {
             this.visible = true;
         },
         handleOk(e) {
-            this.ModalText = 'The modal will be closed after two seconds';
             this.confirmLoading = true;
-            setTimeout(() => {
-                this.visible = false;
-                this.confirmLoading = false;
-            }, 2000);
+            let _param ={
+                "icon": "",
+                "mobile":  this.ruleForm.tel,
+                "username": this.ruleForm.name
+            };
+            updateInfo(_param).then(res => {
+                if(res.code == 200000) {
+                    this.$store.dispatch('getUserInfo');
+                    setTimeout(()=>{
+                        this.initInfo();
+                        this.visible = false;
+                        this.confirmLoading = false;
+                        this.$message.success(`修改成功`);
+                    },1000)
+                    
+                    
+                }else {
+                    
+                }
+            }).catch(err => {
+
+            })
         },
         handleCancel(e) {
             console.log('Clicked cancel button');
@@ -132,6 +176,22 @@ export default {
                 border-radius: 50%;
                 overflow: hidden;
                 margin: 8px auto;
+                position: relative;
+                .uptate{
+                    position: absolute;
+                    width: 70px;
+                    left:0;
+                    right: 0;
+                    margin: auto;
+                    font-size: 12px;
+                    font-family: PingFangSC-Regular, PingFang SC;
+                    font-weight: 400;
+                    color: #FFFFFF;
+                    padding:3px 8px;
+                    bottom: 5px;
+                    background: rgba(0,0,0,0.5);
+                    cursor: pointer;
+                }
             }
             .msg{
                 text-align: left;
