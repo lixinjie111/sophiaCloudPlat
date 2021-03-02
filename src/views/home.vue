@@ -319,7 +319,7 @@ export default {
                     {
                       title: "数据管理",
                       itemKey: "tuijuguanli",
-                      path: ""
+                      path: "/recommendation/data/list"
                     }
                   ]
                 },
