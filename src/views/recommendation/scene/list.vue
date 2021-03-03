@@ -32,7 +32,7 @@
           </a-select>
         </div>
         <div>
-          <a-input-search placeholder="业务场景名称" style="width: 200px" @search="onSearch" />
+          <a-input-search placeholder="业务场景名称" style="width: 200px" @search="onSearch"/>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
         <a-button type="link">删除</a-button>
       </template>
     </a-table>
-    <a-modal v-model="sceneModalShow" title="选择业务场景">
+    <a-modal v-model="sceneModalShow" title="创建业务场景" :width="640">
       <template slot="footer">
         <a-button type="primary" :loading="setLoading" @click="setting">
           配置数据
@@ -142,13 +142,13 @@
       add() {
         this.sceneModalShow = true;
       },
-      appNameChange (){
+      appNameChange() {
 
       },
-      recTypeChange (){
+      recTypeChange() {
 
       },
-      sceneTypeChange (){
+      sceneTypeChange() {
 
       },
       setting() {
