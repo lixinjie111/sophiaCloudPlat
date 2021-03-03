@@ -19,7 +19,7 @@
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link">报表</a-button>
         <a-button type="link" @click="toDetail">详情</a-button>
-        <a-button type="link" @click="sceneModalShow = true">配置</a-button>
+        <a-button type="link" @click="toScene">配置</a-button>
         <a-button type="link" style="color:red;">删除</a-button>
       </template>
     </a-table>
@@ -105,6 +105,11 @@
       toDetail() {
         this.$router.push({
           path: '/recommendation/application/detail'
+        });
+      },
+      toScene() {
+        this.$router.push({
+          path: '/recommendation/scene/list'
         });
       },
       add() {
