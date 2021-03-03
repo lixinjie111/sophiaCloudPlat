@@ -402,7 +402,7 @@ export default {
   },
   created(){
      this.$store.dispatch('getUserInfo');
-      console.log(this.$store.state.userInfo)
+      // console.log(this.$store.state.userInfo)
   },
   mounted() {
     this.showHeader();
@@ -437,7 +437,7 @@ export default {
       }
     },
     menuHandleClick(e) {
-      console.log(e,'zjjjjjjjjjjj');
+      // console.log(e,'zjjjjjjjjjjj');
       this.breadArr = []; 
       this.selectKeys = e.key;
       if (e.key == "企业设置") {
@@ -461,6 +461,7 @@ export default {
                   if(child.children){
                     child.children.forEach(ele=>{
                       if(ele.itemKey == e.keyPath[0]){
+                        this.breadArr.push(child.title);
                         this.breadArr.push(ele.title)
                         if(ele.path){
                           this.$router.push({path:ele.path})
@@ -469,7 +470,7 @@ export default {
                     })
                   }else if (child.itemKey == e.keyPath[0]) {
                     this.breadArr.push(child.title);
-                    console.log(child, "child");
+                    // console.log(child, "child");
                     if (child.path) {
                       this.$router.push({
                         path: child.path,

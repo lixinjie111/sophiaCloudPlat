@@ -5,43 +5,46 @@
       <div class="content_item">
         <div class="label">选择应用：</div>
         <div class="input_container">
-          <a-select
-            style="width:100%"
-            @change="handleAppListChange"
-            v-model="appNameVal"
-          >
-            <a-select-option
-              v-for="(item) in appNameList"
+
+          <el-select v-model="appNameVal" @change="handleAppListChange" style="height:100%;width:100%;" placeholder="请选择">
+            <el-option
+              v-for="item in appNameList"
               :key="item.id"
-              :value="item.appId"
-            >{{item.appName}}</a-select-option>
-          </a-select>
+              :label="item.appName"
+              :value="item.appId">
+            </el-option>
+          </el-select>
+
         </div>
       </div>
       <div class="content_item">
         <div class="label">选择API：</div>
         <div class="input_container">
-          <a-select default-value="lucy" style="width:100%;">
-            <a-select-option value="jack">Jack</a-select-option>
-            <a-select-option value="lucy">Lucy</a-select-option>
-            <a-select-option value="disabled" disabled>Disabled</a-select-option>
-            <a-select-option value="Yiminghe">yiminghe</a-select-option>
+          <a-select style="width:100%;" @change="handleApIListChange" v-model="apiVal" placeholder="请选择">
+            <a-select-option
+              v-for="(item) in apiList"
+              :key="item.id"
+              :value="item.serviceId"
+            >{{item.serviceName}}</a-select-option>
           </a-select>
         </div>
       </div>
       <div class="content_item">
         <div class="label">统计项：</div>
         <div class="input_container">
-          <a-radio-group name="radioGroup" :default-value="1">
-            <a-radio :value="1">调用量</a-radio>
-            <a-radio :value="2" style="margin-left:20px;">QPS</a-radio>
-          </a-radio-group>
+          <el-radio-group v-model="monItem">
+            <el-radio label="COUNT">调用量</el-radio>
+            <el-radio label="QPS" style="margin-left:20px;">QPS</el-radio>
+          </el-radio-group>
         </div>
       </div>
       <div class="content_item">
         <div class="label">监控项：</div>
         <div class="input_container">
-          <a-checkbox-group v-model="jkValue" name="checkboxgroup" :options="plainOptions" />
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox :label="1">调用成功</el-checkbox>
+            <el-checkbox :label="2">调用失败</el-checkbox>
+          </el-checkbox-group>
         </div>
       </div>
       <div class="content_item">
@@ -62,16 +65,16 @@
       <div class="content_item">
         <div class="label"></div>
         <div class="input_container searchBtn">
-          <a-button type="primary" style="width:100%;height:100%;">查询</a-button>
+          <a-button type="primary" style="width:100%;height:100%;" @click="searchMoiData">查询</a-button>
         </div>
       </div>
     </div>
     <div class="diaoyon_inter_container">
       <div class="radio_container">
-        <a-radio-group v-model="timeRadioVal">
-          <a-radio :value="1">按时</a-radio>
-          <a-radio :value="2">按日</a-radio>
-        </a-radio-group>
+        <el-radio-group v-model="timeRadioVal">
+          <el-radio :label="1">按日</el-radio>
+          <el-radio :label="2">按时</el-radio>
+        </el-radio-group>
       </div>
       <div class="line_echarts_container" id="timeEchartsId"></div>
     </div>
@@ -79,21 +82,25 @@
 </template>
 
 <script>
-import { getAppList } from "../../api/proSer/index";
+import { getAppList,getRepApiList,getMonitorData } from "../../api/proSer/index";
+import moment from "moment";
 export default {
   name: "monRep",
   data() {
     return {
-      jkValue: [],
-      plainOptions: ["调用成功", "调用失败"],
-      timeRadioVal: [],
-      rangeTime: [],
+      moment,
+      checkList: [1],
+      monItem:'COUNT',
+      timeRadioVal:1,
+      rangeTime: [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       appNameList: [{}],
-      appNameVal: ""
+      apiList:[{}],
+      appNameVal:'',
+      apiVal:""
     };
   },
   mounted() {
-    this.initLineEcharts();
+    // this.initLineEcharts();
   },
   created() {
     this.getPageData();
@@ -101,8 +108,56 @@ export default {
   methods: {
     getPageData() {
       this.getAppNameList();
+      this.getApiList({id:''});
+    },
+    searchMoiData(){
+      var monList = this.checkList;
+      var monItem;
+      if(monList.length == 0){
+        monItem = '';
+      }
+      else if(monList.length == 1){
+        monItem = monList[0];
+      }
+      else if(monList.length == 2){
+        monItem = 3;
+      }
+      var parms = {
+        statisticsTerm :this.monItem,
+        appId:this.appNameVal || '',
+        serviceId:this.apiVal,
+        statisticsType:this.timeRadioVal,
+        requestStatus:monItem,
+        startTime:this.rangeTime[0],
+        endTime:this.rangeTime[1] 
+      };
+      getMonitorData(parms).then(res=>{
+        if(res.code == 200000){
+          var MonitorData = res.data || [];
+          this.initLineEcharts(MonitorData);
+        }
+        else{
+          this.$message.error("请求失败！");
+        }
+      }).catch(err=>{
+        this.$message.error("请求失败！");
+      });
+    },
+    getApiList(parms){
+      console.log(parms,'parms')
+      getRepApiList(parms).then(res=>{
+        if(res.code == 200000){
+          this.apiList = res.data.appServiceList || [];
+        }
+        else{
+          this.$message.error("请求失败！");
+        }
+      }).catch(err=>{
+        this.$message.error("请求失败！");
+      });
     },
     getAppNameList() {
+      this.appNameList = [{}];
       var appListParm = {
         pageIndex: 1,
         pageSize: 100
@@ -111,6 +166,14 @@ export default {
         .then(res => {
           if (res.code == 200000) {
             var appListData = res.data.list || [];
+            appListData.unshift({
+              id:'',
+              appId:'',
+              appKey:'',
+              appName:'全部',
+              appSecret:'',
+              industry:''
+            });
             this.appNameList = appListData;
           } else {
             this.$message.error("请求失败！");
@@ -118,16 +181,52 @@ export default {
         })
         .catch(err => {
           this.$message.error("请求失败！");
-          console.log(err);
         });
     },
     changeDataRange(e) {
       console.log(e, "sssssssqqqqq");
     },
     handleAppListChange(e){
-      console.log(e,'aaaaaaaaaa')
+      var appList = this.appNameList || [];
+      var idVal;
+      appList.forEach(item=>{
+        if(e == item.appId){
+          idVal = item.id;
+        }
+      });
+      this.getApiList({id:idVal})
     },
-    initLineEcharts() {
+    handleApIListChange(e){
+      console.log(e,'api')
+      this.apiVal = e;
+    },
+    initLineEcharts(MonitorData) {
+      console.log(MonitorData,'MonitorData')
+      var successData = MonitorData['1'] || [];
+      var failData = MonitorData['2'] || [];
+      var xAxisData = [];
+      var successList = [];
+      var failList = [];
+      successData.forEach(item=>{
+        successList.push(item.cnt);
+      });
+      failData.forEach(item=>{
+        failList.push(item.cnt);
+      });
+      if(successData.length > 0){
+        successData.forEach(item=>{
+          xAxisData.push(item.dateStr);
+        })
+      }
+      else if(failData.length > 0){
+        failData.forEach(item=>{
+          xAxisData.push(item.dateStr);
+        })
+      }
+      else{
+        xAxisData = [];
+      }
+
       var myChart = this.$echarts.init(
         document.getElementById("timeEchartsId")
       );
@@ -148,7 +247,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+          data: xAxisData
         },
         yAxis: {
           type: "value"
@@ -157,7 +256,7 @@ export default {
           {
             name: "调用成功",
             type: "line",
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: successList,
             itemStyle: {
               normal: {
                 color: "#08C971"
@@ -167,7 +266,7 @@ export default {
           {
             name: "调用失败",
             type: "line",
-            data: [20, 2, 11, 34, 21, 30, 10],
+            data: failList,
             itemStyle: {
               normal: {
                 color: "#F64D15"
