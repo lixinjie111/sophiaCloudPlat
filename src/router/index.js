@@ -19,11 +19,12 @@ const user = resolve => require(['@/views/user/index'],resolve);
 
 //数据服务智能推荐
 const recommendationAppList = resolve => require(['@/views/recommendation/application/list'], resolve);
-const recommendationAppData = resolve => require(['@/views/recommendation/application/data'], resolve);
-const recommendationAppScene = resolve => require(['@/views/recommendation/application/scene'], resolve);
-const recommendationAppEdit = resolve => require(['@/views/recommendation/application/edit'], resolve);
 const recommendationAppDetail = resolve => require(['@/views/recommendation/application/detail'], resolve);
 const recommendationSceneList = resolve => require(['@/views/recommendation/scene/list'], resolve);
+const recommendationSceneEdit = resolve => require(['@/views/recommendation/scene/edit'], resolve);
+const recommendationSceneDetail = resolve => require(['@/views/recommendation/scene/detail'], resolve);
+const recommendationSceneData = resolve => require(['@/views/recommendation/scene/data'], resolve);
+const recommendationSceneRule = resolve => require(['@/views/recommendation/scene/rule'], resolve);
 
 //数据服务 数据管理
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
@@ -78,35 +79,40 @@ export const menuRouterMap = [{
           component: recommendationAppList
         },
         {
-          name: "recommendationAppData",
-          path: "/recommendation/application/data",
-          component: recommendationAppData
-        },
-        {
-          name: "recommendationAppScene",
-          path: "/recommendation/application/scene",
-          component: recommendationAppScene
-        },
-        {
-          name: "recommendationAppEdit",
-          path: "/recommendation/application/edit",
-          component: recommendationAppEdit
-        },
-        {
           name: "recommendationAppDetail",
           path: "/recommendation/application/detail",
           component: recommendationAppDetail
+        },
+        {
+          name: "recommendationSceneList",
+          path: "/recommendation/scene/list",
+          component: recommendationSceneList
+        },
+      {
+        name: "recommendationSceneDetail",
+        path: "/recommendation/scene/detail",
+        component: recommendationSceneDetail
+      },
+        {
+          name: "recommendationSceneData",
+          path: "/recommendation/scene/data",
+          component: recommendationSceneData
+        },
+        {
+          name: "recommendationSceneRule",
+          path: "/recommendation/scene/rule",
+          component: recommendationSceneRule
+        },
+        {
+          name: "recommendationSceneEdit",
+          path: "/recommendation/scene/edit",
+          component: recommendationSceneEdit
         },
         {
           name: "recommendationDataList",
           path: "/recommendation/data/list",
           component: recommendationDataList
         },
-        {
-          name: "recommendationSceneList",
-          path: "/recommendation/scene/list",
-          component: recommendationSceneList
-        }
     ]
 }];
 export default new VueRouter({

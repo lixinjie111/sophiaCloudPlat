@@ -32,8 +32,8 @@
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
   import SceneForm from "@/components/recommendation/scene/SceneForm";
-  import SetData from "@/components/recommendation/SetData";
-  import SetRules from "@/components/recommendation/SetRules";
+  import SetData from "@/components/recommendation/scene/SetData";
+  import SetRules from "@/components/recommendation/scene/SetRules";
 
   export default {
     name: "edit",

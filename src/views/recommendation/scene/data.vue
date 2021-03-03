@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import SetData from "@/components/recommendation/SetData";
+  import SetData from "@/components/recommendation/scene/SetData";
 
   export default {
     name: "data",

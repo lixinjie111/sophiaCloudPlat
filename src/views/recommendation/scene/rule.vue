@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import SetRules from "@/components/recommendation/SetRules";
+  import SetRules from "@/components/recommendation/scene/SetRules";
 
   export default {
     name: "scene",
