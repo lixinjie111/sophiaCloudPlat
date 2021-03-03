@@ -15,15 +15,7 @@
           </a-select>
         </div>
         <div>
-          推荐类型：
-          <a-select placeholder="请选择推荐类型" v-model="recType" @change="recTypeChange">
-            <a-select-option value="0">全部</a-select-option>
-            <a-select-option value="1">1</a-select-option>
-            <a-select-option value="2">2</a-select-option>
-          </a-select>
-        </div>
-        <div>
-          场景类型：
+            数据类型:
           <a-select placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange">
             <a-select-option value="0">全部</a-select-option>
             <a-select-option value="1">1</a-select-option>
@@ -31,7 +23,7 @@
           </a-select>
         </div>
         <div>
-          <a-input-search placeholder="业务场景名称" style="width: 200px" @search="onSearch" />
+          <a-input-search placeholder="数据表名称" style="width: 200px" @search="onSearch" />
         </div>
       </div>
     </div>
@@ -40,13 +32,12 @@
       :data-source="data"
       :pagination="{showQuickJumper: true, showSizeChanger: true}">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link">详情</a-button>
-        <a-button type="link">编辑</a-button>
-        <a-button type="link">测试</a-button>
+        <a-button type="link">查看</a-button>
+        <a-button type="link">修改</a-button>
         <a-button type="link">删除</a-button>
       </template>
     </a-table>
-    <a-modal v-model="sceneModalShow" title="选择业务场景">
+    <a-modal v-model="newFile" title="选择业务场景">
       <template slot="footer">
         <a-button type="primary" :loading="setLoading" @click="setting">
           配置数据
@@ -68,14 +59,14 @@
     data.push({
       key: i,
       index: i + 1,
-      name: `商场热门商品推荐`,
-      app: `合生汇商品推荐`,
-      type1: '个性化推荐',
-      type2: '智能场景',
-      kind: '商品推荐',
-      num: i + 1,
+      name: `北京合生汇数据`,
+      fileName: `合生汇`,
+      type1: '商品数据',
+      owner: '合生通',
+      creater:"ampm",
+      kind: '同步',
       time: '2020-01-28 12:00:00',
-      people: 'demo',
+      update: '2020-02-28 12:00:00',
       operation: i
     });
   }
@@ -92,54 +83,55 @@
             dataIndex: 'index'
           },
           {
-            title: '场景名称',
+            title: '表名',
             dataIndex: 'name'
           },
           {
-            title: '所属应用',
-            dataIndex: 'app'
+            title: '文件夹',
+            dataIndex: 'fileName'
           },
           {
-            title: '推荐类型',
+            title: '数据类型',
             dataIndex: 'type1'
           },
           {
-            title: '场景类型',
-            dataIndex: 'type2'
+            title: '所属租户',
+            dataIndex: 'owner'
           },
           {
-            title: '推荐种类',
+            title: '创建人',
+            dataIndex: 'creater'
+          },
+          {
+            title: '分类',
             dataIndex: 'kind'
-          },
-          {
-            title: '调用次数',
-            dataIndex: 'num'
           },
           {
             title: '创建时间',
             dataIndex: 'time'
           },
           {
-            title: '创建人',
-            dataIndex: 'people'
+            title: '更新时间',
+            dataIndex: 'update'
           },
           {
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            width: 300
           },
         ],
         appName: "0",
         recType: "0",
         sceneType: "0",
-        sceneModalShow: false,
+        newFile: false,
         setLoading: false
       }
     },
     methods: {
       upload(){},
-      file(){},
+      file(){
+          this.newFile = true
+      },
       appNameChange (){
 
       },
@@ -155,7 +147,7 @@
         });
       },
       cancelSetting() {
-        this.sceneModalShow = false;
+        this.newFile = false;
       }
     }
   }
