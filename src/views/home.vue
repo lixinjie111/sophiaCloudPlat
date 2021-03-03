@@ -363,7 +363,7 @@ export default {
             },
             {
               subKey: "sys2",
-              title: "个人设置",
+              title: "用户中心",
               menuItmList: [
                 {
                   title: "基本资料",
@@ -372,7 +372,8 @@ export default {
                 },
                 {
                   title: "实名认证",
-                  itemKey: "renzheng"
+                  itemKey: "renzheng",
+                  path: "/Verified"
                 },
 
                 {

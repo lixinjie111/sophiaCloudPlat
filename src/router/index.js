@@ -16,6 +16,7 @@ const sdkApply = resolve => require(['@/views/proSer/sdkApply'], resolve);
 //系统管理
 const businessSet = resolve => require(['@/views/businessSet/index'],resolve);
 const user = resolve => require(['@/views/user/index'],resolve);
+const Verified = resolve => require(['@/views/Verified/index'],resolve);
 
 //数据服务智能推荐
 const recommendationAppList = resolve => require(['@/views/recommendation/application/list'], resolve);
@@ -67,6 +68,11 @@ export const menuRouterMap = [{
             name:'user',
             path: "/user",
             component: user
+        },
+        {
+          name:'Verified',
+          path: "/Verified",
+          component: Verified
         },
         {
             name:'monRep',
