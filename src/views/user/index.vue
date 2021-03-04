@@ -39,13 +39,13 @@
                 <a-col :span="6">
                    <div class="avtaor">
                           <!-- :headers="headers" -->
+                          <!-- :data="uploadData" -->
                        <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="" @click="goLink(userInfomation.icon)">
                       <a-upload
                             name="file"
                             :headers="headers"
-                            :data="uploadData"
                             :multiple="false"
-                            action="https://www.yzsophia.com/ucenter/upload"
+                            :action="toUrl"
                             @change="handleChange"
                         >
                             <span class="uptate">修改头像</span>
@@ -79,13 +79,16 @@
 </template>
 
 <script>
+import {HTTPURL} from '@/api/requestUrl';
 import { updateInfo} from '@/api/user';
+console.log(HTTPURL)
 export default {
     data() {
         return {
             headers: {
                 'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
             },
+            toUrl:HTTPURL+'/ucenter/upload',
             // uploadData: {
             //     'fileType': "image",
             // },
