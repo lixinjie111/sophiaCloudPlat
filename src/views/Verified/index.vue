@@ -1,7 +1,7 @@
 <template>
     <div class="Verified_container">
         <div class="verified_til_container">实名认证</div>
-        <div class="verified_con_container">
+        <div class="verified_con_container" v-if="changeTab == 1">
             <div class="info_container">
                 <div class="info_icon">
                     <img :src="info" alt="" srcset="" class="info">
@@ -20,7 +20,7 @@
                     <div class="geren_til_info">适用于个人用户</div>
                     <div class="wendang_container">相关文档：<span style="color:#0376FD;">个人如何完成实名认证 ></span></div>
                 </div>
-                <div class="qiye">
+                <div class="qiye" @click="changeTabFn(2)">
                     <div class="geren_icon_container">
                         <img :src="humanPng" alt="" srcset="" class="humanPng">
                     </div>
@@ -29,6 +29,9 @@
                     <div class="wendang_container">相关文档：<span style="color:#0376FD;">企业如何完成实名认证 ></span></div>
                 </div>
             </div>
+        </div>
+        <div class="verified_step_container" v-else-if="changeTab == 2">
+            哈啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
         </div>
 	</div>
 </template>
@@ -39,13 +42,18 @@ export default {
     data() {
         return {
             info:require("../../assets/images/verify/info.png"),
-            humanPng:require("../../assets/images/verify/human.png")
+            humanPng:require("../../assets/images/verify/human.png"),
+            changeTab:1
         }
     },
     created() {
 
     },
-    methods:{}
+    methods:{
+        changeTabFn(arg){
+            this.changeTab = arg;
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -63,6 +71,8 @@ export default {
     }
     .verified_con_container{
         width: 100%;
+        padding: 60px;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -111,13 +121,16 @@ export default {
             justify-content: space-between;
             .geren,.qiye{
                 width: 49%;
-                height: 360px;
+                height: 460px;
                 background: #F7F9FA;
                 border-radius: 2px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+                &:hover{
+                    cursor: pointer;
+                }
                 .geren_icon_container{
                     width: 200px;
                     height: 185px;
