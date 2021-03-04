@@ -39,11 +39,13 @@
                 <a-col :span="6">
                    <div class="avtaor">
                           <!-- :headers="headers" -->
-                       <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="">
+                       <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="" @click="goLink(userInfomation.icon)">
                       <a-upload
                             name="file"
+                            :headers="headers"
+                            :data="uploadData"
                             :multiple="false"
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            action="https://www.yzsophia.com/ucenter/upload"
                             @change="handleChange"
                         >
                             <span class="uptate">修改头像</span>
@@ -81,6 +83,12 @@ import { updateInfo} from '@/api/user';
 export default {
     data() {
         return {
+            headers: {
+                'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
+            },
+            // uploadData: {
+            //     'fileType': "image",
+            // },
             userInfomation:{},
             ModalText: 'Content of the modal',
             visible: false,
@@ -106,18 +114,27 @@ export default {
         this.initInfo();
     },
     methods: {
+        goLink(item){
+            window.open(item);
+        },
         initInfo(){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
+            console.log(this.userInfomation)
             this.ruleForm.uName=this.userInfomation.name;
         },
         handleChange(info) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
+            // if (info.file.status !== 'uploading') {
+            //     console.log(info.file, info.fileList);
+            // }
             if (info.file.status === 'done') {
-                this.$message.success(`${info.file.name}上传成功`);
+                if(info.file.response.code==200000){
+                    this.userInfomation.icon=info.file.response.data;
+                    this.handleOk1();
+                }else{
+                    this.$message.error(`上传失败`);
+                }
             } else if (info.file.status === 'error') {
-                this.$message.error(`${info.file.name}上传失败`);
+                this.$message.error(`上传失败`);
             }
         },
        callback(key) {
@@ -134,23 +151,45 @@ export default {
             this.visible = true;
         },
         handleOk(e) {
-            this.confirmLoading = true;
+             this.$refs['ruleForm'].validate((valid) => {
+                if (valid) {
+                     this.confirmLoading = true;
+                    let _param ={
+                        "mobile":  this.ruleForm.tel,
+                        "username": this.ruleForm.name
+                    };
+                    updateInfo(_param).then(res => {
+                        if(res.code == 200000) {
+                            this.$store.dispatch('getUserInfo');
+                            setTimeout(()=>{
+                                this.initInfo();
+                                this.visible = false;
+                                this.confirmLoading = false;
+                                this.$message.success(`修改成功`);
+                            },1000)
+                        }else {
+                            
+                        }
+                    }).catch(err => {
+
+                    })
+                } else {
+                    
+                    return false;
+                }
+            });
+        },
+        handleOk1(e) {
             let _param ={
-                "icon": "",
-                "mobile":  this.ruleForm.tel,
-                "username": this.ruleForm.name
+                "icon": this.userInfomation.icon,
             };
             updateInfo(_param).then(res => {
                 if(res.code == 200000) {
                     this.$store.dispatch('getUserInfo');
                     setTimeout(()=>{
                         this.initInfo();
-                        this.visible = false;
-                        this.confirmLoading = false;
                         this.$message.success(`修改成功`);
                     },1000)
-                    
-                    
                 }else {
                     
                 }
@@ -177,6 +216,9 @@ export default {
                 overflow: hidden;
                 margin: 8px auto;
                 position: relative;
+                img{
+                    cursor: pointer;
+                }
                 .uptate{
                     position: absolute;
                     width: 70px;

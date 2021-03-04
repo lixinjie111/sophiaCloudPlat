@@ -81,7 +81,7 @@
       <a-layout-header class="cloudHeader">
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight">
-          <div class="avtor"><img src="../assets/images/login/header.jpg" alt=""></div>
+          <div class="avtor"><img :src="$store.state.userInfo.icon" alt=""></div>
           <a-dropdown>
             <div class="ant-dropdown-link" @click="e => e.preventDefault()">
               {{$store.state.userInfo.username}}<a-icon typeusername="down" />
