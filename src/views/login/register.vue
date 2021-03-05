@@ -1,23 +1,5 @@
 <template>
     <div class="main">
-            <div class="coverBg" v-show="coverBg">
-                <div class="safeCheck">
-                    <div class="safeHeader"><span>安全验证</span><img src="../../assets/images/login/close.png" class="close" @click="closeDialog"></div>
-                    <div class="safeContent">
-                        <div class="safeTip">您的账号可能存在安全风险，为了确保为您本人操作，请先进行安全验证</div>
-                        <div class="safeTitle">验证方式</div>
-                        <input type="text" v-model="useTel" placeholder="" readonly class="useTel">
-                        <div class="checkMa">
-                            <div class="tipMsg" v-show="checkTelMaShow">验证码错误，请重新输入</div>
-                            <input type="text"  v-model="checkTelMa" placeholder="请输入六位验证码" > 
-                            <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
-                        </div>
-                        <div class="submit" @click="makSure">
-                            <span style="margin-right:5px">确定</span>
-                        </div>
-                     </div>   
-                </div>
-            </div>
 			<div class="left">
 				<div class="logo">
 					<img src="../../assets/images/login/logo.png" alt="">
@@ -34,105 +16,41 @@
                     <span v-if="findPwd" @click="findPwd=false">登录 &nbsp;&nbsp;   |   &nbsp;&nbsp;</span><span onclick="javascript:window.open('https://www.yzsophia.com/#/index')" >首页</span> &nbsp;&nbsp;   |   &nbsp;&nbsp; <span onclick="javascript:window.open('https://www.yzsophia.com/#/experienceColl?oneId=5&twoRouteId=5.1&routeId=5.1.1')">功能体验</span>
                 </div>
                 <div class="login_content" v-if="!findPwd">
-                    <div class="login_title">Sophia管理控制台</div>
+                    <div class="login_title">欢迎注册Sophia云账号</div>
                     <div class="email">
-                        <img src="../../assets/images/login/user.png" class="user_img" style="width: 16px;height: 16px;"><input type="text" v-model="username" placeholder="邮箱/用户名/登录手机" id="account" @focus="inputEvent">
+                        <img src="../../assets/images/login/user.png" class="user_img" style="width: 16px;height: 16px;"><input type="text" v-model="username" placeholder="请设置用户名" id="account" @focus="inputEvent">
                     </div>
                     <div class="password">
                         <div class="tip" v-show="tipShow">用户名或密码有误，请重新输入或找回密码</div>
-                        <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;"><input type="password"  v-model="password" placeholder="密码" id="password" @keyup.enter.native="handleLogin" @focus="inputEvent">
+                        <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;"><input type="password"  v-model="password" placeholder="请设置您的密码" id="password" @keyup.enter.native="handleLogin" @focus="inputEvent">
                     </div>
-                    
+
+                    <div class="password">
+                        <div class="tip" v-show="tipShow">用户名或密码有误，请重新输入或找回密码</div>
+                        <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;"><input type="password"  v-model="password" placeholder="请再次输入密码" id="password" @keyup.enter.native="handleLogin" @focus="inputEvent">
+                    </div>
+                    <div class="email">
+                        <div  class="user_img" style="width: 16px;">
+                            <img src="../../assets/images/login/phone.png" >
+                        </div>    
+                        <span class="tipMsg">+86</span><input type="text" v-model="tel" placeholder="请输入您的手机号" >
+                    </div>
+                    <div class="checkSendMa">
+                        <div class="tipMsg" v-show="idVertify">{{idVertifyMsg}}</div>
+                        <input type="text"  v-model="idVertifyMa" placeholder="请输入验证码" class="checkInput"> 
+                        <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
+                    </div>
+                    <div class="readBox">
+                        <a-checkbox :checked="isRead" @change="onChangeCheck">
+                                <span class="readDoc">我已阅读并同意<span class="readtext">《Sophia云平台用户协议》</span>和<span class="readtext">《隐私政策声明》</span></span>
+                        </a-checkbox>
+                    </div>
                     <div class="submit" @click="handleLogin">
-                        <span style="margin-right:5px">登录</span>
+                        <span style="margin-right:5px">立即注册</span>
                         <img src="../../assets/images/login/Shape.png" style="width: 16px;">
                     </div>
-                    <div class="forgetPwd" ><span @click="goRegister">
-                        <!-- 免费注册 -->
-                        </span><span @click="forgetPwd">忘记密码</span></div>
-                    <div class="text_content">
-                        <div class="zixun_text">Sophia平台不支持用户注册，您可以通过&nbsp;<span class="option" onclick="javascript:window.open('https://www.yzsophia.com/#/zixun')">合作咨询</span>&nbsp;进行申请 了解AI应用管理控制台功能，可查阅&nbsp;<span class="option" onclick="javascript:window.open('https://www.yzsophia.com/#/allDocument')">帮助文档</span>&nbsp;</div>
-                    </div>
+                    <div class="forgetPwd" @click="goToLogin">已有账号？<span>登录</span></div>
                 </div>
-                <div class="findPanel" v-if="findPwd">
-                    <div v-show="stepIndex==1">
-                        <div class="title">找回密码</div>
-                        <div class="email">
-                            <div  class="user_img" style="width: 16px;">
-                                <img src="../../assets/images/login/phone.png" >
-                            </div>    
-                            <span class="tipMsg">+86</span><input type="text" v-model="tel" placeholder="请输入您的手机号" >
-                             
-                        </div>
-                        <div class="checkMa">
-                        <div class="tipMsg" v-show="checkMaShow">{{verifyCodeMsg}}</div>
-                            <input type="text"  v-model="checkMa" placeholder="请输入图形验证码" >
-                            <div  class="pws_img" style="width: 115px;cursor:pointer" @click="resetMa">
-                                <img :src="imgUrl" >
-                            </div>
-                        </div>
-                        <div class="submit" @click="handleNext">
-                            <span style="margin-right:5px">下一步</span>
-                            <img src="../../assets/images/login/Shape.png" style="width: 16px;">
-                        </div>
-                    </div>
-                    <div v-show="stepIndex==2">
-                        <div class="title">身份验证</div>
-                        <div class="sendTip">
-                            向手机+86 <span>{{getTel}}</span>发送验证码
-                        </div>
-                         <div class="checkSendMa">
-                            <div class="tipMsg" v-show="idVertify">{{idVertifyMsg}}</div>
-                            <input type="text"  v-model="idVertifyMa" placeholder="请输入六位验证码" > 
-                            <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
-                        </div>
-                        <div class="submit" @click="handleNext1">
-                            <span style="margin-right:5px">下一步</span>
-                            <img src="../../assets/images/login/Shape.png" style="width: 16px;">
-                        </div>
-                    </div>
-                    <div v-if="stepIndex==3">
-                        <div class="title">密码重置</div>
-                        <div class="resetPwd">
-                            <div  class="pws_img" style="width: 16px;">
-                                <img src="../../assets/images/login/pws.png">
-                            </div>
-                            <input type="password" v-model="resetPwd" placeholder="请设置新密码" @input="inputCk" @focus="toolTip=true" @blur="toolTip=false">
-                            <a-tooltip placement="right"  overlayClassName='overlayTip' v-model='toolTip'>
-                                <template slot="title" >
-                                    <div class="msgTip">
-                                        <img src="../../assets/images/login/warn.png"  style="width: 10px;" v-show="tip1==0">
-                                        <img src="../../assets/images/login/error.png"  style="width: 10px;" v-show="tip1==1">
-                                        <img src="../../assets/images/login/correct.png"  style="width: 10px;" v-show="tip1==2">
-                                        6-20个字符，密码不能是相同的用户名
-                                    </div>
-                                    <div class="msgTip">
-                                        <img src="../../assets/images/login/warn.png"  style="width: 10px;" v-show="tip2==0">
-                                        <img src="../../assets/images/login/error.png"  style="width: 10px;" v-show="tip2==1">
-                                        <img src="../../assets/images/login/correct.png"  style="width: 10px;" v-show="tip2==2">
-                                        只能包含字母、数字以及特殊符号（除空格）</div>
-                                    <div class="msgTip">
-                                        <img src="../../assets/images/login/warn.png"  style="width: 10px;" v-show="tip3==0">
-                                        <img src="../../assets/images/login/error.png"  style="width: 10px;" v-show="tip3==1">
-                                        <img src="../../assets/images/login/correct.png"  style="width: 10px;" v-show="tip3==2">
-                                        字母、数字和特殊符号至少包含2种</div>
-                                </template>
-                            </a-tooltip>
-                        </div>
-                        <div class="surePwd">
-                            <div class="sureTip" v-show="sureTip">两次输入密码不一致</div>
-                            <div  class="pws_img" style="width: 16px;">
-                                <img src="../../assets/images/login/pws.png">
-                            </div>
-                            <input type="password"  v-model="surePwd" placeholder="请再次确认新密码" @input="sureInput">
-                        </div>
-                        <div class="submit" @click="handleNext2">
-                            <span style="margin-right:5px">下一步</span>
-                            <img src="../../assets/images/login/Shape.png" style="width: 16px;">
-                        </div>
-                    </div>
-                </div>
-                
 			</div>
 		</div>
 </template>
@@ -143,6 +61,7 @@ import { getVerificationCode,verifyPhone,sendMessage,verifyPhoneNodeCode,resetPa
 export default {
     data() {
         return {
+            isRead:false,
             verifyCodeMsg:'',
             idVertifyMsg:'',
             tip1:0,
@@ -180,8 +99,8 @@ export default {
 
     },
     methods: {
-        goRegister(){
-            this.$router.push({path:'/register'})
+        onChangeCheck(e){
+            this.isRead = e.target.checked;
         },
         resetMa(){
             this.uuid=this.getUUID();
@@ -371,25 +290,8 @@ export default {
                 console.log(err)
             })
         },
-        forgetPwd(){
-            this.resetMa();
-            this.stepIndex=1;
-            this.findPwd=true;
-
-            this.checkMa='';
-            this.tipShow=false;
-            this.tel='';
-            this.verifyCodeMsg='';
-            this.getTel='';
-            this.idVertifyMa='';
-            this.idVertifyMsg='';
-            this.tip1=0;
-            this.tip2=0;
-            this.tip3=0;
-            this.resetPwd='';
-            this.toolTip=false;
-            this.surePwd='';
-            this.sendMessage='发送验证码';
+        goToLogin(){
+           this.$router.push({path:'/login'})
         },
         closeDialog(){
             this.coverBg=false;
@@ -565,7 +467,7 @@ export default {
                     
                 }
                 .submit{
-                    margin-top: 46px;
+                    margin-top: 35px;
                     width: 100%;
                     height: 40px;
                     background: #005ACD;
@@ -710,7 +612,6 @@ export default {
                     align-items: center;
                     justify-content: space-between;
                     position: relative;
-                    margin-top: 12px;
                     .tipMsg{
                         position: absolute;
                         bottom:-20px;
@@ -727,7 +628,6 @@ export default {
                         height: 100%;
                         flex:1;
                         padding-left: 12px;
-                        margin-right: 8px;
                         height: 100%;
                         outline:none;
                     }
@@ -735,6 +635,7 @@ export default {
                         outline:none;
                         width: 150px;
                         height: 42px;
+                         flex:auto;
                         background: #FFFFFF;
                         border-radius: 2px;
                         border: 1px solid #B8BECC;
@@ -890,7 +791,69 @@ export default {
                         left:0;  
                     }
                 }
-                
+                .checkSendMa{
+                    background: #FFFFFF;
+                    width: 324px;
+                    height: 42px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    position: relative;
+                    .tipMsg{
+                        position: absolute;
+                        bottom:-20px;
+                        font-size: 10px;
+                        font-family: PingFangSC-Regular, PingFang SC;
+                        font-weight: 400;
+                        color: #D60039;
+                        line-height: 14px;
+                    }
+                    input{
+                        border: 1px solid #B8BECC;
+                        border-radius: 2px;
+                        box-sizing: border-box;
+                        height: 100%;
+                        // flex:1;
+                        padding-left: 12px;
+                        height: 100%;
+                        outline:none;
+                    }
+                    .checkInput{
+                         width: calc(100% - 158px);
+                    }
+                    .sendMsg{
+                        outline:none;
+                        width: 150px;
+                        height: 42px;
+                        margin-left: 8px;
+                        background: #FFFFFF;
+                        border-radius: 2px;
+                        padding-left: 0;
+                        border: 1px solid #B8BECC;
+                        font-size: 14px;
+                        font-family: PingFangSC-Regular, PingFang SC;
+                        font-weight: 400;
+                        color: #121C33;
+                        line-height: 42px; 
+                        text-align: center;
+                        cursor: pointer;
+                    }
+                    
+                }
+                .readBox{
+                    margin-top: 35px;
+                  
+                    .readDoc{
+                          font-size: 10px;
+                            font-family: PingFangSC-Regular, PingFang SC;
+                            font-weight: 400;
+                            color: #7A8499;
+                            .readtext{
+                                color: #0376FD;
+                            }
+                    }
+                    
+                }
                 .submit{
                     margin-top: 45px;
                     width: 100%;
@@ -906,14 +869,18 @@ export default {
                     cursor: pointer;
                 }
                 .forgetPwd{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 15px;
+                    margin-top: 35px;
+                    text-align: center;
                     font-size: 14px;
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
-                    color: #005ACD;
-                    cursor: pointer;
+                    color: #7A8499;
+                    line-height: 20px;
+                    span{
+                        cursor: pointer;
+                         color: #0376FD;
+                    }
+                    
                 }
                 .text_content{
                     margin-top: 65px;

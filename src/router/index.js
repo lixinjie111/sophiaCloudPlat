@@ -1,5 +1,6 @@
 // 不在菜单导航里的路由
 const Login = resolve => require(['@/views/login/index'], resolve)
+const register = resolve => require(['@/views/login/register'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
 //我的应用监控报表
@@ -32,6 +33,7 @@ const recommendationDataList = resolve => require(['@/views/recommendation/data/
 
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
+        { path: '/register', name: 'register', component: register },
         // { path: '*', redirect: '/404' }
     ]
     // 在菜单导航里的路由
