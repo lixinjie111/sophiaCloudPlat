@@ -290,7 +290,7 @@ export default {
             var sdkManData = res.data || {};
             this.sdkManData = sdkManData;
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -316,7 +316,7 @@ export default {
               });
             }, 1000);
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -340,7 +340,7 @@ export default {
             });
             this.sqdata = sdkAuthListData;
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -358,6 +358,7 @@ export default {
             var sdkSorListData = res.data || [];
             this.sdkSorceList = sdkSorListData;
           } else {
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

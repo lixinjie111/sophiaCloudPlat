@@ -137,7 +137,7 @@ export default {
           this.initLineEcharts(MonitorData);
         }
         else{
-          this.$message.error("请求失败！");
+           this.$message.error(res.message || "请求失败！");
         }
       }).catch(err=>{
         this.$message.error("请求失败！");
@@ -150,7 +150,7 @@ export default {
           this.apiList = res.data.appServiceList || [];
         }
         else{
-          this.$message.error("请求失败！");
+           this.$message.error(res.message || "请求失败！");
         }
       }).catch(err=>{
         this.$message.error("请求失败！");
@@ -176,7 +176,7 @@ export default {
             });
             this.appNameList = appListData;
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

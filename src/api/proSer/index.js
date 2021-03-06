@@ -63,3 +63,11 @@ export const getRepApiList = params => {
 export const getMonitorData = params => {
     return axios.get(`${totalUrl}/app/monitorReport`, {params: params}).then(res => res.data);
 }
+//企业认证   
+export const comAuthentication = params => { 
+    return axios.post(`${HTTPURL}/ucenter/enterpriseAuthentication`, params).then(res => res.data);
+};
+//企业认证信息查询   
+export const getAuthInfo = params => { 
+    return axios.post(`${HTTPURL}/ucenter/enterpriseAuthenticationInfo`, params).then(res => res.data);
+};

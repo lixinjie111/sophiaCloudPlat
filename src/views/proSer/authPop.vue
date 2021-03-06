@@ -155,7 +155,7 @@ export default {
             this.$message.success("授权成功！");
             this.closePop();
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -201,7 +201,7 @@ export default {
             var appListData = res.data.list || [];
             this.appNameList = appListData;
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -218,7 +218,7 @@ export default {
           if (res.code == 200000) {
             this.sdkNameList = res.data || [];
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

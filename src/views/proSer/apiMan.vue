@@ -320,7 +320,7 @@ export default {
             });
             this.serListArr = serListdata;
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -353,7 +353,7 @@ export default {
             });
             this.qsdata = serListdata;
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -374,7 +374,7 @@ export default {
             var serListdata = res.data || [];
             this.initBarEcharts(serListdata);
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -412,7 +412,7 @@ export default {
             });
             this.nldata = serListdata;
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

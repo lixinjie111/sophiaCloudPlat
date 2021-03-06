@@ -97,15 +97,15 @@
         <div class="qiye qiyedata">
           <div class="qiyedata_item">
             <div class="qiye_label">企业名称：</div>
-            <div>上海元知晟睿科技研究有限公司北京分公司</div>
+            <div>{{comInfObj.enterpriseName}}</div>
           </div>
           <div class="qiyedata_item">
             <div class="qiye_label">证件号码：</div>
-            <div>911*************36E</div>
+            <div>{{comInfObj.businessLicenseNumber}}</div>
           </div>
           <div class="qiyedata_item">
             <div class="qiye_label">认证时间：</div>
-            <div>2020-12-24 10:03:45</div>
+            <div>{{comInfObj.createTime}}</div>
           </div>
         </div>
       </div>
@@ -320,6 +320,7 @@
 
 <script>
 import {HTTPURL} from '@/api/requestUrl';
+import {comAuthentication,getAuthInfo} from '../../api/proSer/index';
 export default {
   data() {
     return {
@@ -394,10 +395,13 @@ export default {
         img2: "其他组织证书示例图",
       },
       ifDisabledQy:false,
-      imageUrl: ''
+      imageUrl: '',
+      comInfObj:{}
     };
   },
-  created() {},
+  created() {
+    this.getComInfo();
+  },
   methods: {
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
@@ -416,34 +420,80 @@ export default {
         }
         return true;
       },
-    changeTabFn(arg) {
-      this.changeTab = arg;
-    },
-    goEdit(){
-      this.changeTab = 2;
-    },
-    clickTabType(arg) {
-      this.ifShowCheck = arg;
-      if (arg == 1) {
-        this.labelInfoObj = this.labelInfoObj1;
-      } else {
-        this.labelInfoObj = this.labelInfoObj2;
-      }
-    },
-    qiyeDSubmit(formName) {
-       this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.ifDisabledQy = true;
-            this.stepNum = 2;
-          } else {
-            console.log('error submit!!');
-            return false;
+      getComInfo(){
+        getAuthInfo().then(res=>{
+          if(res.code == 200000){
+            var authObj = res.data || {};
+            if(authObj.status == 0){ //审核中
+              this.stepNum = 2;
+              this.ifDisabledQy = true;
+              this.qiyeObj.comYinyeNum = authObj.businessLicenseNumber;
+              this.qiyeObj.qiyeName = authObj.enterpriseName;
+              this.imageUrl = authObj.businessLicenseImage;
+            }
+            else if(authObj.status == 1){  //失败
+              this.changeTab = 3;
+            }
+            else if(authObj.status == 2){  //成功
+              this.changeTab = 4;
+              this.comInfObj = authObj;
+            }
           }
-      });
-    },
-    zuzhiSubmit(){
-      
-    }
+          else{
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err=>{
+          this.$message.error("请求失败！");
+        });
+      },
+      changeTabFn(arg) {
+        this.changeTab = arg;
+      },
+      goEdit(){
+        this.changeTab = 2;
+      },
+      clickTabType(arg) {
+        this.ifShowCheck = arg;
+        if (arg == 1) {
+          this.labelInfoObj = this.labelInfoObj1;
+        } else {
+          this.labelInfoObj = this.labelInfoObj2;
+        }
+      },
+      qiyeDSubmit(formName) {
+        this.$refs[formName].validate((valid) => {
+            if (valid) {
+              var qiyeObj = this.qiyeObj;
+              var parms = {
+                userAuthenticationPo:{
+                  businessLicenseImage:this.imageUrl,
+                  businessLicenseNumber:qiyeObj.comYinyeNum,
+                  enterpriseName:qiyeObj.qiyeName
+                }
+              };
+              this.stepNum = 2;
+              this.ifDisabledQy = true;
+              comAuthentication(parms).then(res=>{
+                if(res.code == 200000){
+                  console.log(res,'res')
+                  this.getComInfo();
+                }
+                else{
+                  this.$message.error(res.message || "请求失败！");
+                  this.getComInfo();
+                }
+              }).catch(err=>{
+                console.log(err)
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+        });
+      },
+      zuzhiSubmit(){
+        
+      }
   }
 };
 </script>
