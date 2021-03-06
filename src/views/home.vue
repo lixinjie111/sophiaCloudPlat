@@ -449,7 +449,7 @@ export default {
       } else if (e.key == "概览") {
         this.breadArr.push("概览");
         this.$router.push({
-          path: ""
+          path: "/dashBaord"
         });
       } else {
         this.menuList.forEach(item => {

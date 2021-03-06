@@ -5,6 +5,7 @@ const Home = resolve => require(['@/views/home'], resolve)
 
 //我的应用监控报表
 const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
+const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
@@ -45,6 +46,11 @@ export const menuRouterMap = [{
             name: "applicationList",
             path: "application/list",
             component: applicationList
+        },
+        {
+            name: "dashBaord",
+            path: "/dashBaord",
+            component: dashBaord
         },
         {
             name: "apiMan",
