@@ -176,14 +176,14 @@
             :disabled="ifDisabledQy"
             ref="ruleForm"
             >
-              <el-form-item prop="qiyeName" :label="labelInfoObj.laebl1">
+              <el-form-item key="qiyeName" prop="qiyeName" :label="labelInfoObj.laebl1">
                   <el-input
                   v-model="qiyeObj.qiyeName"
                   placeholder="请输入企业名称"
                   ></el-input>
               </el-form-item>
               <div class="label_info_txt">{{ labelInfoObj.info1 }}</div>
-              <el-form-item prop="comYinyeNum" :label="labelInfoObj.laebl2">
+              <el-form-item key="comYinyeNum" prop="comYinyeNum" :label="labelInfoObj.laebl2">
                   <el-input
                   v-model="qiyeObj.comYinyeNum"
                   placeholder="请输入营业执照注册号"
@@ -204,9 +204,9 @@
                         multiple
                         :show-file-list="false"
                         :headers="headers"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        :on-success="qyhandleAvatarSuccess"
+                        :before-upload="qybeforeAvatarUpload">
+                        <img v-if="qyimageUrl" :src="qyimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
                   </div>
@@ -218,64 +218,51 @@
             </div>
           </div>
           <div class="zuzhi_con_container" v-else>
-            <div class="label_til">
-                <img :src="starIcon" alt="" srcset="" class="starIcon" />
-                <span>{{ labelInfoObj.laebl1 }}</span>
-            </div>
-            <div class="comp_name">
-                <el-form
-                :model="zuzhiObj"
-                :rules="zuzhiRules"
-                >
-                <el-form-item prop="zuzhiName">
-                    <el-input
-                    v-model="zuzhiObj.zuzhiName"
-                    placeholder="请输入组织名称"
-                    ></el-input>
-                </el-form-item>
-                </el-form>
-            </div>
-            <div class="label_info_txt">{{ labelInfoObj.info1 }}</div>
-            <div class="label_til">
-                <img :src="starIcon" alt="" srcset="" class="starIcon" />
-                <span>{{ labelInfoObj.laebl2 }}</span>
-            </div>
-            <div class="comp_name">
-                <el-form
-                :model="zuzhiNumObj"
-                :rules="zuzhiNumRules"
-                >
-                    <el-form-item prop="zuzhiNum">
-                        <el-input
-                        v-model="zuzhiNumObj.zuzhiNum"
-                        placeholder="请输入组织机构代码"
-                        ></el-input>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <div class="label_info_txt">
-                {{ labelInfoObj.info2 }}
-            </div>
-            <div class="label_til">
-                <img :src="starIcon" alt="" srcset="" class="starIcon" />
-                <span>{{ labelInfoObj.laebl3 }}</span>
-            </div>
-            <div class="upload_container">
-                <div class="upload_con">
+            <el-form
+            :model="zuzhiObj"
+            :rules="zuzhiRules"
+            :disabled="ifDisabledzz"
+            ref="zzruleForm"
+            >
+              <el-form-item key="zuzhiName" prop="zuzhiName" :label="labelInfoObj.laebl1">
+                  <el-input
+                  v-model="zuzhiObj.zuzhiName"
+                  placeholder="请输入组织名称"
+                  ></el-input>
+              </el-form-item>
+              <div class="label_info_txt">{{ labelInfoObj.info1 }}</div>
+              <el-form-item key="zuzhiNum" prop="zuzhiNum" :label="labelInfoObj.laebl2">
+                  <el-input
+                  v-model="zuzhiObj.zuzhiNum"
+                  placeholder="请输入组织机构代码"
+                  ></el-input>
+              </el-form-item>
+              <div class="label_info_txt">{{ labelInfoObj.info2 }}</div>
+              <div class="label_til">
+                  <img :src="starIcon" alt="" srcset="" class="starIcon" />
+                  <span>{{ labelInfoObj.laebl3 }}</span>
+              </div>
+              <div class="upload_container">
+                  <div class="upload_con">
                     <el-upload
-                        action=""
-                        style="width: 100%; height: 100%"
-                        drag
-                        multiple
-                        list-type="picture-card"
-                    >
-                        <i class="el-icon-plus"></i>
+                          class="avatar-uploader"
+                          style="width:100%;height:100%;"
+                          :action="toUrl"
+                          drag
+                          multiple
+                          :show-file-list="false"
+                          :headers="headers"
+                          :on-success="zzhandleAvatarSuccess"
+                          :before-upload="zzbeforeAvatarUpload">
+                          <img v-if="zzimageUrl" :src="zzimageUrl" class="avatar">
+                          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                </div>
-                <div class="upload_txt">可拖拽照片到左侧区域上传</div>
-            </div>
+                  </div>
+                  <div class="upload_txt">可拖拽照片到左侧区域上传</div>
+              </div>
+            </el-form>
             <div class="submit_btn_container">
-                <div class="submit_btn" @click="zuzhiSubmit">提交审核</div>
+                <div class="submit_btn" @click="zuzhiSubmit('zzruleForm')">提交审核</div>
             </div>
           </div>
 
@@ -344,10 +331,11 @@ export default {
       },
       zuzhiObj: {
         zuzhiName: "",
-      },
-      zuzhiNumObj:{
         zuzhiNum: "",
       },
+      // zuzhiNumObj:{
+      //   zuzhiNum: "",
+      // },
       qiyeRules: {
         qiyeName: [
           { required: true, message: "请输入企业名称", trigger: "blur" },
@@ -357,13 +345,16 @@ export default {
         ]
       },
       zuzhiRules: {
-        zuzhiName: [{ required: true, message: "请输入组织名称", trigger: "blur" }]
-      },
-      zuzhiNumRules:{
+        zuzhiName: [{ required: true, message: "请输入组织名称", trigger: "blur" }],
         zuzhiNum: [
           { required: true, message: "请输入组织机构代码", trigger: "blur" },
         ]
       },
+      // zuzhiNumRules:{
+      //   zuzhiNum: [
+      //     { required: true, message: "请输入组织机构代码", trigger: "blur" },
+      //   ]
+      // },
       labelInfoObj: {
         laebl1: "企业名称",
         info1: "请务必与营业执照上的名称保持一致",
@@ -395,7 +386,9 @@ export default {
         img2: "其他组织证书示例图",
       },
       ifDisabledQy:false,
-      imageUrl: '',
+      ifDisabledzz:false,
+      qyimageUrl: '',
+      zzimageUrl:'',
       comInfObj:{}
     };
   },
@@ -403,10 +396,27 @@ export default {
     this.getComInfo();
   },
   methods: {
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+      qyhandleAvatarSuccess(res, file) {
+        this.qyimageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
+      zzhandleAvatarSuccess(res, file){
+        this.zzimageUrl = URL.createObjectURL(file.raw);
+      },
+      qybeforeAvatarUpload(file) {
+        console.log(file,'file')
+        const isLt2M = file.size / 1024 / 1024 < 8;
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/bmp') {
+          let imgType = file.type.split('/')[1];
+          this.$message.error(`上传头像图片不能是 ${imgType} 格式!`);
+          return false;
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 8MB!');
+          return false;
+        }
+        return true;
+      },
+      zzbeforeAvatarUpload(file){
         console.log(file,'file')
         const isLt2M = file.size / 1024 / 1024 < 8;
         if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/bmp') {
@@ -429,7 +439,7 @@ export default {
               this.ifDisabledQy = true;
               this.qiyeObj.comYinyeNum = authObj.businessLicenseNumber;
               this.qiyeObj.qiyeName = authObj.enterpriseName;
-              this.imageUrl = authObj.businessLicenseImage;
+              this.qyimageUrl = authObj.businessLicenseImage;
             }
             else if(authObj.status == 1){  //失败
               this.changeTab = 3;
@@ -466,7 +476,8 @@ export default {
               var qiyeObj = this.qiyeObj;
               var parms = {
                 userAuthenticationPo:{
-                  businessLicenseImage:this.imageUrl,
+                  authType:'1',
+                  businessLicenseImage:this.qyimageUrl,
                   businessLicenseNumber:qiyeObj.comYinyeNum,
                   enterpriseName:qiyeObj.qiyeName
                 }
@@ -475,7 +486,6 @@ export default {
               this.ifDisabledQy = true;
               comAuthentication(parms).then(res=>{
                 if(res.code == 200000){
-                  console.log(res,'res')
                   this.getComInfo();
                 }
                 else{
@@ -491,8 +501,36 @@ export default {
             }
         });
       },
-      zuzhiSubmit(){
-        
+      zuzhiSubmit(formName){
+        this.$refs[formName].validate((valid) => {
+            if (valid) {
+              var zuzhiObj = this.zuzhiObj;
+              var parms = {
+                userAuthenticationPo:{
+                  authType:'2',
+                  businessLicenseImage:this.zzimageUrl,
+                  businessLicenseNumber:zuzhiObj.zuzhiNum,
+                  enterpriseName:zuzhiObj.zuzhiName
+                }
+              };
+              this.stepNum = 2;
+              this.ifDisabledzz = true;
+              comAuthentication(parms).then(res=>{
+                if(res.code == 200000){
+                  this.getComInfo();
+                }
+                else{
+                  this.$message.error(res.message || "请求失败！");
+                  this.getComInfo();
+                }
+              }).catch(err=>{
+                console.log(err)
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+        });
       }
   }
 };
@@ -812,20 +850,23 @@ export default {
             }
             }
             .submit_btn_container {
-            width: 100%;
-            .submit_btn {
-                width: 135px;
-                height: 40px;
-                background: #1890ff;
-                border-radius: 2px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 16px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #ffffff;
-            }
+              width: 100%;
+              .submit_btn {
+                  width: 135px;
+                  height: 40px;
+                  background: #1890ff;
+                  border-radius: 2px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 16px;
+                  font-family: PingFangSC-Regular, PingFang SC;
+                  font-weight: 400;
+                  color: #ffffff;
+                  &:hover{
+                    cursor: pointer;
+                  }
+              }
             }
         }
       }
