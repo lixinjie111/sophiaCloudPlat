@@ -81,7 +81,7 @@
       <a-layout-header class="cloudHeader">
         <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="collapse" />
         <div class="headerRight">
-          <div class="avtor"><img src="../assets/images/login/header.jpg" alt=""></div>
+          <div class="avtor"><img :src="$store.state.userInfo.icon" alt=""></div>
           <a-dropdown>
             <div class="ant-dropdown-link" @click="e => e.preventDefault()">
               {{$store.state.userInfo.username}}<a-icon typeusername="down" />
@@ -363,7 +363,7 @@ export default {
             },
             {
               subKey: "sys2",
-              title: "个人设置",
+              title: "用户中心",
               menuItmList: [
                 {
                   title: "基本资料",
@@ -372,7 +372,8 @@ export default {
                 },
                 {
                   title: "实名认证",
-                  itemKey: "renzheng"
+                  itemKey: "renzheng",
+                  path: "/Verified"
                 },
 
                 {
@@ -448,7 +449,7 @@ export default {
       } else if (e.key == "概览") {
         this.breadArr.push("概览");
         this.$router.push({
-          path: ""
+          path: "/dashBaord"
         });
       } else {
         this.menuList.forEach(item => {

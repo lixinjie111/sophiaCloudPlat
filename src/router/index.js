@@ -1,9 +1,11 @@
 // 不在菜单导航里的路由
 const Login = resolve => require(['@/views/login/index'], resolve)
+const register = resolve => require(['@/views/login/register'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
 //我的应用监控报表
 const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
+const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
@@ -16,6 +18,7 @@ const sdkApply = resolve => require(['@/views/proSer/sdkApply'], resolve);
 //系统管理
 const businessSet = resolve => require(['@/views/businessSet/index'],resolve);
 const user = resolve => require(['@/views/user/index'],resolve);
+const Verified = resolve => require(['@/views/Verified/index'],resolve);
 
 //数据服务智能推荐
 const recommendationAppList = resolve => require(['@/views/recommendation/application/list'], resolve);
@@ -31,6 +34,7 @@ const recommendationDataList = resolve => require(['@/views/recommendation/data/
 
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
+        { path: '/register', name: 'register', component: register },
         // { path: '*', redirect: '/404' }
     ]
     // 在菜单导航里的路由
@@ -42,6 +46,11 @@ export const menuRouterMap = [{
             name: "applicationList",
             path: "application/list",
             component: applicationList
+        },
+        {
+            name: "dashBaord",
+            path: "/dashBaord",
+            component: dashBaord
         },
         {
             name: "apiMan",
@@ -67,6 +76,11 @@ export const menuRouterMap = [{
             name:'user',
             path: "/user",
             component: user
+        },
+        {
+          name:'Verified',
+          path: "/Verified",
+          component: Verified
         },
         {
             name:'monRep',

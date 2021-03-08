@@ -102,7 +102,7 @@ export default {
             });
             this.sdkChioceList = newSdkList;
           } else {
-            this.$message.error("请求失败！");
+             this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

@@ -2,3 +2,6 @@
 dataplatform
 /dataplat
 .idea
+#macOS
+.DS_Store
+
