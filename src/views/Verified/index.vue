@@ -434,19 +434,37 @@ export default {
         getAuthInfo().then(res=>{
           if(res.code == 200000){
             var authObj = res.data || {};
-            if(authObj.status == 0){ //审核中
-              this.stepNum = 2;
-              this.ifDisabledQy = true;
-              this.qiyeObj.comYinyeNum = authObj.businessLicenseNumber;
-              this.qiyeObj.qiyeName = authObj.enterpriseName;
-              this.qyimageUrl = authObj.businessLicenseImage;
+            if(authObj.authType == 1){ //企业类认证结果查询
+              if(authObj.status == 0){ //审核中
+                this.stepNum = 2;
+                this.ifDisabledQy = true;
+                this.qiyeObj.comYinyeNum = authObj.businessLicenseNumber;
+                this.qiyeObj.qiyeName = authObj.enterpriseName;
+                this.qyimageUrl = authObj.businessLicenseImage;
+              }
+              else if(authObj.status == 1){  //失败
+                this.changeTab = 3;
+              }
+              else if(authObj.status == 2){  //成功
+                this.changeTab = 4;
+                this.comInfObj = authObj;
+              }
             }
-            else if(authObj.status == 1){  //失败
-              this.changeTab = 3;
-            }
-            else if(authObj.status == 2){  //成功
-              this.changeTab = 4;
-              this.comInfObj = authObj;
+            else if(authObj.authType == 2){  //组织类认证结果查询
+              if(authObj.status == 0){ //审核中
+                this.stepNum = 2;
+                this.ifDisabledzz = true;
+                this.zuzhiObj.zuzhiNum = authObj.businessLicenseNumber;
+                this.zuzhiObj.zuzhiName = authObj.enterpriseName;
+                this.zzimageUrl = authObj.businessLicenseImage;
+              }
+              else if(authObj.status == 1){  //失败
+                this.changeTab = 3;
+              }
+              else if(authObj.status == 2){  //成功
+                this.changeTab = 4;
+                this.comInfObj = authObj;
+              }
             }
           }
           else{
