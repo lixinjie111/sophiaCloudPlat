@@ -33,14 +33,14 @@
       :pagination="{showQuickJumper: true, showSizeChanger: true}">
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link">查看</a-button>
-        <a-button type="link">修改</a-button>
+        <a-button type="link" disabled>修改</a-button>
         <a-button type="link">删除</a-button>
       </template>
     </a-table>
-    <a-modal v-model="newFile" title="选择业务场景">
+    <a-modal v-model="newFile" title="创建文件夹">
       <template slot="footer">
         <a-button type="primary" :loading="setLoading" @click="setting">
-          配置数据
+          创建
         </a-button>
         <a-button @click="cancelSetting">
           取消
