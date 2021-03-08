@@ -500,7 +500,7 @@ export default {
               var qiyeObj = this.qiyeObj;
               var parms = {
                 userAuthenticationPo:{
-                  authType:'1',
+                  authType:1,
                   businessLicenseImage:this.qyimageUrl,
                   businessLicenseNumber:qiyeObj.comYinyeNum,
                   enterpriseName:qiyeObj.qiyeName
@@ -531,7 +531,7 @@ export default {
               var zuzhiObj = this.zuzhiObj;
               var parms = {
                 userAuthenticationPo:{
-                  authType:'2',
+                  authType:2,
                   businessLicenseImage:this.zzimageUrl,
                   businessLicenseNumber:zuzhiObj.zuzhiNum,
                   enterpriseName:zuzhiObj.zuzhiName
