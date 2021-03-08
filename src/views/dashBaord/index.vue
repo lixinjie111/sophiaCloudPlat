@@ -36,8 +36,25 @@
             <a-row :gutter="[20,0]">
                 <a-col :span="12">
                     <div class="box1">
-                          <div class="title">现金余额</div>
-                          <div class="title">现金余额</div>
+                        <div class="titleNav">
+                            <div class="title">消费趋势</div>
+                            <div class="titleRt">
+                                <a-radio-group v-model="time" @change="onChange">
+                                    <a-radio-button value="a">
+                                    月
+                                    </a-radio-button>
+                                    <a-radio-button value="b">
+                                    半年
+                                    </a-radio-button>
+                                    <a-radio-button value="c">
+                                    年
+                                    </a-radio-button>
+                                </a-radio-group>
+                            </div>
+                        </div>
+                        <div class="boxEts">
+                            <cLine id="box58" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                        </div>
                     </div>
                 </a-col>
                 <a-col :span="12">
@@ -130,12 +147,15 @@
 </template>
 
 <script>
+import cLine from '@/components/echarts/common/line';
 export default {
+    components:{cLine},
     data() {
         return {
             formInline: {
                 region: '0'
             },
+            time:"b",
             value1: '',
 
         }
@@ -143,6 +163,7 @@ export default {
     created() {
     },
     methods: {
+        onChange(){},
         onSubmit() {
             console.log('submit!');
         },
@@ -270,6 +291,16 @@ export default {
                 border-radius: 2px;
                 border: 1px solid #D9D9D9;
                 padding:20px;
+                display: flex;
+                flex-direction: column;
+                .titleNav{
+                    display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                }
+                .boxEts{
+                    flex:1;
+                }
             }
             .box2{
                 height: 291px;
