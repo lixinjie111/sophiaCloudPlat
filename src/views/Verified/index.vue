@@ -449,6 +449,9 @@ export default {
                 this.changeTab = 4;
                 this.comInfObj = authObj;
               }
+              else if(authObj.status == 3){ //未提交
+                this.changeTab == 1;
+              }
             }
             else if(authObj.authType == 2){  //组织类认证结果查询
               if(authObj.status == 0){ //审核中
@@ -464,6 +467,9 @@ export default {
               else if(authObj.status == 2){  //成功
                 this.changeTab = 4;
                 this.comInfObj = authObj;
+              }
+              else if(authObj.status == 3){ //未提交
+                this.changeTab == 1;
               }
             }
           }
