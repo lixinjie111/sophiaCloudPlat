@@ -428,6 +428,7 @@ export default {
     collapse() {
       this.collapsed = !this.collapsed;
       this.showHeader();
+      this.$store.commit('set_collapsed', this.collapsed);
     },
     showHeader() {
       var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];
