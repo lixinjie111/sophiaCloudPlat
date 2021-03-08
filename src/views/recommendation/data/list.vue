@@ -39,20 +39,32 @@
     </a-table>
     <a-modal v-model="newFile" title="创建文件夹">
       <template slot="footer">
-        <a-button type="primary" :loading="setLoading" @click="setting">
+        <a-button type="primary" :loading="setLoading" @click="create">
           创建
         </a-button>
-        <a-button @click="cancelSetting">
+        <a-button @click="cancelNew">
           取消
         </a-button>
       </template>
-      <SceneForm ref="sceneForm"></SceneForm>
+      <newFile></newFile>
+    </a-modal>
+    <a-modal v-model="uploadData" title="上传数据">
+      <template slot="footer">
+        <a-button type="primary" :loading="setLoading" @click="nextStep">
+          下一步
+        </a-button>
+        <a-button @click="cancelNew">
+          取消
+        </a-button>
+      </template>
+      <newFile></newFile>
     </a-modal>
   </div>
 </template>
 
 <script>
-  import SceneForm from "@/components/recommendation/scene/SceneForm";
+  import newFile from "@/components/recommendation/data/NewFile";
+  import UploadData from "@/components/recommendation/data/UploadData";
 
   const data = [];
   for (let i = 0; i < 46; i++) {
@@ -73,7 +85,7 @@
 
   export default {
     name: "list",
-    components: {SceneForm},
+    components: {newFile,UploadData},
     data() {
       return {
         data,
@@ -124,11 +136,14 @@
         recType: "0",
         sceneType: "0",
         newFile: false,
-        setLoading: false
+        setLoading: false,
+        uploadData:false
       }
     },
     methods: {
-      upload(){},
+      upload(){
+        this.uploadData = true
+      },
       file(){
           this.newFile = true
       },
@@ -141,13 +156,16 @@
       sceneTypeChange (){
 
       },
-      setting() {
+      create() {
         this.$router.push({
           path: '/recommendation/application/data'
         });
       },
-      cancelSetting() {
+      cancelNew() {
         this.newFile = false;
+      },
+      nextStep(){
+        
       }
     }
   }
