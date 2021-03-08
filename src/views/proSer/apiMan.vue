@@ -32,7 +32,7 @@
       </div>
       <div class="btn_container">
         <a-button @click="resetFn">重置</a-button>
-        <a-button type="primary" @click="searchFn">查询</a-button>
+        <a-button type="primary" @click="searchFn" style="margin-left:20px;">查询</a-button>
       </div>
     </div>
     <div class="fangwen_area_container">
