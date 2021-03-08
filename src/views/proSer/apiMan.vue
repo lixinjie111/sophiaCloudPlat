@@ -30,7 +30,6 @@
           <a-select-option value="sgjd">上个季度</a-select-option>
         </a-select>
       </div>
-
       <div class="btn_container">
         <a-button @click="resetFn">重置</a-button>
         <a-button type="primary" @click="searchFn">查询</a-button>
@@ -522,21 +521,21 @@ export default {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    position: relative;
     .select_container {
-      width: 199px;
+      min-width: 120px;
       height: 32px;
       margin-right: 20px;
     }
     .close_week {
-      width: 100px;
-      margin-right: 48%;
+      margin-left: 20px;
     }
     .time_container {
-      width: 370px;
       height: 32px;
     }
     .btn_container {
-      width: 136px;
+      position: absolute;
+      right: 0;
       height: 32px;
       display: flex;
       align-items: center;
