@@ -136,7 +136,7 @@ export default {
                 {
                   title: "概览",
                   itemKey: "yingyong1",
-                  path: ""
+                  path: "/gailan"
                 },
                 {
                   title: "应用列表",
@@ -378,7 +378,8 @@ export default {
 
                 {
                   title: "安全设置",
-                  itemKey: "safeSet"
+                  itemKey: "safeSet",
+                  path: "/safeSet"
                 }
               ]
             },

@@ -106,7 +106,7 @@
                         <div class="bm"></div>
                     </div>
                 </a-col>
-                <a-col  flex="auto">
+                <a-col  flex="1">
                      <a-row :gutter="[20,20]">
                         <a-col :span="12">
                             <div class="box api">

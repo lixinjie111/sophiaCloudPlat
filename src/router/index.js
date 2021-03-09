@@ -5,7 +5,9 @@ const Home = resolve => require(['@/views/home'], resolve)
 
 //我的应用监控报表
 const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
+const safeSet = resolve => require(['@/views/user/safeSet'], resolve);
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
+const gailan = resolve => require(['@/views/application/gailan'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
 
 //产品服务模板页
@@ -43,10 +45,21 @@ export const menuRouterMap = [{
     path: "/",
     name: "home",
     component: Home,
-    children: [{
+    children: [
+        {
             name: "applicationList",
             path: "application/list",
             component: applicationList
+        },
+        {
+            name: "safeSet",
+            path: "/safeSet",
+            component: safeSet
+        },
+        {
+            name: "gailan",
+            path: "/gailan",
+            component: gailan
         },
         {
             name: "dashBaord",
