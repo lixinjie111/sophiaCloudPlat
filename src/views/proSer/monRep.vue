@@ -20,13 +20,13 @@
       <div class="content_item">
         <div class="label">选择API：</div>
         <div class="input_container">
-          <a-select style="width:100%;" @change="handleApIListChange" v-model="apiVal" placeholder="请选择">
-            <a-select-option
+          <el-select style="width:100%;height:100%;" @change="handleApIListChange" v-model="apiVal" placeholder="请选择">
+            <el-option
               v-for="(item) in apiList"
               :key="item.id"
               :value="item.serviceId"
-            >{{item.serviceName}}</a-select-option>
-          </a-select>
+            >{{item.serviceName}}</el-option>
+          </el-select>
         </div>
       </div>
       <div class="content_item">
@@ -189,6 +189,7 @@ export default {
     handleAppListChange(e){
       var appList = this.appNameList || [];
       var idVal;
+      this.apiVal = '';
       appList.forEach(item=>{
         if(e == item.appId){
           idVal = item.id;
