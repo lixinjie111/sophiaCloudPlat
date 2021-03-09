@@ -136,7 +136,7 @@ export default {
                 {
                   title: "概览",
                   itemKey: "yingyong1",
-                  path: ""
+                  path: "/gailan"
                 },
                 {
                   title: "应用列表",
@@ -378,7 +378,8 @@ export default {
 
                 {
                   title: "安全设置",
-                  itemKey: "safeSet"
+                  itemKey: "safeSet",
+                  path: "/safeSet"
                 }
               ]
             },
@@ -428,6 +429,7 @@ export default {
     collapse() {
       this.collapsed = !this.collapsed;
       this.showHeader();
+      this.$store.commit('set_collapsed', this.collapsed);
     },
     showHeader() {
       var cloudHeaderDom = document.getElementsByClassName("cloudHeader")[0];
@@ -549,7 +551,7 @@ export default {
       background: #fff;
       justify-content: space-between;
       padding: 0;
-      z-index: 1 !important;
+      z-index: 99999 !important;
       .headerRight {
         margin-right: 24px;
         width: 50%;

@@ -1,14 +1,66 @@
 <template>
-  <div class="apiMan_container">
+<div  class="gailanContainer">
+    <div class="gailan">
+        <a-page-header
+            style="border-bottom: 1px solid rgb(235, 237, 240)"
+            title="概览"
+        />
+        <div class="gailan_container">
+             <div class="gailan_left">
+                 <div class="title">应用</div>
+                 <div class="gailan_box">
+                     <div class="hasBuild">已建应用<span style="color:#0376FD">1</span>个</div>
+                      <div style="margin-top:5px">
+                          <a-button type="primary">
+                            管理应用
+                         </a-button>
+                      </div>
+                      <div style="margin-top:5px">
+                           <a-button type="primary">
+                                创建应用
+                            </a-button>
+                      </div>
+                    
+                    
+                 </div>
+             </div>
+             <div class="gailan_rt">
+                <div class="title">
+                        <span>用量</span>
+                        <span>
+                            <el-date-picker
+                                v-model="rangeTime"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                style="height:100%"
+                                value-format="yyyy-MM-dd"
+                                @change="changeDataRange"
+                                size="small"
+                                >
+                            </el-date-picker>
+                        </span>
+                </div>
+                <div class="tableContent">
+                    <a-table :columns="nlcolumns0" :data-source="nldata" @change="changePage">
+                        <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+                        <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+                        <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+                    </a-table>
+                </div>
+             </div>
+        </div>
+    </div>
     <div class="select_area_container">
       <div class="select_container">
-        <a-select default-value style="width:100%" @change="chengeSerSelect">
-          <a-select-option
+        <el-select default-value style="width:150px" @change="chengeSerSelect">
+          <el-select-option
             v-for="(item) in serListArr"
             :value="item.serviceId"
             :key="item.id"
-          >{{item.serviceName}}</a-select-option>
-        </a-select>
+          >{{item.serviceName}}</el-select-option>
+        </el-select>
       </div>
       <div class="time_container">
         <el-date-picker
@@ -38,7 +90,8 @@
     <div class="fangwen_area_container">
       <div class="title_container">访问趋势</div>
       <div class="bar_container" id="barID"></div>
-      <div class="fangwen_detail_container" v-show="ifShowDetail">
+      <div class="title_container">访问趋势详情</div>
+      <div class="fangwen_detail_container">
         <a-table :columns="qscolumns" :data-source="qsdata" @change="changeQsTablePag">
           <a slot="serviceName" slot-scope="text" href="">{{text}}</a>
           <span slot="successUsageRate" slot-scope="successUsageRate">
@@ -56,22 +109,8 @@
           <a slot="buyNum" slot-scope="text" href="">{{text}}</a>
         </a-table>
       </div>
-      <div class="expan_btn_container">
-        <div class="btn_container1" @click="expanfangwen">
-          <a-icon
-            type="down-circle"
-            :style="{ fontSize: '16px', color: '#6495fa' }"
-            v-show="!ifShowDetail"
-          ></a-icon>
-          <a-icon
-            type="up-circle"
-            :style="{ fontSize: '16px', color: '#6495fa' }"
-            v-show="ifShowDetail"
-          ></a-icon>
-        </div>
-      </div>
     </div>
-    <div class="nengli_area_container">
+     <div class="nengli_area_container">
       <div class="nengli_title_container">
         <div class="nl_title">能力服务列表</div>
         <div class="search_container">
@@ -95,7 +134,7 @@
         </a-table>
       </div>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -113,52 +152,65 @@ export default {
     return {
       locale,
       moment,
-      nlcolumns: [
+      nlcolumns0: [
         {
-          title: "API名称",
+          title: "API",
           dataIndex: "serviceName",
           key: "serviceName",
           scopedSlots: { customRender: "serviceName" }
         },
         {
-          title: "消费状态",
-          dataIndex: "paySta",
-          key: "paySta"
-        },
-        {
-          title: "调用量限制",
+          title: "调用量",
           dataIndex: "freeNum",
           key: "freeNum"
         },
         {
-          title: "QPS",
+          title: "调用失败",
           key: "basicQps",
           dataIndex: "basicQps"
         },
         {
-          title: "购买时间",
+          title: "失败率",
           key: "paySuccessTime",
           dataIndex: "paySuccessTime"
         },
         {
-          title: "到期时间",
-          key: "effectiveTime",
-          dataIndex: "effectiveTime"
-        },
-        {
-          title: "开通付费",
+          title: "详细统计",
           key: "openBuy",
           dataIndex: "openBuy",
           slots: { title: "customTitle" },
           scopedSlots: { customRender: "openBuy" }
         },
+      ],
+      nlcolumns: [
         {
-          title: "购买次数包",
-          key: "Purchases",
-          dataIndex: "Purchases",
+          title: "API",
+          dataIndex: "serviceName",
+          key: "serviceName",
+          scopedSlots: { customRender: "serviceName" }
+        },
+        {
+          title: "调用量",
+          dataIndex: "freeNum",
+          key: "freeNum"
+        },
+        {
+          title: "调用失败",
+          key: "basicQps",
+          dataIndex: "basicQps"
+        },
+        {
+          title: "失败率",
+          key: "paySuccessTime",
+          dataIndex: "paySuccessTime"
+        },
+        {
+          title: "详细统计",
+          key: "openBuy",
+          dataIndex: "openBuy",
           slots: { title: "customTitle" },
-          scopedSlots: { customRender: "Purchases" }
-        }
+          scopedSlots: { customRender: "openBuy" }
+        },
       ],
       searchName: "",
       nldata: [],
@@ -217,11 +269,11 @@ export default {
     };
   },
   created() {
-    this.routerData = this.$route.query.serviceModel;
+    this.routerData = 1;
   },
   watch: {
     $route: function(newVal, oldVal) {
-      this.routerData = this.$route.query.serviceModel;
+      this.routerData = 1;
       this.getPageData();
     }
   },
@@ -496,141 +548,187 @@ export default {
         myChart.setOption(option);
       }, 200);
     },
-    expanfangwen() {
-      this.ifShowDetail = !this.ifShowDetail;
-      var expanDom = document.getElementsByClassName("expan_btn_container")[0];
-      if (this.ifShowDetail) {
-        expanDom.style = "margin-top: 73px;";
-      } else {
-        expanDom.style = "margin-top: 15px;";
-      }
-    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.apiMan_container {
-  width: 100%;
-  height: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  .select_area_container {
-    width: 100%;
-    height: 80px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    .select_container {
-      min-width: 120px;
-      height: 32px;
-      margin-right: 20px;
-    }
-    .close_week {
-      margin-left: 20px;
-    }
-    .time_container {
-      height: 32px;
-    }
-    .btn_container {
-      position: absolute;
-      right: 0;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-  .fangwen_area_container {
-    width: 100%;
-    min-height: 316px;
-    margin-bottom: 13px;
-    .title_container {
-      width: 100%;
-      height: 60px;
-      font-size: 16px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #000000;
-      line-height: 24px;
-      display: flex;
-      align-items: center;
-    }
-    .bar_container {
-      width: 100%;
-      height: 230px;
-    }
-    .fangwen_detail_container {
-      width: 100%;
-      min-height: 200px;
-      margin-top: 15px;
-      /deep/ .ant-table-wrapper {
-        /deep/ .ant-spin-nested-loading {
-          /deep/ .ant-pagination {
+.gailanContainer{
+     background: #f0f2f5; 
+    .gailan{
+        background: #fff;
+        margin-bottom: 20px;
+        .gailan_container{
             display: flex;
-            justify-content: center;
-            float: inherit;
+            padding:20px;
+            .gailan_left{
+                width: 250px;
+                .title{
+                     height: 30px;
+                        font-size: 14px;
+                        font-family: HelveticaNeue;
+                        color: #54565B;
+                        margin-bottom: 15px;
+                        display: flex;
+                            align-items: center;
+                }
+                .gailan_box{
+                    height: 200px;
+                    border-radius: 2px;
+                    border: 1px solid #D9D9D9;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+            .gailan_rt{
+               margin-left: 20px;
+               flex:1;
+               display: flex;
+               flex-direction: column;
+               .title{
+                   height: 30px;
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   font-size: 14px;
+                    font-family: HelveticaNeue;
+                    color: #54565B;
+                    margin-bottom: 15px;
+               } 
+               .tableContent{
+                   height: 200px;
+                   overflow: auto;
+                   border: 1px solid #D9D9D9;
+               }
+            }
+        }
+    }
+    .select_area_container {
+        width: 100%;
+        height: 80px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        position: relative;
+         background: #fff;
+         padding: 0 24px;
+        .select_container {
+          min-width: 120px;
+          // height: 32px;
+          margin-right: 20px;
+        }
+        .close_week {
+        margin-left: 20px;
+        }
+        .time_container {
+        //  height: 32px;
+        }
+        .btn_container {
+        position: absolute;
+        right: 24px;
+        // height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        }
+    }
+    .fangwen_area_container {
+        width: 100%;
+        min-height: 316px;
+        margin-bottom: 13px;
+        background: #fff;
+        padding:0 24px;
+        margin-top: 20px;
+        .title_container {
+        width: 100%;
+        height: 60px;
+        font-size: 16px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #000000;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        }
+        .bar_container {
+        width: 100%;
+        height: 230px;
+        }
+        .fangwen_detail_container {
+          width: 100%;
+          min-height: 200px;
+          padding-bottom: 24px;
+          /deep/ .ant-table-wrapper {
+              /deep/ .ant-spin-nested-loading {
+              /deep/ .ant-pagination {
+                  display: flex;
+                  justify-content: center;
+                  float: inherit;
+              }
+              }
           }
         }
-      }
-    }
-    .expan_btn_container {
-      width: 100%;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 15px;
-      .btn_container1 {
-        width: 19px;
-        height: 19px;
+        .expan_btn_container {
+        width: 100%;
+        height: 26px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  .nengli_area_container {
-    width: 100%;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    .nengli_title_container {
-      width: 100%;
-      height: 57px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .nl_title {
-        font-size: 15px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
-        color: #676970;
-        line-height: 21px;
-      }
-      .search_container {
-        width: 288px;
-        height: 32px;
-      }
-    }
-    .table_container {
-      width: 100%;
-      flex: 1;
-      /deep/ .ant-table-wrapper {
-        /deep/ .ant-spin-nested-loading {
-          /deep/ .ant-pagination {
+        margin-top: 15px;
+        .btn_container1 {
+            width: 19px;
+            height: 19px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            float: inherit;
-          }
+            border-radius: 50%;
+            &:hover {
+            cursor: pointer;
+            }
         }
-      }
+        }
     }
-  }
+    .nengli_area_container {
+        width: 100%;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        padding: 0 24px;
+        margin-top: 20px;
+        background: #fff;
+        .nengli_title_container {
+        width: 100%;
+        height: 57px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .nl_title {
+            font-size: 15px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #676970;
+            line-height: 21px;
+        }
+        .search_container {
+            width: 288px;
+            height: 32px;
+        }
+        }
+        .table_container {
+        width: 100%;
+        flex: 1;
+        /deep/ .ant-table-wrapper {
+            /deep/ .ant-spin-nested-loading {
+            /deep/ .ant-pagination {
+                display: flex;
+                justify-content: center;
+                float: inherit;
+            }
+            }
+        }
+        }
+    }
 }
 </style>

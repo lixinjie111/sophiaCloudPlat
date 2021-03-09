@@ -10,8 +10,13 @@ import Xui from 'x-intelligent-ui';
 import 'x-intelligent-ui/dist/main.css';
 Vue.use(Xui);
 
+import lxjData from "./utils/lxjData.js"
+import fjData from "./utils/fjData.js"
+
 import echarts from "echarts";
 Vue.prototype.$echarts = echarts;
+Vue.prototype.$lxjData = lxjData;
+Vue.prototype.$fjData = fjData;
 
 // 进度条
 // 进度条
