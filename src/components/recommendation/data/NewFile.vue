@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    name: "dataForm",
+    name: "NewFile",
     data() {
       return {
         formItemLayout: {

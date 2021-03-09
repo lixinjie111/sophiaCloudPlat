@@ -46,24 +46,16 @@
           取消
         </a-button>
       </template>
-      <newFile></newFile>
+      <NewFile></NewFile>
     </a-modal>
-    <a-modal v-model="uploadData" title="上传数据">
-      <template slot="footer">
-        <a-button type="primary" :loading="setLoading" @click="nextStep">
-          下一步
-        </a-button>
-        <a-button @click="cancelNew">
-          取消
-        </a-button>
-      </template>
-      <newFile></newFile>
+    <a-modal v-model="uploadData" title="上传数据" :footer="null">
+      <UploadData></UploadData>
     </a-modal>
   </div>
 </template>
-
+ 
 <script>
-  import newFile from "@/components/recommendation/data/NewFile";
+  import NewFile from "@/components/recommendation/data/NewFile";
   import UploadData from "@/components/recommendation/data/UploadData";
 
   const data = [];
@@ -85,7 +77,7 @@
 
   export default {
     name: "list",
-    components: {newFile,UploadData},
+    components: {NewFile,UploadData},
     data() {
       return {
         data,
