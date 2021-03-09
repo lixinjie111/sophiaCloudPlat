@@ -72,7 +72,7 @@
     </div>
     <div class="sdk_two_container">
       <div class="sdk_item" v-for="(item,index) in sdkApyList" :key="index">
-        <div class="sdk_title2">{{item.serviceName}}</div>
+        <div class="sdk_title2" :title="item.serviceName">{{item.serviceName}}</div>
         <div class="total_num_container">
           <span>{{item.authorizationCount}}</span>授权总数
         </div>
@@ -560,6 +560,9 @@ export default {
         font-size: 16px;
         font-weight: 550;
         margin-bottom: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .total_num_container {
         font-size: 14px;
