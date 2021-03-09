@@ -66,7 +66,7 @@ export default {
   align-items: center;
   justify-content: center;
   .authentPop_con {
-    width: 35%;
+    min-width: 500px;
     min-height: 378px;
     background: #ffffff;
     box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.08),
