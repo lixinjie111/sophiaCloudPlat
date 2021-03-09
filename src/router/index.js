@@ -6,6 +6,7 @@ const Home = resolve => require(['@/views/home'], resolve)
 //我的应用监控报表
 const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
 const safeSet = resolve => require(['@/views/user/safeSet'], resolve);
+const authentPop = resolve => require(['@/views/user/authentPop'], resolve);
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const gailan = resolve => require(['@/views/application/gailan'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
@@ -55,6 +56,11 @@ export const menuRouterMap = [{
             name: "safeSet",
             path: "/safeSet",
             component: safeSet
+        },
+        {
+          name:'authentPop',
+          path:"/authentPop",
+          component:authentPop
         },
         {
             name: "gailan",
