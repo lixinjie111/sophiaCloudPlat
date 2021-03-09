@@ -8,11 +8,10 @@
       @tabChange="key => onTabChange(key, 'noTitleKey')"
     >
       <div v-if="noTitleKey === '1'">
-        <a-card title="应用信息" size="small">
-          <CreateForm></CreateForm>
-        </a-card>
-        <a-card title="业务场景" size="small" class="c-mt-20">
-          <SceneForm></SceneForm>
+        <a-card title="业务场景" size="small">
+          <div style="width: 500px">
+            <SceneForm></SceneForm>
+          </div>
         </a-card>
         <div class="basic-btn">
           <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
