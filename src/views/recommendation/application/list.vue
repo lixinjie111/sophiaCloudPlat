@@ -30,7 +30,13 @@
         <a-button type="link">报表</a-button>
         <a-button type="link" @click="toDetail">详情</a-button>
         <a-button type="link" @click="toScene">配置</a-button>
-        <a-button type="link" style="color:red;">删除</a-button>
+        <a-popconfirm
+          title="是否删除该应用?"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="del(record.id)">
+          <a-button type="link" style="color:red;">删除</a-button>
+        </a-popconfirm>
       </template>
     </a-table>
     <a-modal v-model="createModalShow" title="创建应用">
@@ -48,7 +54,7 @@
 </template>
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
-  import {getAppList} from "@/api/recommendation/index";
+  import {getAppList, delApp} from "@/api/recommendation/index";
   import moment from "moment";
 
   export default {
@@ -93,7 +99,7 @@
           current: 1,
           pageSize: 10,
           onChange: (pageNumber) => {
-            this.getAppList(pageNumber);
+            this.getList(pageNumber);
           }
         },
         // exportLoading: false,
@@ -108,7 +114,7 @@
       // },
     },
     created() {
-      this.getAppList();
+      this.getList();
     },
     methods: {
       formatTime(time) {
@@ -174,7 +180,7 @@
       tradeChange(value) {
         console.log(value);
       },
-      getAppList(current) {
+      getList(current) {
         let params = {
           appType: 1,//应用类型, 0普通，1推荐
           pageIndex: current || 1,
@@ -188,6 +194,18 @@
             this.list = res.data.list;
             this.pagination.current = res.data.pageNum;
             this.pagination.total = res.data.total;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      del(id) {
+        delApp({id:id}).then(res => {
+          if (res.code == 200000) {
+            this.$message.success("删除成功！");
           } else {
             this.$message.error(res.message || "请求失败！");
           }
