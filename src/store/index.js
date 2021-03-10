@@ -7,7 +7,8 @@ import {
 const store = new Vuex.Store({
 	state: {
         token:'',
-        userInfo:{}
+        userInfo:{},
+		collapsed:"",
 	},
 	mutations: {
 		SET_LOGIN_INFO:(state, loginInfo) => {
@@ -18,7 +19,11 @@ const store = new Vuex.Store({
 		},
 		REMOVE_LOGIN_INFO:(state) => {
 			state.token = "";
-		}
+		},
+		set_collapsed:(state,collapsed)=>{
+			console.log(collapsed)
+			state.collapsed=collapsed;
+		},
 	},
 	actions: {
 		// 设置用户授权信息

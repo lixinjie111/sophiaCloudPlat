@@ -66,12 +66,12 @@
     methods: {
       save() {
         this.$router.push({
-          path: '/recommendation/application/scene'
+          path: '/recommendation/scene/rule'
         });
       },
       cancel() {
         this.$router.push({
-          path: '/recommendation/application/list'
+          path: '/recommendation/scene/list'
         });
       }
     }

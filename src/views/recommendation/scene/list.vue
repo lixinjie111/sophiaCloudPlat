@@ -41,8 +41,8 @@
       :data-source="data"
       :pagination="{showQuickJumper: true, showSizeChanger: true}">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link">详情</a-button>
-        <a-button type="link">编辑</a-button>
+        <a-button type="link" @click="toDetail">详情</a-button>
+        <a-button type="link" @click="toEdit">编辑</a-button>
         <a-button type="link">测试</a-button>
         <a-button type="link">删除</a-button>
       </template>
@@ -139,6 +139,16 @@
       }
     },
     methods: {
+      toDetail() {
+        this.$router.push({
+          path: '/recommendation/scene/detail'
+        });
+      },
+      toEdit() {
+        this.$router.push({
+          path: '/recommendation/scene/edit'
+        });
+      },
       add() {
         this.sceneModalShow = true;
       },
@@ -153,7 +163,7 @@
       },
       setting() {
         this.$router.push({
-          path: '/recommendation/application/data'
+          path: '/recommendation/scene/data'
         });
       },
       cancelSetting() {

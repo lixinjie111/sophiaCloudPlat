@@ -397,10 +397,15 @@ export default {
   },
   methods: {
       qyhandleAvatarSuccess(res, file) {
-        this.qyimageUrl = URL.createObjectURL(file.raw);
+        // this.qyimageUrl = URL.createObjectURL(file.raw);
+        if(file.response.code == 200000){
+          this.qyimageUrl = file.response.data;
+        }
       },
       zzhandleAvatarSuccess(res, file){
-        this.zzimageUrl = URL.createObjectURL(file.raw);
+        if(file.response.code == 200000){
+          this.zzimageUrl = file.response.data;
+        }
       },
       qybeforeAvatarUpload(file) {
         console.log(file,'file')
@@ -435,7 +440,10 @@ export default {
           if(res.code == 200000){
             var authObj = res.data || {};
             if(authObj.authType == 1){ //企业类认证结果查询
+              this.ifShowCheck = 1;
               if(authObj.status == 0){ //审核中
+              this.$message.info("审核中！");
+                this.changeTab = 2;
                 this.stepNum = 2;
                 this.ifDisabledQy = true;
                 this.qiyeObj.comYinyeNum = authObj.businessLicenseNumber;
@@ -449,9 +457,15 @@ export default {
                 this.changeTab = 4;
                 this.comInfObj = authObj;
               }
+              else if(authObj.status == 3){ //未提交
+                this.changeTab == 1;
+              }
             }
             else if(authObj.authType == 2){  //组织类认证结果查询
+              this.ifShowCheck = 2;
               if(authObj.status == 0){ //审核中
+                this.$message.info("审核中！");
+                this.changeTab = 2;
                 this.stepNum = 2;
                 this.ifDisabledzz = true;
                 this.zuzhiObj.zuzhiNum = authObj.businessLicenseNumber;
@@ -464,6 +478,9 @@ export default {
               else if(authObj.status == 2){  //成功
                 this.changeTab = 4;
                 this.comInfObj = authObj;
+              }
+              else if(authObj.status == 3){ //未提交
+                this.changeTab == 1;
               }
             }
           }
@@ -493,12 +510,10 @@ export default {
             if (valid) {
               var qiyeObj = this.qiyeObj;
               var parms = {
-                userAuthenticationPo:{
-                  authType:'1',
+                  authType:1,
                   businessLicenseImage:this.qyimageUrl,
                   businessLicenseNumber:qiyeObj.comYinyeNum,
                   enterpriseName:qiyeObj.qiyeName
-                }
               };
               this.stepNum = 2;
               this.ifDisabledQy = true;
@@ -524,12 +539,10 @@ export default {
             if (valid) {
               var zuzhiObj = this.zuzhiObj;
               var parms = {
-                userAuthenticationPo:{
-                  authType:'2',
+                  authType:2,
                   businessLicenseImage:this.zzimageUrl,
                   businessLicenseNumber:zuzhiObj.zuzhiNum,
                   enterpriseName:zuzhiObj.zuzhiName
-                }
               };
               this.stepNum = 2;
               this.ifDisabledzz = true;
