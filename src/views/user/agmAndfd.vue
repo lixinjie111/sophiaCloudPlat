@@ -15,7 +15,8 @@
         </el-steps>
       </div>
     </div>
-    <div class="agmAndfd_con1">
+    <div class="agmAndfd_con1" v-if="stepItem == 1">
+      <!--协议与反馈部分-->
       <div class="agmAndfd_til1">注销前请您仔细阅读以下重要信息！</div>
       <div class="agmAndfd_til2">账号注销重要信息</div>
       <div class="agmAndfd_til3">
@@ -58,6 +59,25 @@
         <div class="btn2" @click="subZhuxiao">确定注销</div>
       </div>
     </div>
+    <div class="agmAndfd_con2" v-if="stepItem == 2">
+      <!--安全设置-注销账号-账号信息检查与注销部分-->
+      <div class="agmAndfd_con2_item1">
+        <div class="info_info_con">
+          <img :src="infoIcon" class="info_info" />
+        </div>
+        <div class="info_txt_con">
+            <div class="info_txt1">请注意</div>
+            <div class="info_txt2">账号删除将会检测账号所有的云产品和服务，当您确认并启动注销流程之后，所有设计到的云产品和服务数据将被清理，请注意这个流程是不可逆的。</div>
+        </div>
+        <div class="info_close_icon">
+            <img :src="closeIcon" class="info_close">
+        </div>
+      </div>
+      <div class="agmAndfd_con2_item2">系统正在执行账号注销检查，请耐心等待</div>
+      <div class="agmAndfd_con2_item3">
+          <div class="agmAndfd_con2_item3_item">取消注销（15s）</div>
+      </div>
+    </div>
     <div class="info_pop" v-show="ifShowPop">
       <div class="info_pop_con">
         <div class="pop_til">
@@ -90,6 +110,7 @@ export default {
   name: "agmAndfd",
   data() {
     return {
+      stepItem: 1,
       stepNum: 1,
       isRed: false,
       closeIcon: require("../../assets/images/verify/close.png"),
@@ -105,6 +126,8 @@ export default {
     submit() {
       //此处调用接口
       this.ifShowPop = false;
+      this.stepItem = 2;
+      this.stepNum = 2;
     },
     cancel() {
       this.ifShowPop = false;
@@ -213,6 +236,76 @@ export default {
         border: 1px solid #0376fd;
         color: white;
       }
+    }
+  }
+  .agmAndfd_con2 {
+    width: 85%;
+    margin-top: 50px;
+    .agmAndfd_con2_item1 {
+      width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
+      background: #fffbe6;
+      border-radius: 2px;
+      border: 1px solid #ffe58f;
+      display: flex;
+      align-items: flex-start;
+      .info_info_con {
+        width: 18px;
+        margin-right: 17px;
+        .info_info {
+          display: block;
+          width: 100%;
+        }
+      }
+      .info_txt_con{
+          flex: 1;
+          .info_txt1{
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.85);
+            margin-bottom: 5px;
+          }
+          .info_txt2{
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.65);
+          }
+      }
+      .info_close_icon{
+          width: 16px;
+          .info_close{
+              display: block;
+              width: 100%;
+          }
+      }
+    }
+    .agmAndfd_con2_item2{
+        margin-top: 35px;
+        font-size: 18px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #121C33;
+    }
+    .agmAndfd_con2_item3{
+        width: 100%;
+        margin-top: 180px;
+        .agmAndfd_con2_item3_item{
+            min-width: 140px;
+            height: 40px;
+            background: #F7F7F7;
+            border-radius: 2px;
+            border: 1px solid #DDDDDD;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #121C33;
+            line-height: 40px;
+            padding-left: 12px;
+            box-sizing: border-box;
+        }
     }
   }
   .info_pop {
