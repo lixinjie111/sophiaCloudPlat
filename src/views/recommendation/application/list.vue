@@ -38,6 +38,7 @@
 </template>
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
+  import { getAppList } from "@/api/recommendation/index";
 
   const data = [];
   for (let i = 0; i < 46; i++) {
@@ -101,6 +102,9 @@
         return this.selectedRowKeys.length > 0;
       },
     },
+    created(){
+      this.getAppList();
+    },
     methods: {
       toDetail() {
         this.$router.push({
@@ -158,6 +162,24 @@
       },
       tradeChange(value) {
         console.log(value);
+      },
+      getAppList() {
+        let params = {
+          appType: 1,//应用类型, 0普通，1推荐
+          pageIndex: 1,
+          pageSize: 10
+        }
+        getAppList(params).then(res => {
+            if (res.code == 200000) {
+              // var sdkApplyData = res.data;
+              console.log(res);
+            } else {
+              this.$message.error(res.message || "请求失败！");
+            }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
       }
     }
   };
