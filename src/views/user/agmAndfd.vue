@@ -66,16 +66,23 @@
           <img :src="infoIcon" class="info_info" />
         </div>
         <div class="info_txt_con">
-            <div class="info_txt1">请注意</div>
-            <div class="info_txt2">账号删除将会检测账号所有的云产品和服务，当您确认并启动注销流程之后，所有设计到的云产品和服务数据将被清理，请注意这个流程是不可逆的。</div>
+          <div class="info_txt1">请注意</div>
+          <div class="info_txt2">
+            账号删除将会检测账号所有的云产品和服务，当您确认并启动注销流程之后，所有设计到的云产品和服务数据将被清理，请注意这个流程是不可逆的。
+          </div>
         </div>
         <div class="info_close_icon">
-            <img :src="closeIcon" class="info_close">
+          <img :src="closeIcon" class="info_close" />
         </div>
       </div>
-      <div class="agmAndfd_con2_item2">系统正在执行账号注销检查，请耐心等待</div>
+      <div class="agmAndfd_con2_item2">
+        系统正在执行账号注销检查，请耐心等待
+      </div>
       <div class="agmAndfd_con2_item3">
-          <div class="agmAndfd_con2_item3_item">取消注销（15s）</div>
+        <div class="agmAndfd_con2_item3_item">
+          取消注销（<span>{{ timerNum }}</span
+          >s）
+        </div>
       </div>
     </div>
     <div class="info_pop" v-show="ifShowPop">
@@ -116,10 +123,28 @@ export default {
       closeIcon: require("../../assets/images/verify/close.png"),
       infoIcon: require("../../assets/images/verify/error2.png"),
       ifShowPop: false,
+      timerNum:17,
+      timer: null,
     };
   },
-  created() {},
+  created() {
+    this.setTimer();
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
   methods: {
+    setTimer() {
+      this.timer = setInterval(() => {
+        if (this.timerNum > 0) {
+          this.timerNum--;
+        }
+        else{
+            clearInterval(this.timer);
+            alert('我要注销了！')
+        }
+      }, 1000);
+    },
     subZhuxiao() {
       this.ifShowPop = true;
     },
@@ -258,54 +283,54 @@ export default {
           width: 100%;
         }
       }
-      .info_txt_con{
-          flex: 1;
-          .info_txt1{
-            font-size: 16px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: rgba(0, 0, 0, 0.85);
-            margin-bottom: 5px;
-          }
-          .info_txt2{
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.65);
-          }
+      .info_txt_con {
+        flex: 1;
+        .info_txt1 {
+          font-size: 16px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 500;
+          color: rgba(0, 0, 0, 0.85);
+          margin-bottom: 5px;
+        }
+        .info_txt2 {
+          font-size: 14px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: rgba(0, 0, 0, 0.65);
+        }
       }
-      .info_close_icon{
-          width: 16px;
-          .info_close{
-              display: block;
-              width: 100%;
-          }
+      .info_close_icon {
+        width: 16px;
+        .info_close {
+          display: block;
+          width: 100%;
+        }
       }
     }
-    .agmAndfd_con2_item2{
-        margin-top: 35px;
-        font-size: 18px;
+    .agmAndfd_con2_item2 {
+      margin-top: 35px;
+      font-size: 18px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #121c33;
+    }
+    .agmAndfd_con2_item3 {
+      width: 100%;
+      margin-top: 180px;
+      .agmAndfd_con2_item3_item {
+        width: 144px;
+        height: 40px;
+        background: #f7f7f7;
+        border-radius: 2px;
+        border: 1px solid #dddddd;
+        font-size: 16px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #121C33;
-    }
-    .agmAndfd_con2_item3{
-        width: 100%;
-        margin-top: 180px;
-        .agmAndfd_con2_item3_item{
-            min-width: 140px;
-            height: 40px;
-            background: #F7F7F7;
-            border-radius: 2px;
-            border: 1px solid #DDDDDD;
-            font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #121C33;
-            line-height: 40px;
-            padding-left: 12px;
-            box-sizing: border-box;
-        }
+        color: #121c33;
+        line-height: 40px;
+        padding-left: 12px;
+        box-sizing: border-box;
+      }
     }
   }
   .info_pop {
