@@ -6,5 +6,5 @@ if (location.host == "www.yzsophia.com") {
 } else if(location.host == "dev-www.yzsophia.com"){
     window.config.url = "https://dev-www.yzsophia.com"; //测式
 }else {
-    window.config.url = ""
+    window.config.url = "https://dev-www.yzsophia.com"
 }

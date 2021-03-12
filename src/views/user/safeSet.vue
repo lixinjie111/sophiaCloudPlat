@@ -1,6 +1,6 @@
 <template>
     <div class="busEt">
-        <safeAlert @closeDialog1="closeDialog1" v-show="isAlert"></safeAlert>  
+        <safeAlert @closeDialog1="closeDialog1" v-if="isAlert" :path="path"></safeAlert>  
         <div class="coverBg" v-show="coverBg">
             <div class="safeCheck">
                 <div class="safeHeader"><span>登录保护设置</span><img src="../../assets/images/login/close.png" class="close" @click="closeDialog"></div>
@@ -47,15 +47,15 @@
                 <div class="left">
                     <div class="title">账号安全等级</div>
                     <div class="desc">安全级别：
-                        <span style="color:#f5222d" v-if="level==0">低</span>
-                        <span style="color:#FAAD14" v-if="level==1">中</span>
-                        <span style="color:#52c41a" v-if="level==2">高</span>
+                        <span style="color:#f5222d" v-if="level<2">低</span>
+                        <span style="color:#52c41a" v-else-if="level>3">高</span>
+                        <span style="color:#FAAD14" v-else>中</span>
                     </div>
                 </div>
                 <div class="rt">
-                    <a-progress :showInfo="false" :percent="30" status="exception" v-if="level==0"/>
-                    <a-progress :showInfo="false" :percent="50" stroke-color="#FAAD14" v-if="level==1"/>
-                    <a-progress :showInfo="false" :percent="80" status="success" v-if="level==2"/>
+                    <a-progress :showInfo="false" :percent="30" status="exception" v-if="level<2"/>
+                    <a-progress :showInfo="false" :percent="80" status="success" v-else-if="level>3"/>
+                    <a-progress :showInfo="false" :percent="50" stroke-color="#FAAD14" v-else/>
                 </div>
             </div>
             <div class="list">
@@ -68,7 +68,7 @@
                         <a-icon type="check-circle"  :style="{ fontSize: '16px', color: '#51C41B' }"/>
                         <span style="color:#51C41B;margin-left:10px ">已设置</span>    
                         <a-divider type="vertical" />
-                        <span style="color: #0376FD; "  @click="modify" class="btn">修改</span>    
+                        <span style="color: #0376FD; "  @click="modify(0)" class="btn">修改</span>    
                     </div>
                     <div class="isSet" v-else>
                        <a-icon type="info-circle"  :style="{ fontSize: '16px', color: '#FAAD14' }"/>
@@ -178,10 +178,12 @@
 import {HTTPURL} from '@/api/requestUrl';
 import safeAlert from './safeAlert';
 import { updateInfo} from '@/api/user';
+import { securityInfo} from '@/api/safeSet';
 console.log(HTTPURL)
 export default {
     data() {
         return {
+            path:"",
             ruleForm:{
                 isOpen:"不开启"
             },
@@ -195,15 +197,35 @@ export default {
             isProSet:false,
             level:0,
             isAlert:false,
+            safeInfo:{},
+            userInfomation:{},
+            tel:''
+            
         }
     },
     components:{
         safeAlert
     },
     created() {
-        //this.initInfo();
+        this.initInfo();
     },
     methods: {
+        initInfo(){
+            this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
+            this.tel = this.userInfomation.mobile.substr(0,3)+"****"+this.userInfomation.mobile.substr(7);
+        },
+        initInfo(){
+            securityInfo().then(res=>{
+                if(res.code==200000){
+                    this.level=res.data.securityLevel;
+                    this.isloginSet=res.data.passwordIsSet;
+                    this.istelSet=res.data.mobileIsSet;
+                    this.isSet=res.data.mfaIsSet;
+                    this.ismailSet=res.data.emailIsSet;
+                    this.isProSet=res.data.loginProtect;
+                }
+            })
+        },
         closeDialog1(){
             this.isAlert=false;
         },
@@ -216,10 +238,12 @@ export default {
         closeDialog(){
             this.coverBg=false;
         },
-        modify(){
-            this.$router.push({
-                path:"/modifyPwd"
-            })
+        modify(val){
+            this.path="/modifyPwd";
+            this.isAlert=true;
+            // this.$router.push({
+            //     path:"/modifyPwd"
+            // })
         },
         modifyTel(item){
             this.$router.push({
