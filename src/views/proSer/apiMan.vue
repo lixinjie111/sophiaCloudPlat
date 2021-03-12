@@ -7,6 +7,7 @@
             v-for="(item) in serListArr"
             :value="item.serviceId"
             :key="item.id"
+            :title='item.serviceName'
           >{{item.serviceName}}</a-select-option>
         </a-select>
       </div>
@@ -425,9 +426,9 @@ export default {
         var yData1 = [];
         var yData2 = [];
         ecData.forEach(item=>{
-          xData.push(item.nowTime);
-          yData1.push(item.thisSuccessNum);
-          yData2.push(item.numMonthRatio);
+          xData.push(item.statisticsDate);
+          yData1.push(item.serviceSuccessNum);
+          yData2.push(item.numDayRatio);
         });
         var myChart = this.$echarts.init(document.getElementById("barID"));
         var option = {
