@@ -9,6 +9,8 @@ const safeSet = resolve => require(['@/views/user/safeSet'], resolve);
 const modifyPwd = resolve => require(['@/views/user/modifyPwd'], resolve);
 const modifyTel = resolve => require(['@/views/user/modifyTel'], resolve);
 const safeEmail = resolve => require(['@/views/user/safeEmail'], resolve);
+const authentPop = resolve => require(['@/views/user/authentPop'], resolve); 
+const agmAndfd = resolve => require(['@/views/user/agmAndfd'], resolve); 
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const gailan = resolve => require(['@/views/application/gailan'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
@@ -73,6 +75,16 @@ export const menuRouterMap = [{
             name: "safeEmail",
             path: "/safeEmail",
             component: safeEmail
+        },
+        {
+          name:'authentPop',
+          path:"/authentPop",
+          component:authentPop
+        },
+        {
+          name:'agmAndfd',
+          path:'/agmAndfd',
+          component:agmAndfd
         },
         {
             name: "gailan",
