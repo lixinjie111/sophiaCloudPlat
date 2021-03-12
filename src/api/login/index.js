@@ -25,3 +25,7 @@ export const verifyPhoneNodeCode = params => { return axios.get(`${HTTPURL}/ucen
  * 重置密码
  */
 export const resetPasswords = params => { return axios.get(`${HTTPURL}/ucenter/user/resetPasswords`, {params: params}).then(res => res.data); };
+/**
+ * mobileProtect
+ */
+export const mobileProtect = params => { return axios.get(`${HTTPURL}/ucenter/user/mobileProtect`, {params: params}).then(res => res.data); };

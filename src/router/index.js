@@ -6,6 +6,9 @@ const Home = resolve => require(['@/views/home'], resolve)
 //我的应用监控报表
 const monRep = resolve => require(['@/views/proSer/monRep'], resolve);
 const safeSet = resolve => require(['@/views/user/safeSet'], resolve);
+const modifyPwd = resolve => require(['@/views/user/modifyPwd'], resolve);
+const modifyTel = resolve => require(['@/views/user/modifyTel'], resolve);
+const safeEmail = resolve => require(['@/views/user/safeEmail'], resolve);
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const gailan = resolve => require(['@/views/application/gailan'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
@@ -55,6 +58,21 @@ export const menuRouterMap = [{
             name: "safeSet",
             path: "/safeSet",
             component: safeSet
+        },
+        {
+            name: "modifyPwd",
+            path: "/modifyPwd",
+            component: modifyPwd
+        },
+        {
+            name: "modifyTel",
+            path: "/modifyTel",
+            component: modifyTel
+        },
+        {
+            name: "safeEmail",
+            path: "/safeEmail",
+            component: safeEmail
         },
         {
             name: "gailan",
