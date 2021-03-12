@@ -206,6 +206,7 @@
         delApp({id:id}).then(res => {
           if (res.code == 200000) {
             this.$message.success("删除成功！");
+            this.getList();
           } else {
             this.$message.error(res.message || "请求失败！");
           }
