@@ -2,7 +2,7 @@
     <div class="busEt">
           <a-page-header
             style="borderBottom: 1px solid rgb(235, 237, 240)"
-            title="密保邮箱"
+            :title="title"
          >
         </a-page-header>
         <div class="content">
@@ -34,12 +34,11 @@
 </template>
 <script>
 import {HTTPURL} from '@/api/requestUrl';
-import { updateInfo} from '@/api/user';
-import {sendMessage} from '@/api/login';
-console.log(HTTPURL)
+import { sendVerifyEmail,verifyEmailCode} from '@/api/safeSet';
 export default {
     data() {
         return {
+            title:'密保邮箱',
             ruleForm: {
                 email:'',
                 checkTelMa:'',
@@ -58,24 +57,32 @@ export default {
         }
     },
     created() {
-        //this.initInfo();
+        if(this.$route.query.val==0){
+            this.title="密保邮箱"
+        }else{
+            this.title="更改密保邮箱"
+        }
     },
     methods: {
         makSure(){
             this.closeDialog();
         },
         sendMeg(){
-            let _param ={
-                phone:this.email,
-                type:1,
-            };
-            sendMessage(_param).then(res => {
+            var emailTemplate=this.$route.query.val==0?"BIND_EMAIL":"CHANGE_EMAIL";
+            var formData = new FormData(); 
+            formData.append('email',this.ruleForm.email);
+            formData.append('emailTemplate',emailTemplate); 
+            let config = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }; 
+
+            sendVerifyEmail(formData,config).then(res => {
                 if(res.code == 200000) {
                     this.settime();
-                    this.idVertify=false;
                 }else {
-                    this.idVertify=true;
-                    this.idVertifyMsg=res.message;
+                    this.$message.error(res.message);
                 }
             }).catch(err => {
 
@@ -102,7 +109,30 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('submit!');
+                var formData = new FormData(); 
+                formData.append('email',this.ruleForm.email);
+                formData.append('code',this.ruleForm.checkTelMa); 
+                let config = {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }; 
+                verifyEmailCode(formData,config).then(res => {
+                    if(res.code == 200000) {
+                        this.$message.success(`修改成功`);
+                        this.$store.dispatch('getUserInfo');
+                         setTimeout(()=>{
+                              this.$router.push({
+                                    path:'/safeSet'
+                                })
+                         },1000)
+                       
+                    }else {
+
+                    }
+                }).catch(err => {
+
+                })
             } else {
                 console.log('error submit!!');
                 return false;

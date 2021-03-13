@@ -83,11 +83,13 @@ export default {
                 };
                 mobileProtect(_param).then(res => {
                     if(res.code == 200000) {
-                        localStorage.setItem("yk-token",res.data);
-                        this.$router.push({ path: '/' });
-                        this.$router.push({
-                            path:this.path
-                        })
+                        if(this.path==1){
+                            this.$emit('closeDialog2');
+                        }else{
+                            this.$router.push({
+                                path:this.path
+                            })
+                        }
                     }else {
                     
                     }

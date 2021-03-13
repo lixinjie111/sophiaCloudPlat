@@ -1,6 +1,6 @@
 <template>
     <div class="busEt">
-        <safeAlert @closeDialog1="closeDialog1" v-if="isAlert" :path="path"></safeAlert>  
+        <safeAlert @closeDialog1="closeDialog1" @closeDialog2="closeDialog2" v-if="isAlert" :path="path" :useTel="userInfomation.mobile"></safeAlert>  
         <div class="coverBg" v-show="coverBg">
             <div class="safeCheck">
                 <div class="safeHeader"><span>登录保护设置</span><img src="../../assets/images/login/close.png" class="close" @click="closeDialog"></div>
@@ -15,7 +15,7 @@
                             </el-form-item>
                             <template v-if="ruleForm.isOpen=='开启'">
                                 <el-form-item >
-                                    <el-checkbox v-model="checkedTel">手机短信验证</el-checkbox>
+                                    <el-checkbox v-model="checkedTel" disabled>手机短信验证</el-checkbox>
                                     <span  class="lv">已设置</span>
                                 </el-form-item>
                                 <el-form-item >
@@ -81,7 +81,7 @@
             <div class="list">
                 <div class="left">
                     <div class="title">手机绑定</div>
-                    <div class="desc" v-if="istelSet">您已绑定了手机<span style="color:#51C41B; ">138****2837</span>[您的手机号可以直接用于登陆、找回密码等]</div>
+                    <div class="desc" v-if="istelSet">您已绑定了手机<span style="color:#51C41B; ">{{tel}}</span>[您的手机号可以直接用于登陆、找回密码等]</div>
                     <!-- <div class="desc"  v-else>密保手机能够完成登录时的二次校验，提升账户安全等级，同时可以用来找回密码和接收相关安全提醒信息。</div> -->
                 </div>
                 <div class="rt">
@@ -89,7 +89,7 @@
                         <a-icon type="check-circle"  :style="{ fontSize: '16px', color: '#51C41B' }"/>
                         <span style="color:#51C41B;margin-left:10px " >已设置</span>    
                         <a-divider type="vertical" />
-                        <span style="color: #0376FD; " class="btn" @click="modifyTel(1)">修改</span>    
+                        <span style="color: #0376FD; " class="btn" @click="modifyTel">修改</span>    
                     </div>
                     <!-- <div class="isSet" v-else>
                        <a-icon type="info-circle"  :style="{ fontSize: '16px', color: '#FAAD14' }"/>
@@ -102,7 +102,7 @@
             <div class="list">
                 <div class="left">
                     <div class="title">邮箱绑定</div>
-                    <div class="desc" v-if="ismailSet">您已经绑定了邮箱<span style="color:#51C41B; ">66***6@gdpr.com</span>[您的邮箱可用于接收Sophia云平台发送给您的各种通知]</div>
+                    <div class="desc" v-if="ismailSet">您已经绑定了邮箱<span style="color:#51C41B; ">{{new_email}}</span>[您的邮箱可用于接收Sophia云平台发送给您的各种通知]</div>
                     <div class="desc" v-else>绑定邮箱能够提升账户安全等级，同时可用于接收Sophia云平台发送给您的各种通知，如实例创建成功提醒、实例到期提醒等。</div>
                 </div>
                 <div class="rt">
@@ -110,13 +110,13 @@
                         <a-icon type="check-circle"  :style="{ fontSize: '16px', color: '#51C41B' }"/>
                         <span style="color:#51C41B;margin-left:10px ">已设置</span>    
                         <a-divider type="vertical" />
-                        <span style="color: #0376FD; " class="btn">修改</span>    
+                        <span style="color: #0376FD; " class="btn" @click="modifyEmail(1)">修改</span>    
                     </div>
                     <div class="isSet" v-else>
                        <a-icon type="info-circle"  :style="{ fontSize: '16px', color: '#FAAD14' }"/>
                        <span style="color:#FAAD14;margin-left:10px ">未设置</span>   
                        <a-divider type="vertical" />
-                       <span style="color: #0376FD; " class="btn">设置</span>  
+                       <span style="color: #0376FD; " class="btn" @click="modifyEmail(0)">设置</span>  
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
 import {HTTPURL} from '@/api/requestUrl';
 import safeAlert from './safeAlert';
 import { updateInfo} from '@/api/user';
-import { securityInfo} from '@/api/safeSet';
+import { securityInfo,disableProtect,enableProtect} from '@/api/safeSet';
 console.log(HTTPURL)
 export default {
     data() {
@@ -199,7 +199,9 @@ export default {
             isAlert:false,
             safeInfo:{},
             userInfomation:{},
-            tel:''
+
+            tel:'',
+            new_email:''
             
         }
     },
@@ -208,11 +210,20 @@ export default {
     },
     created() {
         this.initInfo();
+        this.initInfo1();
     },
     methods: {
-        initInfo(){
+        initInfo1(){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
             this.tel = this.userInfomation.mobile.substr(0,3)+"****"+this.userInfomation.mobile.substr(7);
+            var str =  this.userInfomation.email.split('@'),
+    　　　　　　_s = '';
+    　　　　if (str[0].length > 3) {
+    　　　　　　for (var i = 0; i < str[0].length - 3; i++) {
+    　　　　　　　　_s += '*';
+    　　　　　　}
+    　　　　}
+    　　　　this.new_email = str[0].substr(0, 3) + _s + '@' + str[1];
         },
         initInfo(){
             securityInfo().then(res=>{
@@ -223,17 +234,75 @@ export default {
                     this.isSet=res.data.mfaIsSet;
                     this.ismailSet=res.data.emailIsSet;
                     this.isProSet=res.data.loginProtect;
+                    if(res.data.loginProtect){
+                        this.ruleForm.isOpen="开启"
+                        this.checkedTel=true;
+                    }else{
+                        this.ruleForm.isOpen="不开启" 
+                        this.checkedTel=false;
+                    }
+                    
                 }
             })
         },
         closeDialog1(){
             this.isAlert=false;
         },
-        proCk(){
+        closeDialog2(){
+            this.isAlert=false;
             this.coverBg=true;
         },
+        proCk(){
+            this.path=1;
+            this.isAlert=true;
+            //this.coverBg=true;
+        },
         makSure(){
-            this.coverBg=false;
+            var formData = new FormData(); 
+            formData.append('protectType','MOBILE');
+            let config = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }; 
+            if(this.ruleForm.isOpen=="开启"){
+                enableProtect(formData,config).then(res => {
+                    if(res.code == 200000) {
+                        this.$message.success(`修改成功`);
+                        this.coverBg=false;
+                        this.$store.dispatch('getUserInfo');
+                         setTimeout(()=>{
+                                this.initInfo();
+                                this.initInfo1();
+                         },300)
+                       
+                    }else {
+
+                    }
+                }).catch(err => {
+
+                })
+            }else{
+                disableProtect().then(res => {
+                    if(res.code == 200000) {
+                        this.$message.success(`修改成功`);
+                        this.coverBg=false;
+                        this.$store.dispatch('getUserInfo');
+                         setTimeout(()=>{
+                               this.initInfo();
+                                this.initInfo1();
+                         },300)
+                       
+                    }else {
+
+                    }
+                }).catch(err => {
+
+                })
+
+            }
+            
+            
         },
         closeDialog(){
             this.coverBg=false;
@@ -241,17 +310,14 @@ export default {
         modify(val){
             this.path="/modifyPwd";
             this.isAlert=true;
-            // this.$router.push({
-            //     path:"/modifyPwd"
-            // })
         },
-        modifyTel(item){
-            this.$router.push({
-                path:"/modifyTel",
-                query:{
-                    'tel':item
-                }
-            })
+        modifyTel(item){ 
+            this.path="/modifyTel";
+            this.isAlert=true;
+        },
+        modifyEmail(item){ 
+            this.path="/safeEmail?val="+item;
+            this.isAlert=true;
         },
     }
 }
