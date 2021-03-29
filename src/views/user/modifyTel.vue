@@ -7,25 +7,25 @@
         </a-page-header>
         <div class="content">
             <div class="title">密保手机能够完成登录时的二次校验，提升账户安全等级，同时可以用来找回密码和接收相关安全提醒信息,请勿随意泄露</div>
-            <el-form :model="ruleForm"  :rules="rules" ref="ruleForm" label-width="0" class="demo-ruleForm">
+            <el-form :model="ruleForm1"  :rules="rules" ref="ruleForm1" label-width="0" class="demo-ruleForm">
                 <el-form-item  prop="tel">
-                    <el-input  prefix-icon="el-icon-mobile-phone" v-model="ruleForm.tel"  placeholder="请输入你的手机号">
+                    <el-input  prefix-icon="el-icon-mobile-phone" v-model="ruleForm1.useTel"  placeholder="请输入你的手机号">
                          <template #prepend>+86</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item >
                         <el-row :gutter="20">
                                 <el-col :span="14">
-                                    <el-input  prefix-icon="el-icon-key" v-model="ruleForm.checkTelMa"  placeholder="请输入验证码">
+                                    <el-input  prefix-icon="el-icon-key" v-model="ruleForm1.checkTelMa"  placeholder="请输入验证码">
                                     </el-input>
                                 </el-col>
                                 <el-col :span="10">
-                                    <input  id="sendMsg1"   @click="sendMeg('sendMsg1')" v-model="sendMessage" readonly > 
+                                    <input  id="sendMsg"   @click="sendMeg('sendMsg')" v-model="sendMessage" readonly > 
                                 </el-col>
                             </el-row>
                         </el-form-item>
                 <el-form-item>
-                    <a-button type="primary" block  @click="submitForm('ruleForm')" size="large" style="margin-top:80px">
+                    <a-button type="primary" block  @click="submitForm('ruleForm1')" size="large" style="margin-top:80px">
                         确定
                     </a-button>
                 </el-form-item>
@@ -35,67 +35,58 @@
 </template>
 
 <script>
-import {HTTPURL} from '@/api/requestUrl';
-import { updateInfo} from '@/api/user';
+import { changeMobile } from "@/api/safeSet";
 import {sendMessage} from '@/api/login';
 export default {
     data() {
         return {
-            isEdit:'',
-            ruleForm: {
-                tel:'',
-            },
             ruleForm1: {
                 useTel:'',
                 checkTelMa:'',
             },
-            coverBg:true,
-            useTel:'136******78',
-             checkTelMaShow:false,
-              countdown : 60,
+            countdown : 60,
             checkTelMa:'',
             sendMessage: '发送验证码',
-            rules: {
-                tel: [
-                    { required: true, message: '请输入手机号', trigger: 'blur' }
-                ],
-            },
             rules1: {
                 useTel: [
                     { required: true, message: '请输入手机号', trigger: 'blur' }
                 ],
                 checkTelMa: [
-                    { required: true, message: '请输入手机号', trigger: 'blur' }
+                    { required: true, message: '请输入验证码', trigger: 'blur' }
                 ],
-            }
+            },
+            userInfomation:{},
+            timer:null
         }
     },
     created() {
-        
+        this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
     },
     methods: {
-        makSure(){
-            this.closeDialog();
+        getUUID() {
+            return 'xxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
         },
         sendMeg(id){
             let _param ={
-                phone:this.tel,
+                phone:this.ruleForm1.useTel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime(id);
-                   // this.idVertify=false;
+                    this.settime();
                 }else {
-                    this.idVertify=true;
-                    //this.idVertifyMsg=res.message;
+                    this.$message.error(res.message);
                 }
             }).catch(err => {
 
             })
         },
         settime(id) {
-            var sendMsg=document.getElementById(id);
+            var sendMsg=document.getElementById('sendMsg');
+            console.log(sendMsg)
             if(sendMsg){
                  if (this.countdown == 0) {
                     sendMsg.removeAttribute("disabled");
@@ -118,7 +109,31 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('submit!');
+                var formData = new FormData(); 
+                formData.append('uuid',this.getUUID());
+                formData.append('newPhone',this.ruleForm1.useTel); 
+                formData.append('oldPhone',this.userInfomation.mobile); 
+                formData.append('verifyCode',this.ruleForm1.checkTelMa); 
+                let config = {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }; 
+                changeMobile(formData,config).then(res => {
+                    if(res.code == 200000) {
+                        this.$message.success(`修改成功`);
+                        this.$store.dispatch('getUserInfo');
+                        setTimeout(()=>{
+                            this.$router.push({
+                                path:'/safeSet'
+                            })
+                        },1000)
+                    }else {
+                        this.$message.error(res.message);
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
             } else {
                 console.log('error submit!!');
                 return false;
@@ -145,7 +160,7 @@ export default {
                 color: #909399;
                 line-height: 22px;
             }
-             /deep/ #sendMsg1{
+             /deep/ #sendMsg{
                 text-align: center;
                 cursor: pointer;
                     height: 40px;
