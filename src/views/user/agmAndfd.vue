@@ -52,11 +52,11 @@
       </div>
       <div class="agmAndfd_til7">
         <el-checkbox v-model="isRed"></el-checkbox>&nbsp;
-        已了解《Sophia云账号注销协议》，提交申请后，我的账号110642****@qq.com将被注销，包含的内容、数据和服务都不可再恢复。
+        已了解《Sophia云账号注销协议》，提交申请后，我的账号{{myCount}}将被注销，包含的内容、数据和服务都不可再恢复。
       </div>
       <div class="agmAndfd_til9">
-        <div class="btn1">取消注销</div>
-        <div class="btn2" @click="subZhuxiao">确定注销</div>
+        <div class="btn1" @click="cancelZhuxiao">取消注销</div>
+        <div class="btn2" :class="{'activeBtn':isRed}" @click="subZhuxiao">确定注销</div>
       </div>
     </div>
     <div class="agmAndfd_con2" v-if="stepItem == 2">
@@ -79,7 +79,7 @@
         系统正在执行账号注销检查，请耐心等待
       </div>
       <div class="agmAndfd_con2_item3">
-        <div class="agmAndfd_con2_item3_item">
+        <div class="agmAndfd_con2_item3_item" @click="quxiaoZhuxiao">
           取消注销（<span>{{ timerNum }}</span
           >s）
         </div>
@@ -109,10 +109,12 @@
         </div>
       </div>
     </div>
+    <vPop v-if="ifShowAuthpop" @closePop='closevPop'></vPop>
   </div>
 </template>
 
 <script>
+import vPop from "./authentPop"
 export default {
   name: "agmAndfd",
   data() {
@@ -123,17 +125,27 @@ export default {
       closeIcon: require("../../assets/images/verify/close.png"),
       infoIcon: require("../../assets/images/verify/error2.png"),
       ifShowPop: false,
-      timerNum:17,
+      timerNum:15,
       timer: null,
+      myCount:'',
+      ifShowAuthpop:false
     };
   },
+  components:{
+    vPop
+  },
   created() {
-    this.setTimer();
+    this.getUserInfo();
   },
   destroyed() {
     clearInterval(this.timer);
   },
   methods: {
+    quxiaoZhuxiao(){
+      clearInterval(this.timer);
+      this.stepItem = 1;
+      this.stepNum = 1;
+    },
     setTimer() {
       this.timer = setInterval(() => {
         if (this.timerNum > 0) {
@@ -141,18 +153,44 @@ export default {
         }
         else{
             clearInterval(this.timer);
-            alert('我要注销了！')
+            truncAccount(zhuxiaoObj).then(res=>{
+              if(res.code == 200000){
+                this.$message.success("注销成功！");
+                this.$emit('closePop',false)
+              }
+              else{
+                this.$message.success("注销失败！");
+              }
+            }).catch(err=>{
+
+            });
         }
       }, 1000);
     },
+    cancelZhuxiao(){
+      this.$router.go(-1);
+    },
+    closevPop(arg){
+      if(arg.operBtn == 'close'){
+        this.ifShowAuthpop = arg.ifShow;
+      }
+      else if(arg.operBtn == 'submit'){
+        this.ifShowAuthpop = arg.ifShow;
+        this.stepItem = 2;
+        this.stepNum = 2;
+        this.setTimer();
+      }
+    },
     subZhuxiao() {
+      if(!this.isRed){
+        return;
+      }
       this.ifShowPop = true;
     },
     submit() {
       //此处调用接口
       this.ifShowPop = false;
-      this.stepItem = 2;
-      this.stepNum = 2;
+      this.ifShowAuthpop = true;
     },
     cancel() {
       this.ifShowPop = false;
@@ -160,6 +198,12 @@ export default {
     closePop() {
       this.cancel();
     },
+    getUserInfo(){
+      var userIfon = localStorage.getItem('yk-userInfo');
+      var userIfonObj = JSON.parse(userIfon);
+      this.myCount = userIfonObj['email'];
+      console.log(userIfonObj,'userIfon')
+    }
   },
 };
 </script>
@@ -256,7 +300,14 @@ export default {
           cursor: pointer;
         }
       }
-      .btn2 {
+      .btn2{
+        background: #F7F7F7;
+        border-radius: 2px;
+        border: 1px solid #DDDDDD;
+        font-size: 16px;
+        color: #DDDDDD;
+      }
+      .activeBtn{
         background: #0376fd;
         border: 1px solid #0376fd;
         color: white;

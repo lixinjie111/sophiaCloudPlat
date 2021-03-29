@@ -12,3 +12,4 @@ export const enableProtect = params => { return axios.post(`${HTTPURL}/ucenter/e
 export const disableProtect = params => { return axios.post(`${HTTPURL}/ucenter/disableProtect`, params).then(res => res.data); };
 
 export const securityInfo = params => { return axios.get(`${HTTPURL}/ucenter/securityInfo`, {params: params}).then(res => res.data); };
+export const truncAccount = params => { return axios.get(`${HTTPURL}/ucenter/truncAccount`, {params: params}).then(res => res.data); };

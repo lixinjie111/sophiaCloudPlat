@@ -167,7 +167,7 @@
                     <div class="desc">如果您不再使用此账号，可以将其注销。账号成功注销后，其下所有服务、数据及隐私信息将会被删除并将无法恢复。</div>
                 </div>
                 <div class="rt">
-                       <span style="color: #0376FD; " class="btn">注销账号</span>  
+                       <span style="color: #0376FD; " class="btn" @click="gozhuxiao">注销账号</span>  
                 </div>
             </div>
 	    </div>
@@ -319,6 +319,11 @@ export default {
             this.path="/safeEmail?val="+item;
             this.isAlert=true;
         },
+        gozhuxiao(){
+            this.$router.push({
+                path:'/agmAndfd'
+            });
+        }
     }
 }
 </script>
