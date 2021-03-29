@@ -4,7 +4,7 @@
       <div class="authentPop_til">
         <div class="pop_til_txt">身份验证</div>
         <div class="close_icon_container">
-          <img :src="closeIcon" alt="" srcset="" class="closeIcon" />
+          <img :src="closeIcon" alt="" srcset="" class="closeIcon"  @click="clsoePop1"/>
         </div>
       </div>
       <div class="authentPop_con_bom">
@@ -17,9 +17,9 @@
           </div>
         </div>
         <div class="auth_item2">
-          <div>请先获取验证码</div>
-          <div>发送成功</div>
-          <div>验证码错误</div>
+          <div v-if="codeStatus == 1">请先获取验证码</div>
+          <div v-else-if="codeStatus == 2">发送成功</div>
+          <div v-else-if="codeStatus == 3">验证码错误</div>
         </div>
         <div class="auth_item3">验证方式</div>
         <div class="auth_item4">
@@ -30,27 +30,90 @@
             <el-input placeholder="请输入验证码" v-model="yanzhenNum">
             </el-input>
           </div>
-          <div class="input_txt">发送验证码</div>
+          <div class="input_txt" @click="sendYzCode" ref="sendBtn">{{fasongTxt}}</div>
         </div>
-        <div class="auth_item6">确 定</div>
+        <div class="auth_item6" @click="submitZhuxiao">确 定</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {sendMessage} from '@/api/login';
 export default {
   name: "authentPop",
   data() {
     return {
       closeIcon: require("../../assets/images/verify/close.png"),
       errorIcon: require("../../assets/images/verify/error1.png"),
-      telNum: "136******78",
-      ifTelDisabled: true,
+      telNum: "",
+      ifTelDisabled: false,
       yanzhenNum: "",
+      fasongTxt:'发送验证码',
+      userIfon:null,
+      countdown:60,
+      codeStatus:1
     };
   },
-  created() {},
+  created(){
+    this.userIfon =JSON.parse(localStorage.getItem('yk-userInfo'));
+    this.telNum = this.userIfon.mobile.substr(0,3)+"****"+this.userIfon.mobile.substr(7);
+  },
+  methods:{
+    clsoePop1(){
+      var zhuxObj={
+        ifShow:false,
+        operBtn:'close'
+      };
+      this.$emit('closePop',zhuxObj)
+    },
+    settime(){
+      var sendMsg=this.$refs['sendBtn'];
+      if(sendMsg){
+            if (this.countdown == 0) {
+              sendMsg.removeAttribute("disabled");
+              this.fasongTxt="发送验证码";
+              this.countdown = 60;
+              return;
+          } else {
+              sendMsg.setAttribute("disabled", true);
+              this.fasongTxt="重新发送(" + this.countdown + ")";
+              this.countdown--;
+          }
+          this.timer=setTimeout(()=> {
+              this.settime(); 
+          },1000)
+      }
+    },
+    sendYzCode(){
+      let _param ={
+          phone:this.userIfon.mobile,
+          type:1,
+      };
+      sendMessage(_param).then(res => {
+          if(res.code == 200000) {
+            this.codeStatus = 2;
+            this.settime();
+          }else {
+            this.$message.error("验证码获取失败！");
+          }
+      }).catch(err => {
+
+      })
+    },
+    submitZhuxiao(){
+      var zhuxiaoObj = {
+        phone:this.userIfon.mobile,
+        noteCode:this.yanzhenNum
+      };
+      var zhuxObj={
+        ifShow:false,
+        operBtn:'submit',
+        subData:zhuxiaoObj
+      };
+      this.$emit('closePop',zhuxObj)
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -92,6 +155,9 @@ export default {
         .closeIcon {
           display: block;
           width: 100%;
+          &:hover{
+            cursor: pointer;
+          }
         }
       }
     }
@@ -109,6 +175,9 @@ export default {
       .auth_item5,
       .auth_item6 {
         width: 85%;
+        &:hover{
+          cursor: pointer;
+        }
       }
       .auth_item1 {
         background: rgba(255, 77, 79, 0.2);
@@ -158,6 +227,9 @@ export default {
       }
       .auth_item4 {
         margin-bottom: 15px;
+        /deep/ .el-input .el-input__inner{
+          background: #F8F8F8;
+        }
       }
       .auth_item5 {
         display: flex;
