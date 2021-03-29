@@ -54,7 +54,7 @@
 </template>
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
-  import {getAppList, delApp} from "@/api/recommendation/index";
+  import {getAppList, delApp, addApp} from "@/api/recommendation/index";
   import moment from "moment";
 
   export default {
@@ -151,6 +151,8 @@
           if (valid) {
             this.nextLoading = true;
             setTimeout(() => {
+              this.addApp();
+              this.getList();
               this.nextLoading = false;
               this.createModalShow = false;
               this.$router.push({
@@ -168,6 +170,8 @@
           if (valid) {
             this.createLoading = true;
             setTimeout(() => {
+              this.addApp();
+              this.getList();
               this.createLoading = false;
               this.createModalShow = false;
             }, 1000);
@@ -203,10 +207,23 @@
         });
       },
       del(id) {
-        delApp({id:id}).then(res => {
+        delApp({id: id}).then(res => {
           if (res.code == 200000) {
             this.$message.success("删除成功！");
             this.getList();
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      addApp() {
+        let params = Object.assign(this.$refs.createForm.$refs.createForm.model, { appType: "1" });
+        addApp(params).then(res => {
+          if (res.code == 200000) {
+            this.$message.success("添加成功！");
           } else {
             this.$message.error(res.message || "请求失败！");
           }

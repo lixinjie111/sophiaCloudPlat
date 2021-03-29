@@ -1,13 +1,12 @@
 <template>
   <div class="create_form_box">
     <a-form-model ref="createForm" :model="createForm" :rules="createFormRules">
-      <a-form-model-item label="应用名称" prop="name">
-        <a-input placeholder="请输入应用名称" v-model="createForm.name" :maxLength="14"/>
+      <a-form-model-item label="应用名称" prop="appName">
+        <a-input placeholder="请输入应用名称" v-model="createForm.appName" :maxLength="14"/>
       </a-form-model-item>
-      <a-form-model-item label="所属行业" prop="trade">
-        <a-select placeholder="请选择行业" v-model="createForm.trade" @change="tradeChange">
-          <a-select-option value="1">教育培训</a-select-option>
-          <a-select-option value="2">文化娱乐</a-select-option>
+      <a-form-model-item label="所属行业" prop="industry">
+        <a-select placeholder="请选择行业" v-model="createForm.industry" @change="tradeChange">
+          <a-select-option :value="item.id" v-for="(item,index) in industryList" :key="index">{{item.industry}}</a-select-option>
         </a-select>
       </a-form-model-item>
       <a-form-model-item label="应用描述" prop="description">
@@ -19,26 +18,46 @@
 </template>
 
 <script>
+  import {getIndustryList} from "@/api/recommendation/index";
+
   export default {
     name: "CreateForm",
     data() {
       return {
+        industryList: [],
         createForm: {
-          name: '',
-          trade: '',
+          appName: '',
+          industry: [],
           description: ''
         },
         createFormRules: {
-          name: [
+          appName: [
             {required: true, message: '请输入应用名称', trigger: 'blur'}
           ],
-          trade: [
+          industry: [
             {required: true, message: '请选择行业', trigger: 'change'}
           ],
           description: [
             {required: true, message: '请输入应用描述', trigger: 'blur'}
           ],
         }
+      }
+    },
+    mounted() {
+      this.getIndustryList();
+    },
+    methods: {
+      getIndustryList() {
+        getIndustryList({}).then(res => {
+          if (res.code == 200000) {
+            this.industryList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
       }
     }
   }
