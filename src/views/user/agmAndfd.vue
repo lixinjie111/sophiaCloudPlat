@@ -85,6 +85,12 @@
         </div>
       </div>
     </div>
+    <div class="agmAndfd_con2" v-if="stepItem == 3">
+      <div class="chengG_con">
+        <div class="chengG_con1">注销已完成，<span class="downCount">{{downCount}}</span>s后将自动返回登陆页</div>
+        <div class="chengG_con2" @click="goLogin">立即返回</div>
+      </div>
+    </div>
     <div class="info_pop" v-show="ifShowPop">
       <div class="info_pop_con">
         <div class="pop_til">
@@ -114,7 +120,8 @@
 </template>
 
 <script>
-import vPop from "./authentPop"
+import vPop from "./authentPop";
+import {truncAccount} from '@/api/safeSet';
 export default {
   name: "agmAndfd",
   data() {
@@ -127,8 +134,10 @@ export default {
       ifShowPop: false,
       timerNum:15,
       timer: null,
+      timer1: null,
       myCount:'',
-      ifShowAuthpop:false
+      ifShowAuthpop:false,
+      downCount:10
     };
   },
   components:{
@@ -141,22 +150,40 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    goLogin(){
+      this.$router.push({
+        path:'/login'
+      });
+    },
+    downCountter(){
+      this.timer1 = setInterval(() => {
+        if (this.downCount > 0) {
+          this.downCount--;
+        }
+        else{
+          this.goLogin();
+          clearInterval(this.timer1);
+        }
+      }, 1000);
+    },
     quxiaoZhuxiao(){
       clearInterval(this.timer);
       this.stepItem = 1;
       this.stepNum = 1;
     },
-    setTimer() {
+    setTimer(parms) {
       this.timer = setInterval(() => {
         if (this.timerNum > 0) {
           this.timerNum--;
         }
         else{
             clearInterval(this.timer);
-            truncAccount(zhuxiaoObj).then(res=>{
+            truncAccount(parms).then(res=>{
               if(res.code == 200000){
                 this.$message.success("注销成功！");
-                this.$emit('closePop',false)
+                this.stepItem = 3;
+                this.stepNum = 3;
+                this.downCountter();
               }
               else{
                 this.$message.success("注销失败！");
@@ -178,7 +205,7 @@ export default {
         this.ifShowAuthpop = arg.ifShow;
         this.stepItem = 2;
         this.stepNum = 2;
-        this.setTimer();
+        this.setTimer(arg.subData);
       }
     },
     subZhuxiao() {
@@ -381,6 +408,40 @@ export default {
         line-height: 40px;
         padding-left: 12px;
         box-sizing: border-box;
+      }
+    }
+    .chengG_con{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .chengG_con1{
+        margin-top: 180px;
+        font-size: 18px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #121C33;
+        .downCount{
+          color: #0376FD;
+        }
+      }
+      .chengG_con2{
+        width: 135px;
+        height: 40px;
+        margin-top: 180px;
+        background: #F7F7F7;
+        border-radius: 2px;
+        border: 1px solid #DDDDDD;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #121C33;
+        &:hover{
+          cursor: pointer;
+        }
       }
     }
   }

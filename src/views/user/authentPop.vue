@@ -40,7 +40,6 @@
 
 <script>
 import {sendMessage} from '@/api/login';
-import {truncAccount} from '@/api/safeSet';
 export default {
   name: "authentPop",
   data() {
