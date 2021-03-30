@@ -9,7 +9,7 @@
         </a-select-option>
       </a-select>
       <div class="c-mr-20">数据源：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据类型" v-model="item.source" @change="sourceChange" style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.folderId" @change="sourceChange" style="width:140px">
         <a-select-opt-group v-for="(sources,index) in sourcesList" :key="index">
           <span slot="label">{{sources.folderName}}</span>
           <a-select-option :value="item.folderId" v-for="(item,index1) in sources.subDataSources" :key="index1">
@@ -18,7 +18,7 @@
         </a-select-opt-group>
       </a-select>
       <div class="c-mr-20">数据源表：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.table" @change="tableChange" style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.sourceTableId" @change="tableChange" style="width:140px">
         <a-select-option :value="item.sourceTableId" v-for="(item,index) in sourceTablesList" :key="index">{{item.sourceUserTableName}}
         </a-select-option>
       </a-select>
@@ -91,8 +91,8 @@
         }
         this.addList.push({
           dataType: [],
-          source: [],
-          table: []
+          folderId: [],
+          sourceTableId: []
         })
       },
       del(index) {

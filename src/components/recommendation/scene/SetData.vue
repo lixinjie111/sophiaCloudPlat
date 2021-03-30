@@ -3,31 +3,31 @@
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="userHistoryList" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="userHistoryData" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="userAddList" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="userNewData" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="物品数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="goodsHistoryList" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="itemHistoryData" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="goodsAddList" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="itemNewData" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="行为数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="actionHistoryList" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="behaviorHistoryData" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="actionAddList" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="behaviorNewData" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <div class="btns" v-if="type == 'edit'">
@@ -60,12 +60,12 @@
         historySourcesList: [],
         addSourcesList: [],
 
-        userHistoryList: [],
-        userAddList: [],
-        goodsHistoryList: [],
-        goodsAddList: [],
-        actionHistoryList: [],
-        actionAddList: []
+        userHistoryData: [],
+        userNewData: [],
+        itemHistoryData: [],
+        itemNewData: [],
+        behaviorHistoryData: [],
+        behaviorNewData: []
       }
     },
     created() {
@@ -107,8 +107,29 @@
         });
       },
       save() {
-        this.$router.push({
-          path: '/recommendation/scene/rule'
+        let params = {
+          applicationId: "3253252",
+          sceneId: "3253252",
+          userHistoryData: this.userHistoryData,
+          userNewData: this.userNewData,
+          itemHistoryData: this.itemHistoryData,
+          itemNewData: this.itemNewData,
+          behaviorHistoryData: this.behaviorHistoryData,
+          behaviorNewData: this.behaviorNewData
+        };
+        saveSceneConfigData(params).then(res => {
+          if (res.code == 200000) {
+
+            // this.$router.push({
+            //   path: '/recommendation/scene/rule'
+            // });
+
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
         });
       },
       cancel() {

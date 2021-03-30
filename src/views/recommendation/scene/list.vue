@@ -195,7 +195,7 @@
         getSceneList(params).then(res => {
           if (res.code == 200000) {
             this.list = res.data.list;
-            this.pagination.current = res.data.pageNum;
+            this.pagination.current = current || 1;
             this.pagination.total = res.data.total;
           } else {
             this.$message.error(res.message || "请求失败！");
