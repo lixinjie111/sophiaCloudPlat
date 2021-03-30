@@ -9,7 +9,7 @@
       <div class="right">
         <div>
           应用名称：
-          <a-select placeholder="请选择应用名称" v-model="applicationId" @change="appNameChange">
+          <a-select placeholder="请选择应用名称" v-model="applicationId" @change="appNameChange" style="width: 120px;">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="app.id" v-for="(app,index) in appList" :key="index">{{app.appName}}
             </a-select-option>
@@ -17,7 +17,7 @@
         </div>
         <div>
           推荐类型：
-          <a-select placeholder="请选择推荐类型" v-model="recommendType" @change="recommendTypeChange">
+          <a-select placeholder="请选择推荐类型" v-model="recommendType" @change="recommendTypeChange" style="width: 120px;">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="item.value" v-for="(item,index) in typeList" :key="index">{{item.label}}
             </a-select-option>
@@ -25,7 +25,7 @@
         </div>
         <div>
           场景类型：
-          <a-select placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange">
+          <a-select placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange" style="width: 120px;">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="item.value" v-for="(item,index) in sceneList" :key="index">{{item.label}}
             </a-select-option>
@@ -125,39 +125,43 @@
         ],
         appList: [],
         applicationId: '',
-        sceneList: [{
-          label: '智能场景',
-          value: '0',
-          disabled: false
-        }, {
-          label: '自定义场景',
-          value: '1',
-          disabled: false
-        }, {
-          label: '模板场景',
-          value: '2',
-          disabled: true
-        }],
-        typeList: [{
-          label: '个性化推荐',
-          value: '0',
-          disabled: false
-        }, {
-          label: '相关推荐',
-          value: '1',
-          disabled: false
-        }, {
-          label: '热点推荐',
-          value: '2',
-          disabled: false
-        }, {
-          label: '主题推荐',
-          value: '3',
-          disabled: true
-        }],
-        recommendType: "",
-        sceneType: "",
-        keyword: "",
+        sceneList: [
+          {
+            label: '智能场景',
+            value: '0',
+            disabled: false
+          }, {
+            label: '自定义场景',
+            value: '1',
+            disabled: false
+          }, {
+            label: '模板场景',
+            value: '2',
+            disabled: true
+          }
+        ],
+        typeList: [
+          {
+            label: '个性化推荐',
+            value: '0',
+            disabled: false
+          }, {
+            label: '相关推荐',
+            value: '1',
+            disabled: false
+          }, {
+            label: '热点推荐',
+            value: '2',
+            disabled: false
+          }, {
+            label: '主题推荐',
+            value: '3',
+            disabled: true
+          }
+        ],
+        recommendType: '',
+        sceneType: '',
+        keyword: '',
         sceneModalShow: false,
         setLoading: false
       }
@@ -187,7 +191,7 @@
           pageSize: this.pagination.pageSize,
           recommendType: this.recommendType,
           sceneType: this.sceneType
-        }
+        };
         getSceneList(params).then(res => {
           if (res.code == 200000) {
             this.list = res.data.list;
@@ -227,19 +231,26 @@
         this.getList();
       },
       setting() {
-        let params = this.$refs.sceneForm.$refs.sceneForm.model;
-        addScene(params).then(res => {
-          if (res.code == 200000) {
-            this.$message.success("添加成功！");
-            this.$router.push({
-              path: '/recommendation/scene/data'
+        this.$refs.sceneForm.$refs.sceneForm.validate(valid => {
+          if (valid) {
+            let params = this.$refs.sceneForm.$refs.sceneForm.model;
+            addScene(params).then(res => {
+              if (res.code == 200000) {
+                this.$message.success("添加成功！");
+                this.$router.push({
+                  path: '/recommendation/scene/data'
+                });
+              } else {
+                this.$message.error(res.message || "请求失败！");
+              }
+            }).catch(err => {
+              this.$message.error("请求失败！");
+              console.log(err, "err");
             });
           } else {
-            this.$message.error(res.message || "请求失败！");
+            console.log('error submit!!');
+            return false;
           }
-        }).catch(err => {
-          this.$message.error("请求失败！");
-          console.log(err, "err");
         });
       },
       cancelSetting() {

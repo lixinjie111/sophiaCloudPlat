@@ -36,3 +36,23 @@ export const getSceneAll = params => {
 export const addScene = params => {
   return axios.post(`${totalUrl}/recommend/scene/add`, params).then(res => res.data);
 };
+
+// 全部数据类型枚举
+export const getDataTypes = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
+};
+
+// 获得数据源列表
+export const getSceneSources = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getSources`, params).then(res => res.data);
+};
+
+// 获得数据源表列表
+export const getSceneSourceTables = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getSourceTables`, params).then(res => res.data);
+};
+
+// 保存配置应用数据操作
+export const saveSceneConfigData = params => {
+  return axios.post(`${totalUrl}/recommend/scene/saveConfigData`, params).then(res => res.data);
+};
