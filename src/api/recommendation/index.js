@@ -37,6 +37,11 @@ export const addScene = params => {
   return axios.post(`${totalUrl}/recommend/scene/add`, params).then(res => res.data);
 };
 
+// 删除业务场景
+export const deleteScene = params => {
+  return axios.post(`${totalUrl}/recommend/scene/delete`, params).then(res => res.data);
+};
+
 // 全部数据类型枚举
 export const getDataTypes = params => {
   return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);

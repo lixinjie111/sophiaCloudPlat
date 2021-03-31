@@ -160,7 +160,7 @@
               });
             }, 1000);
           } else {
-            console.log('error submit!!');
+            console.log('提交失败!');
             return false;
           }
         });
@@ -176,7 +176,7 @@
               this.createModalShow = false;
             }, 1000);
           } else {
-            console.log('error submit!!');
+            console.log('提交失败!');
             return false;
           }
         });

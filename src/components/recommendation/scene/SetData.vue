@@ -43,7 +43,7 @@
 
 <script>
   import AddData from "./AddData"
-  import {getDataTypes, getSceneSources} from "@/api/recommendation/index";
+  import {getDataTypes, getSceneSources, saveSceneConfigData} from "@/api/recommendation/index";
 
   export default {
     name: "setData",
@@ -108,8 +108,8 @@
       },
       save() {
         let params = {
-          applicationId: "3253252",
-          sceneId: "3253252",
+          applicationId: this.$route.query.appId,
+          sceneId: this.$route.query.sceneId,
           userHistoryData: this.userHistoryData,
           userNewData: this.userNewData,
           itemHistoryData: this.itemHistoryData,
@@ -117,13 +117,24 @@
           behaviorHistoryData: this.behaviorHistoryData,
           behaviorNewData: this.behaviorNewData
         };
+
+        // 去空，数据源表为必填
+        for(let key in params){
+          Array.isArray(params[key]) && params[key].filter((s,index) => {
+            for(let key1 in s){
+              if(s['sourceTableId'].length == 0){
+                params[key].splice(index,1);
+              }
+            }
+          });
+        }
+
         saveSceneConfigData(params).then(res => {
           if (res.code == 200000) {
-
-            // this.$router.push({
-            //   path: '/recommendation/scene/rule'
-            // });
-
+            this.$message.success("添加成功！");
+            this.$router.push({
+              path: '/recommendation/scene/rule'
+            });
           } else {
             this.$message.error(res.message || "请求失败！");
           }

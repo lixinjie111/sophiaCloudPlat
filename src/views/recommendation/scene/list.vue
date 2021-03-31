@@ -44,7 +44,13 @@
         <a-button type="link" @click="toDetail">详情</a-button>
         <a-button type="link" @click="toEdit">编辑</a-button>
         <a-button type="link">测试</a-button>
-        <a-button type="link">删除</a-button>
+        <a-popconfirm
+          title="是否删除该应用?"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="del(record.id)">
+          <a-button type="link" style="color:red;">删除</a-button>
+        </a-popconfirm>
       </template>
     </a-table>
     <a-modal v-model="sceneModalShow" title="创建业务场景" :width="640">
@@ -63,7 +69,7 @@
 
 <script>
   import SceneForm from "@/components/recommendation/scene/SceneForm";
-  import {getSceneList, getSceneAll, addScene} from "@/api/recommendation/index";
+  import {getSceneList, getSceneAll, addScene, deleteScene} from "@/api/recommendation/index";
 
   export default {
     name: "list",
@@ -230,6 +236,19 @@
       sceneTypeChange() {
         this.getList();
       },
+      del(id) {
+        deleteScene({id: id}).then(res => {
+          if (res.code == 200000) {
+            this.$message.success("删除成功！");
+            this.getList();
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
       setting() {
         this.$refs.sceneForm.$refs.sceneForm.validate(valid => {
           if (valid) {
@@ -238,7 +257,7 @@
               if (res.code == 200000) {
                 this.$message.success("添加成功！");
                 this.$router.push({
-                  path: '/recommendation/scene/data'
+                  path: '/recommendation/scene/data?appId='+ this.$refs.sceneForm.$refs.sceneForm.model.applicationId + '&sceneId=' + res.data
                 });
               } else {
                 this.$message.error(res.message || "请求失败！");
@@ -248,7 +267,7 @@
               console.log(err, "err");
             });
           } else {
-            console.log('error submit!!');
+            console.log('提交失败!');
             return false;
           }
         });

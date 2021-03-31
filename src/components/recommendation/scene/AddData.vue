@@ -3,13 +3,13 @@
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <div class="index c-mr-20">{{index+1}}</div>
       <div class="c-mr-20">数据类型：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据类型" v-model="item.dataType" @change="dataTypeChange"
+      <a-select class="c-mr-20" placeholder="请选择数据类型" v-model="item.dataType" @change="dataTypeChange(item)"
                 style="width:140px">
         <a-select-option :value="item.id" v-for="(item,index) in dataTypeList" :key="index">{{item.dataTypeDesc}}
         </a-select-option>
       </a-select>
       <div class="c-mr-20">数据源：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.folderId" @change="sourceChange" style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.folderId" @change="sourceChange(item)" style="width:140px">
         <a-select-opt-group v-for="(sources,index) in sourcesList" :key="index">
           <span slot="label">{{sources.folderName}}</span>
           <a-select-option :value="item.folderId" v-for="(item,index1) in sources.subDataSources" :key="index1">
@@ -98,12 +98,17 @@
       del(index) {
         this.addList.splice(index, 1);
       },
-      dataTypeChange(value) {
-        this.curDataType = value;
+      dataTypeChange(item) {
+        this.curDataType = item.dataType;
+        item.sourceTableId = [];
+        item.folderId = [];
+        this.sourceTablesList = [];
         this.getSceneSourceTables()
       },
-      sourceChange(value) {
-        this.curDataSourceId = value;
+      sourceChange(item) {
+        this.curDataSourceId = item.folderId;
+        item.sourceTableId = [];
+        this.sourceTablesList = [];
         this.getSceneSourceTables()
       },
       tableChange() {
