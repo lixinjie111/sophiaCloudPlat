@@ -122,17 +122,6 @@
           behaviorNewData: this.behaviorNewData
         };
 
-        // 去空，数据源表为必填
-        for (let key in params) {
-          Array.isArray(params[key]) && params[key].filter((s, index) => {
-            for (let key1 in s) {
-              if (s['sourceTableId'].length == 0) {
-                params[key].splice(index, 1);
-              }
-            }
-          });
-        }
-
         saveSceneConfigData(params).then(res => {
           if (res.code == 200000) {
             this.$message.success("添加成功！");

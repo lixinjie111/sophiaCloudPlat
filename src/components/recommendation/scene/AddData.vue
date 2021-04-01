@@ -59,8 +59,8 @@
     data() {
       return {
         addList: this.list,
-        curDataType: [],
-        curDataSourceId: [],
+        curDataType: '',
+        curDataSourceId: '',
         sourceTablesList: []
       }
     },
@@ -90,9 +90,9 @@
           return;
         }
         this.addList.push({
-          dataType: [],
-          folderId: [],
-          sourceTableId: []
+          dataType: '',
+          folderId: '',
+          sourceTableId: ''
         })
       },
       del(index) {
@@ -100,14 +100,14 @@
       },
       dataTypeChange(item) {
         this.curDataType = item.dataType;
-        item.sourceTableId = [];
-        item.folderId = [];
+        item.sourceTableId = '';
+        item.folderId = '';
         this.sourceTablesList = [];
         this.getSceneSourceTables()
       },
       sourceChange(item) {
         this.curDataSourceId = item.folderId;
-        item.sourceTableId = [];
+        item.sourceTableId = '';
         this.sourceTablesList = [];
         this.getSceneSourceTables()
       },
