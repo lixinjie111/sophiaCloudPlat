@@ -8,33 +8,31 @@
       <div class="right">
         <div>
           应用名称：
-          <a-select placeholder="请选择应用名称" v-model="appName" @change="appNameChange">
-            <a-select-option value="0">全部</a-select-option>
-            <a-select-option value="1">1</a-select-option>
-            <a-select-option value="2">2</a-select-option>
+          <a-select style="width:160px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange">
+            <a-select-option value="all">全部</a-select-option>
+            <a-select-option v-for="item in appNameList" :key="item.id">{{item.appName}}</a-select-option>
           </a-select>
         </div>
         <div>
             数据类型:
-          <a-select placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange">
-            <a-select-option value="0">全部</a-select-option>
-            <a-select-option value="1">1</a-select-option>
-            <a-select-option value="2">2</a-select-option>
+          <a-select style="width: 160px" placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange">
+            <a-select-option value="all">全部</a-select-option>
+            <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </div>
         <div>
-          <a-input-search placeholder="数据表名称" style="width: 200px" @search="onSearch" />
+          <a-input-search :value="searchText" placeholder="数据表名称" style="width: 200px" @search="onSearch" />
         </div>
       </div>
     </div>
     <a-table
       :columns="columns"
-      :data-source="data"
-      :pagination="{showQuickJumper: true, showSizeChanger: true}">
+      :data-source="tableList"
+      :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link">查看</a-button>
         <a-button type="link" disabled>修改</a-button>
-        <a-button type="link">删除</a-button>
+        <a-button type="link" disabled>删除</a-button>
       </template>
     </a-table>
     <a-modal v-model="newFile" title="创建文件夹">
@@ -80,7 +78,7 @@
     components: {NewFile,UploadData},
     data() {
       return {
-        data,
+        tableList:[],
         columns: [
           {
             title: '序号',
@@ -124,10 +122,21 @@
             scopedSlots: {customRender: 'operation'},
           },
         ],
-        appName: "0",
-        sceneType: "0",
+        appName: "all",
+        sceneType: "all",
         appNameList:[],
         sceneList:[],
+        pagination: {
+          total: 0,
+          current: 1,
+          pageSize: 10,
+          showQuickJumper: true, 
+          showSizeChanger: true,
+          onChange: () => {
+            this.getDataList();
+          }
+        },
+        searchText:"",
         newFile: false,
         setLoading: false,
         uploadData:false
@@ -140,11 +149,13 @@
       file(){
           this.newFile = true
       },
-      appNameChange (){
-
+      appNameChange (value,option){
+        console.log(value,option)
+        this.appName = value
       },
-      sceneTypeChange (){
-
+      sceneTypeChange (value,option){
+        this.sceneType = value
+        console.log(value,option)
       },
       create() {
         this.$router.push({
@@ -161,9 +172,10 @@
       getSceneAll(){
         getSceneAll({}).then(res=>{
           if(res.code == 200000){
-            this.appNameList = res.data.slice(0,-2).map(item=>{
-              
+            this.appNameList = res.data.map(item=>{
+              return {id:item.id,appName:item.appName}
             })
+            console.log(this.appNameList)
           }else {
             this.$message.error(res.message||"请求失败!")
           }
@@ -174,9 +186,12 @@
       // 数据类型
       getAppList(){
         getDataTypes({}).then(res=>{
-          console.log(res)
           if(res.code == 200000){
-            this.sceneList == res.data
+            this.sceneList = []
+            res.data.slice(0,-2).forEach(item=>{
+              this.sceneList.push(...item.subDataTypes)
+            })
+            console.log(this.sceneList)
           }else{
             this.$message.error(res.message||"请求失败!")
           }
@@ -186,16 +201,16 @@
       },      
       getDataList(){
         let params = {
-          applicationId: "",
-          name:"",
-          dataType:"",
-          pageNum: 1,
-          pageSize: 10
+          applicationId: this.appName=="all"?"":this.appName,
+          dataType:this.sceneType="all"?"":this.sceneType,
+          name:this.searchText,
+          pageNum: this.pagination.current,
+          pageSize: this.pagination.pageSize
         }
         getDataTableList(params).then(res => {
           if (res.code == 200000) {
             res.data.list.forEach((item) => {
-              item.isAppKeyShow = false;
+              
             })
             this.list = res.data.list;
             this.pagination.current = res.data.pageNum;
@@ -212,6 +227,7 @@
     mounted(){
       this.getSceneAll()
       this.getAppList()
+      this.getDataList()
     }
   }
 </script>
