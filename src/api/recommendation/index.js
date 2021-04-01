@@ -13,7 +13,7 @@ export const getDataTypes = params => {
     return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
   };
 
-// -----------------
+// -------------------------推荐应用管理-----------------------------
 // 应用列表
 export const getAppList = params => {
   return axios.get(`${totalUrl}/admin/app/list`, {params: params}).then(res => res.data);
@@ -34,6 +34,7 @@ export const addApp = params => {
   return axios.post(`${totalUrl}/admin/app/add`, params).then(res => res.data);
 };
 
+// -------------------------推荐场景管理-----------------------------
 // 业务场景列表接口
 export const getSceneList = params => {
   return axios.post(`${totalUrl}/recommend/scene/getList`, params).then(res => res.data);
