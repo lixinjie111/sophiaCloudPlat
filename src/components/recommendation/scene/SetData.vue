@@ -3,31 +3,32 @@
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="userHistoryData" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="userHistoryData" :dataTypeList="userTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="userNewData" :dataTypeList="dataTypeList[0].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="userNewData" :dataTypeList="userTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="物品数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="itemHistoryData" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="itemHistoryData" :dataTypeList="itemTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="itemNewData" :dataTypeList="dataTypeList[1].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="itemNewData" :dataTypeList="itemTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="行为数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="behaviorHistoryData" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="behaviorHistoryData" :dataTypeList="behaviorTypeList"
+                 :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="behaviorNewData" :dataTypeList="dataTypeList[2].subDataTypes" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="behaviorNewData" :dataTypeList="behaviorTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <div class="btns" v-if="type == 'edit'">
@@ -56,10 +57,11 @@
     },
     data() {
       return {
-        dataTypeList: [],
+        userTypeList: [],
+        itemTypeList: [],
+        behaviorTypeList: [],
         historySourcesList: [],
         addSourcesList: [],
-
         userHistoryData: [],
         userNewData: [],
         itemHistoryData: [],
@@ -77,7 +79,9 @@
       getDataTypes() {
         getDataTypes({}).then(res => {
           if (res.code == 200000) {
-            this.dataTypeList = res.data;
+            this.userTypeList = res.data[0].subDataTypes;
+            this.itemTypeList = res.data[1].subDataTypes;
+            this.behaviorTypeList = res.data[2].subDataTypes;
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -119,11 +123,11 @@
         };
 
         // 去空，数据源表为必填
-        for(let key in params){
-          Array.isArray(params[key]) && params[key].filter((s,index) => {
-            for(let key1 in s){
-              if(s['sourceTableId'].length == 0){
-                params[key].splice(index,1);
+        for (let key in params) {
+          Array.isArray(params[key]) && params[key].filter((s, index) => {
+            for (let key1 in s) {
+              if (s['sourceTableId'].length == 0) {
+                params[key].splice(index, 1);
               }
             }
           });
@@ -133,7 +137,7 @@
           if (res.code == 200000) {
             this.$message.success("添加成功！");
             this.$router.push({
-              path: '/recommendation/scene/rule'
+              path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
             });
           } else {
             this.$message.error(res.message || "请求失败！");

@@ -61,3 +61,23 @@ export const getSceneSourceTables = params => {
 export const saveSceneConfigData = params => {
   return axios.post(`${totalUrl}/recommend/scene/saveConfigData`, params).then(res => res.data);
 };
+
+// 配置规则中的过滤物品部分获取品类等信息
+export const getSceneItems = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getItems`, params).then(res => res.data);
+};
+
+// 获得场景配置规则中的物品特征
+export const getSceneItemProperties = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getItemProperties`, params).then(res => res.data);
+};
+
+// 获得场景配置规则中的必推物品筛选条件
+export const getSceneMustPushProperties = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getMustPushProperties`, params).then(res => res.data);
+};
+
+// 保存配置的场景规则
+export const saveSceneConfigRule = params => {
+  return axios.post(`${totalUrl}/recommend/scene/saveConfigRule`, params).then(res => res.data);
+};

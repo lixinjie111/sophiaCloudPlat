@@ -39,6 +39,7 @@
     <a-table
       :columns="columns"
       :data-source="list"
+      :rowKey="record=>record.id"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link" @click="toDetail">详情</a-button>
