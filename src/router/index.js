@@ -40,6 +40,9 @@ const recommendationSceneRule = resolve => require(['@/views/recommendation/scen
 //数据服务 数据管理
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
 
+//数据服务 推荐运营
+const recommendationOperationResult = resolve => require(['@/views/recommendation/operation/result'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
@@ -175,6 +178,11 @@ export const menuRouterMap = [{
           name: "recommendationDataList",
           path: "/recommendation/data/list",
           component: recommendationDataList
+        },
+        {
+          name: "recommendationOperationResult",
+          path: "/recommendation/operation/result",
+          component: recommendationOperationResult
         },
     ]
 }];

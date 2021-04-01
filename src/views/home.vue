@@ -319,7 +319,7 @@ export default {
                     {
                       title: "推荐测试及结果",
                       itemKey: "tuijianceshijijieguo",
-                      path: ""
+                      path: "/recommendation/operation/result"
                     },
                     {
                       title: "物品管理",
