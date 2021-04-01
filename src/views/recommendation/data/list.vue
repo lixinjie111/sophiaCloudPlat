@@ -57,7 +57,7 @@
 <script>
   import NewFile from "@/components/recommendation/data/NewFile";
   import UploadData from "@/components/recommendation/data/UploadData";
-
+  import {getSceneAll,getDataTypes,getDataTableList} from "@/api/recommendation/index"
   const data = [];
   for (let i = 0; i < 46; i++) {
     data.push({
@@ -125,8 +125,9 @@
           },
         ],
         appName: "0",
-        recType: "0",
         sceneType: "0",
+        appNameList:[],
+        sceneList:[],
         newFile: false,
         setLoading: false,
         uploadData:false
@@ -142,9 +143,6 @@
       appNameChange (){
 
       },
-      recTypeChange (){
-
-      },
       sceneTypeChange (){
 
       },
@@ -158,7 +156,62 @@
       },
       nextStep(){
         
-      }
+      },
+      // 应用名称
+      getSceneAll(){
+        getSceneAll({}).then(res=>{
+          if(res.code == 200000){
+            this.appNameList = res.data.slice(0,-2).map(item=>{
+              
+            })
+          }else {
+            this.$message.error(res.message||"请求失败!")
+          }
+        }).catch(err=>{
+          this.$message.error("请求失败!")
+        })
+      },
+      // 数据类型
+      getAppList(){
+        getDataTypes({}).then(res=>{
+          console.log(res)
+          if(res.code == 200000){
+            this.sceneList == res.data
+          }else{
+            this.$message.error(res.message||"请求失败!")
+          }
+        }).catch(err=>{
+          this.$message.error("请求失败!")
+        })
+      },      
+      getDataList(){
+        let params = {
+          applicationId: "",
+          name:"",
+          dataType:"",
+          pageNum: 1,
+          pageSize: 10
+        }
+        getDataTableList(params).then(res => {
+          if (res.code == 200000) {
+            res.data.list.forEach((item) => {
+              item.isAppKeyShow = false;
+            })
+            this.list = res.data.list;
+            this.pagination.current = res.data.pageNum;
+            this.pagination.total = res.data.total;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });        
+      }      
+    },
+    mounted(){
+      this.getSceneAll()
+      this.getAppList()
     }
   }
 </script>
