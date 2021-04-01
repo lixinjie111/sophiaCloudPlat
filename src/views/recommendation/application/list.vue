@@ -182,7 +182,7 @@
         });
       },
       tradeChange(value) {
-        console.log(value);
+        // console.log(value);
       },
       getList(current) {
         let params = {

@@ -2,6 +2,18 @@
 import {HTTPURL} from '../requestUrl';
 let totalUrl = HTTPURL;
 
+// ----公共枚举-----
+// 业务场景中的所属应用枚举接口
+export const getSceneAll = params => {
+    return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
+  };
+
+// 全部数据类型枚举
+export const getDataTypes = params => {
+    return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
+  };
+
+// -----------------
 // 应用列表
 export const getAppList = params => {
   return axios.get(`${totalUrl}/admin/app/list`, {params: params}).then(res => res.data);
@@ -27,11 +39,6 @@ export const getSceneList = params => {
   return axios.post(`${totalUrl}/recommend/scene/getList`, params).then(res => res.data);
 };
 
-// 业务场景中的所属应用枚举接口
-export const getSceneAll = params => {
-  return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
-};
-
 // 创建推荐应用业务场景
 export const addScene = params => {
   return axios.post(`${totalUrl}/recommend/scene/add`, params).then(res => res.data);
@@ -40,11 +47,6 @@ export const addScene = params => {
 // 删除业务场景
 export const deleteScene = params => {
   return axios.post(`${totalUrl}/recommend/scene/delete`, params).then(res => res.data);
-};
-
-// 全部数据类型枚举
-export const getDataTypes = params => {
-  return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
 };
 
 // 获得数据源列表
@@ -81,3 +83,9 @@ export const getSceneMustPushProperties = params => {
 export const saveSceneConfigRule = params => {
   return axios.post(`${totalUrl}/recommend/scene/saveConfigRule`, params).then(res => res.data);
 };
+
+// -------------------------数据中心-----------------------------
+// 推荐数据管理列表
+export const getDataTableList = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDataTableList`,params).then(res => res.data)
+}

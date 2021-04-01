@@ -32,15 +32,19 @@ export default {
       current: 0,
       steps: [
         {
-          title: "First",
+          title: "上传文件",
           content: "First-content",
         },
         {
-          title: "Second",
+          title: "设置属性",
           content: "Second-content",
         },
         {
-          title: "Last",
+          title: "预览",
+          content: "Last-content",
+        },
+        {
+          title: "完成",
           content: "Last-content",
         },
       ],
