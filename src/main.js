@@ -9,6 +9,11 @@ Vue.use(ElementUI);
 import Xui from 'x-intelligent-ui';
 import 'x-intelligent-ui/dist/main.css';
 Vue.use(Xui);
+// 全局修改message距离顶部高度
+import { message } from 'x-intelligent-ui';
+message.config({
+  top: `100px`
+});
 
 import lxjData from "./utils/lxjData.js"
 import fjData from "./utils/fjData.js"

@@ -1,23 +1,6 @@
 <template>
     <div class="main">
-            <div class="coverBg" v-show="coverBg">
-                <div class="safeCheck">
-                    <div class="safeHeader"><span>安全验证</span><img src="../../assets/images/login/close.png" class="close" @click="closeDialog"></div>
-                    <div class="safeContent">
-                        <div class="safeTip">您的账号可能存在安全风险，为了确保为您本人操作，请先进行安全验证</div>
-                        <div class="safeTitle">验证方式</div>
-                        <input type="text" v-model="useTel" placeholder="" readonly class="useTel">
-                        <div class="checkMa">
-                            <div class="tipMsg" v-show="checkTelMaShow">验证码错误，请重新输入</div>
-                            <input type="text"  v-model="checkTelMa" placeholder="请输入六位验证码" > 
-                            <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
-                        </div>
-                        <div class="submit" @click="makSure">
-                            <span style="margin-right:5px">确定</span>
-                        </div>
-                     </div>   
-                </div>
-            </div>
+            <safeAlert @closeDialog1="closeDialog1" v-if="isAlert" :useTel="useTel"></safeAlert>  
 			<div class="left">
 				<div class="logo">
 					<img src="../../assets/images/login/logo.png" alt="">
@@ -138,9 +121,13 @@
 </template>
 
 <script>
+import safeAlert from './safeAlert1';
 import { mapActions } from 'vuex';
 import { getVerificationCode,verifyPhone,sendMessage,verifyPhoneNodeCode,resetPasswords} from '@/api/login';
 export default {
+    components:{
+        safeAlert
+    },
     data() {
         return {
             verifyCodeMsg:'',
@@ -156,8 +143,8 @@ export default {
             idVertifyMa:'',
             getTel:'',
             stepIndex:1,
-            useTel:'136******78',
-            coverBg:false,
+            useTel:'',
+            coverBg:true,
             findPwd:false,
             checkMaShow:false,
             checkTelMaShow:false,
@@ -174,12 +161,16 @@ export default {
             imgUrl:'',
             findName:'',
             timer:null,
+            isAlert:false,
         }
     },
     created() {
 
     },
     methods: {
+        closeDialog1(){
+            this.isAlert=false;
+        },
         goRegister(){
             this.$router.push({path:'/register'})
         },
@@ -412,8 +403,14 @@ export default {
         loginFunc(params) {
             this.goLogin(params).then(res => {
                 if(res.code == 200000) {
-                    localStorage.setItem("yk-token",res.data);
-                    this.$router.push({ path: '/' });
+                    if(res.data.loginProtect&&res.data.loginProtect==1){
+                        this.isAlert=true;
+                        this.useTel=res.data.mobile;
+                    }else{
+                        localStorage.setItem("yk-token",res.data);
+                        this.$router.push({ path: '/' });
+                    }
+                   
                 }else {
                     this.tipShow=true;
                     this.loading = false;

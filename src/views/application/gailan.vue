@@ -9,7 +9,7 @@
              <div class="gailan_left">
                  <div class="title">应用</div>
                  <div class="gailan_box">
-                     <div class="hasBuild">已建应用<span style="color:#0376FD">1</span>个</div>
+                     <div class="hasBuild">已建应用 <span style="color:#0376FD">{{count}}</span> 个</div>
                       <div style="margin-top:5px">
                           <a-button type="primary">
                             管理应用
@@ -146,10 +146,15 @@ import {
   apiVisitTrendInfo,
   serviceList
 } from "../../api/proSer/index";
+import {
+  appCount,
+} from "../../api/gailan/index";
 export default {
   name: "apiMan",
   data() {
     return {
+      count:0,
+
       locale,
       moment,
       nlcolumns0: [
@@ -270,17 +275,29 @@ export default {
   },
   created() {
     this.routerData = 1;
+
   },
   watch: {
-    $route: function(newVal, oldVal) {
-      this.routerData = 1;
-      this.getPageData();
-    }
+    // $route: function(newVal, oldVal) {
+    //   this.routerData = 1;
+    //   this.getPageData();
+    // }
   },
   mounted() {
-    this.getPageData();
+    //this.getPageData();
+    this.getCount();
   },
   methods: {
+    getCount(){
+        appCount().then(res => {
+          console.log(res)
+              if(res.code==200000){
+                this.count=res.data;
+              }
+        }).catch(err => {
+
+        })
+    },
     getPageData() {
       this.getServiceList({ current: 1, pageSize: 10, serviceName: "" });
       this.getSelectList({ current: 1, pageSize: "", serviceName: "" });

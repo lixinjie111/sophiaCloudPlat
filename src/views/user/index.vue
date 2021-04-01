@@ -122,7 +122,6 @@ export default {
         },
         initInfo(){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
-            console.log(this.userInfomation)
             this.ruleForm.uName=this.userInfomation.name;
         },
         handleChange(info) {
