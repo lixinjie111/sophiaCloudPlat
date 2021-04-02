@@ -169,7 +169,7 @@
         recommendType: '',
         sceneType: '',
         keyword: '',
-        sceneModalShow: false,
+        sceneModalShow: this.$route.query.show == 1 ? true : false,
         setLoading: false
       }
     },

@@ -156,7 +156,7 @@
               this.nextLoading = false;
               this.createModalShow = false;
               this.$router.push({
-                path: '/recommendation/scene/list'
+                path: '/recommendation/scene/list?show=1'
               });
             }, 1000);
           } else {
