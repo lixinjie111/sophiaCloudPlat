@@ -15,14 +15,14 @@
         <p class="title">必推行为：</p>
         <a-radio-group v-model="bestValue" :options="bestOptions" @change="bestChange" />
       </div>
-      <div class="scene_box" v-if="bestValue == '2'">
+      <div class="scene_box" v-if="bestValue == '1'">
         <p class="title"></p>
         <div class="best_goods">
           <div class="best_goods_title">
             <p>筛选必推物品：</p>
             <a-button type="primary">必推物品池</a-button>
           </div>
-          <AddBestGoods :list="bestGoodsList"></AddBestGoods>
+          <AddBestGoods :list="bestGoodsList" :propertiesList="mustPushPropertiesList"></AddBestGoods>
         </div>
       </div>
     </a-card>
@@ -41,7 +41,7 @@
 <script>
   import AddGoods from "./AddGoods";
   import AddBestGoods from "./AddBestGoods";
-  import {getSceneItems, getSceneItemProperties, saveSceneConfigRule} from "@/api/recommendation/index";
+  import {getSceneItems, getSceneItemProperties, getSceneMustPushProperties, saveSceneConfigRule} from "@/api/recommendation/index";
 
   export default {
     name: "scene",
@@ -65,12 +65,14 @@
           {label: '无必推商品', value: 0},
           {label: '有必推商品', value: 1}
         ],
-        bestGoodsList: []
+        bestGoodsList: [],
+        mustPushPropertiesList:[]
       }
     },
     created () {
       this.getSceneItems();
       this.getSceneItemProperties();
+      this.getSceneMustPushProperties();
     },
     methods: {
       getSceneItems() {
@@ -102,6 +104,18 @@
           console.log(err, "err");
         });
       },
+      getSceneMustPushProperties() {
+        getSceneMustPushProperties({}).then(res => {
+          if (res.code == 200000) {
+            this.mustPushPropertiesList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
       onChange1(e){
         e.target.checked ? this.buyFlag = 1 : this.buyFlag = 0;
       },
@@ -118,18 +132,22 @@
 
       },
       finish() {
-        let params = Object.assign({filterItemParams:this.goodsList},{
+        let params = {
+          filterItemParams: this.goodsList,
           applicationId: this.$route.query.appId,
           sceneId: this.$route.query.sceneId,
           buyFlag: this.buyFlag,
           complainFlag: this.complainFlag,
           hasPushFlag: this.hasPushFlag,
           mustRecommendFlag: this.bestValue,
-          recommendParams:[]
-        });
+          recommendParams:this.bestGoodsList
+        };
         saveSceneConfigRule(params).then(res => {
           if (res.code == 200000) {
             this.$message.success("添加成功！");
+            this.$router.push({
+              path: '/recommendation/scene/list'
+            });
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -139,7 +157,9 @@
         });
       },
       cancel() {
-
+        this.$router.push({
+          path: '/recommendation/scene/list'
+        });
       }
     }
   }
