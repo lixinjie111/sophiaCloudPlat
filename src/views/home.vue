@@ -133,22 +133,22 @@ export default {
               subKey: "myYingyong",
               title: "我的应用",
               menuItmList: [
-                {
-                  title: "概览",
-                  itemKey: "yingyong1",
-                  path: "/gailan"
-                },
+                // {
+                //   title: "概览",
+                //   itemKey: "yingyong1",
+                //   path: "/gailan"
+                // },
                 {
                   title: "应用列表",
                   itemKey: "yingyong2",
                   path: "/application/list"
                 },
 
-                {
-                  title: "监控报表",
-                  itemKey: "yingyong3",
-                  path: "/monRep"
-                }
+                // {
+                //   title: "监控报表",
+                //   itemKey: "yingyong3",
+                //   path: "/monRep"
+                // }
               ]
             }
           ]
@@ -336,31 +336,31 @@ export default {
             }
           ]
         },
-        {
-          moduleTitle: "工具服务",
-          list: [
-            {
-              subKey: "toolSer1",
-              title: "风控管理"
-            },
-            {
-              subKey: "toolSer2",
-              title: "财税计算"
-            },
-            {
-              subKey: "toolSer3",
-              title: "出行工具"
-            }
-          ]
-        },
+        // {
+        //   moduleTitle: "工具服务",
+        //   list: [
+        //     {
+        //       subKey: "toolSer1",
+        //       title: "风控管理"
+        //     },
+        //     {
+        //       subKey: "toolSer2",
+        //       title: "财税计算"
+        //     },
+        //     {
+        //       subKey: "toolSer3",
+        //       title: "出行工具"
+        //     }
+        //   ]
+        // },
         {
           moduleTitle: "系统管理",
           list: [
-            {
-              subKey: "sys1",
-              title: "企业设置",
-              path: "/businessSet"
-            },
+            // {
+            //   subKey: "sys1",
+            //   title: "企业设置",
+            //   path: "/businessSet"
+            // },
             {
               subKey: "sys2",
               title: "用户中心",
@@ -370,11 +370,11 @@ export default {
                   itemKey: "ziliao",
                   path: "/user"
                 },
-                {
-                  title: "实名认证",
-                  itemKey: "renzheng",
-                  path: "/Verified"
-                },
+                // {
+                //   title: "实名认证",
+                //   itemKey: "renzheng",
+                //   path: "/Verified"
+                // },
 
                 {
                   title: "安全设置",
@@ -383,14 +383,14 @@ export default {
                 }
               ]
             },
-            {
-              subKey: "sys3",
-              title: "消息中心"
-            },
-            {
-              subKey: "sys4",
-              title: "日志管理"
-            }
+            // {
+            //   subKey: "sys3",
+            //   title: "消息中心"
+            // },
+            // {
+            //   subKey: "sys4",
+            //   title: "日志管理"
+            // }
           ]
         }
       ],
