@@ -3,32 +3,32 @@
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="userHistoryData" :dataTypeList="userTypeList" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="userHistoryData" :type="0" :dataTypeList="userTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="userNewData" :dataTypeList="userTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="userNewData" :type="1" :dataTypeList="userTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="物品数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="itemHistoryData" :dataTypeList="itemTypeList" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="itemHistoryData" :type="0" :dataTypeList="itemTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="itemNewData" :dataTypeList="itemTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="itemNewData" :type="1" :dataTypeList="itemTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="行为数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="behaviorHistoryData" :dataTypeList="behaviorTypeList"
+        <AddData :type="0" :list="behaviorHistoryData" :dataTypeList="behaviorTypeList"
                  :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="behaviorNewData" :dataTypeList="behaviorTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :type="1" :list="behaviorNewData" :dataTypeList="behaviorTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <div class="btns" v-if="type == 'edit'">
