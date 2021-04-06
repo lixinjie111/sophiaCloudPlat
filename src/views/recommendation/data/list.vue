@@ -15,13 +15,13 @@
         </div>
         <div>
             数据类型:
-          <a-select style="width: 160px" placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange">
+          <a-select style="width: 160px" placeholder="请选择场景类型" v-model="dataTypeDesc" @change="sceneTypeChange">
             <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </div>
         <div>
-          <a-input-search :value="searchText" placeholder="数据表名称" style="width: 200px" @search="onSearch" />
+          <a-input-search v-model="searchText" placeholder="数据表名称" style="width: 200px" @search="onSearch" />
         </div>
       </div>
     </div>
@@ -56,23 +56,6 @@
   import NewFile from "@/components/recommendation/data/NewFile";
   import UploadData from "@/components/recommendation/data/UploadData";
   import {getSceneAll,getDataTypes,getDataTableList} from "@/api/recommendation/index"
-  const data = [];
-  for (let i = 0; i < 46; i++) {
-    data.push({
-      key: i,
-      index: i + 1,
-      name: `北京合生汇数据`,
-      fileName: `合生汇`,
-      type1: '商品数据',
-      owner: '合生通',
-      creater:"ampm",
-      kind: '同步',
-      time: '2020-01-28 12:00:00',
-      update: '2020-02-28 12:00:00',
-      operation: i
-    });
-  }
-
   export default {
     name: "list",
     components: {NewFile,UploadData},
@@ -86,35 +69,35 @@
           },
           {
             title: '表名',
-            dataIndex: 'name'
+            dataIndex: 'userTableName'
           },
           {
             title: '文件夹',
-            dataIndex: 'fileName'
+            dataIndex: 'documentName'
           },
           {
             title: '数据类型',
-            dataIndex: 'type1'
+            dataIndex: 'dataTypeDesc'
           },
           {
             title: '所属租户',
-            dataIndex: 'owner'
+            dataIndex: 'tenant'
           },
           {
             title: '创建人',
-            dataIndex: 'creater'
+            dataIndex: 'tenant'
           },
-          {
-            title: '分类',
-            dataIndex: 'kind'
-          },
+          // {
+          //   title: '分类',
+          //   dataIndex: 'kind'
+          // },
           {
             title: '创建时间',
-            dataIndex: 'time'
+            dataIndex: 'createdTime'
           },
           {
             title: '更新时间',
-            dataIndex: 'update'
+            dataIndex: 'updatedTime'
           },
           {
             title: '操作',
@@ -123,7 +106,7 @@
           },
         ],
         appName: "all",
-        sceneType: "all",
+        dataTypeDesc: "all",
         appNameList:[],
         sceneList:[],
         pagination: {
@@ -132,8 +115,8 @@
           pageSize: 10,
           showQuickJumper: true, 
           showSizeChanger: true,
-          onChange: () => {
-            this.getDataList();
+          onChange: (pageNum) => {
+            this.getDataList(pageNum);
           }
         },
         searchText:"",
@@ -149,13 +132,19 @@
       file(){
           this.newFile = true
       },
-      appNameChange (value,option){
-        console.log(value,option)
+      appNameChange (value){
         this.appName = value
+        console.log(value)
+        this.getDataList(this.pagination.current)
       },
-      sceneTypeChange (value,option){
-        this.sceneType = value
-        console.log(value,option)
+      sceneTypeChange (value){
+        this.dataTypeDesc = value
+        console.log(value)
+        this.getDataList(this.pagination.current)
+      },
+      onSearch(){
+        console.log(this.searchText)
+        this.getDataList(this.pagination.current)
       },
       create() {
         this.$router.push({
@@ -175,7 +164,6 @@
             this.appNameList = res.data.map(item=>{
               return {id:item.id,appName:item.appName}
             })
-            console.log(this.appNameList)
           }else {
             this.$message.error(res.message||"请求失败!")
           }
@@ -187,10 +175,11 @@
       getAppList(){
         getDataTypes({}).then(res=>{
           if(res.code == 200000){
-            this.sceneList = []
+            let ary = []
             res.data.slice(0,-2).forEach(item=>{
-              this.sceneList.push(...item.subDataTypes)
+              ary.push(...item.subDataTypes)
             })
+            this.sceneList = ary
             console.log(this.sceneList)
           }else{
             this.$message.error(res.message||"请求失败!")
@@ -199,21 +188,21 @@
           this.$message.error("请求失败!")
         })
       },      
-      getDataList(){
+      getDataList(pageNum){
         let params = {
           applicationId: this.appName=="all"?"":this.appName,
-          dataType:this.sceneType="all"?"":this.sceneType,
+          dataType:this.dataTypeDesc="all"?"":this.dataTypeDesc,
           name:this.searchText,
-          pageNum: this.pagination.current,
+          pageNum: pageNum||1,
           pageSize: this.pagination.pageSize
         }
         getDataTableList(params).then(res => {
           if (res.code == 200000) {
-            res.data.list.forEach((item) => {
-              
+            res.data.list.forEach((item,index) => {
+              item.index = index + 1
             })
-            this.list = res.data.list;
-            this.pagination.current = res.data.pageNum;
+            this.tableList = res.data.list
+            this.pagination.current = pageNum||1;
             this.pagination.total = res.data.total;
           } else {
             this.$message.error(res.message || "请求失败！");
@@ -225,9 +214,9 @@
       }      
     },
     mounted(){
-      this.getSceneAll()
-      this.getAppList()
-      this.getDataList()
+      Promise.all([this.getSceneAll(),this.getAppList()]).then(res=>{
+        this.getDataList()
+      })
     }
   }
 </script>
