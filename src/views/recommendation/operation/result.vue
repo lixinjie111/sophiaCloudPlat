@@ -210,7 +210,11 @@ export default {
       .result_middle_code{
         padding: 4px 20px;
         border: 1px solid #d9d9d9;
-        height: 100%;
+        height: 448px;
+        pre{
+          height: 100%;
+          overflow-y: auto;
+        }
       }
     }
   }
