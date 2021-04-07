@@ -6,12 +6,17 @@ let totalUrl = HTTPURL;
 // 业务场景中的所属应用枚举接口
 export const getSceneAll = params => {
     return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
-  };
+};
 
 // 全部数据类型枚举
 export const getDataTypes = params => {
     return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
-  };
+};
+
+// 获得应用下的所有业务场景
+export const getAllByApplication = params => {
+  return axios.post(`${totalUrl}/recommend/scene/getAllByApplication`, params).then(res => res.data);
+};
 
 // -------------------------推荐应用管理-----------------------------
 // 应用列表
@@ -90,3 +95,9 @@ export const saveSceneConfigRule = params => {
 export const getDataTableList = params => {
   return axios.post(`${totalUrl}/recommend/excel/getDataTableList`,params).then(res => res.data)
 }
+
+// ------------------------推荐运营------------------------------
+// 获得推荐结果
+export const getRecommendResult = params => {
+  return axios.post(`${totalUrl}/recommend/recommend/result`, params).then(res => res.data);
+};
