@@ -1,8 +1,8 @@
 <template>
   <div class="scene_form_box">
     <a-form-model ref="sceneForm" :model="sceneForm" v-bind="formItemLayout" :rules="sceneFormRules">
-      <a-form-model-item label="应用名称" prop="title">
-        <a-input placeholder="请输入应用名称" v-model="sceneForm.title" :maxLength="14"/>
+      <a-form-model-item label="场景名称" prop="title">
+        <a-input placeholder="请输入场景名称" v-model="sceneForm.title" :maxLength="14"/>
       </a-form-model-item>
       <a-form-model-item label="所属应用" prop="applicationId">
         <a-select placeholder="请选择所属应用" v-model="sceneForm.applicationId">
