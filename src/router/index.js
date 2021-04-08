@@ -13,7 +13,7 @@ const authentPop = resolve => require(['@/views/user/authentPop'], resolve);
 const agmAndfd = resolve => require(['@/views/user/agmAndfd'], resolve); 
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const gailan = resolve => require(['@/views/application/gailan'], resolve);
-const barView = resolve => require(['@/components/echarts/barView'], resolve);
+const barView = resolve => require(['@/components/echarts/pieView'], resolve);
 
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);

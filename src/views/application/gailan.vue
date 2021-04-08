@@ -29,7 +29,7 @@
                         <span>用量</span>
                         <span>
                             <el-date-picker
-                                v-model="rangeTime"
+                                v-model="rangeTime1"
                                 type="daterange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
@@ -43,10 +43,8 @@
                         </span>
                 </div>
                 <div class="tableContent">
-                    <a-table :columns="nlcolumns0" :data-source="nldata" @change="changePage">
-                        <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-                        <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-                        <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+                    <a-table :columns="nlcolumns0" :data-source="nldata0"  :pagination="false">
+                        <a slot="openBuy" class="ant-dropdown-link" >详细</a>
                     </a-table>
                 </div>
              </div>
@@ -54,12 +52,13 @@
     </div>
     <div class="select_area_container">
       <div class="select_container">
-        <el-select default-value style="width:150px" @change="chengeSerSelect">
-          <el-select-option
+        <el-select v-model="selectModel" style="width:150px" @change="chengeSerSelect">
+         <el-option
             v-for="(item) in serListArr"
             :value="item.serviceId"
             :key="item.id"
-          >{{item.serviceName}}</el-select-option>
+           :label="item.serviceName"
+          ></el-option>
         </el-select>
       </div>
       <div class="time_container">
@@ -92,7 +91,7 @@
       <div class="bar_container" id="barID"></div>
       <div class="title_container">访问趋势详情</div>
       <div class="fangwen_detail_container">
-        <a-table :columns="qscolumns" :data-source="qsdata" @change="changeQsTablePag">
+        <a-table :columns="qscolumns" :data-source="qsdata" @change="changeQsTablePag" :pagination="pagination1">
           <a slot="serviceName" slot-scope="text" href="">{{text}}</a>
           <span slot="successUsageRate" slot-scope="successUsageRate">
             <a-progress :percent="successUsageRate" size="small" status="active" />
@@ -127,7 +126,7 @@
         </div>
       </div>
       <div class="table_container">
-        <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage">
+        <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage" :pagination="pagination">
           <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
@@ -148,76 +147,95 @@ import {
 } from "../../api/proSer/index";
 import {
   appCount,
+  apiVisitDosage,
+  userServiceModels
 } from "../../api/gailan/index";
 export default {
   name: "apiMan",
   data() {
     return {
       count:0,
-
+      selectModel:'',
       locale,
       moment,
       nlcolumns0: [
         {
           title: "API",
-          dataIndex: "serviceName",
-          key: "serviceName",
-          scopedSlots: { customRender: "serviceName" }
+          dataIndex: 'service_name',
+          key: "service_name",
+          //scopedSlots: { customRender: "serviceName" }
         },
         {
           title: "调用量",
-          dataIndex: "freeNum",
-          key: "freeNum"
+          key: "success_num",
+          dataIndex: "success_num"
         },
         {
           title: "调用失败",
-          key: "basicQps",
-          dataIndex: "basicQps"
+          key: "fail_num",
+          dataIndex: "fail_num",
         },
         {
           title: "失败率",
-          key: "paySuccessTime",
-          dataIndex: "paySuccessTime"
+          key: "fail_rate",
+          dataIndex: "fail_rate",
         },
         {
           title: "详细统计",
           key: "openBuy",
           dataIndex: "openBuy",
-          slots: { title: "customTitle" },
           scopedSlots: { customRender: "openBuy" }
         },
       ],
       nlcolumns: [
         {
-          title: "API",
+          title: "API名称",
           dataIndex: "serviceName",
           key: "serviceName",
           scopedSlots: { customRender: "serviceName" }
         },
         {
-          title: "调用量",
+          title: "消费状态",
+          dataIndex: "paySta",
+          key: "paySta"
+        },
+        {
+          title: "调用量限制",
           dataIndex: "freeNum",
           key: "freeNum"
         },
         {
-          title: "调用失败",
+          title: "QPS",
           key: "basicQps",
           dataIndex: "basicQps"
         },
         {
-          title: "失败率",
+          title: "购买时间",
           key: "paySuccessTime",
           dataIndex: "paySuccessTime"
         },
         {
-          title: "详细统计",
+          title: "到期时间",
+          key: "effectiveTime",
+          dataIndex: "effectiveTime"
+        },
+        {
+          title: "开通付费",
           key: "openBuy",
           dataIndex: "openBuy",
           slots: { title: "customTitle" },
           scopedSlots: { customRender: "openBuy" }
         },
+        {
+          title: "购买次数包",
+          key: "Purchases",
+          dataIndex: "Purchases",
+          slots: { title: "customTitle" },
+          scopedSlots: { customRender: "Purchases" }
+        }
       ],
       searchName: "",
+      nldata0: [],
       nldata: [],
       qscolumns: [
         {
@@ -265,27 +283,32 @@ export default {
       qsdata: [],
       ifShowDetail: false,
       serListArr: [],
+      rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*365*3)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       serViceId:'',
       beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
       endDate:moment(new Date()).format('YYYY-MM-DD'),
       selVal:'cl7',
-      routerData:''
+      pagination:{
+        current: 1, 
+        pageSize: 10,
+        total: 0,
+      },
+      pagination1:{
+        current: 1, 
+        pageSize: 10,
+        total: 0,
+      },
+     
     };
   },
   created() {
-    this.routerData = 1;
-
-  },
-  watch: {
-    // $route: function(newVal, oldVal) {
-    //   this.routerData = 1;
-    //   this.getPageData();
-    // }
+    this.getCount();
+    this.VisitDosage();
+    this.getSelectList();
   },
   mounted() {
-    //this.getPageData();
-    this.getCount();
+     this.getPageData();
   },
   methods: {
     getCount(){
@@ -298,94 +321,103 @@ export default {
 
         })
     },
+    VisitDosage(){
+        apiVisitDosage(
+        { 
+          beginDate: this.rangeTime1[0], 
+          endDate: this.rangeTime1[1], 
+        }
+        ).then(res => {
+              if(res.code==200000){
+                this.nldata0=res.data;
+              }
+        }).catch(err => {
+
+        })
+    },
     getPageData() {
-      this.getServiceList({ current: 1, pageSize: 10, serviceName: "" });
-      this.getSelectList({ current: 1, pageSize: "", serviceName: "" });
+      this.getServiceList();
       this.getApiVisitTrend();
-      this.getApiVisitedInfo({beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'), endDate:moment(new Date()).format('YYYY-MM-DD'), current: 1, pageSize: 10, serViceId: ""});
+      this.getApiVisitedInfo();
     },
     resetFn(){
       this.serViceId = '';
+      this.selectModel = '';
       this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
       this.beginDate=moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD');
       this.endDate=moment(new Date()).format('YYYY-MM-DD');
       this.selVal='cl7';
       this.getApiVisitTrend();
-      this.getApiVisitedInfo({beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'), endDate:moment(new Date()).format('YYYY-MM-DD'), current: 1, pageSize: 10, serViceId: ""});
+      this.getApiVisitedInfo();
     },
     searchFn(){
       this.getApiVisitTrend();
-      this.getApiVisitedInfo({beginDate:this.beginDate,endDate:this.endDate,current:1,pageSize:10,serViceId:this.serViceId});
+      this.getApiVisitedInfo();
     },
     chengeSerSelect(e){
-      this.serViceId = e;
+      // this.serViceId = e;
     },
     choiceRange(e) {
       if(e == 'cl7'){
         this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
-        this.beginDate = this.rangeTime[0];
-        this.endDate = this.rangeTime[1];
       }
       else if(e == 'by'){
         const startDate = moment().month(moment().month()).startOf('month').valueOf();
         const endDate = moment().month(moment().month()).endOf('month').valueOf();
         this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        this.beginDate = this.rangeTime[0];
-        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgy'){
         const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
         const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
         this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        this.beginDate = this.rangeTime[0];
-        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgjd'){
         const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();
         const endDate = moment().quarter(moment().quarter() - 1).endOf('quarter').valueOf();
         this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        this.beginDate = this.rangeTime[0];
-        this.endDate = this.rangeTime[1];
       }
     },
     changeDataRange(e){
-      var dateList = e || [];
-      this.beginDate = dateList[0];
-      this.endDate = dateList[1];
+      // var dateList = e || [];
+      // this.beginDate = dateList[0];
+      // this.endDate = dateList[1];
     },
     changePage(pagination, filters, sorter) {
-      pagination.serviceName = "";
-      this.getServiceList(pagination);
+      this.pagination={...pagination}
+      this.getServiceList();
     },
     changeQsTablePag(pagination, filters, sorter){
-      pagination.serviceId = this.serViceId;
-      pagination.beginDate = this.beginDate;
-      pagination.endDate = this.endDate;
-      this.getApiVisitedInfo(pagination);
+      this.pagination1={...pagination}
+      this.getApiVisitedInfo();
     },
     onSearch() {
-      var searchText = this.searchName || "";
-      this.getServiceList({
-        current: 1,
+       this.pagination={
+        current: 1, 
         pageSize: 10,
-        serviceName: searchText
-      });
+        total: 0,
+      };
+      this.getServiceList();
+     
     },
-    getSelectList(pagination) {
-      this.serListArr = [];
-      var serListParm = new FormData();
-      serListParm.append("serviceName", pagination.serviceName);
-      serListParm.append("pageIndex", pagination.current);
-      serListParm.append("pageSize", pagination.pageSize);
-      serListParm.append("serviceModel",this.routerData); 
-      serviceList(serListParm)
+    getSelectList() {
+      userServiceModels()
         .then(res => {
           if (res.code == 200000) {
-            var serListdata = res.data.list || [];
-            serListdata.unshift({
-              serviceId: "",
+             var serListdata = [];
+             serListdata.unshift({
+              serviceId: '',
               serviceName: "全部"
             });
+            for(var i in res.data){
+              serListdata.push({
+                serviceId:i,
+                serviceName: res.data[i]
+              })
+            }
+            // serListdata.unshift({
+            //   serviceId: 0,
+            //   serviceName: "全部"
+            // });
             this.serListArr = serListdata;
           } else {
             this.$message.error(res.message || "请求失败！");
@@ -396,18 +428,18 @@ export default {
           console.log(err, "err");
         });
     },
-    getApiVisitedInfo(pagination){
+    getApiVisitedInfo(){
       this.qsdata = [];
-      var fwqsInfoParm = new FormData();
-      fwqsInfoParm.append("serviceId",pagination.serViceId);
-      fwqsInfoParm.append("beginDate", pagination.beginDate); 
-      fwqsInfoParm.append("endDate",pagination.endDate); 
-      fwqsInfoParm.append("pageIndex",pagination.current);  
-      fwqsInfoParm.append("pageSize",pagination.pageSize);
-      fwqsInfoParm.append("serviceModel",this.routerData);   
-      apiVisitTrendInfo(fwqsInfoParm)
+      let _param={
+        serviceId:'',
+        beginDate:this.rangeTime[0],
+        endDate:this.rangeTime[1],
+        pageIndex:this.pagination1.current,
+        pageSize:this.pagination1.pageSize,
+        serviceModel:this.selectModel,
+      } 
+      apiVisitTrendInfo(_param)
         .then(res => {
-          console.log(res,'趋势详情')
           if (res.code == 200000) {
             var serListdata = res.data.list || [];
             serListdata.forEach(item=>{
@@ -420,6 +452,7 @@ export default {
               }
             });
             this.qsdata = serListdata;
+            this.pagination1.total = res.data.total;
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -431,10 +464,10 @@ export default {
     },
     getApiVisitTrend() {
       var fwqsParm = new FormData();
-      fwqsParm.append("serviceId",this.serViceId);
-      fwqsParm.append("beginDate", this.beginDate); 
-      fwqsParm.append("endDate",this.endDate); 
-      fwqsParm.append("serviceModel",this.routerData); 
+      fwqsParm.append("serviceId",'');
+      fwqsParm.append("beginDate",  this.rangeTime[0]); 
+      fwqsParm.append("endDate", this.rangeTime[1]); 
+      fwqsParm.append("serviceModel",this.selectModel); 
       apiVisitTrend(fwqsParm)
         .then(res => {
           console.log(res,'趋势')
@@ -450,13 +483,13 @@ export default {
           console.log(err, "err");
         });
     },
-    getServiceList(pagination) {
+    getServiceList() {
       this.nldata = [];
       var serListParm = new FormData();
-      serListParm.append("serviceName", pagination.serviceName);
-      serListParm.append("pageIndex", pagination.current);
-      serListParm.append("pageSize", pagination.pageSize);
-      serListParm.append("serviceModel",this.routerData); 
+      serListParm.append("serviceName", this.searchName);
+      serListParm.append("pageIndex", this.pagination.current);
+      serListParm.append("pageSize", this.pagination.pageSize);
+      serListParm.append("serviceModel",'');
       serviceList(serListParm)
         .then(res => {
           if (res.code == 200000) {
@@ -479,6 +512,7 @@ export default {
               }
             });
             this.nldata = serListdata;
+            this.pagination.total = res.data.total;
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -494,9 +528,9 @@ export default {
         var yData1 = [];
         var yData2 = [];
         ecData.forEach(item=>{
-          xData.push(item.nowTime);
-          yData1.push(item.thisSuccessNum);
-          yData2.push(item.numMonthRatio);
+          xData.push(item.statisticsDate);
+          yData1.push(item.serviceSuccessNum);
+          yData2.push(item.numDayRatio);
         });
         var myChart = this.$echarts.init(document.getElementById("barID"));
         var option = {
