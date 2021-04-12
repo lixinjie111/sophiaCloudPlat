@@ -39,6 +39,11 @@ export const addApp = params => {
   return axios.post(`${totalUrl}/admin/app/add`, params).then(res => res.data);
 };
 
+// 获得推荐应用详情
+export const getAppDetail = params => {
+  return axios.post(`${totalUrl}/recommend/recommend/detail`, params).then(res => res.data);
+};
+
 // -------------------------推荐场景管理-----------------------------
 // 业务场景列表接口
 export const getSceneList = params => {
