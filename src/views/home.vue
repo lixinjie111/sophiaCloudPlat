@@ -84,7 +84,7 @@
           <div class="avtor"><img :src="$store.state.userInfo.icon" alt=""></div>
           <a-dropdown>
             <div class="ant-dropdown-link" @click="e => e.preventDefault()">
-              {{$store.state.userInfo.username}}<a-icon typeusername="down" />
+              {{$store.state.userInfo.username}}<a-icon type="down" />
             </div>
             <a-menu slot="overlay">
               <a-menu-item @click="logout">

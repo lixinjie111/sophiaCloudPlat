@@ -2,25 +2,27 @@
   <div class="set_rules_container">
     <a-card title="推荐规则" size="small">
       <div class="scene_box">
-        <p class="title">过滤物品：</p>
-        <AddGoods :list="goodsList"></AddGoods>
+        <p class="title">筛选物品：</p>
+        <AddGoods :list="goodsList" :itemList="itemList" :itemPropertiesList="itemPropertiesList"></AddGoods>
       </div>
       <div class="scene_box">
         <p class="title">过滤行为：</p>
-        <a-checkbox-group v-model="actionValue" :options="actionOptions" @change="actionChange"></a-checkbox-group>
+        <a-checkbox @click="onChange1">有购买行为的物品</a-checkbox>
+        <a-checkbox @click="onChange2">用户过去3天内有过曝光行为的物品</a-checkbox>
+        <a-checkbox @click="onChange3">用户投诉的物品</a-checkbox>
       </div>
       <div class="scene_box">
         <p class="title">必推行为：</p>
         <a-radio-group v-model="bestValue" :options="bestOptions" @change="bestChange" />
       </div>
-      <div class="scene_box" v-if="bestValue == '2'">
+      <div class="scene_box" v-if="bestValue == '1'">
         <p class="title"></p>
         <div class="best_goods">
           <div class="best_goods_title">
             <p>筛选必推物品：</p>
             <a-button type="primary">必推物品池</a-button>
           </div>
-          <AddBestGoods :list="bestGoodsList"></AddBestGoods>
+          <AddBestGoods :list="bestGoodsList" :propertiesList="mustPushPropertiesList"></AddBestGoods>
         </div>
       </div>
     </a-card>
@@ -39,6 +41,7 @@
 <script>
   import AddGoods from "./AddGoods";
   import AddBestGoods from "./AddBestGoods";
+  import {getSceneItems, getSceneItemProperties, getSceneMustPushProperties, saveSceneConfigRule} from "@/api/recommendation/index";
 
   export default {
     name: "scene",
@@ -51,37 +54,112 @@
     },
     data() {
       return {
+        itemList: [],
+        itemPropertiesList: [],
         goodsList: [],
-        actionValue: '',
-        actionOptions: [
-          {label: '有购买行为的物品', value: '1'},
-          {label: '用户过去3天内有过曝光行为的物品', value: '2'},
-          {label: '用户投诉的物品', value: '3'}
-        ],
+        buyFlag: 0,
+        complainFlag: 0,
+        hasPushFlag: 0,
         bestValue: '',
         bestOptions: [
-          {label: '无必推商品', value: '1'},
-          {label: '有必推商品', value: '2'}
+          {label: '无必推商品', value: 0},
+          {label: '有必推商品', value: 1}
         ],
-        bestGoodsList: []
+        bestGoodsList: [],
+        mustPushPropertiesList:[]
       }
     },
+    created () {
+      this.getSceneItems();
+      this.getSceneItemProperties();
+      this.getSceneMustPushProperties();
+    },
     methods: {
-      actionChange(checkedValues) {
-        console.log('checked = ', checkedValues);
-        console.log('value = ', this.value);
+      getSceneItems() {
+        let params = {
+          applicationId: this.$route.query.appId,
+          sceneId: this.$route.query.sceneId,
+          type: 0 // 0：一级品类 1:二级品类 2：品牌
+        };
+        getSceneItems(params).then(res => {
+          if (res.code == 200000) {
+            this.itemList = res.data.result;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      getSceneItemProperties() {
+        getSceneItemProperties({}).then(res => {
+          if (res.code == 200000) {
+            this.itemPropertiesList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      getSceneMustPushProperties() {
+        getSceneMustPushProperties({}).then(res => {
+          if (res.code == 200000) {
+            this.mustPushPropertiesList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      onChange1(e){
+        e.target.checked ? this.buyFlag = 1 : this.buyFlag = 0;
+      },
+      onChange2(e){
+        e.target.checked ? this.hasPushFlag = 1 : this.hasPushFlag = 0;
+      },
+      onChange3(e){
+        e.target.checked ? this.complainFlag = 1 : this.complainFlag = 0;
       },
       bestChange(e) {
-        console.log('radio3 checked', e.target.value);
+
       },
       test() {
 
       },
       finish() {
-
+        let params = {
+          filterItemParams: this.goodsList,
+          applicationId: this.$route.query.appId,
+          sceneId: this.$route.query.sceneId,
+          buyFlag: this.buyFlag,
+          complainFlag: this.complainFlag,
+          hasPushFlag: this.hasPushFlag,
+          mustRecommendFlag: this.bestValue,
+          recommendParams:this.bestGoodsList
+        };
+        saveSceneConfigRule(params).then(res => {
+          if (res.code == 200000) {
+            this.$message.success("添加成功！");
+            this.$router.push({
+              path: '/recommendation/scene/list'
+            });
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
       },
       cancel() {
-
+        this.$router.push({
+          path: '/recommendation/scene/list'
+        });
       }
     }
   }

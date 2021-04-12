@@ -55,12 +55,16 @@
         type: Array,
         default: () => []
       },
+      type: {
+        type: Number,
+        default: 0
+      }
     },
     data() {
       return {
         addList: this.list,
-        curDataType: [],
-        curDataSourceId: [],
+        curDataType: '',
+        curDataSourceId: '',
         sourceTablesList: []
       }
     },
@@ -69,7 +73,7 @@
         let params = {
           dataSourceId: this.curDataSourceId.length > 0 ? this.curDataSourceId : '', //文件夹id
           dataType: this.curDataType, //数据类型（0：用户数据 1：商品数据 2：行为数据 3：商业服务数据 4：店铺数据 5：资讯数据 6：活动数据 7：黑名单)
-          dataHistoryType: 1 //0:历史数据 1：新增数据
+          dataHistoryType: this.type //0:历史数据 1：新增数据
         };
         getSceneSourceTables(params).then(res => {
           if (res.code == 200000) {
@@ -90,9 +94,9 @@
           return;
         }
         this.addList.push({
-          dataType: [],
-          folderId: [],
-          sourceTableId: []
+          dataType: '',
+          folderId: '',
+          sourceTableId: ''
         })
       },
       del(index) {
@@ -100,14 +104,14 @@
       },
       dataTypeChange(item) {
         this.curDataType = item.dataType;
-        item.sourceTableId = [];
-        item.folderId = [];
+        item.sourceTableId = '';
+        item.folderId = '';
         this.sourceTablesList = [];
         this.getSceneSourceTables()
       },
       sourceChange(item) {
         this.curDataSourceId = item.folderId;
-        item.sourceTableId = [];
+        item.sourceTableId = '';
         this.sourceTablesList = [];
         this.getSceneSourceTables()
       },

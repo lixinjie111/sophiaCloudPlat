@@ -24,6 +24,7 @@
       <a-table
         :columns="columns"
         :data-source="data"
+        :rowKey="record=>record.id"
         :pagination="{showQuickJumper: true, showSizeChanger: true}">
         <template slot="operation" slot-scope="text, record, index">
           <a-button type="link">详情</a-button>
