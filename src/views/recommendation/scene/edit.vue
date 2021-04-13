@@ -10,7 +10,7 @@
       <div v-if="noTitleKey === '1'">
         <a-card title="业务场景" size="small">
           <div style="width: 500px">
-            <SceneForm></SceneForm>
+            <SceneForm ref="sceneForm" :sceneForm="sceneForm"></SceneForm>
           </div>
         </a-card>
         <div class="basic-btn">
@@ -33,6 +33,7 @@
   import SceneForm from "@/components/recommendation/scene/SceneForm";
   import SetData from "@/components/recommendation/scene/SetData";
   import SetRules from "@/components/recommendation/scene/SetRules";
+  import {getSceneDetail, addScene} from "@/api/recommendation/index";
 
   export default {
     name: "edit",
@@ -53,10 +54,62 @@
             tab: '推荐规则',
           },
         ],
-        noTitleKey: '1'
+        noTitleKey: '1',
+        sceneForm: {}
       }
     },
+    created() {
+      this.getSceneDetail();
+    },
     methods: {
+      getSceneDetail() {
+        let params = {
+          id: this.$route.query.id
+        };
+        getSceneDetail(params).then(res => {
+          if (res.code == 200000) {
+            this.sceneForm = {
+              id: res.data.id,
+              title: res.data.title,
+              applicationId: res.data.applicationId,
+              sceneType: res.data.sceneType + '',
+              recommendObjectType: res.data.recommendObjectType + '',
+              recommendType: res.data.recommendType + '',
+              startType: res.data.startType + '',
+              place: res.data.place,
+              description: res.data.description
+            };
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      finish() {
+        this.$refs.sceneForm.$refs.sceneForm.validate(valid => {
+          if (valid) {
+            let params = this.$refs.sceneForm.$refs.sceneForm.model;
+            addScene(params).then(res => {
+              if (res.code == 200000) {
+                this.$message.success("编辑成功！");
+                // this.$router.push({
+                //   path: '/recommendation/scene/data?appId='+ this.$refs.sceneForm.$refs.sceneForm.model.applicationId + '&sceneId=' + res.data
+                // });
+              } else {
+                this.$message.error(res.message || "请求失败！");
+              }
+            }).catch(err => {
+              this.$message.error("请求失败！");
+              console.log(err, "err");
+            });
+          } else {
+            console.log('提交失败!');
+            return false;
+          }
+        });
+      },
       onTabChange(key, type) {
         console.log(key, type);
         this[type] = key;

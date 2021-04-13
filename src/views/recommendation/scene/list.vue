@@ -42,8 +42,8 @@
       :rowKey="record=>record.id"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" @click="toDetail">详情</a-button>
-        <a-button type="link" @click="toEdit">编辑</a-button>
+        <a-button type="link" @click="toDetail(record.id)">详情</a-button>
+        <a-button type="link" @click="toEdit(record.id)">编辑</a-button>
         <a-button type="link">测试</a-button>
         <a-popconfirm
           title="是否删除该应用?"
@@ -212,14 +212,14 @@
           console.log(err, "err");
         });
       },
-      toDetail() {
+      toDetail(id) {
         this.$router.push({
-          path: '/recommendation/scene/detail'
+          path: '/recommendation/scene/detail?id='+id
         });
       },
-      toEdit() {
+      toEdit(id) {
         this.$router.push({
-          path: '/recommendation/scene/edit'
+          path: '/recommendation/scene/edit?id='+id
         });
       },
       add() {

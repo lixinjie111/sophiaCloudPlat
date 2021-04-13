@@ -61,6 +61,21 @@
       appList: {
         type: Array,
         default: () => []
+      },
+      sceneForm: {
+        type: Object,
+        default: () => {
+          return {
+            title: '',
+            applicationId: [],
+            sceneType: '0',
+            recommendObjectType: '0',
+            recommendType: '0',
+            startType: '0',
+            place: '',
+            description: ''
+          }
+        }
       }
     },
     data() {
@@ -68,16 +83,6 @@
         formItemLayout: {
           labelCol: {span: 4},
           wrapperCol: {span: 20},
-        },
-        sceneForm: {
-          title: '',
-          applicationId: [],
-          sceneType: '0',
-          recommendObjectType: '0',
-          recommendType: '0',
-          startType: '0',
-          place: '',
-          description: ''
         },
         sceneFormRules:
           {

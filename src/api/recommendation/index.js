@@ -95,6 +95,11 @@ export const saveSceneConfigRule = params => {
   return axios.post(`${totalUrl}/recommend/scene/saveConfigRule`, params).then(res => res.data);
 };
 
+// 业务场景详情
+export const getSceneDetail = params => {
+  return axios.post(`${totalUrl}/recommend/scene/get`, params).then(res => res.data);
+};
+
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
