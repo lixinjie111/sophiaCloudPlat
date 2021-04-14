@@ -10,3 +10,5 @@ export const distribution = params => { return axios.get(`${HTTPURL}/admin/servi
 export const appCount = params => { return axios.get(`${HTTPURL}/admin/app/count`, {params: params}).then(res => res.data); };
 export const stisticsCallInfo = params => { return axios.get(`${HTTPURL}/admin/APIService/stisticsCallInfo`, {params: params}).then(res => res.data); };
 export const statisticsVistedInfo = params => { return axios.get(`${HTTPURL}/ai/statistics/statisticsVistedInfo`, {params: params}).then(res => res.data); };
+export const applist = params => { return axios.get(`${HTTPURL}/admin/app/listModelApp`, {params: params}).then(res => res.data); };
+export const userServiceList = params => { return axios.get(`${HTTPURL}/admin/service/userServiceList`, {params: params}).then(res => res.data); };

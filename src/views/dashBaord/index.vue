@@ -39,7 +39,16 @@
                         <div class="titleNav">
                             <div class="title">消费趋势</div>
                             <div class="titleRt">
-                                <a-radio-group v-model="time" @change="onChange">
+                                 <el-date-picker
+                                    v-model="rangeTime2"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期"
+                                    style="height:100%;width:100%"
+                                    value-format="yyyy-MM-dd"
+                                    ></el-date-picker>
+                                <!-- <a-radio-group v-model="time" @change="onChange">
                                     <a-radio-button value="a">
                                     月
                                     </a-radio-button>
@@ -49,11 +58,11 @@
                                     <a-radio-button value="c">
                                     年
                                     </a-radio-button>
-                                </a-radio-group>
+                                </a-radio-group> -->
                             </div>
                         </div>
                         <div class="boxEts">
-                            <cLine id="box58" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                            <cLine id="box58" :colorList="$lxjData.colorList" :myData="ConsumeTrendData"></cLine>
                         </div>
                     </div>
                 </a-col>
@@ -62,11 +71,20 @@
                           <div class="titleNav">
                             <div class="title">消费分布</div>
                             <div class="titleRt">
-                                <a-range-picker @change="onChange" />
+                                <!-- <a-range-picker @change="onChange" /> -->
+                                 <el-date-picker
+                                    v-model="rangeTime1"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期"
+                                    style="height:100%;width:100%"
+                                    value-format="yyyy-MM-dd"
+                                    ></el-date-picker>
                             </div>
                         </div>
                         <div class="boxEts">
-                             <PieEcharts :colorList="$fjData.colorList" :myData="$fjData.box4Data"></PieEcharts>
+                             <PieEcharts :colorList="$fjData.colorList" :myData="distributionData"></PieEcharts>
                         </div>
                     </div>
                 </a-col>
@@ -92,7 +110,6 @@
                 end-placeholder="结束日期"
                 style="height:100%"
                 value-format="yyyy-MM-dd"
-                @change="changeDataRange"
                 ></el-date-picker>
             </div>
             <div class="select_container close_week">
@@ -123,11 +140,11 @@
                             <div class="box api">
                                 <div class="yingyong">
                                     <div class="top">API调用</div>
-                                    <div class="mid midLeft"><span>{{stisticsInfo.apiCount}}</span> 千次</div>
-                                    <div class="bm">周环比<a-icon type="caret-up" :style="{ fontSize: '16px', color: '#FF4D4F' }" /><span :style="{ color: '#FF4D4F' }">6.47%</span>，月环比<a-icon type="caret-down"  :style="{ fontSize: '16px', color: '#52C41A' }"/><span :style="{ color: '#52C41A' }">6.47%</span></div>
+                                    <div class="mid midLeft"><span>{{stisticsInfo.apiCount}}</span> 次</div>
+                                    <!-- <div class="bm">周环比<a-icon type="caret-up" :style="{ fontSize: '16px', color: '#FF4D4F' }" /><span :style="{ color: '#FF4D4F' }">6.47%</span>，月环比<a-icon type="caret-down"  :style="{ fontSize: '16px', color: '#52C41A' }"/><span :style="{ color: '#52C41A' }">6.47%</span></div> -->
                                 </div>
                                 <div class="boxEts">
-                                   <cLine id="box57" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                                   <cLine id="box57" :colorList="$lxjData.colorList" :myData="appInfo"></cLine>
                                 </div>
                             </div>
                         </a-col>
@@ -135,26 +152,26 @@
                             <div class="box api">
                                 <div class="yingyong">
                                     <div class="top">SDK调用</div>
-                                    <div class="mid midLeft"><span>{{stisticsInfo.sdkCount}}</span> 千次</div>
-                                    <div class="bm">周环比<a-icon type="caret-up" :style="{ fontSize: '16px', color: '#FF4D4F' }" /><span :style="{ color: '#FF4D4F' }">6.47%</span>，月环比<a-icon type="caret-down"  :style="{ fontSize: '16px', color: '#52C41A' }"/><span :style="{ color: '#52C41A' }">6.47%</span></div>
+                                    <div class="mid midLeft"><span>{{stisticsInfo.sdkCount}}</span> 次</div>
+                                    <!-- <div class="bm">周环比<a-icon type="caret-up" :style="{ fontSize: '16px', color: '#FF4D4F' }" /><span :style="{ color: '#FF4D4F' }">6.47%</span>，月环比<a-icon type="caret-down"  :style="{ fontSize: '16px', color: '#52C41A' }"/><span :style="{ color: '#52C41A' }">6.47%</span></div> -->
                                 </div>
                                 <div class="boxEts">
-                                   <cLine id="box56" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                                   <cLine id="box56" :colorList="$lxjData.colorList" :myData="sdkInfo"></cLine>
                                 </div>
                             </div>
                         </a-col>
                     </a-row>
                 </a-col>
             </a-row>
-            <a-row :gutter="[20,20]">
+            <a-row :gutter="[20,20]"  v-if="showList">
                 <a-col :span="6" v-for="(value,index) in vistedInfo" :key="index">
-                    <div class="box1" >
+                    <div class="box1" v-if="index!='abc'">
                         <div class="top" >{{value.moudle_name}}</div>
                         <div class="lv">使用率</div>
-                        <div class="per">{{value.summary?value.summary.usedPercent:''}}</div>
+                        <div class="per">{{value.summary?value.summary.usedPercent:'0%'}}</div>
                         <div class="bm">
-                            总量 <span :style="{ color: '#52C41A' }">{{value.summary?value.summary.totalNum:''}}</span>
-                            <span class="half">剩余</span> <span :style="{ color: '#FF4D4F' }">{{value.summary?value.summary.remainNum:''}}</span>
+                            总量 <span :style="{ color: '#52C41A' }">{{value.summary?value.summary.totalNum:'0'}}</span>
+                            <span class="half">剩余</span> <span :style="{ color: '#FF4D4F' }">{{value.summary?value.summary.remainNum:'0'}}</span>
                         </div>
                         <div class="boxEts">
                             <barEcharts id="box1" :colorList="$lxjData.colorList" :myData="value.echartData"></barEcharts>
@@ -166,41 +183,41 @@
         <div class="barTitle">
             能力调用趋势
         </div>
-        <div class="boxContent neng">
+        <div class="boxContent neng" v-if="showList">
             <a-row :gutter="[20,20]">
                 <a-col :span="12" v-for="(value,index) in vistedInfo" :key="index">
-                    <div class="box2"  >
+                    <div class="box2"  v-if="index!='abc'">
                         <div class="top">{{value.moudle_name}}</div>
                         <div class="sel">
                             <div class="selectItem">
-                                <el-select v-model="formInline.region" placeholder=""  style="width:80px" size="small">
-                                    <el-option label="全部" value="0"></el-option>
+                                <el-select v-model="value.appId" placeholder=""  style="width:80px" size="small" @change="select1(value,$event,index)">
+                                    <el-option label="全部" value="" ></el-option>
+                                    <el-option :label="item1.appName" :value="item1.appId" v-for="item1 in value.applist" :key="item1.appName"></el-option>
                                 </el-select>
                             </div>
                              <div class="selectItem">
-                                <el-select v-model="formInline.region" placeholder=""  style="width:80px" size="small">
-                                    <el-option label="全部" value="0"></el-option>
+                                <el-select v-model="value.serviceId" placeholder=""  style="width:80px" size="small" @change="select2(value,$event,index)">
+                                    <el-option label="全部" value=""></el-option>
+                                    <el-option :label="item1.serviceName" :value="item1.serviceId" v-for="item1 in value.servicelist" :key="item1.serviceId"></el-option>
                                 </el-select>
                             </div>
                             <div class="selectItem">
-                                <el-radio-group v-model="radio1" @change="onChange" size="small">
-                                    <el-radio-button label="调用量">
-                                    </el-radio-button>
-                                    <el-radio-button label="QPS">
+                                <el-radio-group v-model="value.radio1" @change="onChange(value,index)" size="small">
+                                    <el-radio-button :label="subItem.value" v-for="subItem in value.radioList" :key="subItem.value">
+                                       {{subItem.lable}}
                                     </el-radio-button>
                                 </el-radio-group>
                             </div>
                             <div class="selectItem">
-                                <el-radio-group v-model="radio2" @change="onChange" size="small">
-                                    <el-radio-button label="7天">
-                                    </el-radio-button>
-                                    <el-radio-button label="30天">
+                                <el-radio-group v-model="value.radio2" @change="onChange1(value,index)" size="small">
+                                    <el-radio-button :label="subItem.value" v-for="subItem in value.radioList2" :key="subItem.value">
+                                        {{subItem.lable}}
                                     </el-radio-button>
                                 </el-radio-group>
                             </div>
                         </div>
                         <div class="boxEts">
-                            <cLine id="box51" :colorList="$lxjData.colorList" :myData="value.echartData"></cLine>
+                            <cLine :id="'box5'+index" :colorList="$lxjData.colorList" :myData="value.echartData" :myTotaldata="vistedInfo"></cLine>
                         </div>
                     </div>
                 </a-col>
@@ -216,22 +233,25 @@ import PieEcharts from '@/components/echarts/common/PieEcharts';
 import moment from "moment";
 import "moment/locale/zh-cn";
 import {userServiceModels} from "../../api/gailan/index";
-import {userAccountSummary,userConsumeTrend,distribution,appCount,stisticsCallInfo,statisticsVistedInfo} from "../../api/dashbord/index";
+import {applist,userServiceList,userAccountSummary,userConsumeTrend,distribution,appCount,stisticsCallInfo,statisticsVistedInfo} from "../../api/dashbord/index";
 export default {
     components:{cLine,barEcharts,PieEcharts},
     data() {
         return {
+            showList:false,
             selectModel:'',
             serListArr: [],
             selVal:'cl7',
-             rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime2:[moment(new Date(new Date().getTime() - 3600*1000*24*365*2)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*365*2)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             formInline: {
                 region: '0'
             },
             time:"b",
             value1: '',
             value2: '',
-            radio1: '',
+            currentRadio: 'COUNT',
             radio2: '',
             accountSummary:{
                invoiceAmount:null, 
@@ -240,24 +260,37 @@ export default {
                totalAmount:null, 
             },
             appNum:0,
-            stisticsInfo:{
-                apiCount: 0,
-                apiList: [],
-                sdkCount: 0,
-                sdkList: [],
-            },
+            stisticsInfo:{},
             vistedInfo:{},
+            currentNo:0,
+            ConsumeTrendData:{
+                name:[],
+                value:[]
+            },
+            distributionData:{
+                name:[],
+                value:[]
+            },
+            appInfo:{
+                name:[],
+                value:[]
+            },
+            sdkInfo:{
+                name:[],
+                value:[]
+            },
 
         }
     },
     created() {
         this.getSelectList();
+        this.getVistedInfo();
         this.getCash();
         this.getTrend();
         this.getDistribution();
         this.getappCount();
         this.getStistics();
-        this.getVistedInfo();
+       
     },
     methods: {
         getVistedInfo(){
@@ -268,25 +301,37 @@ export default {
                 serviceId:'',//API服务SERVICEID
                 statisticsType :'1',//统计时间类型, 1:天 2:小时 3:月
                 requestStatus :'1',// 1:成功 2:失败 3:全部
-                // startTime :this.rangeTime[0],
-                // endTime :this.rangeTime[1],
-                startTime :'2000-01-08',
-                endTime :'2021-04-02',
+                startTime :this.rangeTime[0],
+                endTime :this.rangeTime[1],
+                // startTime :'2000-01-08',
+                // endTime :'2021-04-02',
             };
             statisticsVistedInfo(_param).then(res => {
                 if(res.code == 200000) {
+                    let length=Object.keys(res.data).length;
+                    var index=0;
                    for(var i in res.data){
+                       index++;
                        var str='str'+i;
                        this.vistedInfo[str]=[];
                        this.vistedInfo[str]={
+                            'radio1':'COUNT',
+                            'radioList':[{lable:'调用量',value:'COUNT'},{lable:'QPS',value:'QPS'}],
+                            'radio2':'1',
+                            'radioList2':[{lable:'7天',value:'0'},{lable:'30天',value:'1'}],
                             'moudle_name':res.data[i].list[0].moudle_name,
                             'service_model':res.data[i].list[0].service_model,
                             'summary':res.data[i].summary,
+                            'applist':[],
+                            'appId':'',
+                            'servicelist':[],
+                            'serviceId':'',
                             'echartData':{
                                 'name': [],
                                 'value':[]
                             }
                         }
+                        this.getApplist(res.data[i].list[0].service_model,str,index,length);
                    }
                    for(var i in res.data){
                        var str='str'+i;
@@ -295,7 +340,63 @@ export default {
                             this.vistedInfo[str].echartData['value'].push(item.cnt);
                         })
                    }
-                    console.log(this.vistedInfo)
+                  
+                }else {
+                    
+                }
+            }).catch(err => {
+                
+            })
+        },
+        select1(item,item2,index){
+            this.getUerServiceList(item,item2);
+            this.getVistedInfo1(item,index)
+        },
+        select2(item,item2,index){
+            this.$forceUpdate();
+            this.getVistedInfo1(item,index)
+        },
+        getApplist(service_model,str,index,length){
+            let _param ={
+                serviceModel:service_model,
+                pageIndex:'1',
+                pageSize:'30',
+            };
+            applist(_param).then(res => {
+                if(res.code == 200000) {
+                    this.vistedInfo[str].applist=res.data.list;
+                    this.$set(this.vistedInfo[str],'applist',res.data.list) 
+                   if(length==index){
+                       setTimeout(()=>{
+                           this.showList=true;
+                            //console.log(this.vistedInfo)
+                       },300)
+                        
+                   }
+                   
+                }else {
+                    
+                }
+            })
+        },
+        getUerServiceList(val1,val2){
+            let _param ={
+                appId:val2,
+                serviceModelId:val1.service_model,
+            };
+            userServiceList(_param).then(res => {
+                if(res.code == 200000) {
+                    //val1.servicelist=res.data;
+                    var attrName = val1.moudle_name;
+                    var vistList = this.vistedInfo || {};
+                    for(var attr in vistList){
+                        if(vistList[attr].moudle_name == attrName){
+                            vistList[attr].servicelist = res.data;
+                        }
+                    }
+                    this.$set(this,'vistedInfo',vistList);
+                    this.$forceUpdate();
+                     this.vistedInfo = vistList;
                 }else {
                     
                 }
@@ -306,12 +407,23 @@ export default {
         getStistics(){
             let _param ={
                 serviceModel:this.selectModel,
+                // beginDate :this.rangeTime[0],
+                // endDate :this.rangeTime[1],
                 beginDate:'2000-01-08',
                 endDate:'2021-04-02',
             };
             stisticsCallInfo(_param).then(res => {
                 if(res.code == 200000) {
-                    let info=res.data;
+                    this.stisticsInfo=res.data;
+                    res.data.sdkList.forEach(item=>{
+                         this.appInfo['name'].push(item.date_str)
+                         this.appInfo['value'].push(item.total_call_num)
+                    })
+                    res.data.apiList.forEach(item=>{
+                         this.sdkInfo['name'].push(item.date_str)
+                         this.sdkInfo['value'].push(item.total_call_num)
+                    })
+                   
                 }else {
                     
                 }
@@ -336,12 +448,17 @@ export default {
         },
         getDistribution(){
             let _param ={
-                beginDate:'2000-01-08',
-                endDate:'2021-04-02',
+                beginDate:this.rangeTime1[0],
+                endDate:this.rangeTime1[1],
             };
             distribution(_param).then(res => {
                 if(res.code == 200000) {
-
+                    if(res.data.length>0){
+                        res.data.forEach(item=>{
+                            this.distributionData['name'].push(item.categoryName);
+                            this.distributionData['value'].push(item.value);
+                        })
+                    }
                 }else {
                     
                 }
@@ -351,12 +468,17 @@ export default {
         },
         getTrend(){
             let _param ={
-                beginDate:'2000-01-08',
-                endDate:'2021-04-02',
+                beginDate:this.rangeTime2[0],
+                endDate:this.rangeTime2[1],
             };
             userConsumeTrend(_param).then(res => {
                 if(res.code == 200000) {
-
+                    if(res.data.length>0){
+                        res.data.forEach(item=>{
+                            this.ConsumeTrendData['name'].push(item.dateStr);
+                            this.ConsumeTrendData['value'].push(item.amount);
+                        })
+                    }
                 }else {
                     
                 }
@@ -410,7 +532,55 @@ export default {
                 console.log(err, "err");
                 });
         },
-        onChange(){},
+        getVistedInfo1(val,str1){
+            let _param ={
+                statisticsTerm:val.radio1,//统计数据项, COUNT:调用次数 QPS:QPS
+                appId:val.appId,//应用APPID
+                serviceModel:val.service_model,
+                serviceId:val.serviceId,//API服务SERVICEID
+                statisticsType :val.radio2==0?'1':'3',//统计时间类型, 1:天 2:小时 3:月
+                requestStatus :'1',// 1:成功 2:失败 3:全部
+                startTime :this.rangeTime[0],
+                endTime :this.rangeTime[1],
+                // startTime :'2000-01-08',
+                // endTime :'2021-04-02',
+            };
+            statisticsVistedInfo(_param).then(res => {
+                if(res.code == 200000) {
+                    this.currentNo++;
+                   for(var i in res.data){
+                        this.vistedInfo[str1].echartData.name=[];
+                        this.vistedInfo[str1].echartData.value=[];
+                          if(res.data[i].list){
+                              res.data[i].list.forEach(item=>{
+                                if(val.radio1=='QPS'){
+                                    this.vistedInfo[str1].echartData.name.push(item.dateStr);
+                                    this.vistedInfo[str1].echartData.value.push(item.qps);
+                                }else{
+                                    this.vistedInfo[str1].echartData.name.push(item.dateStr);
+                                    this.vistedInfo[str1].echartData.value.push(item.cnt);
+                                }
+                             })
+                          }
+                   }
+                   this.$set(this.vistedInfo,'abc',this.currentNo) 
+                   this.$forceUpdate();
+                    console.log(this.vistedInfo)
+                }else {
+                    
+                }
+            }).catch(err => {
+                
+            })
+        },
+        onChange(value,index){
+            this.$forceUpdate();
+            this.getVistedInfo1(value,index)
+        },
+        onChange1(value,index){
+            this.$forceUpdate();
+            this.getVistedInfo1(value,index)
+        },
         onSubmit() {
             console.log('submit!');
         },
@@ -435,8 +605,7 @@ export default {
             }
         },
          searchFn(){
-            // this.getApiVisitTrend();
-            // this.getApiVisitedInfo();
+            this.getVistedInfo();
         },
         resetFn(){
             this.selectModel = '';
@@ -477,7 +646,7 @@ export default {
             font-weight: 500;
             color: #54565B;
             line-height: 22px;
-            margin-top: 2px;
+            margin: 10px 0;
         }
         .resBox{
             .box{

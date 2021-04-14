@@ -29,6 +29,9 @@ export default {
 		}
 	},
 	watch:{
+		myData(){
+			this.initEcharts();
+		},
 		"$store.state.collapsed"(newVal,oldVal){
 			if(this.myChart){
 				setTimeout(()=>{

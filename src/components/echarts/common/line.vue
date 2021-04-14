@@ -6,6 +6,11 @@
 import echarts from 'echarts'
 export default {
 	props: {
+		myTotaldata:{
+			default:()=>{
+				return {};
+			},
+		},
 		myData:{
 			default:()=>{
 				return [];
@@ -30,6 +35,18 @@ export default {
 		}
 	},
 	watch:{
+		myData:{
+            handler:function(val,oldval){  
+               this.initEcharts();
+            },  
+            deep:true//对象内部的属性监听，也叫深度监听  
+        },
+		myTotaldata:{
+            handler:function(val,oldval){  
+                this.initEcharts();
+            },  
+            deep:true//对象内部的属性监听，也叫深度监听  
+        },
 		"$store.state.collapsed"(newVal,oldVal){
 			if(this.myChart){
 				setTimeout(()=>{
@@ -51,7 +68,7 @@ export default {
 		initEcharts() {
 			let _option = this.defaultOption();
 			this.myChart = this.$echarts.init(document.getElementById(this.id));
-			this.myChart.setOption(_option);
+			this.myChart.setOption(_option,true);
 			window.addEventListener('resize',()=>{
 				this.myChart.resize();
 			})
