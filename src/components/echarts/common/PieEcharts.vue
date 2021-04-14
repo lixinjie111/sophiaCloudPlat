@@ -30,6 +30,14 @@
           },  
           deep:true//对象内部的属性监听，也叫深度监听  
       },
+      "$store.state.collapsed"(newVal,oldVal){
+        if(this.myChart){
+          setTimeout(()=>{
+            this.myChart.resize();
+          },100)
+          
+        }
+      },
     },
     methods: {
       getChart(){

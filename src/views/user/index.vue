@@ -21,9 +21,9 @@
                 <el-form-item label="联系人" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="tel">
+                <!-- <el-form-item label="手机号码" prop="tel">
                     <el-input v-model="ruleForm.tel"></el-input>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>    
         </a-modal>
           <a-page-header
@@ -100,15 +100,15 @@ export default {
                 uName: '',
                 type: '0',
                 name: '',
-                tel: '',
+                //tel: '',
             },
             rules: {
                 name: [
                     { required: true, message: '请输入姓名', trigger: 'blur' },
                 ],
-                tel: [
-                    { required: true, message: '请输入手机号', trigger: 'blur' },
-                ],
+                // tel: [
+                //     { required: true, message: '请输入手机号', trigger: 'blur' },
+                // ],
             }
             
         }
@@ -157,7 +157,7 @@ export default {
                 if (valid) {
                      this.confirmLoading = true;
                     let _param ={
-                        "mobile":  this.ruleForm.tel,
+                        //"mobile":  this.ruleForm.tel,
                         "username": this.ruleForm.name
                     };
                     updateInfo(_param).then(res => {

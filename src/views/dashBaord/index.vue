@@ -239,7 +239,7 @@ export default {
             formInline: {
                 region: '0'
             },
-            time:"2",
+            time:'2',
             value1: '',
             value2: '',
             currentRadio: 'COUNT',
@@ -363,6 +363,7 @@ export default {
                    if(length==index){
                        setTimeout(()=>{
                            this.showList=true;
+                           this.$forceUpdate();
                             //console.log(this.vistedInfo)
                        },300)
                         
@@ -390,7 +391,7 @@ export default {
                     }
                     this.$set(this,'vistedInfo',vistList);
                     this.$forceUpdate();
-                     this.vistedInfo = vistList;
+                    this.vistedInfo = vistList;
                 }else {
                     
                 }
@@ -401,10 +402,10 @@ export default {
         getStistics(){
             let _param ={
                 serviceModel:this.selectModel,
-                // beginDate :this.rangeTime[0],
-                // endDate :this.rangeTime[1],
-                beginDate:'2000-01-08',
-                endDate:'2021-04-02',
+                beginDate :this.rangeTime[0],
+                endDate :this.rangeTime[1],
+                // beginDate:'2000-01-08',
+                // endDate:'2021-04-02',
             };
             stisticsCallInfo(_param).then(res => {
                 if(res.code == 200000) {
@@ -598,6 +599,7 @@ export default {
             }
         },
          searchFn(){
+            this.vistedInfo={};
             this.getVistedInfo();
         },
         resetFn(){

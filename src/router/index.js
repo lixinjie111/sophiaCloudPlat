@@ -53,6 +53,7 @@ export const menuRouterMap = [{
     path: "/",
     name: "home",
     component: Home,
+    redirect: "/dashBaord",
     children: [
         {
             name: "applicationList",

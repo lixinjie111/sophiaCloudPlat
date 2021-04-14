@@ -404,6 +404,8 @@ export default {
   created(){
      this.$store.dispatch('getUserInfo');
      this.$store.dispatch('setBusInfo');
+     console.log(this.$route.fullPath)
+     console.log(this.$route.path)
   },
   mounted() {
     this.showHeader();
