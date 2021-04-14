@@ -492,6 +492,14 @@ export default {
                 normal: {
                   color: "#5B8FF9"
                 }
+              },
+              label: {
+                normal: {
+                  show: true,
+                  textStyle: {
+                    color: '#FFF'
+                  }
+                }
               }
             },
             {
@@ -503,6 +511,10 @@ export default {
                 normal: {
                   color: "#61D7A7"
                 }
+              },
+              label:{
+                  show:true,
+                  color:'rgba(0, 0, 0, 0.65)'
               }
             }
           ]
