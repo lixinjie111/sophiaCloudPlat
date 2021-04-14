@@ -137,7 +137,7 @@ export default {
             this.$message.success(res.data);
             this.$router.go(-1);
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {

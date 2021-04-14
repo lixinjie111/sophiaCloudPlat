@@ -22,7 +22,7 @@ export const getSdkAuthList = params => {
 };
 //获取SDK申请SDK选择数据  
 export const getSdkmodeList = params => { 
-    return axios.get(`${totalUrl}/service/modelList`, {params: params}).then(res => res.data);
+    return axios.get(`${totalUrl}/service/modelListSDK`, {params: params}).then(res => res.data);
 };
 //SDK管理 
 export const getSdkManagement = params => { 

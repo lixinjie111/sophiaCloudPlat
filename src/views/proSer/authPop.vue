@@ -70,7 +70,7 @@
             <div class="input_cls auth_num">
               <div class="top_input">
                 <div class="input_cls1">
-                  <a-input v-model="sqNum" :disabled="ifDisSq" />
+                  <input type='text' :disabled="ifDisSq" class="shouqpeInput" v-model="sqNum" @keyup="inputsqFn">
                 </div>
                 <div class="input_text">个</div>
               </div>
@@ -102,7 +102,7 @@ export default {
       appName: "",
       appPackName: "",
       apPlat: "",
-      sqNum: 0,
+      sqNum: '',
       serviceId: "",
       sdkNameVal: "",
       appNameVal: "",
@@ -110,7 +110,7 @@ export default {
       ifDisAppNam: false,
       ifDisSq: false,
       ifShowOptioBtn: true,
-      shengyuNum:0
+      shengyuNum:''
     };
   },
   props: ["serviceModel", "sqDetail"],
@@ -123,6 +123,21 @@ export default {
     this.getPageData();
   },
   methods: {
+    inputsqFn(){
+      var value = (this.sqNum + '').replace(/^(0+)|[^\d]+/g,'');
+      var syNum = this.shengyuNum;
+      if(Number(value) > syNum){
+        this.sqNum = syNum;
+      }
+      else{
+        if(value == ''){
+          this.sqNum = '';
+        }
+        else{
+          this.sqNum = Number(value);
+        }
+      }
+    },
     closePop() {
       this.$emit("closeMe", false);
     },
@@ -343,6 +358,13 @@ export default {
                 height: 100%;
                 width: 109px;
                 margin-right: 39px;
+                .shouqpeInput{
+                  width: 100% !important;
+                  height: 100% !important;
+                  border: 1px solid #d9d9d9;
+                  border-radius: 2px;
+                  padding-left: 10px;
+                }
               }
               .input_text {
                 font-size: 12px;
