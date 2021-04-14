@@ -24,8 +24,11 @@
       this.initEcharts(this.myData);
     },
     watch: {
-      myData(myData){
-        this.initEcharts(myData)
+      myData:{
+          handler:function(newval,oldval){  
+              this.initEcharts(newval);
+          },  
+          deep:true//对象内部的属性监听，也叫深度监听  
       },
     },
     methods: {

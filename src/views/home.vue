@@ -41,7 +41,6 @@
               <a-menu-item
                 :key="subItem.title"
                 v-if="subItem.title=='企业设置' "
-                style="padding-left: 44px !important;"
               >
                 <a-icon type="user" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>

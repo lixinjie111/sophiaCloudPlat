@@ -61,7 +61,7 @@ export const getRepApiList = params => {
 }
 //监控报表查询接口 
 export const getMonitorData = params => {
-    return axios.get(`${totalUrl}/app/monitorReport`, {params: params}).then(res => res.data);
+    return axios.get(`${HTTPURL}/ai/statistics/monitorReport`, {params: params}).then(res => res.data);
 }
 //企业认证   
 export const comAuthentication = params => { 

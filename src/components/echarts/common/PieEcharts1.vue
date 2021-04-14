@@ -24,8 +24,9 @@
       this.initEcharts(this.myData);
     },
     watch: {
-      myData(myData){
-        this.initEcharts(myData)
+      myData(newVal,oldVal){
+        console.log(newVal,oldVal)
+        this.initEcharts(newVal)
       },
     },
     methods: {

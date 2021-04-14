@@ -26,15 +26,15 @@
                 <a-card title="基本信息" :bordered="false" style="width: 400px">
                     <div style="display:flex;padding:1px 0">
                         <p class="name" style="width:150px">企业名称</p>
-                        <p class="name">北京好生活网络科技有限公司</p>
+                        <p class="name">{{info.enterpriseName}}</p>
                     </div>
                     <div style="display:flex;padding:10px 0">
                         <p class="name" style="width:150px">账号</p>
-                        <p class="name">143256789</p>
+                        <p class="name">{{info.businessLicenseNumber}}</p>
                     </div>
                     <div style="display:flex;padding:10px 0">
-                        <p class="name" style="width:150px">省份/城市</p>
-                        <p class="name">北京/北京</p>
+                        <p class="name" style="width:150px">认证时间</p>
+                        <p class="name">{{info.createTime}}</p>
                     </div>
                 </a-card>
                 <a-col flex="auto" style="margin-left:40px">
@@ -47,20 +47,20 @@
                                 </a-button>
                            </div>
                            <div class="busTable" style="margin-top:20px">
-                               <a-table :columns="columns" :data-source="userIndata">
-                                    <span slot="reveive" slot-scope="isCheck,record">
-                                       <a-switch :checked="isCheck" @change="onChange(record)" />
+                               <a-table :columns="columns" :data-source="userIndata" :pagination="false">
+                                    <span slot="reveive" slot-scope="push,record">
+                                       <a-switch :checked="push==0" @change="onChange(record)" />
                                     </span>
-                                    <span slot="action">
-                                        <a>编辑</a>
+                                    <span slot="action"  slot-scope="record">
+                                        <a @click="update(record)">编辑</a>
                                         <a-divider type="vertical" />
-                                        <a>删除</a>
+                                        <a @click="remove(record)">删除</a>
                                     </span>
                                 </a-table>
                            </div>
                         </a-tab-pane>
                         <a-tab-pane key="2" tab="故障通知" force-render style="height:56px">
-                            Content of Tab Pane 2
+                            <!-- Content of Tab Pane 2 -->
                         </a-tab-pane>
                     </a-tabs>
                 </a-col>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { warningPushDelete,warningPushList,warningPushAdd,warningPushUpdate,getAuthInfo} from '@/api/businessSet';
 export default {
     data() {
         return {
@@ -84,18 +85,18 @@ export default {
                 },
                 {
                     title: '号码',
-                    dataIndex: 'number',
-                    key: 'number',
+                    dataIndex: 'phone',
+                    key: 'phone',
                 },
                 {
                     title: '创建时间',
-                    dataIndex: 'creatTime',
-                    key: 'creatTime',
+                    dataIndex: 'createTime',
+                    key: 'createTime',
                 },
                 {
                     title: '接受消息',
                     key: 'reveive',
-                    dataIndex: 'isCheck',
+                    dataIndex: 'push',
                     scopedSlots: { customRender: 'reveive' },
                 },
                 {
@@ -105,27 +106,6 @@ export default {
                 },
             ],
             userIndata : [
-                {
-                    key:'1',
-                    name: 'John Brown',
-                    number: 13232345432,
-                    creatTime: '2020-12-26 11:43:25',
-                    isCheck: true,
-                },
-                {
-                    key:'2',
-                    name: 'Jim Green',
-                    number: 13232345432,
-                    creatTime:  '2020-12-26 11:43:25',
-                    isCheck: true,
-                },
-                {
-                    key:'3',
-                    name: 'Joe Black',
-                    number: 13232345432,
-                    creatTime: '2020-12-26 11:43:25',
-                    isCheck: false,
-                },
             ],
             ruleForm: {
                 name: '',
@@ -138,36 +118,127 @@ export default {
                 tel: [
                     { required: true, message: '请输入手机号', trigger: 'blur' },
                 ],
-            }
+            },
+            info:{},
+            isAdd:true,
+            updateInfo:{},
             
         }
     },
     created() {
+        this.initInfo();
+        this.initList();
     },
     methods: {
+        initInfo(){
+            getAuthInfo().then(res=>{
+                if(res.code==200000){
+                 this.info=res.data;
+                }
+            })
+        },
+        initList(){
+            warningPushList().then(res=>{
+                if(res.code==200000){
+                //this.userIndata=res.data;
+                let result=res.data.data;
+                result.forEach((item,index)=>{
+                    item['key']=index
+                })
+                this.userIndata=result;
+                console.log(this.userIndata)
+                }
+            })
+        },
        callback(key) {
             console.log(key);
        },
        onSearch(value) {
         console.log(value);
         },
-        onChange(checked,ev) {
-            checked.isCheck = !checked.isCheck;
-            console.log(checked,ev);
+        onChange(row) {
+            let isPush=row.push;
+            if(row.push==0){
+               isPush = 1;
+            }else{
+               isPush = 0;
+            }
+            let _param={
+                id:row.id,
+                name:row.name,
+                phone:row.phone,
+                push:isPush,
+            }
+            warningPushUpdate(_param).then(res=>{
+                if(res.code==200000){
+                    this.$message.success('更新成功');
+                    this.initList();
+                }
+            })
+        },
+        update(row) {
+            this.isAdd=false;
+            this.ruleForm.name=row.name;
+            this.ruleForm.tel=row.phone;
+            this.visible = true;
+            this.updateInfo={
+                id:row.id,
+                push:row.push,
+            };
+           
+        },
+        remove(row) {
+             let _param={
+                warningPushId:row.id,
+            }
+            warningPushDelete(_param).then(res=>{
+                if(res.code==200000){
+                    this.$message.success('更新成功');
+                    this.initList();
+                }
+            })
         },
         showModal() {
             this.visible = true;
+            this.isAdd=true;
+            this.ruleForm.name='';
+            this.ruleForm.tel='';
         },
         handleOk(e) {
-            this.ModalText = 'The modal will be closed after two seconds';
-            this.confirmLoading = true;
-            setTimeout(() => {
-                this.visible = false;
-                this.confirmLoading = false;
-            }, 2000);
+            if(this.isAdd){
+                this.confirmLoading = true;
+                let _param={
+                    name:this.ruleForm.name,
+                    phone:this.ruleForm.tel,
+                    push:0,
+                }
+                warningPushAdd(_param).then(res=>{
+                    if(res.code==200000){
+                    this.visible = false;
+                    this.confirmLoading = false;
+                    this.$message.success('添加成功');
+                    this.initList();
+                    }
+                })
+            }else{
+                this.confirmLoading = true;
+                let _param={
+                    id:this.updateInfo.id,
+                    name:this.ruleForm.name,
+                    phone:this.ruleForm.tel,
+                    push:this.updateInfo.push,
+                }
+                warningPushUpdate(_param).then(res=>{
+                    if(res.code==200000){
+                    this.visible = false;
+                    this.confirmLoading = false;
+                    this.$message.success('更新成功');
+                    this.initList();
+                    }
+                })
+            }
         },
         handleCancel(e) {
-            console.log('Clicked cancel button');
             this.visible = false;
         },
     }

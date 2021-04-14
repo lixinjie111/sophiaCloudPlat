@@ -25,8 +25,21 @@ export default {
 	},
 	data () {
 		return {
-			
+			myChart:"",
 		}
+	},
+	watch:{
+		myData(){
+			this.initEcharts();
+		},
+		"$store.state.collapsed"(newVal,oldVal){
+			if(this.myChart){
+				setTimeout(()=>{
+					this.myChart.resize();
+				},100)
+				
+			}
+		},
 	},
     mounted() {
 			this.initEcharts();
@@ -34,10 +47,10 @@ export default {
 	methods: {
 		initEcharts() {
 			let _option = this.defaultOption();
-			let myChart = this.$echarts.init(document.getElementById(this.id));
-			myChart.setOption(_option);
+			this.myChart = this.$echarts.init(document.getElementById(this.id));
+			this.myChart.setOption(_option);
 			window.addEventListener('resize',()=>{
-				myChart.resize();
+				this.myChart.resize();
 			})
 		},
 		defaultOption() {
