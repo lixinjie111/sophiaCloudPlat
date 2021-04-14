@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="table_container">
-        <a-table :columns="sqcolumns" :data-source="sqdata" @change="changePage">
+        <a-table :columns="sqcolumns" :pagination="pagination" :loading="loading" :data-source="sqdata" @change="changePage">
           <a slot="appName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a
             slot="operating"
@@ -229,7 +229,9 @@ export default {
         surplusInfo: {},
         usedInfo: {}
       },
-      sqDetailData: {}
+      sqDetailData: {},
+      pagination:{},
+      loading:false
     };
   },
   components: {
@@ -325,6 +327,7 @@ export default {
         });
     },
     getSdkAuthList(pagination) {
+      this.loading = true;
       var getParms = {
         pageNum: pagination.current,
         pageSize: pagination.pageSize,
@@ -332,7 +335,12 @@ export default {
       };
       getSdkAuthList(getParms)
         .then(res => {
+          console.log(res,'分页相关！')
           if (res.code == 200000) {
+            const pagination = { ...this.pagination };
+            pagination.total = res.data.total;
+            this.loading = false;
+            this.pagination = pagination;
             var sdkAuthListData = res.data.list || [];
             sdkAuthListData.forEach(element => {
               element.key = element.appId;
