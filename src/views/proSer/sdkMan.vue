@@ -45,7 +45,7 @@
             />
           </div>
           <div class="echarts_text_container">
-            <div class="text_title1">已分配</div>
+            <div class="text_title1">已激活</div>
             <div class="text_num1">{{sdkManData.usedInfo.usedCount}}</div>
             <div class="per_num1">占比 {{sdkManData.usedInfo.usedCountPercentage}}%</div>
           </div>
@@ -63,7 +63,7 @@
             />
           </div>
           <div class="echarts_text_container">
-            <div class="text_title1">已分配</div>
+            <div class="text_title1">剩余可分配</div>
             <div class="text_num1">{{sdkManData.surplusInfo.surplusCount}}</div>
             <div class="per_num1">占比 {{sdkManData.surplusInfo.surplusPercentage}}%</div>
           </div>
