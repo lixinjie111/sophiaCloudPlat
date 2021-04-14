@@ -74,7 +74,7 @@
                 </div>
                 <div class="input_text">个</div>
               </div>
-              <div class="bottom_desc">剩余可分配数量：10000</div>
+              <div class="bottom_desc">剩余可分配数量：{{shengyuNum}}</div>
             </div>
           </div>
         </div>
@@ -109,7 +109,8 @@ export default {
       ifdisSdkNam: false,
       ifDisAppNam: false,
       ifDisSq: false,
-      ifShowOptioBtn: true
+      ifShowOptioBtn: true,
+      shengyuNum:0
     };
   },
   props: ["serviceModel", "sqDetail"],
@@ -165,7 +166,13 @@ export default {
     },
     handleSdkChange(value) {
       this.serviceId = value;
-      console.log(`selected ${value}`);
+      var sokInfoList = this.sdkNameList || [];
+      for(var i=0;i<sokInfoList.length;i++){
+        if(sokInfoList[i].serviceId == value){
+          this.shengyuNum = sokInfoList[i].surplus;
+        }
+      }
+      console.log(`selected ${value}`,sokInfoList);
     },
     handleAppListChange(value) {
       var appNameDataList = this.appNameList || [];
