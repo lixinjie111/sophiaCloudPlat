@@ -441,6 +441,7 @@ export default {
             var authObj = res.data || {};
             if(authObj.authType == 1){ //企业类认证结果查询
               this.ifShowCheck = 1;
+              this.$store.dispatch('setBusInfo');
               if(authObj.status == 0){ //审核中
               this.$message.info("审核中！");
                 this.changeTab = 2;
@@ -864,13 +865,13 @@ export default {
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  /deep/ .el-upload-dragger{
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  }
+                }
+                /deep/ .el-upload--text .el-upload-dragger{
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
                 }
             }
             .upload_txt {

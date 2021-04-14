@@ -39,26 +39,17 @@
                         <div class="titleNav">
                             <div class="title">消费趋势</div>
                             <div class="titleRt">
-                                 <el-date-picker
-                                    v-model="rangeTime2"
-                                    type="daterange"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期"
-                                    style="height:100%;width:100%"
-                                    value-format="yyyy-MM-dd"
-                                    ></el-date-picker>
-                                <!-- <a-radio-group v-model="time" @change="onChange">
-                                    <a-radio-button value="a">
+                                <a-radio-group v-model="time" @change="onChange3" type="button" button-style="solid">
+                                    <a-radio-button value="1">
                                     月
                                     </a-radio-button>
-                                    <a-radio-button value="b">
+                                    <a-radio-button value="2">
                                     半年
                                     </a-radio-button>
-                                    <a-radio-button value="c">
+                                    <a-radio-button value="3">
                                     年
                                     </a-radio-button>
-                                </a-radio-group> -->
+                                </a-radio-group>
                             </div>
                         </div>
                         <div class="boxEts">
@@ -243,12 +234,12 @@ export default {
             serListArr: [],
             selVal:'cl7',
             rangeTime2:[moment(new Date(new Date().getTime() - 3600*1000*24*365*2)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
-            rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*365*2)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*182)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             formInline: {
                 region: '0'
             },
-            time:"b",
+            time:"2",
             value1: '',
             value2: '',
             currentRadio: 'COUNT',
@@ -293,6 +284,9 @@ export default {
        
     },
     methods: {
+        onChange3(){
+            this.getTrend();
+        },
         getVistedInfo(){
             let _param ={
                 statisticsTerm:'COUNT',//统计数据项, COUNT:调用次数 QPS:QPS
@@ -468,8 +462,7 @@ export default {
         },
         getTrend(){
             let _param ={
-                beginDate:this.rangeTime2[0],
-                endDate:this.rangeTime2[1],
+                dateType:this.time
             };
             userConsumeTrend(_param).then(res => {
                 if(res.code == 200000) {

@@ -40,7 +40,7 @@
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.title"
-                v-if="subItem.title=='企业设置' "
+                v-if="subItem.title=='企业设置'&& $store.state.busSet==2"
               >
                 <a-icon type="user" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
@@ -403,7 +403,7 @@ export default {
   },
   created(){
      this.$store.dispatch('getUserInfo');
-      // console.log(this.$store.state.userInfo)
+     this.$store.dispatch('setBusInfo');
   },
   mounted() {
     this.showHeader();
