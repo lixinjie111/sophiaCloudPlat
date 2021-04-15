@@ -37,11 +37,11 @@
                         <p class="name">{{info.createTime}}</p>
                     </div>
                 </a-card>
-                <a-col flex="auto" style="margin-left:40px">
+                <a-col flex="1" style="margin-left:40px">
                     <a-tabs default-active-key="1" @change="callback" size="large">
                         <a-tab-pane key="1" tab="预警通知" >
                            <div class="c-text-between">
-                               <a-input-search placeholder="输入姓名或手机号" style="width: 250px" @search="onSearch" />
+                                <a-input-search placeholder="输入手机号" v-model="telInput" style="width: 250px" @search="onSearch" />
                                 <a-button icon="plus" @click="showModal">
                                 预警通知联系人
                                 </a-button>
@@ -74,6 +74,7 @@ import { warningPushDelete,warningPushList,warningPushAdd,warningPushUpdate,getA
 export default {
     data() {
         return {
+            telInput:'',
             ModalText: 'Content of the modal',
             visible: false,
             confirmLoading: false,
@@ -138,7 +139,7 @@ export default {
             })
         },
         initList(){
-            warningPushList().then(res=>{
+            warningPushList({phone:this.telInput}).then(res=>{
                 if(res.code==200000){
                 //this.userIndata=res.data;
                 let result=res.data.data;
@@ -154,7 +155,7 @@ export default {
             console.log(key);
        },
        onSearch(value) {
-        console.log(value);
+            this.initList();
         },
         onChange(row) {
             let isPush=row.push;
