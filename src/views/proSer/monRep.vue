@@ -25,6 +25,7 @@
               v-for="(item) in apiList"
               :key="item.id"
               :value="item.serviceId"
+              :label="item.serviceName"
             >{{item.serviceName}}</el-option>
           </el-select>
         </div>
