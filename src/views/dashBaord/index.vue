@@ -71,6 +71,7 @@
                                     end-placeholder="结束日期"
                                     style="height:100%;width:100%"
                                     value-format="yyyy-MM-dd"
+                                    @change="change2"
                                     ></el-date-picker>
                             </div>
                         </div>
@@ -284,6 +285,9 @@ export default {
        
     },
     methods: {
+        change2(){
+            this.getDistribution();
+        },
         onChange3(){
             this.getTrend();
         },
