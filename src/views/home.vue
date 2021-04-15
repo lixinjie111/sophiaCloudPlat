@@ -18,58 +18,58 @@
       <a-menu
         theme="dark"
         mode="inline"
-        :default-selected-keys="['1']"
+        :default-selected-keys="defaultChoiceList"
+        :default-open-keys="defaultopenkeys"
         @click="menuHandleClick"
         :inlineCollapsed="true"
-        v-model="selectKeys"
       >
         <template v-for="item in menuList">
           <a-menu-item
             disabled="true"
             v-show="!collapsed"
             v-if="item.list.length>0"
-            :key="item.moduleTitle"
+            :key="item.firstkey"
           >
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
-          <a-menu-item v-show="!collapsed" v-else :key="item.moduleTitle">
+          <a-menu-item v-show="!collapsed" v-else :key="item.firstkey">
             <a-icon type="user" />
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <template v-if="item.moduleTitle == '系统管理'">
             <template v-for="subItem in item.list">
               <a-menu-item
-                :key="subItem.title"
+                :key="subItem.seckey"
                 v-if="subItem.title=='企业设置'&& $store.state.busSet==2"
               >
                 <a-icon type="user" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
               </a-menu-item>
-              <a-sub-menu v-else :key="subItem.title">
+              <a-sub-menu v-else :key="subItem.seckey">
                 <span slot="title">
                   <a-icon type="user" />
                   <span>{{ subItem.title }}</span>
                 </span>
                 <a-menu-item
                   v-for="item1 in subItem.menuItmList"
-                  :key="item1.itemKey"
+                  :key="item1.threekey"
                 >{{ item1.title}}</a-menu-item>
               </a-sub-menu>
             </template>
           </template>
           <template v-else>
-            <a-sub-menu v-for="subItem in item.list" :key="subItem.title">
+            <a-sub-menu v-for="subItem in item.list" :key="subItem.seckey">
               <span slot="title">
                 <a-icon type="user" />
                 <span>{{ subItem.title }}</span>
               </span>
               <template v-for="item1 in subItem.menuItmList">
-                  <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.itemKey">
-                    <a-menu-item v-for="child in item1.children" :key="child.itemKey" >
+                  <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.threekey">
+                    <a-menu-item v-for="child in item1.children" :key="child.fourkey" >
                       {{child.title}}
                     </a-menu-item>
                   </a-sub-menu>
-                  <a-menu-item v-else :key="item1.itemKey">{{item1.title}}</a-menu-item>
+                  <a-menu-item v-else :key="item1.threekey">{{item1.title}}</a-menu-item>
               </template>
             </a-sub-menu>
           </template>
@@ -123,7 +123,8 @@ export default {
       menuList: [
         {
           moduleTitle: "概览",
-          list: []
+          list: [],
+          firstkey:'gailan'
         },
         {
           moduleTitle: "应用管理",
@@ -131,22 +132,25 @@ export default {
             {
               subKey: "myYingyong",
               title: "我的应用",
+              seckey:'myYingyong',
               menuItmList: [
                 {
                   title: "概览",
                   itemKey: "yingyong1",
-                  path: "/gailan"
+                  path: "/gailan",
+                  threekey:'yingyong1'
                 },
                 {
                   title: "应用列表",
                   itemKey: "yingyong2",
-                  path: "/application/list"
+                  path: "/application/list",
+                  threekey:'yingyong2'
                 },
-
                 {
                   title: "监控报表",
                   itemKey: "yingyong3",
-                  path: "/monRep"
+                  path: "/monRep",
+                  threekey:'yingyong3'
                 }
               ]
             }
@@ -158,126 +162,147 @@ export default {
             {
               subKey: "pro1",
               title: "自然语言处理",
+              seckey:'pro1',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "yuyanAPI",
                   path: "/apiMan",
-                  serviceModel: 1
+                  serviceModel: 1,
+                  threekey:'apiMan1'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "yuyanSDK",
                   path: "/sdkMan",
-                  serviceModel: 1
+                  serviceModel: 1,
+                  threekey:'sdkMan1'
                 }
               ]
             },
             {
               subKey: "pro2",
               title: "语音技术",
+              seckey:'pro2',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "yuyinAPI",
                   path: "/apiMan",
-                  serviceModel: 2
+                  serviceModel: 2,
+                  threekey:'apiMan2'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "yuyinSDK",
                   path: "/sdkMan",
-                  serviceModel: 2
+                  serviceModel: 2,
+                  threekey:'sdkMan2'
                 }
               ]
             },
             {
               subKey: "pro3",
               title: "人脸识别",
+              seckey:'pro3',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "renlianAPI",
                   path: "/apiMan",
-                  serviceModel: 6
+                  serviceModel: 6,
+                  threekey:'apiMan3'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "renlianSDK",
                   path: "/sdkMan",
-                  serviceModel: 6
+                  serviceModel: 6,
+                  threekey:'sdkMan3'
                 }
               ]
             },
             {
               subKey: "pro4",
               title: "人体分析",
+              seckey:'pro4',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "rentiAPI",
                   path: "/apiMan",
-                  serviceModel: 7
+                  serviceModel: 7,
+                  threekey:'apiMan4'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "rentiSDK",
                   path: "/sdkMan",
-                  serviceModel: 7
+                  serviceModel: 7,
+                  threekey:'sdkMan4'
                 }
               ]
             },
             {
               subKey: "pro5",
               title: "文字识别",
+              seckey:'pro5',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "wenziAPI",
                   path: "/apiMan",
-                  serviceModel: 3
+                  serviceModel: 3,
+                  threekey:'apiMan5'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "wenziSDK",
                   path: "/sdkMan",
-                  serviceModel: 3
+                  serviceModel: 3,
+                  threekey:'sdkMan5'
                 }
               ]
             },
             {
               subKey: "pro6",
               title: "图像技术",
+              seckey:'pro6',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "tuxiangAPI",
                   path: "/apiMan",
-                  serviceModel: 4
+                  serviceModel: 4,
+                  threekey:'apiMan6'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "tuxiangSDK",
                   path: "/sdkMan",
-                  serviceModel: 4
+                  serviceModel: 4,
+                  threekey:'sdkMan6'
                 }
               ]
             },
             {
               subKey: "pro7",
               title: "视频技术",
+              seckey:'pro7',
               menuItmList: [
                 {
                   title: "API管理",
                   itemKey: "shipinAPI",
                   path: "/apiMan",
-                  serviceModel: 5
+                  serviceModel: 5,
+                  threekey:'apiMan7'
                 },
                 {
                   title: "SDK管理",
                   itemKey: "shipinSDK",
                   path: "/sdkMan",
-                  serviceModel: 5
+                  serviceModel: 5,
+                  threekey:'sdkMan7'
                 }
               ]
             }
@@ -289,41 +314,49 @@ export default {
             {
               subKey: "dataSer1",
               title: "智能推荐",
+              seckey:'dataSer1',
               menuItmList: [
                 {
                   title: "推荐应用管理",
                   itemKey: "tuijianyingyong",
                   path: "/recommendation/application/list",
+                  threekey:'tuijianyingyong'
                 },
                 {
                   title: "推荐场景管理",
                   itemKey: "tuijianchangjing",
                   path: "/recommendation/scene/list",
+                  threekey:'tuijianchangjing'
                 },
                 {
                   title: "数据中心",
                   itemKey: "shujuzhongxin",
+                  threekey:'shujuzhongxin',
                   children: [
                     {
                       title: "数据管理",
                       itemKey: "shujuguanli",
-                      path: "/recommendation/data/list"
+                      path: "/recommendation/data/list",
+                      fourkey:'shujuguanlik'
                     }
                   ]
                 },
                 {
                   title: "推荐运营",
                   itemKey: "tuijianyunying",
+                  threekey:'tuijianyunying',
                   children: [
                     {
                       title: "推荐测试及结果",
                       itemKey: "tuijianceshijijieguo",
-                      path: "/recommendation/operation/result"
+                      path: "/recommendation/operation/result",
+                      fourkey:'tuijianceshijijieguo'
                     },
                     {
                       title: "物品管理",
                       itemKey: "wupinguanli",
-                      path: ""
+                      path: "",
+                      fourkey:'wupinguanlik'
                     }
                   ]
                 }
@@ -331,7 +364,8 @@ export default {
             },
             {
               subKey: "dataSer2",
-              title: "用户画像"
+              title: "用户画像",
+              seckey:'dataSer2',
             }
           ]
         },
@@ -340,15 +374,18 @@ export default {
           list: [
             {
               subKey: "toolSer1",
-              title: "风控管理"
+              title: "风控管理",
+              seckey:'toolSer1',
             },
             {
               subKey: "toolSer2",
-              title: "财税计算"
+              title: "财税计算",
+              seckey:'toolSer2',
             },
             {
               subKey: "toolSer3",
-              title: "出行工具"
+              title: "出行工具",
+              seckey:'toolSer3',
             }
           ]
         },
@@ -358,54 +395,68 @@ export default {
             {
               subKey: "sys1",
               title: "企业设置",
-              path: "/businessSet"
+              path: "/businessSet",
+              seckey:'sys1',
             },
             {
               subKey: "sys2",
               title: "用户中心",
+              seckey:'sys2',
               menuItmList: [
                 {
                   title: "基本资料",
                   itemKey: "ziliao",
-                  path: "/user"
+                  path: "/user",
+                  threekey:'jibenziliao'
                 },
                 {
                   title: "实名认证",
                   itemKey: "renzheng",
-                  path: "/Verified"
+                  path: "/Verified",
+                  threekey:'smrenzheng'
                 },
-
                 {
                   title: "安全设置",
                   itemKey: "safeSet",
-                  path: "/safeSet"
+                  path: "/safeSet",
+                  threekey:'safeSet'
                 }
               ]
             },
             {
               subKey: "sys3",
+              seckey:'sys3',
               title: "消息中心"
             },
             {
               subKey: "sys4",
+              seckey:'sys4',
               title: "日志管理"
             }
           ]
         }
       ],
-      selectKeys:[]
+      defaultChoiceList:['gailan'],
+      defaultopenkeys:['gailan']
     };
   },
   watch:{
     $route:function(a,b){
-      this.selectKeys = this.selectKeys;
     }
   },
   created(){
-     this.$store.dispatch('getUserInfo');
-     this.$store.dispatch('setBusInfo');
-     console.log(this.$route.fullPath)
-     console.log(this.$route.path)
+      this.$store.dispatch('getUserInfo');
+      this.$store.dispatch('setBusInfo');
+      this.defaultChoiceList = [];
+      this.defaultopenkeys = [];
+      var activKey = localStorage.getItem('activKey');
+      var openkey = localStorage.getItem('openkey').split(',');
+      this.defaultChoiceList.push(activKey);
+      this.defaultopenkeys = openkey;
+      this.$forceUpdate();
+      console.log(this.defaultChoiceList,'this.defaultChoiceList')
+      console.log(this.defaultopenkeys,'this.defaultopenkeys')
+
   },
   mounted() {
     this.showHeader();
@@ -441,9 +492,8 @@ export default {
       }
     },
     menuHandleClick(e) {
-      // console.log(e,'zjjjjjjjjjjj');
+      console.log(e,'zjjjjjjjjjjj');
       this.breadArr = []; 
-      this.selectKeys = e.key;
       if (e.key == "企业设置") {
         this.breadArr.splice(0, 0, "系统管理", "企业设置");
         this.$router.push({
@@ -456,15 +506,16 @@ export default {
         });
       } else {
         this.menuList.forEach(item => {
+          console.log(item,'item')
           if (item.list.length > 0) {
             item.list.forEach(subItem => {
-              if (subItem.title == e.keyPath[e.keyPath.length-1]) {
+              if (subItem.seckey == e.keyPath[e.keyPath.length-1]) {
                 this.breadArr.push(item.moduleTitle);
                 this.breadArr.push(subItem.title);
                 subItem.menuItmList.forEach(child => {
                   if(child.children){
                     child.children.forEach(ele=>{
-                      if(ele.itemKey == e.keyPath[0]){
+                      if(ele.fourkey == e.keyPath[0]){
                         this.breadArr.push(child.title);
                         this.breadArr.push(ele.title)
                         if(ele.path){
@@ -472,7 +523,7 @@ export default {
                         }
                       }
                     })
-                  }else if (child.itemKey == e.keyPath[0]) {
+                  }else if (child.threekey == e.keyPath[0]) {
                     this.breadArr.push(child.title);
                     // console.log(child, "child");
                     if (child.path) {
@@ -490,6 +541,12 @@ export default {
           }
         });
       }
+      localStorage.setItem('activKey',e.key);
+      var openPath = e.keyPath;
+      var inx = openPath.indexOf(e.key);
+      openPath.splice(inx,1);
+      var operPatnlist = openPath.reverse();
+      localStorage.setItem('openkey',operPatnlist)
     }
   }
 };
