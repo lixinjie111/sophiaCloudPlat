@@ -22,6 +22,7 @@
         :default-open-keys="defaultopenkeys"
         @click="menuHandleClick"
         :inlineCollapsed="true"
+        v-if="ifShowMenu"
       >
         <template v-for="item in menuList">
           <a-menu-item
@@ -437,11 +438,26 @@ export default {
         }
       ],
       defaultChoiceList:['gailan'],
-      defaultopenkeys:['gailan']
+      defaultopenkeys:['gailan'],
+      ifShowMenu:true
     };
   },
   watch:{
-    $route:function(a,b){
+    $route(newVal,oldVal){
+      var routerParm = this.$route.query;
+      if(routerParm.activekey && routerParm.activekey.length){
+        this.ifShowMenu = false;
+        this.defaultChoiceList = routerParm.activekey;
+        this.defaultopenkeys = routerParm.openkey;
+        setTimeout(()=>{
+          this.ifShowMenu = true;
+        },100);
+        localStorage.setItem('activKey',routerParm.activekey)
+        localStorage.setItem('openkey',routerParm.openkey)
+        console.log(this.defaultChoiceList,'this.defaultChoiceList')
+        console.log(this.defaultopenkeys,'this.defaultopenkeys')
+      }
+      this.$forceUpdate();
     }
   },
   created(){
@@ -457,12 +473,12 @@ export default {
         this.defaultopenkeys = [];
         var activKey = localStorage.getItem('activKey');
         var openkey = localStorage.getItem('openkey').split(',');
+        console.log(activKey,'activKeyactivKeyactivKey')
+        console.log(openkey,'openkeyopenkeyopenkey')
         this.defaultChoiceList.push(activKey);
         this.defaultopenkeys = openkey;
         this.$forceUpdate();
       }
-      console.log(this.defaultChoiceList,'this.defaultChoiceList')
-      console.log(this.defaultopenkeys,'this.defaultopenkeys')
   },
   mounted() {
     this.showHeader();
@@ -553,6 +569,8 @@ export default {
       openPath.splice(inx,1);
       var operPatnlist = openPath.reverse();
       localStorage.setItem('openkey',operPatnlist)
+      console.log(e.key,'activKey')
+      console.log(operPatnlist,'openkey')
     }
   }
 };

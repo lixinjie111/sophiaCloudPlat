@@ -323,7 +323,11 @@ export default {
     },
     goLink(){
       this.$router.push({
-        path:'/application/list'
+        path:'/application/list',
+        query:{
+          activekey:['yingyong2'],
+          openkey:['myYingyong']
+        }
       })
     },
     goLink1(){
