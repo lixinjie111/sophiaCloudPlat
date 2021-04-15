@@ -447,16 +447,22 @@ export default {
   created(){
       this.$store.dispatch('getUserInfo');
       this.$store.dispatch('setBusInfo');
-      this.defaultChoiceList = [];
-      this.defaultopenkeys = [];
-      var activKey = localStorage.getItem('activKey');
-      var openkey = localStorage.getItem('openkey').split(',');
-      this.defaultChoiceList.push(activKey);
-      this.defaultopenkeys = openkey;
-      this.$forceUpdate();
+      var routerobj = this.$route.path;
+      if(routerobj == '/dashBaord'){
+        this.defaultChoiceList = ['gailan'];
+        this.defaultopenkeys = ['gailan']
+      }
+      else{
+        this.defaultChoiceList = [];
+        this.defaultopenkeys = [];
+        var activKey = localStorage.getItem('activKey');
+        var openkey = localStorage.getItem('openkey').split(',');
+        this.defaultChoiceList.push(activKey);
+        this.defaultopenkeys = openkey;
+        this.$forceUpdate();
+      }
       console.log(this.defaultChoiceList,'this.defaultChoiceList')
       console.log(this.defaultopenkeys,'this.defaultopenkeys')
-
   },
   mounted() {
     this.showHeader();
