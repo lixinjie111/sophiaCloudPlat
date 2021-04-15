@@ -407,6 +407,14 @@ export default {
                 // beginDate:'2000-01-08',
                 // endDate:'2021-04-02',
             };
+            this.appInfo={
+                name:[],
+                value:[]
+            };
+            this.sdkInfo={
+                name:[],
+                value:[]
+            };
             stisticsCallInfo(_param).then(res => {
                 if(res.code == 200000) {
                     this.stisticsInfo=res.data;
@@ -446,6 +454,10 @@ export default {
                 beginDate:this.rangeTime1[0],
                 endDate:this.rangeTime1[1],
             };
+            this.distributionData={
+                name:[],
+                value:[]
+            };
             distribution(_param).then(res => {
                 if(res.code == 200000) {
                     if(res.data.length>0){
@@ -464,6 +476,10 @@ export default {
         getTrend(){
             let _param ={
                 dateType:this.time
+            };
+            this.ConsumeTrendData={
+                name:[],
+                value:[]
             };
             userConsumeTrend(_param).then(res => {
                 if(res.code == 200000) {

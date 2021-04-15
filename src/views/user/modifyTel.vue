@@ -70,6 +70,10 @@ export default {
             });
         },
         sendMeg(id){
+            if(!this.ruleForm1.useTel){
+                this.$message.error('请填写手机号');
+                return;
+            }
             this.settime();
             let _param ={
                 phone:this.ruleForm1.useTel,

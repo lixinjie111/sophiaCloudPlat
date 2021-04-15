@@ -40,12 +40,13 @@
                    <div class="avtaor">
                           <!-- :headers="headers" -->
                           <!-- :data="uploadData" -->
-                       <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="" @click="goLink(userInfomation.icon)">
+                       <img :src="avatUrl" alt="" @click="goLink(userInfomation.icon)">
                       <a-upload
                             name="file"
                             :headers="headers"
                             :multiple="false"
                             :action="toUrl"
+                            :showUploadList="false"
                             @change="handleChange"
                         >
                             <span class="uptate">修改头像</span>
@@ -109,7 +110,8 @@ export default {
                 // tel: [
                 //     { required: true, message: '请输入手机号', trigger: 'blur' },
                 // ],
-            }
+            },
+            avatUrl:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
             
         }
     },
@@ -120,9 +122,18 @@ export default {
         goLink(item){
             window.open(item);
         },
-        initInfo(){
+        imgLoad(){
+            this.$message.success(`修改成功1`);
+        },
+        initInfo(val){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
+            console.log(this.userInfomation,'this.userInfomation')
             this.ruleForm.uName=this.userInfomation.name;
+            this.avatUrl = this.userInfomation.icon;
+            this.$forceUpdate();
+            if(val==1){
+                 this.$message.success(`修改成功`);
+            }
         },
         handleChange(info) {
             // if (info.file.status !== 'uploading') {
@@ -189,8 +200,7 @@ export default {
                 if(res.code == 200000) {
                     this.$store.dispatch('getUserInfo');
                     setTimeout(()=>{
-                        this.initInfo();
-                        this.$message.success(`修改成功`);
+                        this.initInfo(1);
                     },1000)
                 }else {
                     
