@@ -218,6 +218,10 @@ export default {
                 overflow: hidden;
                 margin: 8px auto;
                 position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border:1px solid #ccc;
                 img{
                     cursor: pointer;
                 }
@@ -232,7 +236,7 @@ export default {
                     font-weight: 400;
                     color: #FFFFFF;
                     padding:3px 8px;
-                    bottom: 5px;
+                    bottom: 10px;
                     background: rgba(0,0,0,0.5);
                     cursor: pointer;
                 }

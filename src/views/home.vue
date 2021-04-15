@@ -623,6 +623,10 @@ export default {
           border-radius: 50%;
           overflow: hidden;
           margin-right: 16px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border:1px solid #ccc;
         }
         .ant-dropdown-link{
           cursor: pointer;
