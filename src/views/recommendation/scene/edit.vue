@@ -10,7 +10,7 @@
       <div v-if="noTitleKey === '1'">
         <a-card title="业务场景" size="small">
           <div style="width: 500px">
-            <SceneForm ref="sceneForm" :sceneForm="sceneForm"></SceneForm>
+            <SceneForm ref="sceneForm" :sceneForm="sceneForm" :app-list="appList" type="edit"></SceneForm>
           </div>
         </a-card>
         <div class="basic-btn">
@@ -19,10 +19,10 @@
         </div>
       </div>
       <div v-else-if="noTitleKey === '2'">
-        <SetData type="edit"></SetData>
+        <SetData type="edit" :dataInfo="dataInfo"></SetData>
       </div>
       <div v-else="noTitleKey === '3'">
-        <SetRules type="edit"></SetRules>
+        <SetRules type="edit" :ruleInfo="ruleInfo"></SetRules>
       </div>
     </a-card>
   </div>
@@ -33,7 +33,7 @@
   import SceneForm from "@/components/recommendation/scene/SceneForm";
   import SetData from "@/components/recommendation/scene/SetData";
   import SetRules from "@/components/recommendation/scene/SetRules";
-  import {getSceneDetail, addScene} from "@/api/recommendation/index";
+  import {getSceneDetail, addScene, getSceneAll} from "@/api/recommendation/index";
 
   export default {
     name: "edit",
@@ -55,16 +55,33 @@
           },
         ],
         noTitleKey: '1',
-        sceneForm: {}
+        sceneForm: {},
+        appList:[],
+        dataInfo: {},
+        ruleInfo: {}
       }
     },
     created() {
       this.getSceneDetail();
+      this.getSceneAll();
     },
     methods: {
+      getSceneAll() {
+        getSceneAll({}).then(res => {
+          if (res.code == 200000) {
+            this.appList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
       getSceneDetail() {
         let params = {
-          id: this.$route.query.id
+          id: this.$route.query.sceneId,
+          hasDataFlag: 1
         };
         getSceneDetail(params).then(res => {
           if (res.code == 200000) {
@@ -79,6 +96,8 @@
               place: res.data.place,
               description: res.data.description
             };
+            this.dataInfo = res.data.dataInfo;
+            this.ruleInfo = res.data.ruleInfo;
           } else {
             this.$message.error(res.message || "请求失败！");
           }

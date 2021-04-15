@@ -27,7 +27,7 @@
         industryList: [],
         createForm: {
           appName: '',
-          industry: [],
+          industry: undefined,
           description: ''
         },
         createFormRules: {
