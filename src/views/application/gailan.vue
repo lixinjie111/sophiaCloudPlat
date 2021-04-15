@@ -11,17 +11,15 @@
                  <div class="gailan_box">
                      <div class="hasBuild">已建应用 <span style="color:#0376FD">{{count}}</span> 个</div>
                       <div style="margin-top:5px">
-                          <a-button type="primary">
+                          <a-button type="primary" @click="goLink">
                             管理应用
                          </a-button>
                       </div>
                       <div style="margin-top:5px">
-                           <a-button type="primary">
+                           <a-button type="primary"  @click="goLink1">
                                 创建应用
                             </a-button>
                       </div>
-                    
-                    
                  </div>
              </div>
              <div class="gailan_rt">
@@ -133,10 +131,12 @@
         </a-table>
       </div>
     </div>
+     <create-app-modal v-if="showModal" @cancel="closeModal" @refreshList="refreshList"/>
 </div>
 </template>
 
 <script>
+ import CreateAppModal from '@/components/application/list/components/CreateAppModal1.vue'
 import locale from "x-intelligent-ui/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import "moment/locale/zh-cn";
@@ -152,8 +152,10 @@ import {
 } from "../../api/gailan/index";
 export default {
   name: "apiMan",
+  components:{CreateAppModal},
   data() {
     return {
+      showModal:false,
       count:0,
       selectModel:'',
       locale,
@@ -311,6 +313,23 @@ export default {
      this.getPageData();
   },
   methods: {
+    refreshList(){
+      this.$router.push({
+        path:'/application/list'
+      })
+    },
+    closeModal(){
+      this.showModal=false;
+    },
+    goLink(){
+      this.$router.push({
+        path:'/application/list'
+      })
+    },
+    goLink1(){
+      this.showModal=true;
+    
+    },
     getCount(){
         appCount().then(res => {
           console.log(res)

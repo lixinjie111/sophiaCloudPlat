@@ -601,6 +601,7 @@ export default {
          searchFn(){
             this.vistedInfo={};
             this.getVistedInfo();
+            this.getStistics();
         },
         resetFn(){
             this.selectModel = '';
