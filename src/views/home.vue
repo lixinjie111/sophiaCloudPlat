@@ -494,12 +494,12 @@ export default {
     menuHandleClick(e) {
       console.log(e,'zjjjjjjjjjjj');
       this.breadArr = []; 
-      if (e.key == "企业设置") {
+      if (e.key == "sys1") {
         this.breadArr.splice(0, 0, "系统管理", "企业设置");
         this.$router.push({
           path: "/businessSet"
         });
-      } else if (e.key == "概览") {
+      } else if (e.key == "gailan") {
         this.breadArr.push("概览");
         this.$router.push({
           path: "/dashBaord"
