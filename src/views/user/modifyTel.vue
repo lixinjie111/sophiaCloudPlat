@@ -70,13 +70,14 @@ export default {
             });
         },
         sendMeg(id){
+            this.settime();
             let _param ={
                 phone:this.ruleForm1.useTel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                    
                 }else {
                     this.$message.error(res.message);
                 }

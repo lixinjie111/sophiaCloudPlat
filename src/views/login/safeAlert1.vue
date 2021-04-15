@@ -39,13 +39,14 @@ export default {
     },
     methods: {
         sendMeg(){
+            this.settime();
             let _param ={
                 phone:this.useTel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                    
                     this.idVertify=false;
                 }else {
                     this.idVertify=true;

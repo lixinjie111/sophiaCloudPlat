@@ -192,13 +192,14 @@ export default {
             });
         },
         sendMeg(){
+            this.settime();
             let _param ={
                 phone:this.tel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                    
                     this.idVertify=false;
                 }else {
                     this.idVertify=true;

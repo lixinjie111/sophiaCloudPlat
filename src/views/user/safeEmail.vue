@@ -77,10 +77,10 @@ export default {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }; 
-
+             this.settime();
             sendVerifyEmail(formData,config).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                   
                 }else {
                     this.$message.error(res.message);
                 }
