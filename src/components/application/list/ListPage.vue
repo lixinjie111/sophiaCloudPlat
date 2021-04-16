@@ -7,7 +7,7 @@
         <a-button class="" type="primary" @click="openModal(1)">添加应用</a-button>
       </div>
     </div>
-    <init-page v-if="!data.length"></init-page>
+    <init-page v-if="!data.length" :industryList="industryList" @refreshList="refreshList"></init-page>
     <template v-else>
       <a-table :pagination="{ current, pageSize, total, showTotal:(total, range) => `第 ${range[0]}-${range[1]} / 共计 ${total} 条` }" :columns="columns" rowKey="id" :data-source="data" @change="tableChange" bordered class="dotted-line-table" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }">
         <template slot="appName" slot-scope="text, record">

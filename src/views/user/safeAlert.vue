@@ -38,20 +38,21 @@ export default {
     },
     methods: {
         sendMeg(){
+            this.settime();
             let _param ={
                 phone:this.useTel,
                 type:1,
             };
             sendMessage(_param).then(res => {
+                console.log(res)
                 if(res.code == 200000) {
-                    this.settime();
                     this.idVertify=false;
                 }else {
                     this.idVertify=true;
                     this.idVertifyMsg=res.message;
                 }
             }).catch(err => {
-
+                 console.log(err)
             })
         },
         settime() {
@@ -91,7 +92,8 @@ export default {
                             })
                         }
                     }else {
-                    
+                        this.idVertify=true;
+                        this.idVertifyMsg=res.message;
                     }
                 }).catch(err => {
 

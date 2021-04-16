@@ -25,16 +25,15 @@
         </div>
       </div>
     </div>
-    <create-app-modal :visible="true" title="" v-show="showModal === 1" @cancel="closeModal" @next="onNext" @create="onCreate"/>
-    <connector-modal :visible="true" title=""  v-show="showModal === 2" @cancel="closeModal"/>
+    <create-app-modal :visible="true" :industryList="industryList" title="" v-if="showModal === 1" @cancel="closeModal" @refreshList="refreshList"/>
   </div>
 </template>
 
 <script>
   import CreateAppModal from './components/CreateAppModal.vue'
-  import ConnectorModal from './components/ConnectorModal'
   export default {
-    components: { CreateAppModal, ConnectorModal },
+    components: { CreateAppModal },
+    props: ['industryList'],
     data(){
       return{
         showModal: null
@@ -54,6 +53,9 @@
       onCreate(values){
         this.showModal = 2
       },
+      refreshList(){
+        this.$emit('refreshList')
+      }
     }
   }
 </script>

@@ -28,7 +28,7 @@
       </template>
       <template slot="operation" slot-scope="text, record, index">
         <a-button type="link">报表</a-button>
-        <a-button type="link" @click="toDetail">详情</a-button>
+        <a-button type="link" @click="toDetail(record.id)">详情</a-button>
         <a-button type="link" @click="toScene">配置</a-button>
         <a-popconfirm
           title="是否删除该应用?"
@@ -123,9 +123,9 @@
       appKeyShow(isAppKeyShow, index) {
         return this.list[index].isAppKeyShow = !isAppKeyShow;
       },
-      toDetail() {
+      toDetail(id) {
         this.$router.push({
-          path: '/recommendation/application/detail'
+          path: '/recommendation/application/detail?id=' + id
         });
       },
       toScene() {
