@@ -19,7 +19,7 @@
                             </el-input>
                         </el-col>
                         <el-col :span="10">
-                            <input  id="sendMsg"   @click="sendMeg" v-model="sendMessage" readonly > 
+                            <input  id="sendMsg"   @click="sendMeg" v-model="sendMessage" readonly >
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -47,7 +47,8 @@ export default {
             sendMessage: '发送验证码',
             rules: {
                 email: [
-                    { required: true, message: '请输入你的邮箱', trigger: 'blur' }
+                    { required: true, message: '请输入你的邮箱', trigger: 'blur' },
+                    { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
                 ],
                  checkTelMa: [
                     { required: true, message: '请输入手机号', trigger: 'blur' }
@@ -80,7 +81,7 @@ export default {
             this.settime();
             sendVerifyEmail(_param).then(res => {
                 if(res.code == 200000) {
-                   
+
                 }else {
                     this.$message.error(res.message);
                 }
@@ -102,22 +103,18 @@ export default {
                     this.countdown--;
                 }
                 this.timer=setTimeout(()=> {
-                    this.settime(); 
+                    this.settime();
                 },1000)
             }
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                var formData = new FormData(); 
-                formData.append('email',this.ruleForm.email);
-                formData.append('code',this.ruleForm.checkTelMa); 
-                let config = {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }; 
-                verifyEmailCode(formData,config).then(res => {
+                let _param ={
+                    email:this.ruleForm.email,
+                    code:this.ruleForm.checkTelMa,
+                };
+                verifyEmailCode(_param).then(res => {
                     if(res.code == 200000) {
                         this.$message.success(`修改成功`);
                         this.$store.dispatch('getUserInfo');
@@ -126,9 +123,9 @@ export default {
                                     path:'/safeSet'
                                 })
                          },1000)
-                       
-                    }else {
 
+                    }else {
+                        this.$message.error(res.message);
                     }
                 }).catch(err => {
 
@@ -170,6 +167,6 @@ export default {
                 }
         }
     }
- 			
-			
+
+
 </style>
