@@ -1,12 +1,19 @@
 <template>
   <div class="app_edit_container">
+    <div class="app_edit_top c-mb-10">
+      <a-button type="primary" @click="toTest">
+        测试
+      </a-button>
+      <a-button type="primary" @click="toDetail">
+        详情
+      </a-button>
+    </div>
     <a-card
       style="width:100%"
       :bordered="false"
       :tab-list="tabListNoTitle"
       :active-tab-key="noTitleKey"
-      @tabChange="key => onTabChange(key, 'noTitleKey')"
-    >
+      @tabChange="key => onTabChange(key, 'noTitleKey')">
       <div v-if="noTitleKey === '1'">
         <a-card title="业务场景" size="small">
           <div style="width: 500px">
@@ -66,6 +73,16 @@
       this.getSceneAll();
     },
     methods: {
+      toDetail() {
+        this.$router.push({
+          path: '/recommendation/scene/detail?appId=' + this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
+        });
+      },
+      toTest() {
+        this.$router.push({
+          path: '/recommendation/operation/result'
+        });
+      },
       getSceneAll() {
         getSceneAll({}).then(res => {
           if (res.code == 200000) {
@@ -144,6 +161,18 @@
     .basic-btn {
       margin-top: 20px;
       text-align: center;
+    }
+
+    .app_edit_top {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      >button {
+        &:last-child {
+          margin-left: 10px;
+        }
+      }
     }
   }
 </style>

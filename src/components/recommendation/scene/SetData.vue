@@ -1,5 +1,8 @@
 <template>
   <div class="set_data_container">
+    <a-button type="primary" class="c-mb-10" @click="toUpload" v-if="type == ''">
+      上传数据
+    </a-button>
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
@@ -77,6 +80,9 @@
       this.getSceneSources(1);
     },
     methods: {
+      toUpload() {
+
+      },
       getDataTypes() {
         getDataTypes({}).then(res => {
           if (res.code == 200000) {

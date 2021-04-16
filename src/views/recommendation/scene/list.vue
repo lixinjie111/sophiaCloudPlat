@@ -213,6 +213,11 @@
         });
       },
       toDetail(applicationId,id) {
+        // const {href} = this.$router.resolve({
+        //   name: "recommendation-scene-detail",
+        //   query: {id: id}
+        // });
+        // window.open(href, '_blank');
         this.$router.push({
           path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
         });
