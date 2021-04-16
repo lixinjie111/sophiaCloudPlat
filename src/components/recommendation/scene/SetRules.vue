@@ -3,7 +3,7 @@
     <a-card title="推荐规则" size="small">
       <div class="scene_box">
         <p class="title">筛选物品：</p>
-        <AddGoods :list="filterItemParams" :itemList="itemList" :itemPropertiesList="itemPropertiesList"></AddGoods>
+        <AddGoods :type="type" :list="filterItemParams" :itemList="itemList" :itemPropertiesList="itemPropertiesList"></AddGoods>
       </div>
       <div class="scene_box">
         <p class="title">过滤行为：</p>
@@ -64,7 +64,7 @@
         buyFlag: this.ruleInfo.buyFlag || 0,
         complainFlag: this.ruleInfo.complainFlag || 0,
         hasPushFlag: this.ruleInfo.hasPushFlag || 0,
-        mustRecommendFlag: this.ruleInfo.mustRecommendFlag || '',
+        mustRecommendFlag: this.ruleInfo.mustRecommendFlag || 0,
         mustRecommendOptions: [
           {label: '无必推商品', value: 0},
           {label: '有必推商品', value: 1}
@@ -143,9 +143,11 @@
           buyFlag: this.buyFlag,
           complainFlag: this.complainFlag,
           hasPushFlag: this.hasPushFlag,
-          mustRecommendFlag: this.mustRecommendFlag,
-          recommendParams:this.recommendParams
+          mustRecommendFlag: this.mustRecommendFlag
         };
+        if(this.mustRecommendFlag){
+          params = Object.assign(params,{recommendParams:this.recommendParams});
+        }
         saveSceneConfigRule(params).then(res => {
           if (res.code == 200000) {
             this.$message.success("添加成功！");

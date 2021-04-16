@@ -77,7 +77,6 @@
     },
     created() {
       if(this.type == 'edit'){ //编辑
-        console.log('edit');
         this.addList.forEach((item)=> {
           this.getSceneSourceTables(item.folderId,item.dataType)
         });

@@ -56,9 +56,9 @@
           return;
         }
         this.addList.push({
-          property: '',
-          propertyField: '',
-          logicCalc: '',
+          property: undefined,
+          propertyField: undefined,
+          logicCalc: undefined,
           value: ''
         })
       },
