@@ -69,16 +69,16 @@ export default {
         },
         sendMeg(){
             var emailTemplate=this.$route.query.val==0?"BIND_EMAIL":"CHANGE_EMAIL";
-            var formData = new FormData(); 
-            formData.append('email',this.ruleForm.email);
-            formData.append('emailTemplate',emailTemplate); 
-            let config = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }; 
-             this.settime();
-            sendVerifyEmail(formData,config).then(res => {
+            let _param ={
+                email:this.ruleForm.email,
+                emailTemplate:emailTemplate,
+            };
+            if(!this.ruleForm.email){
+                this.$message.error('请填写邮箱');
+                return;
+            }
+            this.settime();
+            sendVerifyEmail(_param).then(res => {
                 if(res.code == 200000) {
                    
                 }else {
