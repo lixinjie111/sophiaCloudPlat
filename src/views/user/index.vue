@@ -21,9 +21,9 @@
                 <el-form-item label="联系人" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="tel">
+                <!-- <el-form-item label="手机号码" prop="tel">
                     <el-input v-model="ruleForm.tel"></el-input>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>    
         </a-modal>
           <a-page-header
@@ -40,12 +40,13 @@
                    <div class="avtaor">
                           <!-- :headers="headers" -->
                           <!-- :data="uploadData" -->
-                       <img :src="userInfomation.icon?userInfomation.icon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'" alt="" @click="goLink(userInfomation.icon)">
+                       <img :src="avatUrl" alt="" @click="goLink(userInfomation.icon)">
                       <a-upload
                             name="file"
                             :headers="headers"
                             :multiple="false"
                             :action="toUrl"
+                            :showUploadList="false"
                             @change="handleChange"
                         >
                             <span class="uptate">修改头像</span>
@@ -100,16 +101,17 @@ export default {
                 uName: '',
                 type: '0',
                 name: '',
-                tel: '',
+                //tel: '',
             },
             rules: {
                 name: [
                     { required: true, message: '请输入姓名', trigger: 'blur' },
                 ],
-                tel: [
-                    { required: true, message: '请输入手机号', trigger: 'blur' },
-                ],
-            }
+                // tel: [
+                //     { required: true, message: '请输入手机号', trigger: 'blur' },
+                // ],
+            },
+            avatUrl:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
             
         }
     },
@@ -120,9 +122,18 @@ export default {
         goLink(item){
             window.open(item);
         },
-        initInfo(){
+        imgLoad(){
+            this.$message.success(`修改成功1`);
+        },
+        initInfo(val){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
+            console.log(this.userInfomation,'this.userInfomation')
             this.ruleForm.uName=this.userInfomation.name;
+            this.avatUrl = this.userInfomation.icon;
+            this.$forceUpdate();
+            if(val==1){
+                 this.$message.success(`修改成功`);
+            }
         },
         handleChange(info) {
             // if (info.file.status !== 'uploading') {
@@ -157,7 +168,7 @@ export default {
                 if (valid) {
                      this.confirmLoading = true;
                     let _param ={
-                        "mobile":  this.ruleForm.tel,
+                        //"mobile":  this.ruleForm.tel,
                         "username": this.ruleForm.name
                     };
                     updateInfo(_param).then(res => {
@@ -189,8 +200,7 @@ export default {
                 if(res.code == 200000) {
                     this.$store.dispatch('getUserInfo');
                     setTimeout(()=>{
-                        this.initInfo();
-                        this.$message.success(`修改成功`);
+                        this.initInfo(1);
                     },1000)
                 }else {
                     
@@ -218,6 +228,10 @@ export default {
                 overflow: hidden;
                 margin: 8px auto;
                 position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border:1px solid #ccc;
                 img{
                     cursor: pointer;
                 }
@@ -232,7 +246,7 @@ export default {
                     font-weight: 400;
                     color: #FFFFFF;
                     padding:3px 8px;
-                    bottom: 5px;
+                    bottom: 10px;
                     background: rgba(0,0,0,0.5);
                     cursor: pointer;
                 }
