@@ -88,7 +88,7 @@
             this.sceneForm = {
               id: res.data.id,
               title: res.data.title,
-              applicationId: res.data.applicationId,
+              applicationId: Number(res.data.applicationId),
               sceneType: res.data.sceneType + '',
               recommendObjectType: res.data.recommendObjectType + '',
               recommendType: res.data.recommendType + '',

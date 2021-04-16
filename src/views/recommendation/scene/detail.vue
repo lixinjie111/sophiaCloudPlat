@@ -10,7 +10,7 @@
   export default {
     name: "detail",
     created() {
-      this.getSceneDetail();
+      // this.getSceneDetail();
     },
     methods: {
       getSceneDetail() {
