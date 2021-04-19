@@ -16,7 +16,7 @@
         <div>
             数据类型:
           <a-select style="width: 160px" placeholder="请选择场景类型" v-model="dataTypeDesc" @change="sceneTypeChange">
-            <a-select-option value="all">全部</a-select-option>
+            <a-select-option value="">全部</a-select-option>
             <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </div>
@@ -46,8 +46,8 @@
       </template>
       <NewFile></NewFile>
     </a-modal>
-    <a-modal v-model="uploadData" title="上传数据" :footer="null">
-      <UploadData></UploadData>
+    <a-modal v-model="uploadData" title="上传数据" :footer="null" :width="860" destroyOnClose>
+      <UploadData @close="close" :dataType="sceneList"></UploadData>
     </a-modal>
   </div>
 </template>
@@ -106,7 +106,7 @@
           },
         ],
         appName: "all",
-        dataTypeDesc: "all",
+        dataTypeDesc: "",
         appNameList:[],
         sceneList:[],
         pagination: {
@@ -126,6 +126,9 @@
       }
     },
     methods: {
+      close(){
+        this.uploadData = false
+      },
       upload(){
         this.uploadData = true
       },
@@ -134,16 +137,16 @@
       },
       appNameChange (value){
         this.appName = value
-        console.log(value)
+        // console.log(value)
         this.getDataList(this.pagination.current)
       },
       sceneTypeChange (value){
         this.dataTypeDesc = value
-        console.log(value)
+        // console.log(value)
         this.getDataList(this.pagination.current)
       },
       onSearch(){
-        console.log(this.searchText)
+        // console.log(this.searchText)
         this.getDataList(this.pagination.current)
       },
       create() {
@@ -176,11 +179,11 @@
         getDataTypes({}).then(res=>{
           if(res.code == 200000){
             let ary = []
-            res.data.slice(0,-2).forEach(item=>{
+            res.data.slice(0,-1).forEach(item=>{
               ary.push(...item.subDataTypes)
             })
             this.sceneList = ary
-            console.log(this.sceneList)
+            // console.log(this.sceneList)
           }else{
             this.$message.error(res.message||"请求失败!")
           }
@@ -191,7 +194,7 @@
       getDataList(pageNum){
         let params = {
           applicationId: this.appName=="all"?"":this.appName,
-          dataType:this.dataTypeDesc="all"?"":this.dataTypeDesc,
+          dataType:this.dataTypeDesc==""?"":this.dataTypeDesc,
           name:this.searchText,
           pageNum: pageNum||1,
           pageSize: this.pagination.pageSize

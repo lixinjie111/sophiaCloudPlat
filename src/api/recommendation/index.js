@@ -94,6 +94,21 @@ export const saveSceneConfigRule = params => {
 // 推荐数据管理列表
 export const getDataTableList = params => {
   return axios.post(`${totalUrl}/recommend/excel/getDataTableList`,params).then(res => res.data)
+};
+
+// 获取用户文件夹
+export const getFilePackage = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDocument`,params).then(res => res.data)
+}
+
+// 上传数据
+export const uploadFileData = params => {
+  return axios.post(`${totalUrl}/recommend/excel/load`,params).then(res => res.data)
+}
+
+// 数据详情预览
+export const getFileDetail = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getTableData`,params).then(res => res.data)
 }
 
 // ------------------------推荐运营------------------------------
