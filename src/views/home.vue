@@ -37,7 +37,17 @@
             <a-icon type="user" />
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
-          <template v-if="item.moduleTitle == '系统管理'">
+          <template v-if="item.moduleTitle == '财务中心'">
+            <template v-for="subItem in item.list">
+              <a-menu-item
+                :key="subItem.seckey"
+              >
+                <a-icon type="user" />
+                <span v-if="!collapsed">{{ subItem.title }}</span>
+              </a-menu-item>
+            </template>
+          </template>
+          <template v-else-if="item.moduleTitle == '系统管理'">
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.seckey"
@@ -391,6 +401,65 @@ export default {
           ]
         },
         {
+          moduleTitle: "财务中心",
+          list: [
+            {
+              subKey: "caiwu1",
+              title: "财务总览",
+              path: "/caiwu1",
+              seckey:'caiwu1',
+            },
+            {
+              subKey: "caiwu2",
+              title: "消费中心",
+              path: "",
+              seckey:'caiwu2',
+            },
+            {
+              subKey: "caiwu3",
+              title: "成本账单",  
+              path: "",
+              seckey:'caiwu3',
+            },
+            {
+              subKey: "caiwu4",
+              title: "收支明细",  
+              path: "",
+              seckey:'caiwu4',
+            },
+            {
+              subKey: "caiwu5",
+              title: "订单管理",  
+              path: "",
+              seckey:'caiwu5',
+            },
+            {
+              subKey: "caiwu6",
+              title: "续费管理",  
+              path: "",
+              seckey:'caiwu6',
+            },
+            {
+              subKey: "caiwu7",
+              title: "退订管理",  
+              path: "",
+              seckey:'caiwu7',
+            },
+            {
+              subKey: "caiwu8",
+              title: "发票管理",  
+              path: "",
+              seckey:'caiwu8',
+            },
+            {
+              subKey: "caiwu9",
+              title: "合同管理",  
+              path: "",
+              seckey:'caiwu9',
+            }
+          ]
+        },
+        {
           moduleTitle: "系统管理",
           list: [
             {
@@ -454,8 +523,6 @@ export default {
         },100);
         localStorage.setItem('activKey',routerParm.activekey)
         localStorage.setItem('openkey',routerParm.openkey)
-        console.log(this.defaultChoiceList,'this.defaultChoiceList')
-        console.log(this.defaultopenkeys,'this.defaultopenkeys')
       }
       this.$forceUpdate();
     }
@@ -473,8 +540,6 @@ export default {
         this.defaultopenkeys = [];
         var activKey = localStorage.getItem('activKey');
         var openkey = localStorage.getItem('openkey').split(',');
-        console.log(activKey,'activKeyactivKeyactivKey')
-        console.log(openkey,'openkeyopenkeyopenkey')
         this.defaultChoiceList.push(activKey);
         this.defaultopenkeys = openkey;
         this.$forceUpdate();
@@ -521,7 +586,65 @@ export default {
         this.$router.push({
           path: "/businessSet"
         });
-      } else if (e.key == "gailan") {
+      }
+      else if(e.key.indexOf('caiwu') != -1){
+        var keyVal = e.key;
+        if(keyVal == 'caiwu1'){
+          this.breadArr.splice(0, 0, "财务中心", "财务总览");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu2'){
+          this.breadArr.splice(0, 0, "财务中心", "消费中心");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu3'){
+          this.breadArr.splice(0, 0, "财务中心", "成本账单");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu4'){
+          this.breadArr.splice(0, 0, "财务中心", "收支明细");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu5'){
+          this.breadArr.splice(0, 0, "财务中心", "订单管理");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu6'){
+          this.breadArr.splice(0, 0, "财务中心", "续费管理");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu7'){
+          this.breadArr.splice(0, 0, "财务中心", "退订管理");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu8'){
+          this.breadArr.splice(0, 0, "财务中心", "发票管理");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+        else if(keyVal == 'caiwu9'){
+          this.breadArr.splice(0, 0, "财务中心", "合同管理");
+          // this.$router.push({
+          //   path: "/businessSet"
+          // });
+        }
+      }
+      else if (e.key == "gailan") {
         this.breadArr.push("概览");
         this.$router.push({
           path: "/dashBaord"
