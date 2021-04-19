@@ -17,8 +17,7 @@
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          style="height:100%"
+          end-placeholder="结束日期" 
           value-format="yyyy-MM-dd"
           @change="changeDataRange"
         ></el-date-picker>
@@ -89,7 +88,13 @@
         </div>
       </div>
       <div class="table_container">
-        <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage">
+        <a-table 
+          :columns="nlcolumns" 
+          :data-source="nldata" 
+          @change="changePage"
+          :pagination="pagination" 
+          :loading="loading"
+        >
           <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
           <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
@@ -214,7 +219,9 @@ export default {
       beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
       endDate:moment(new Date()).format('YYYY-MM-DD'),
       selVal:'cl7',
-      routerData:''
+      routerData:'',
+      pagination:{},
+      loading:false
     };
   },
   created() {
@@ -383,6 +390,7 @@ export default {
         });
     },
     getServiceList(pagination) {
+      this.loading = true;
       this.nldata = [];
       var serListParm = new FormData();
       serListParm.append("serviceName", pagination.serviceName);
@@ -410,6 +418,10 @@ export default {
                 item.openBuy = "购买";
               }
             });
+            const pagination = { ...this.pagination };
+            pagination.total = res.data.total;
+            this.loading = false;
+            this.pagination = pagination;
             this.nldata = serListdata;
           } else {
             this.$message.error(res.message || "请求失败！");
@@ -479,6 +491,14 @@ export default {
                 normal: {
                   color: "#5B8FF9"
                 }
+              },
+              label: {
+                normal: {
+                  show: true,
+                  textStyle: {
+                    color: '#FFF'
+                  }
+                }
               }
             },
             {
@@ -490,6 +510,10 @@ export default {
                 normal: {
                   color: "#61D7A7"
                 }
+              },
+              label:{
+                  show:true,
+                  color:'rgba(0, 0, 0, 0.65)'
               }
             }
           ]

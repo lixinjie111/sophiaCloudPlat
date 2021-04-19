@@ -2,15 +2,15 @@
   <div class="scene_form_box">
     <a-form-model ref="sceneForm" :model="sceneForm" v-bind="formItemLayout" :rules="sceneFormRules">
       <a-form-model-item label="场景名称" prop="title">
-        <a-input placeholder="请输入场景名称" v-model="sceneForm.title" :maxLength="14"/>
+        <a-input placeholder="请输入场景名称" v-model="sceneForm.title" :maxLength="14" :disabled="isEdit"/>
       </a-form-model-item>
       <a-form-model-item label="所属应用" prop="applicationId">
-        <a-select placeholder="请选择所属应用" v-model="sceneForm.applicationId">
+        <a-select placeholder="请选择所属应用" v-model="sceneForm.applicationId" :disabled="isEdit">
           <a-select-option :value="app.id" v-for="(app,index) in appList" :key="index">{{app.appName}}</a-select-option>
         </a-select>
       </a-form-model-item>
       <a-form-model-item label="场景类型">
-        <a-radio-group v-model="sceneForm.sceneType">
+        <a-radio-group v-model="sceneForm.sceneType" :disabled="isEdit">
           <a-radio :value="item.value" v-for="(item,index) in sceneList" :key="index" :disabled="item.disabled">
             {{item.label}}
           </a-radio>
@@ -61,23 +61,33 @@
       appList: {
         type: Array,
         default: () => []
+      },
+      type: {
+        type: String,
+        default: ''
+      },
+      sceneForm: {
+        type: Object,
+        default: () => {
+          return {
+            title: '',
+            applicationId: undefined,
+            sceneType: '0',
+            recommendObjectType: '0',
+            recommendType: '0',
+            startType: '0',
+            place: '',
+            description: ''
+          }
+        }
       }
     },
     data() {
       return {
+        isEdit: this.type == 'edit' ? true : false,
         formItemLayout: {
           labelCol: {span: 4},
           wrapperCol: {span: 20},
-        },
-        sceneForm: {
-          title: '',
-          applicationId: [],
-          sceneType: '0',
-          recommendObjectType: '0',
-          recommendType: '0',
-          startType: '0',
-          place: '',
-          description: ''
         },
         sceneFormRules:
           {

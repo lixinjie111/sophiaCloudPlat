@@ -22,7 +22,7 @@
                         <img src="../../assets/images/login/user.png" class="user_img" style="width: 16px;height: 16px;"><input type="text" v-model="username" placeholder="邮箱/用户名/登录手机" id="account" @focus="inputEvent">
                     </div>
                     <div class="password">
-                        <div class="tip" v-show="tipShow">用户名或密码有误，请重新输入或找回密码</div>
+                        <div class="tip" v-show="tipShow">用户名或密码有误，请重新输入或 <span @click="forgetPwd" style="color:#005ACD;cursor:pointer"> 找回密码</span></div>
                         <img src="../../assets/images/login/pws.png" class="pws_img" style="width: 16px;height: 16px;"><input type="password"  v-model="password" placeholder="密码" id="password" @keyup.enter.native="handleLogin" @focus="inputEvent">
                     </div>
                     
@@ -192,13 +192,14 @@ export default {
             });
         },
         sendMeg(){
+            this.settime();
             let _param ={
                 phone:this.tel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                    
                     this.idVertify=false;
                 }else {
                     this.idVertify=true;

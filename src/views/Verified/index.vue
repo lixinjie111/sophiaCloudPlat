@@ -291,11 +291,15 @@
           <div class="pict_txt_container">
             <div class="old_pict_txt">
               <div class="old_txt">{{ labelInfoObj.img1 }}</div>
-              <div class="old_pic"></div>
+              <div class="old_pic">
+                <img :src="labelInfoObj.img1Url" >
+              </div>
             </div>
             <div class="new_pict_txt">
               <div class="old_txt">{{ labelInfoObj.img2 }}</div>
-              <div class="old_pic"></div>
+              <div class="old_pic">
+                <img :src="labelInfoObj.img2Url" alt="" srcset="">
+              </div>
             </div>
           </div>
         </div>
@@ -363,7 +367,9 @@ export default {
         laebl3: "营业执照扫描件",
         uploadInfo: "上传营业执照注意事项",
         img1: "老版营业执照示例图",
+        img1Url:require("../../assets/images/verify/oldBussiness.png"),
         img2: "新版营业执照示例图",
+        img2Url:require("../../assets/images/verify/newBussiness.png"),
       },
       labelInfoObj1: {
         laebl1: "企业名称",
@@ -373,7 +379,9 @@ export default {
         laebl3: "营业执照扫描件",
         uploadInfo: "上传营业执照注意事项",
         img1: "老版营业执照示例图",
+        img1Url:require("../../assets/images/verify/oldBussiness.png"),
         img2: "新版营业执照示例图",
+        img2Url:require("../../assets/images/verify/newBussiness.png"),
       },
       labelInfoObj2: {
         laebl1: "组织名称",
@@ -382,8 +390,10 @@ export default {
         info2: "请务必与组织机构代码证上的编号一致",
         laebl3: "组织机构代码证扫描件",
         uploadInfo: "上传组织机构代码证扫描件注意事项",
-        img1: "其他组织证书示例图",
-        img2: "其他组织证书示例图",
+        img1: "事业单位法人证书样例",
+        img1Url:require("../../assets/images/verify/shiyeImg.png"),
+        img2: "社会团体法人登记证书样例",
+        img2Url:require("../../assets/images/verify/shehuiImg.png"),
       },
       ifDisabledQy:false,
       ifDisabledzz:false,
@@ -441,6 +451,7 @@ export default {
             var authObj = res.data || {};
             if(authObj.authType == 1){ //企业类认证结果查询
               this.ifShowCheck = 1;
+              this.$store.dispatch('setBusInfo');
               if(authObj.status == 0){ //审核中
               this.$message.info("审核中！");
                 this.changeTab = 2;
@@ -864,13 +875,13 @@ export default {
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  /deep/ .el-upload-dragger{
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  }
+                }
+                /deep/ .el-upload--text .el-upload-dragger{
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
                 }
             }
             .upload_txt {
@@ -962,7 +973,6 @@ export default {
             .old_pic {
               width: 100%;
               height: 200px;
-              background-color: firebrick;
             }
           }
         }

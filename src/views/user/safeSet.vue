@@ -19,7 +19,7 @@
                                     <span  class="lv">已设置</span>
                                 </el-form-item>
                                 <el-form-item >
-                                    <el-checkbox v-model="checkedMFA" disabled>拟MFA验证</el-checkbox>
+                                    <el-checkbox v-model="checkedMFA" disabled>虚拟MFA验证</el-checkbox>
                                     <span class="lan">未设置</span>
                                 </el-form-item>
                                 <el-form-item >

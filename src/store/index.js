@@ -1,5 +1,6 @@
 import { requestLogin} from '@/api/login';
 import { userInfo} from '@/api/user';
+import {getAuthInfo} from '@/api/proSer/index';
 import { 
 	setAuthInfo, removeAuthInfo
 } from '@/session/index';
@@ -9,6 +10,7 @@ const store = new Vuex.Store({
         token:'',
         userInfo:{},
 		collapsed:"",
+		busSet:0,
 	},
 	mutations: {
 		SET_LOGIN_INFO:(state, loginInfo) => {
@@ -17,11 +19,13 @@ const store = new Vuex.Store({
 		get_user_info:(state,user_info)=>{
 			state.userInfo=user_info;
 		},
+		get_bus_set:(state,info)=>{
+			state.busSet=info;
+		},
 		REMOVE_LOGIN_INFO:(state) => {
 			state.token = "";
 		},
 		set_collapsed:(state,collapsed)=>{
-			console.log(collapsed)
 			state.collapsed=collapsed;
 		},
 	},
@@ -34,11 +38,19 @@ const store = new Vuex.Store({
 		removeAuthInfo:({commit}) => {
 			commit('REMOVE_LOGIN_INFO');
 		},
+		setBusInfo({ commit }){
+            getAuthInfo().then(res=>{
+				if(res.code == 200000) {
+					commit('get_bus_set', res.data.status);
+				}else {
+					
+				}
+            })
+        },
 		// 执行登录操作
 		goLogin({commit}, loginForm) {
 			return new Promise((resolve, reject) => {
 				requestLogin(loginForm).then(res => {
-					console.log(res)
 					if(res.code == 200000) {
 						setAuthInfo(res.data);
 					}

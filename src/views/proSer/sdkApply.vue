@@ -10,23 +10,13 @@
           <a-checkbox-group :options="sdkChioceList" @change="onChangeSdk" />
         </div>
       </div>
-      <!-- <div class="content_item">
-        <div class="label_left">
-          <span style="color:#FF504E;">*</span>&nbsp;版本类型
-        </div>
-        <div class="input_right">
-          <div class="input_container">
-            <a-input placeholder="测试版" />
-          </div>
-        </div>
-      </div>-->
       <div class="content_item">
         <div class="label_left">
           <span style="color:#FF504E;">*</span>&nbsp;授权配额
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input-number placeholder="10000次" v-model="sqNum" style="width:100%;" />
+            <input type='text' class="shouqpeInput" placeholder="10000次" v-model="sqNum" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
           </div>
         </div>
       </div>
@@ -36,7 +26,7 @@
         </div>
         <div class="input_right">
           <div class="input_container">
-            <a-input-number v-model="effTime" placeholder="1个月" style="width:100%;" />
+            <input type='text' class="shouqpeInput" placeholder="1个月" v-model="effTime" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
           </div>
         </div>
       </div>
@@ -71,9 +61,9 @@ export default {
     return {
       sdkChioceList: [],
       hasChicedSdk: null,
-      sqNum: null,
+      sqNum: '',
       scenDesc: null,
-      effTime: null
+      effTime:''
     };
   },
   created() {
@@ -117,6 +107,7 @@ export default {
       this.$router.go(-1);
     },
     submitApply() {
+      console.log(this.sqNum,'33333333')
       if (!this.hasChicedSdk) {
         this.$message.error("SDK选择不能为空！");
         return;
@@ -146,7 +137,7 @@ export default {
             this.$message.success(res.data);
             this.$router.go(-1);
           } else {
-            this.$message.error("请求失败！");
+            this.$message.error(res.message || "请求失败！");
           }
         })
         .catch(err => {
@@ -195,6 +186,13 @@ export default {
         .input_container {
           width: 360px;
           height: 32px;
+          .shouqpeInput{
+            width: 100% !important;
+            height: 100% !important;
+            border: 1px solid #d9d9d9;
+            border-radius: 2px;
+            padding-left: 10px;
+          }
         }
         .btn_container {
           display: flex;

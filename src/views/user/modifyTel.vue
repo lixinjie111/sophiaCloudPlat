@@ -70,13 +70,18 @@ export default {
             });
         },
         sendMeg(id){
+            if(!this.ruleForm1.useTel){
+                this.$message.error('请填写手机号');
+                return;
+            }
+            this.settime();
             let _param ={
                 phone:this.ruleForm1.useTel,
                 type:1,
             };
             sendMessage(_param).then(res => {
                 if(res.code == 200000) {
-                    this.settime();
+                    
                 }else {
                     this.$message.error(res.message);
                 }

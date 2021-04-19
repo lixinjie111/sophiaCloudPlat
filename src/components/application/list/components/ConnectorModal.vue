@@ -120,13 +120,6 @@
         getLoadConf({ id: this.data.id }).then((res)=>{
           this.selectedItems = res.data.appServiceList;
           this.selectedKeys = res.data.appServiceList.map(e=>e.id);
-          if(res.data.appServicePackageList && res.data.appServicePackageList.length){
-            for (let i = 0, len = res.data.appServicePackageList.length; i < len; ++i){
-              const { serviceModel, packageAndroid, packageIos } = res.data.appServicePackageList[i];
-              this.packageObj[serviceModel] = { packageAndroid, packageIos, need: 1 };
-            }
-          }
-
         })
       },
       // 提交接口配置项
@@ -140,12 +133,8 @@
         });
         const moduleIds = this.selectedKeys;
         saveConf({ ...this.data, packageList, moduleIds }).then((res)=>{
-          if(res.code === 200000) {
-            this.$message.success('配置成功');
-            this.onCancel();
-          }else {
-            this.$message.error('配置失败');
-          }
+          this.$message.success('配置成功');
+          this.onCancel();
         })
       },
       // 提交接口配置项

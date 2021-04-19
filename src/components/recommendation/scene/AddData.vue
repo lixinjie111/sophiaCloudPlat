@@ -43,37 +43,51 @@
   export default {
     name: "AddData",
     props: {
+      // 用户数据列表
       list: {
         type: Array,
         default: () => []
       },
+      //数据类型列表
       dataTypeList: {
         type: Array,
         default: () => []
       },
+      // 数据源列表
       sourcesList: {
         type: Array,
         default: () => []
       },
-      type: {
+      //0:历史数据 1：新增数据
+      dataHistoryType: {
         type: Number,
         default: 0
+      },
+      //空:新建 edit: 编辑
+      type: {
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
         addList: this.list,
-        curDataType: '',
-        curDataSourceId: '',
         sourceTablesList: []
       }
     },
+    created() {
+      if(this.type == 'edit'){ //编辑
+        this.addList.forEach((item)=> {
+          this.getSceneSourceTables(item.folderId,item.dataType)
+        });
+      }
+    },
     methods: {
-      getSceneSourceTables() {
+      getSceneSourceTables(folderId,dataType) {
         let params = {
-          dataSourceId: this.curDataSourceId.length > 0 ? this.curDataSourceId : '', //文件夹id
-          dataType: this.curDataType, //数据类型（0：用户数据 1：商品数据 2：行为数据 3：商业服务数据 4：店铺数据 5：资讯数据 6：活动数据 7：黑名单)
-          dataHistoryType: this.type //0:历史数据 1：新增数据
+          dataSourceId: folderId, //文件夹id
+          dataType: dataType, //数据类型（0：用户数据 1：商品数据 2：行为数据 3：商业服务数据 4：店铺数据 5：资讯数据 6：活动数据 7：黑名单)
+          dataHistoryType: this.dataHistoryType //0:历史数据 1：新增数据
         };
         getSceneSourceTables(params).then(res => {
           if (res.code == 200000) {
@@ -94,26 +108,26 @@
           return;
         }
         this.addList.push({
-          dataType: '',
-          folderId: '',
-          sourceTableId: ''
+          dataType: undefined,
+          folderId: undefined,
+          sourceTableId: undefined
         })
       },
       del(index) {
         this.addList.splice(index, 1);
       },
       dataTypeChange(item) {
-        this.curDataType = item.dataType;
-        item.sourceTableId = '';
-        item.folderId = '';
+        //重置数据源、数据源表
+        item.folderId = undefined;
+        item.sourceTableId = undefined;
         this.sourceTablesList = [];
-        this.getSceneSourceTables()
       },
       sourceChange(item) {
-        this.curDataSourceId = item.folderId;
-        item.sourceTableId = '';
+        //重置数据源表
+        item.sourceTableId = undefined;
         this.sourceTablesList = [];
-        this.getSceneSourceTables()
+        //获取数据源表
+        this.getSceneSourceTables(item.folderId,item.dataType)
       },
       tableChange() {
 
