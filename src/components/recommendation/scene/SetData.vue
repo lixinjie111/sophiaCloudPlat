@@ -1,6 +1,6 @@
 <template>
   <div class="set_data_container">
-    <a-button type="primary" class="c-mb-10" @click="toUpload" v-if="type == ''">
+    <a-button type="primary" class="c-mb-10" @click="toUpload" v-if="type != 'edit'">
       上传数据
     </a-button>
     <a-card title="用户数据" size="small">
