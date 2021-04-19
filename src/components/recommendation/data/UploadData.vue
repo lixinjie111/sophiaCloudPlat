@@ -10,6 +10,7 @@
           accept=".csv,.xls,.xlsx,.txt"
           :action="uploadUrl"
           method="post"
+          name="files"
           :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload"
         >
           <a-button> <a-icon type="upload" /> 点击上传文件 </a-button>
