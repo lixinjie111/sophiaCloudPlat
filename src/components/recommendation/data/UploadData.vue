@@ -8,11 +8,7 @@
         <!-- <span>点击上传文件</span> -->
                   <!-- accept=".csv,.xls,.xlsx,.txt" -->
         <a-upload
-        :data="uploadData"
-          :action="uploadUrl"
-          method="post"
           :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload"
-          @change="handleChange"
         >
           <a-button> <a-icon type="upload" /> 点击上传文件 </a-button>
         </a-upload>      
@@ -181,9 +177,6 @@ export default {
     };
   },
   methods: {   
-    handleChange(obj){
-      console.log(obj)
-    },
     // 下一步
     next() {
       this.current++;
@@ -212,7 +205,7 @@ export default {
     // 上传后文件列表
     beforeUpload(file) {
       this.fileList = [file];
-      console.log('sdfsdfsfd',file)
+      console.log('>>>>>>>>',file)
       this.dataForm.name = file.name
       return false;
     },        
@@ -266,30 +259,30 @@ export default {
       }
             this.uploadData = params
       // console.log(this.fileList[0])
-      // let formData = new FormData()
-      // formData.append('haveHeader',params.haveHeader)
-      // formData.append('dataType',params.dataType)
-      // formData.append('description',params.description)
-      // formData.append('documentId',params.documentId)
-      // formData.append('documentName',params.documentName)
-      // formData.append('userTableName',params.userTableName)
-      // formData.append('files',this.fileList[0])
+      let formData = new FormData()
+      formData.append('haveHeader',params.haveHeader)
+      formData.append('dataType',params.dataType)
+      formData.append('description',params.description)
+      formData.append('documentId',params.documentId)
+      formData.append('documentName',params.documentName)
+      formData.append('userTableName',params.userTableName)
+      formData.append('file',this.fileList[0])
       // let config = {
       //   headers: {
       //     // 'Content-Type': 'application/x-www-form-urlencoded'
       //     'Content-Type': 'multipart/form-data'
       //   }
       // }
-      // uploadFileData(formData).then(res=>{
-      //   if(res.code == 200000){
-      //     this.tableName = res.data
-      //   }else{
-      //     this.$message.error(res.message||'请求失败')
-      //     this.tableName = ""
-      //   }
-      // }).catch(err=>{
-      //   this.$message.error('请求失败')
-      // })
+      uploadFileData(formData).then(res=>{
+        if(res.code == 200000){
+          this.tableName = res.data
+        }else{
+          this.$message.error(res.message||'请求失败')
+          this.tableName = ""
+        }
+      }).catch(err=>{
+        this.$message.error('请求失败')
+      })
     }
   },
   mounted(){
