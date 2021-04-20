@@ -1,42 +1,40 @@
 <template>
   <div class="set_data_container">
+    <a-button type="primary" class="c-mb-10" @click="toUpload" v-if="type != 'edit'">
+      上传数据
+    </a-button>
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="userHistoryData" :type="0" :dataTypeList="userTypeList" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="userHistoryData" :type="type" :dataHistoryType="0" :dataTypeList="userTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="userNewData" :type="1" :dataTypeList="userTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="userNewData" :type="type" :dataHistoryType="1" :dataTypeList="userTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="物品数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :list="itemHistoryData" :type="0" :dataTypeList="itemTypeList" :sourcesList="historySourcesList"></AddData>
+        <AddData :list="itemHistoryData" :type="type" :dataHistoryType="0" :dataTypeList="itemTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :list="itemNewData" :type="1" :dataTypeList="itemTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="itemNewData" :type="type" :dataHistoryType="1" :dataTypeList="itemTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
     <a-card title="行为数据" size="small" style="margin-top: 20px;">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
-        <AddData :type="0" :list="behaviorHistoryData" :dataTypeList="behaviorTypeList"
-                 :sourcesList="historySourcesList"></AddData>
+        <AddData :list="behaviorHistoryData" :type="type" :dataHistoryType="0" :dataTypeList="behaviorTypeList" :sourcesList="historySourcesList"></AddData>
       </div>
       <div class="card_item">
         <p class="title">新增数据：</p>
-        <AddData :type="1" :list="behaviorNewData" :dataTypeList="behaviorTypeList" :sourcesList="addSourcesList"></AddData>
+        <AddData :list="behaviorNewData" :type="type" :dataHistoryType="1" :dataTypeList="behaviorTypeList" :sourcesList="addSourcesList"></AddData>
       </div>
     </a-card>
-    <div class="btns" v-if="type == 'edit'">
-      <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
-      <a-button @click="cancel">取消</a-button>
-    </div>
-    <div class="btns" v-else>
-      <a-button type="primary" class="c-mr-20" @click="save">配置规则</a-button>
+    <div class="btns">
+      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '配置规则'}}</a-button>
       <a-button @click="cancel">取消</a-button>
     </div>
   </div>
@@ -53,6 +51,10 @@
       type: {
         type: String,
         default: ''
+      },
+      dataInfo: {
+        type: Object,
+        default: () => []
       }
     },
     data() {
@@ -62,20 +64,25 @@
         behaviorTypeList: [],
         historySourcesList: [],
         addSourcesList: [],
-        userHistoryData: [],
-        userNewData: [],
-        itemHistoryData: [],
-        itemNewData: [],
-        behaviorHistoryData: [],
-        behaviorNewData: []
+        userHistoryData: this.dataInfo.userHistoryData || [],
+        userNewData: this.dataInfo.userNewData || [],
+        itemHistoryData: this.dataInfo.itemHistoryData || [],
+        itemNewData: this.dataInfo.itemNewData || [],
+        behaviorHistoryData: this.dataInfo.behaviorHistoryData || [],
+        behaviorNewData: this.dataInfo.behaviorNewData || [],
       }
     },
     created() {
+      //获取数据类型列表
       this.getDataTypes();
+      //获取数据源列表
       this.getSceneSources(0);
       this.getSceneSources(1);
     },
     methods: {
+      toUpload() {
+
+      },
       getDataTypes() {
         getDataTypes({}).then(res => {
           if (res.code == 200000) {
@@ -110,6 +117,7 @@
           console.log(err, "err");
         });
       },
+      // 新建、编辑
       save() {
         let params = {
           applicationId: this.$route.query.appId,
@@ -121,7 +129,6 @@
           behaviorHistoryData: this.behaviorHistoryData,
           behaviorNewData: this.behaviorNewData
         };
-
         saveSceneConfigData(params).then(res => {
           if (res.code == 200000) {
             this.$message.success("添加成功！");

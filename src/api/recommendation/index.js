@@ -5,17 +5,28 @@ let totalUrl = HTTPURL;
 // ----公共枚举-----
 // 业务场景中的所属应用枚举接口
 export const getSceneAll = params => {
-    return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
+  return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
 };
 
 // 全部数据类型枚举
 export const getDataTypes = params => {
-    return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
+  return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
 };
 
 // 获得应用下的所有业务场景
 export const getAllByApplication = params => {
   return axios.post(`${totalUrl}/recommend/scene/getAllByApplication`, params).then(res => res.data);
+};
+
+
+// 根据应用和业务场景获得应用源表下拉项
+/**
+ *
+ * @param params
+ * @returns {*}
+ */
+export const getAllDataTablesInApp = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getAllDataTablesInApp`, params).then(res => res.data);
 };
 
 // -------------------------推荐应用管理-----------------------------
@@ -95,14 +106,42 @@ export const saveSceneConfigRule = params => {
   return axios.post(`${totalUrl}/recommend/scene/saveConfigRule`, params).then(res => res.data);
 };
 
+// 业务场景详情
+export const getSceneDetail = params => {
+  return axios.post(`${totalUrl}/recommend/scene/get`, params).then(res => res.data);
+};
+
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
   return axios.post(`${totalUrl}/recommend/excel/getDataTableList`,params).then(res => res.data)
+};
+
+// 获取用户文件夹
+export const getFilePackage = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDocument`,params).then(res => res.data)
+}
+
+// 上传数据
+export const uploadFileData = params => {
+  return axios.post(`${totalUrl}/recommend/excel/load`,params).then(res => res.data)
+}
+
+// 数据详情预览
+export const getFileDetail = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getTableData`,params).then(res => res.data)
 }
 
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {
   return axios.post(`${totalUrl}/recommend/recommend/result`, params).then(res => res.data);
+};
+// 获得推荐物品池列表数据
+export const getDataByWord = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDataByWord`, params).then(res => res.data);
+};
+// 获得必推物品池列表数据
+export const getTableData = params => {
+  return axios.post(`${totalUrl}/recommend/recommendGoods/getTableData`, params).then(res => res.data);
 };

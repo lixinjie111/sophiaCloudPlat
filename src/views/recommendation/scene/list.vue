@@ -42,9 +42,9 @@
       :rowKey="record=>record.id"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" @click="toDetail">详情</a-button>
-        <a-button type="link" @click="toEdit">编辑</a-button>
-        <a-button type="link">测试</a-button>
+        <a-button type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
+        <a-button type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
+        <a-button type="link" @click="toTest">测试</a-button>
         <a-popconfirm
           title="是否删除该应用?"
           ok-text="是"
@@ -212,14 +212,24 @@
           console.log(err, "err");
         });
       },
-      toDetail() {
+      toDetail(applicationId,id) {
+        // const {href} = this.$router.resolve({
+        //   name: "recommendation-scene-detail",
+        //   query: {id: id}
+        // });
+        // window.open(href, '_blank');
         this.$router.push({
-          path: '/recommendation/scene/detail'
+          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
         });
       },
-      toEdit() {
+      toEdit(applicationId,id) {
         this.$router.push({
-          path: '/recommendation/scene/edit'
+          path: '/recommendation/scene/edit?appId=' + applicationId + '&sceneId=' + id
+        });
+      },
+      toTest() {
+        this.$router.push({
+          path: '/recommendation/operation/result'
         });
       },
       add() {

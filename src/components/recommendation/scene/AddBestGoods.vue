@@ -16,7 +16,7 @@
         <a-select-option value="为空">为空</a-select-option>
         <a-select-option value="不为空">不为空</a-select-option>
       </a-select>
-      <a-input class="c-mr-10" placeholder="请输入推荐位置" v-model="item.value" :maxLength="14" style="width:190px"/>
+      <a-input class="c-mr-10" placeholder="请输入规则数值" v-model="item.value" :maxLength="14" style="width:190px"/>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -56,9 +56,9 @@
           return;
         }
         this.addList.push({
-          property: '',
-          propertyField: '',
-          logicCalc: '',
+          property: undefined,
+          propertyField: undefined,
+          logicCalc: undefined,
           value: ''
         })
       },

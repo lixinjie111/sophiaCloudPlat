@@ -29,7 +29,7 @@
         <a-select-option value="等于">等于</a-select-option>
         <a-select-option value="不包含">不包含</a-select-option>
       </a-select>
-      <a-input class="c-mr-10" placeholder="请输入规则数值" v-model="item.value" :maxLength="14" style="width:100px"/>
+      <a-input class="c-mr-10" placeholder="请输入值" v-model="item.value" :maxLength="14" style="width:100px"/>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -61,6 +61,11 @@
       itemPropertiesList: {
         type: Array,
         default: () => []
+      },
+      //空:新建 edit: 编辑
+      type: {
+        type: String,
+        default: ''
       }
     },
     data() {
@@ -72,6 +77,12 @@
     },
     created() {
       this.getSceneItems();
+      if(this.type == 'edit'){ //编辑
+        this.addList.forEach((item)=> {
+          this.getSceneItems(item.firstLevelCategory, '', 1);
+          this.getSceneItems(item.firstLevelCategory, item.secondLevelCategory, 2);
+        });
+      }
     },
     methods: {
       getSceneItems(firstLevel, secondLevel, type) {
@@ -104,13 +115,13 @@
           return;
         }
         this.addList.push({
-          brand: "", //品牌
-          firstLevelCategory: "", //一级品类
-          secondLevelCategory: "", //二级品类
-          itemProperty: "", //物品特征
-          itemPropertyField: "", //物品特征对应字段
-          logicCalc: "", //逻辑判断
-          value: 60 //规则数值
+          brand: undefined, //品牌
+          firstLevelCategory: undefined, //一级品类
+          secondLevelCategory: undefined, //二级品类
+          itemProperty: undefined, //物品特征
+          itemPropertyField: undefined, //物品特征对应字段
+          logicCalc: undefined, //逻辑判断
+          value: '' //规则数值
         })
       },
       del(index) {
