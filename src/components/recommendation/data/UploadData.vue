@@ -122,41 +122,41 @@ export default {
       filePackageList:[],
       tableName:"",
       columns:[
-        {
-          title:"序号",
-          dataIndex:"id",
-          key :"viewNo"
-        },
-        {
-          title:"拜访人",
-          dataIndex:"viewName",
-          key:"viewName",
-        },
-        {
-          title:"员工编号",
-          dataIndex:"",
-          key:"file",
-        },
-        {
-          title:"部门",
-          dataIndex:"setting",
-          key:"setting",
-        },
-        {
-          title:"职位",
-          dataIndex:"type",
-          key:"type",
-        },
-        {
-          title:"拜访日期",
-          dataIndex:"description",
-          key:"description",
-        },
-        {
-          title:"拜访时间",
-          dataIndex:"description",
-          key:"description",
-        }
+        // {
+        //   title:"序号",
+        //   dataIndex:"id",
+        //   key :"viewNo"
+        // },
+        // {
+        //   title:"拜访人",
+        //   dataIndex:"viewName",
+        //   key:"viewName",
+        // },
+        // {
+        //   title:"员工编号",
+        //   dataIndex:"",
+        //   key:"file",
+        // },
+        // {
+        //   title:"部门",
+        //   dataIndex:"setting",
+        //   key:"setting",
+        // },
+        // {
+        //   title:"职位",
+        //   dataIndex:"type",
+        //   key:"type",
+        // },
+        // {
+        //   title:"拜访日期",
+        //   dataIndex:"description",
+        //   key:"description",
+        // },
+        // {
+        //   title:"拜访时间",
+        //   dataIndex:"description",
+        //   key:"description",
+        // }
       ],
       viewList:[],
       pagination: {
@@ -182,7 +182,7 @@ export default {
         await this.uploadFileData()
         this.getFileDetail()
       };
-      console.log('table',this.dataForm)
+      // console.log('table',this.dataForm)
     },
     //取消 
     cancel() {
@@ -225,31 +225,34 @@ export default {
       this.dataForm.type = val.key
     },     
     // 获取上传文件详情
-    getFileDetail(){
+    async getFileDetail(pageNum){
       let params = {
-        pageNum:1,
-        pageSize:10,
+        pageNum:pageNum||1,
+        pageSize:this.pagination.pageSize,
         tableName:this.tableName
       }
-      getFileDetail(params).then(res=>{
+      try{
+        let res = await getFileDetail(params)
         if(res.code == 200000){
-          this.viewList = res.list
-          this.viewTotal = res.total
-          Object.keys(res.list[0]).slice(0,7).forEach((item,index)=>{
+          this.viewList = res.data.list
+          this.pagination.total = res.data.total
+          this.pagination.current = pageNum||1
+          Object.keys(this.viewList[0]).slice(0,7).forEach((item,index)=>{
             this.columns[index] = {
               title:item,
               dataIndex:item,
               key:item
             }
           })
+          console.log(this.viewList,this.columns)
         }else{
-          this.$message.error(res.message||'请求失败')
+          this.$message.error(res.message||'请求失败>>>>>>')
           this.viewList= []
           this.viewTotal = 0
         }
-      }).catch(err=>{
-        this.$message.error('请求失败')
-      })
+      }catch(err){
+          this.$message.error('请求失败<<<<<')
+      }
     },
     // 上传
     async uploadFileData(){
@@ -261,14 +264,13 @@ export default {
         formData.append('documentId',this.dataForm.file)
         formData.append('documentName',this.dataForm.fileName)
         formData.append('userTableName',this.dataForm.name)
-        formData.append('file',this.fileList[0])
+        formData.append('files',this.fileList[0])
         // let config = {
         //   headers: {
         //     'Content-Type': 'multipart/form-data'
         //   }
         // }        
         let res = await uploadFileData(formData)
-        console.log(res)
         if(res.code == 200000){
           this.tableName = res.data
         }else{
