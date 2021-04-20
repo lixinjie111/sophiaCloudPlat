@@ -36,6 +36,29 @@
       </template>
     </a-table>
     <a-modal v-model="newFile" title="创建文件夹">
+      <div class="data_new_file">
+        <a-form-model ref="dataForm" :model="dataForm" v-bind="formItemLayout">
+          <a-form-model-item label="文件夹名称" prop="name">
+            <a-input placeholder="请输入文件夹名称" v-model="dataForm.name" :maxLength="14"/>
+          </a-form-model-item>
+          <a-form-model-item label="数据分类" prop="type">
+            <a-select placeholder="请选择所属应用" v-model="dataForm.type" @change="applyChange">
+              <a-select-option value="0">上传文件</a-select-option>
+              <a-select-option value="1">同步文件</a-select-option>
+            </a-select>
+          </a-form-model-item>
+          <a-form-model-item label="文件夹上级" prop="mould">
+            <a-select placeholder="请选择场景模板" v-model="dataForm.superior" @change="mouldChange">
+              <a-select-option value="0">推荐数据</a-select-option>
+              <a-select-option value="1">营销数据</a-select-option>
+            </a-select>
+          </a-form-model-item>
+          <a-form-model-item label="文件夹描述" prop="description">
+            <a-textarea v-model="dataForm.description" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入应用描述"
+                        :maxLength="100"/>
+          </a-form-model-item>
+        </a-form-model>
+      </div>
       <template slot="footer">
         <a-button type="primary" :loading="setLoading" @click="create">
           创建
@@ -44,7 +67,6 @@
           取消
         </a-button>
       </template>
-      <NewFile></NewFile>
     </a-modal>
     <a-modal v-model="uploadData" title="上传数据" :footer="null" :width="860" destroyOnClose>
       <UploadData @close="close" :dataType="sceneList"></UploadData>
@@ -53,14 +75,24 @@
 </template>
  
 <script>
-  import NewFile from "@/components/recommendation/data/NewFile";
+  // import NewFile from "@/components/recommendation/data/NewFile";
   import UploadData from "@/components/recommendation/data/UploadData";
-  import {getSceneAll,getDataTypes,getDataTableList} from "@/api/recommendation/index"
+  import {getSceneAll,getDataTypes,getDataTableList,createDocument} from "@/api/recommendation/index"
   export default {
     name: "list",
-    components: {NewFile,UploadData},
+    components: {UploadData},
     data() {
       return {
+        formItemLayout: {
+          labelCol: { span: 4 },
+          wrapperCol: { span: 20 },
+        },
+        dataForm: {
+          name: '',
+          type: '0',
+          superior: '0',
+          description: ''
+        },        
         tableList:[],
         columns: [
           {
@@ -126,8 +158,11 @@
       }
     },
     methods: {
-      close(){
+      close(boolean){
         this.uploadData = false
+        if(boolean){
+          this.getDataList()
+        }
       },
       upload(){
         this.uploadData = true
@@ -148,17 +183,6 @@
       onSearch(){
         // console.log(this.searchText)
         this.getDataList(this.pagination.current)
-      },
-      create() {
-        this.$router.push({
-          path: '/recommendation/application/data'
-        });
-      },
-      cancelNew() {
-        this.newFile = false;
-      },
-      nextStep(){
-        
       },
       // 应用名称
       getSceneAll(){
@@ -212,9 +236,32 @@
           }
         }).catch(err => {
           this.$message.error("请求失败！");
-          console.log(err, "err");
         });        
-      }      
+      },
+      // 创建
+      create() {
+        console.log(this.dataForm)
+        createDocument(this.dataForm).then(res=>{
+          if(res.code == 200000){
+            this.newFile = false
+            this.$message.success(res.message||"success")
+          }else{
+            this.$message.error(res.message||"请求失败")
+          }
+        }).catch(err=>{
+          this.$message.error(err.message)
+        })
+      },
+      // 取消
+      cancelNew() {
+        this.newFile = false;
+      },      
+      applyChange(val) {
+        this.dataForm.type = val
+      },
+      mouldChange(val) {
+        this.dataForm.superior = val
+      },    
     },
     mounted(){
       Promise.all([this.getSceneAll(),this.getAppList()]).then(res=>{
