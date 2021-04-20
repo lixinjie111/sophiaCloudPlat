@@ -6,13 +6,10 @@
     <div class="steps_content" v-if="current==0">
       <div class="click_upload">
         <!-- <span>点击上传文件</span> -->
-                  <!-- accept=".csv,.xls,.xlsx,.txt" -->
         <a-upload
+          name="files"
           accept=".csv,.xls,.xlsx,.txt"
-          :file-list="fileList"
-          :remove="handleRemove"
-          :before-upload="beforeUpload"
-        >
+          :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload">
           <a-button> <a-icon type="upload" /> 点击上传文件 </a-button>
         </a-upload>      
         <p>支持csv、xls、xlsx、txt日志等文件形式（单个文件最大100M ）</p>
@@ -53,16 +50,11 @@
       </a-form-model>
     </div>    
     <div class="steps_content" v-if="current==2">
-      <div>{{dataForm.name}}</div>
+      <div class="table_name">{{dataForm.name}}</div>
       <a-table
       :columns="columns"
-      :data-source="tableList"
+      :data-source="viewList"
       :pagination="pagination">
-      <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link">查看</a-button>
-        <a-button type="link" disabled>修改</a-button>
-        <a-button type="link" disabled>删除</a-button>
-      </template>
     </a-table>
     </div>    
     <div class="steps_content" v-if="current==3">
@@ -87,7 +79,6 @@
 
 <script>
 import {getFilePackage,getFileDetail,uploadFileData} from "@/api/recommendation/index"
-import {HTTPURL} from "@/api/requestUrl"
 export default {
   name: "UploadData",
   props:{
@@ -95,18 +86,8 @@ export default {
       type:Array
     }
   },
-  computed:{
-    rowSelection(){
-      return {
-        selectedRowKeys:this.selectedRowKeys
-      }
-    },
-    
-  },
   data() {
     return {
-      uploadData:{},
-      uploadUrl:`${HTTPURL}/recommend/excel/load`,
         formItemLayout: {
           labelCol: { span: 4 },
           wrapperCol: { span: 20 },
@@ -138,63 +119,70 @@ export default {
         },
       ],
       fileList: [],
-      columns:[
-        {
-          title:"序号",
-          dataIndex:"num",
-          key :"num"
-        },
-        {
-          title:"表名",
-          dataIndex:"name",
-          key:"name",
-          scopedSlots:{customRender:"name"}
-        },
-        {
-          title:"添加文件夹",
-          dataIndex:"file",
-          key:"file",
-          scopedSlots:{customRender:"file"}
-        },
-        {
-          title:"表头设置",
-          dataIndex:"setting",
-          key:"setting",
-        },
-        {
-          title:"数据类型",
-          dataIndex:"type",
-          key:"type",
-          scopedSlots:{customRender:"type"}
-        },
-        {
-          title:"数据描述",
-          dataIndex:"description",
-          key:"description",
-          scopedSlots:{customRender:"description"}
-        }
-      ], 
-      selectedRowKeys:[],   
       filePackageList:[],
       tableName:"",
+      columns:[
+        // {
+        //   title:"序号",
+        //   dataIndex:"id",
+        //   key :"viewNo"
+        // },
+        // {
+        //   title:"拜访人",
+        //   dataIndex:"viewName",
+        //   key:"viewName",
+        // },
+        // {
+        //   title:"员工编号",
+        //   dataIndex:"",
+        //   key:"file",
+        // },
+        // {
+        //   title:"部门",
+        //   dataIndex:"setting",
+        //   key:"setting",
+        // },
+        // {
+        //   title:"职位",
+        //   dataIndex:"type",
+        //   key:"type",
+        // },
+        // {
+        //   title:"拜访日期",
+        //   dataIndex:"description",
+        //   key:"description",
+        // },
+        // {
+        //   title:"拜访时间",
+        //   dataIndex:"description",
+        //   key:"description",
+        // }
+      ],
+      viewList:[],
+      pagination: {
+        total: 0,
+        current: 1,
+        pageSize: 10,
+        showQuickJumper: true, 
+        showSizeChanger: true,
+        onChange: (pageNum) => {
+          this.getFileDetail(pageNum);
+        }
+      },             
     };
   },
   methods: {   
-    // handleChange(obj){
-    //   console.log(obj)
-    // },
     // 下一步
-    next() {
+    async next() {
       this.current++;
       if(this.current==1){
         // 设置属性
-        console.log('1',this.current)
       }else if(this.current==2){
         // 预览
-        console.log('2')
-        this.uploadFileData()
+        await this.uploadFileData()
+        this.getFileDetail()
       };
-      console.log('table',this.dataForm)
+      // console.log('table',this.dataForm)
     },
     //取消 
     cancel() {
@@ -211,7 +199,6 @@ export default {
     // 上传后文件列表
     beforeUpload(file) {
       this.fileList = [file];
-      console.log('sdfsdfsfd',file)
       this.dataForm.name = file.name
       return false;
     },        
@@ -222,6 +209,7 @@ export default {
           this.filePackageList = res.data
         }else{
           this.$message.error(res.message||'请求失败')
+          this.filePackageList = []
         }
       }).catch(err=>{
         this.$message.error('请求失败')
@@ -237,68 +225,61 @@ export default {
       this.dataForm.type = val.key
     },     
     // 获取上传文件详情
-    getFileDetail(){
+    async getFileDetail(pageNum){
       let params = {
-        pageNum:1,
-        pageSize:10,
+        pageNum:pageNum||1,
+        pageSize:this.pagination.pageSize,
         tableName:this.tableName
       }
-      getFileDetail(params).then(res=>{
+      try{
+        let res = await getFileDetail(params)
         if(res.code == 200000){
-
+          this.viewList = res.data.list
+          this.pagination.total = res.data.total
+          this.pagination.current = pageNum||1
+          Object.keys(this.viewList[0]).slice(0,7).forEach((item,index)=>{
+            this.columns[index] = {
+              title:item,
+              dataIndex:item,
+              key:item
+            }
+          })
+          console.log(this.viewList,this.columns)
         }else{
-          this.$message.error(res.message||'请求失败')
+          this.$message.error(res.message||'请求失败>>>>>>')
+          this.viewList= []
+          this.viewTotal = 0
         }
-      }).catch(err=>{
-        this.$message.error('请求失败')
-      })
+      }catch(err){
+          this.$message.error('请求失败<<<<<')
+      }
     },
     // 上传
-    handleChange(){
-      let params = {
-        haveHeader:0,
-        dataType:this.dataForm.type,
-        description:this.dataForm.description,
-        documentId:this.dataForm.file,
-        documentName:this.dataForm.fileName,
-        userTableName:this.dataForm.name
-      }
-      this.uploadData = params
-    },
-    uploadFileData(){
-      let params = {
-        haveHeader:0,
-        dataType:this.dataForm.type,
-        description:this.dataForm.description,
-        documentId:this.dataForm.file,
-        documentName:this.dataForm.fileName,
-        userTableName:this.dataForm.name
-      }
-      this.uploadData = params
-      // console.log(this.fileList[0])
-      let formData = new FormData()
-      formData.append('haveHeader',params.haveHeader)
-      formData.append('dataType',params.dataType)
-      formData.append('description',params.description)
-      formData.append('documentId',params.documentId)
-      formData.append('documentName',params.documentName)
-      formData.append('userTableName',params.userTableName)
-      formData.append('file',this.fileList[0])
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-      uploadFileData(formData).then(res=>{
+    async uploadFileData(){
+      try{
+        let formData = new FormData()
+        formData.append('haveHeader',0)
+        formData.append('dataType',this.dataForm.type)
+        formData.append('description',this.dataForm.description)
+        formData.append('documentId',this.dataForm.file)
+        formData.append('documentName',this.dataForm.fileName)
+        formData.append('userTableName',this.dataForm.name)
+        formData.append('files',this.fileList[0])
+        // let config = {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data'
+        //   }
+        // }        
+        let res = await uploadFileData(formData)
         if(res.code == 200000){
           this.tableName = res.data
         }else{
           this.$message.error(res.message||'请求失败')
           this.tableName = ""
         }
-      }).catch(err=>{
-        this.$message.error('请求失败')
-      })
+      }catch(err){
+          this.$message.error('请求失败')
+      }
     }
   },
   mounted(){
@@ -354,6 +335,14 @@ export default {
       margin: 2px 0;
       font-size: 14px;
     }
+  }
+
+  .table_name{
+    height: 22px;
+    margin: 2px 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
   }
 }
 
