@@ -9,11 +9,11 @@ const safeSet = resolve => require(['@/views/user/safeSet'], resolve);
 const modifyPwd = resolve => require(['@/views/user/modifyPwd'], resolve);
 const modifyTel = resolve => require(['@/views/user/modifyTel'], resolve);
 const safeEmail = resolve => require(['@/views/user/safeEmail'], resolve);
-const authentPop = resolve => require(['@/views/user/authentPop'], resolve); 
-const agmAndfd = resolve => require(['@/views/user/agmAndfd'], resolve); 
+const authentPop = resolve => require(['@/views/user/authentPop'], resolve);
+const agmAndfd = resolve => require(['@/views/user/agmAndfd'], resolve);
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const gailan = resolve => require(['@/views/application/gailan'], resolve);
-const barView = resolve => require(['@/components/echarts/pieView'], resolve);
+const barView = resolve => require(['@/components/echarts/barView'], resolve);
 
 //产品服务模板页
 const apiMan = resolve => require(['@/views/proSer/apiMan'], resolve);
@@ -43,6 +43,13 @@ const recommendationDataList = resolve => require(['@/views/recommendation/data/
 //数据服务 推荐运营
 const recommendationOperationResult = resolve => require(['@/views/recommendation/operation/result'], resolve);
 
+//推荐运营 物料及用户管理
+const recommendationMateriel = resolve => require(['@/views/recommendation/materiel/list'], resolve);
+//必推物品池
+const recommendationMaterielWillPush = resolve => require(['@/views/recommendation/materiel/willPush'], resolve);
+// 物料详情
+const recommendationMaterielDetail = resolve => require(['@/views/recommendation/materiel/detail'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
@@ -53,7 +60,6 @@ export const menuRouterMap = [{
     path: "/",
     name: "home",
     component: Home,
-    redirect: "/dashBaord",
     children: [
         {
             name: "applicationList",
@@ -184,6 +190,21 @@ export const menuRouterMap = [{
           name: "recommendationOperationResult",
           path: "/recommendation/operation/result",
           component: recommendationOperationResult
+        },
+        {
+          name: "recommendationMateriel",
+          path: "/recommendation/materiel",
+          component: recommendationMateriel
+        },
+        {
+          name: "recommendationMaterielDetail",
+          path: "/recommendation/materiel/detail",
+          component: recommendationMaterielDetail
+        },
+        {
+          name: "recommendationMaterielWillPush",
+          path: "/recommendation/materiel/willPush",
+          component: recommendationMaterielWillPush
         },
     ]
 }];

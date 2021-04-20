@@ -5,17 +5,28 @@ let totalUrl = HTTPURL;
 // ----公共枚举-----
 // 业务场景中的所属应用枚举接口
 export const getSceneAll = params => {
-    return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
+  return axios.post(`${totalUrl}/recommend/recommend/getAll`, params).then(res => res.data);
 };
 
 // 全部数据类型枚举
 export const getDataTypes = params => {
-    return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
+  return axios.post(`${totalUrl}/recommend/enum/getDataTypes`, params).then(res => res.data);
 };
 
 // 获得应用下的所有业务场景
 export const getAllByApplication = params => {
   return axios.post(`${totalUrl}/recommend/scene/getAllByApplication`, params).then(res => res.data);
+};
+
+
+// 根据应用和业务场景获得应用源表下拉项
+/**
+ *
+ * @param params
+ * @returns {*}
+ */
+export const getAllDataTablesInApp = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getAllDataTablesInApp`, params).then(res => res.data);
 };
 
 // -------------------------推荐应用管理-----------------------------
@@ -125,4 +136,12 @@ export const getFileDetail = params => {
 // 获得推荐结果
 export const getRecommendResult = params => {
   return axios.post(`${totalUrl}/recommend/recommend/result`, params).then(res => res.data);
+};
+// 获得推荐物品池列表数据
+export const getDataByWord = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDataByWord`, params).then(res => res.data);
+};
+// 获得必推物品池列表数据
+export const getTableData = params => {
+  return axios.post(`${totalUrl}/recommend/recommendGoods/getTableData`, params).then(res => res.data);
 };
