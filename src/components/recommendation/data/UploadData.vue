@@ -58,7 +58,7 @@
     </a-table>
     </div>    
     <div class="steps_content" v-if="current==3">
-      3
+      <div class="upload_suc">文件上传成功!</div>
     </div>    
     <div class="steps_action">
       <a-button v-if="current < steps.length - 1" type="primary" @click="next">
@@ -70,7 +70,7 @@
       <a-button
         v-if="current == steps.length - 1"
         type="primary"
-        @click="$message.success('文件上传完成')">
+        @click="uploadSuc">
         完成
       </a-button>
     </div>
@@ -181,8 +181,9 @@ export default {
         // 预览
         await this.uploadFileData()
         this.getFileDetail()
+      }else if(this.current==3){
+        this.$message.success('文件上传完成')
       };
-      // console.log('table',this.dataForm)
     },
     //取消 
     cancel() {
@@ -244,14 +245,13 @@ export default {
               key:item
             }
           })
-          console.log(this.viewList,this.columns)
         }else{
-          this.$message.error(res.message||'请求失败>>>>>>')
+          this.$message.error(res.message||'请求失败')
           this.viewList= []
           this.viewTotal = 0
         }
       }catch(err){
-          this.$message.error('请求失败<<<<<')
+          this.$message.error('请求失败')
       }
     },
     // 上传
@@ -280,7 +280,12 @@ export default {
       }catch(err){
           this.$message.error('请求失败')
       }
+    },
+    uploadSuc(){
+      this.current = 0;
+      this.$emit('close',true)
     }
+    
   },
   mounted(){
     this.getFilePackage()
@@ -343,6 +348,14 @@ export default {
     font-size: 14px;
     font-weight: 500;
     line-height: 22px;
+  }
+
+  .upload_suc{
+    height: 260px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 260px;
   }
 }
 

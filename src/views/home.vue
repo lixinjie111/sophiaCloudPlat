@@ -639,9 +639,9 @@
           }
           else if(keyVal == 'caiwu8'){
             this.breadArr.splice(0, 0, "财务中心", "发票管理");
-            // this.$router.push({
-            //   path: "/businessSet"
-            // });
+            this.$router.push({
+              path: "/invoiceMan"
+            })
           }
           else if(keyVal == 'caiwu9'){
             this.breadArr.splice(0, 0, "财务中心", "合同管理");

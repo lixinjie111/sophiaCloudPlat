@@ -9,6 +9,11 @@ Vue.use(ElementUI);
 import Xui from 'x-intelligent-ui';
 import 'x-intelligent-ui/dist/main.css';
 Vue.use(Xui);
+
+import 'xe-utils';
+import VXETable from 'vxe-table';
+import 'vxe-table/lib/style.css';
+Vue.use(VXETable)
 // 全局修改message距离顶部高度
 import { message } from 'x-intelligent-ui';
 message.config({

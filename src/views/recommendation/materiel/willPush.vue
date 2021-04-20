@@ -38,7 +38,7 @@
 
 <script>
   import {getSceneAll,getTableData, getAllByApplication, getAllDataTablesInApp} from "@/api/recommendation"
-  import {showTotal} from "@/utils/common"
+  // import {showTotal} from "@/utils/common"
   export default {
     name: "list",
     data() {
@@ -99,7 +99,7 @@
           pageSize: 10,
           showQuickJumper: true,
           showSizeChanger: true,
-          showTotal,
+          showTotal:(total, range) => `第 ${range[0]}-${range[1]} / 共计 ${total} 条`,
           onChange: (current, pageSize) => {
             this.pagination.current = current;
             this.getDataList();

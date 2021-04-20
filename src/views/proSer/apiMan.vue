@@ -20,6 +20,7 @@
           end-placeholder="结束日期" 
           value-format="yyyy-MM-dd"
           @change="changeDataRange"
+          style="height:100%;"
         ></el-date-picker>
       </div>
       <div class="select_container close_week">
@@ -557,6 +558,14 @@ export default {
     }
     .time_container {
       height: 32px;
+      /deep/ .el-date-editor .el-range-separator{
+        line-height: 26px;
+      }
+      /deep/ .el-date-editor .el-input__icon{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
     .btn_container {
       position: absolute;

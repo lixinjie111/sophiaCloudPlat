@@ -132,6 +132,11 @@ export const getFileDetail = params => {
   return axios.post(`${totalUrl}/recommend/excel/getTableData`,params).then(res => res.data)
 }
 
+// 新建文件夹
+export const createDocument = params => {
+  return axios.post(`${totalUrl}/recommend/excel/addDocument`,params).then(res => res.data)
+}
+
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {
