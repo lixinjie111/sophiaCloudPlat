@@ -166,13 +166,13 @@
           <div v-else>无必推商品</div>
         </a-descriptions-item>
         <a-descriptions-item label="有必推商品" v-if="detail.ruleInfo.recommendParams.length">
-          <div class="rule-info">
+          <div class="rule-info1">
             <div>序号</div>
             <div>品牌</div>
             <div>逻辑判断</div>
-            <div>规则数值</div>
+            <div>值</div>
           </div>
-          <div v-for="(item,index) in detail.ruleInfo.recommendParams" :key="item.id" class="rule-info">
+          <div v-for="(item,index) in detail.ruleInfo.recommendParams" :key="item.id" class="rule-info1">
             <div>{{index+1}}</div>
             <div>{{item.property}}</div>
             <div>{{item.logicCalc}}</div>
@@ -271,6 +271,21 @@
       > div {
         margin: 5px;
         width: 10%;
+      }
+    }
+
+    .rule-info1 {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      > div {
+        margin: 5px;
+        width: 10%;
+
+        &:nth-child(4) {
+          width: 60%;
+        }
       }
     }
   }

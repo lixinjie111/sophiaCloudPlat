@@ -29,7 +29,7 @@
         <a-select-option value="等于">等于</a-select-option>
         <a-select-option value="不包含">不包含</a-select-option>
       </a-select>
-      <a-input class="c-mr-10" placeholder="请输入规则数值" v-model="item.value" :maxLength="14" style="width:100px"/>
+      <a-input class="c-mr-10" placeholder="请输入值" v-model="item.value" :maxLength="14" style="width:100px"/>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
