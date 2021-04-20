@@ -47,3 +47,5 @@ export const generateColumn2 = (data2) => {
   }
   return keyArr
 }
+
+export const showTotal = (total, range) => `第 ${range[0]}-${range[1]} / 共计 ${total} 条`;

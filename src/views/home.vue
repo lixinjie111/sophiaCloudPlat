@@ -366,12 +366,14 @@
                       {
                         title: "物料及用户管理",
                         itemKey: "wupinguanli",
-                        path: "/recommendation/materiel"
+                        path: "/recommendation/materiel",
+                        fourkey:'wupinguanli'
                       },
                       {
                         title: "必推物品池",
                         itemKey: "bitui",
-                        path: "/recommendation/materiel/willPush"
+                        path: "/recommendation/materiel/willPush",
+                        fourkey:'bitui'
                       }
                     ]
                   }
