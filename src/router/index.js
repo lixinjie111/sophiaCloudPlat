@@ -43,6 +43,9 @@ const recommendationDataList = resolve => require(['@/views/recommendation/data/
 //数据服务 推荐运营
 const recommendationOperationResult = resolve => require(['@/views/recommendation/operation/result'], resolve);
 
+//发票管理
+const invoiceMan = resolve => require(['@/views/invoiceMan/index'], resolve);
+
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
@@ -185,6 +188,11 @@ export const menuRouterMap = [{
           path: "/recommendation/operation/result",
           component: recommendationOperationResult
         },
+        {
+          name:'invoiceMan',
+          path:'/invoiceMan',
+          component:invoiceMan
+        }
     ]
 }];
 export default new VueRouter({
