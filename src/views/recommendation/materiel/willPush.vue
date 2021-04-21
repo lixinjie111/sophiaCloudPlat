@@ -18,7 +18,7 @@
         </div>
         <div>
           关键词:
-          <a-input-search @search="onSearch" :value="searchText" placeholder="物料名称/ID" style="width: 160px"/>
+          <a-input-search @search="onSearch" v-model="searchText" placeholder="物料名称/ID" style="width: 160px"/>
         </div>
         <a-button type="primary" disabled style="margin-left: 10px">高级查询</a-button>
       </div>
@@ -28,7 +28,7 @@
       :data-source="tableList"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" @click="goToDetail(record)">查看</a-button>
+        <a-button type="link" disabled>查看</a-button>
         <a-button type="link" disabled>修改</a-button>
         <a-button type="link" disabled>删除</a-button>
       </template>
@@ -38,7 +38,7 @@
 
 <script>
   import {getSceneAll,getTableData, getAllByApplication, getAllDataTablesInApp} from "@/api/recommendation"
-  // import {showTotal} from "@/utils/common"
+  import {showTotal} from "@/utils/common"
   export default {
     name: "list",
     data() {
@@ -99,7 +99,7 @@
           pageSize: 10,
           showQuickJumper: true,
           showSizeChanger: true,
-          showTotal:(total, range) => `第 ${range[0]}-${range[1]} / 共计 ${total} 条`,
+          showTotal,
           onChange: (current, pageSize) => {
             this.pagination.current = current;
             this.getDataList();
