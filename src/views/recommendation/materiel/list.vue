@@ -26,7 +26,7 @@
         </div>
         <div>
           关键词:
-          <a-input :value="searchText" placeholder="请输入关键词" style="width: 160px"/>
+          <a-input v-model="searchText" placeholder="请输入关键词" style="width: 160px"/>
         </div>
         <a-button type="primary" @click="onSearch" style="margin-left: 10px">查询</a-button>
       </div>
