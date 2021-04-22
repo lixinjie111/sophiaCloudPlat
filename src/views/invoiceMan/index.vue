@@ -69,13 +69,14 @@
                     :align="allAlign"
                     :data="tableData"
                     :loading="loading"
+                    ref="xTable"
                 >
-                    <vxe-table-column field="sqTime" title="申请时间" sortable></vxe-table-column>
-                    <vxe-table-column field="fpTaitou" title="发票抬头" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
-                    <vxe-table-column field="fpTotal" title="发票总额"></vxe-table-column>
-                    <vxe-table-column field="fpType" title="发票类型" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
-                    <vxe-table-column field="fpxz" title="发票性质" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
-                    <vxe-table-column field="fpStatus" title="发票状态" :title-help="{message: '自定义帮助提示信息'}" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
+                    <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
+                    <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
+                    <vxe-table-column field="totalAmount" title="发票总额"></vxe-table-column>
+                    <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
+                    <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
+                    <vxe-table-column field="invoiceStatusDesc" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
                     <vxe-table-column field="operation" title="操作"></vxe-table-column>
                 </vxe-table>
                 <vxe-pager
@@ -106,28 +107,35 @@ export default {
   name: "invoiceMan",
   data() {
     return {
-        rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+        rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*365)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
         selVal:'cl7',
         fpttVal:'',
         moneyNum:'0.00',
         activeName:'first',
         allAlign: null,
-        tableData: [
-            {sqTime: '2021-04-20', fpTaitou: '元知智能研究院', fpTotal: '100.00', fpType: 28, fpxz: 'vxe-table 从入门到放弃',fpStatus:'开票中'},
-            {sqTime: '2021-04-20', fpTaitou: '元知智能研究院', fpTotal: '200.00', fpType: 22, fpxz: 'Guangzhou',fpStatus:'已开票' },
-            {sqTime: '2021-04-20', fpTaitou: '元知智能研究院', fpTotal: '333.33', fpType: 32, fpxz: 'Shanghai',fpStatus:'已拒绝' },
-            {sqTime: '2021-04-20', fpTaitou: '元知智能研究院', fpTotal: '555.55 ', fpType: 24, fpxz: 'Shanghai',fpStatus:'已作废' }
-        ],
+        tableData: [],
         loading:false,
         loading2: false,
-        tableData2: [],
         tablePage2: {
             currentPage: 1,
             pageSize: 10,
             totalResult: 0
         },
-        beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
+        beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*365)).format('YYYY-MM-DD'),
         endDate:moment(new Date()).format('YYYY-MM-DD'),
+        helpMsg:`待审核：已提交发票申请，暂未经过财务审核，此时用户可取消发票申请
+                 开票中：Sophia云已通过了开票申请，发票开具中 
+                 已开票：发票已开具 
+                 已拒绝：由于实名认证信息、发票抬头等信息存在错误，财务驳回了您的发票申请，发票金额将返回您的可开票余额池中 
+                 已撤销：在财务审核通过前，您取消的发票申请 
+                 已寄出：发票已寄出 
+                 退票中：由于发票信息有误等原因需要退票的，可以在线上申请退票操作 
+                 已作废：Sophia云已线下将发票作废 
+                 已冲红：在线提交退票申请，我们受理后会为您红冲原票操作，即为您再生成一条等额的红字发票，供您下载后，冲抵账务使用`,
+        fptypeFilter:[],
+        fpttFilter:[],
+        fpxzFilter:[],
+        fpztFilter:[]
     };
   },
   created() {
@@ -136,35 +144,35 @@ export default {
   methods: {
     changeDataRange(e){
       var dateList = e || [];
-    //   this.beginDate = dateList[0];
-    //   this.endDate = dateList[1];
+      this.beginDate = dateList[0];
+      this.endDate = dateList[1];
     },
     choiceRange(e) {
       if(e == 'cl7'){
-        // this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
-        // this.beginDate = this.rangeTime[0];
-        // this.endDate = this.rangeTime[1];
+        this.rangeTime = [moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'by'){
-        // const startDate = moment().month(moment().month()).startOf('month').valueOf();
-        // const endDate = moment().month(moment().month()).endOf('month').valueOf();
-        // this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        // this.beginDate = this.rangeTime[0];
-        // this.endDate = this.rangeTime[1];
+        const startDate = moment().month(moment().month()).startOf('month').valueOf();
+        const endDate = moment().month(moment().month()).endOf('month').valueOf();
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgy'){
-        // const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
-        // const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
-        // this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        // this.beginDate = this.rangeTime[0];
-        // this.endDate = this.rangeTime[1];
+        const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
+        const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
       else if(e == 'sgjd'){
-        // const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();
-        // const endDate = moment().quarter(moment().quarter() - 1).endOf('quarter').valueOf();
-        // this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-        // this.beginDate = this.rangeTime[0];
-        // this.endDate = this.rangeTime[1];
+        const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();
+        const endDate = moment().quarter(moment().quarter() - 1).endOf('quarter').valueOf();
+        this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+        this.beginDate = this.rangeTime[0];
+        this.endDate = this.rangeTime[1];
       }
     },
     editfpInfo(){
@@ -177,35 +185,91 @@ export default {
         console.log(tab,'tab');
         console.log(event,'event');
     },
-    findList2 () {
-        // this.loading = true
-        // XEAjax.get(`/api/user/page/list/${this.tablePage2.pageSize}/${this.tablePage2.currentPage}`)then(({ page, result }) => {
-        // this.tableData2 = result
-        // this.tablePage2.totalResult = page.totalResult
-        //     this.loading2 = false
-        // }).catch(e => {
-        //     this.loading2 = false
-        // })
-    },
     handlePageChange2 ({ currentPage, pageSize }) {
-        // this.tablePage2.currentPage = currentPage
-        // this.tablePage2.pageSize = pageSize
-        // this.findList2()
+        this.tablePage2.currentPage = currentPage
+        this.tablePage2.pageSize = pageSize
+        this.getfpManData()
+    },
+    deWeight(arr,attr) {
+        var attr = attr;
+        for (var i = 0; i < arr.length - 1; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[i][attr] == arr[j][attr]) {
+                    arr.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        return arr;
     },
     getfpManData(){
+        var that = this;
+        this.loading = true;
+        this.loading2 = true;
         var parms = {
             beginDate:this.beginDate,
             endDate:this.endDate,
             invoiceId:'',
-            page:'',
-            pageSize:'',
+            page:this.tablePage2.currentPage,
+            pageSize:this.tablePage2.pageSize,
             title:''
         };
         fapSearch(parms).then(res=>{
-
+            this.loading = false;
+            this.loading2 = false;
+            if(res.code == 200000){
+                var getData = res.data || {};
+                var fpty = [],fptt=[],fpxz=[],fpzt=[];
+                var fpList = getData.list ? getData.list : [];
+                this.tableData = fpList;
+                this.tablePage2.totalResult = getData.total ? getData.total : 0;
+                for(var i=0;i<fpList.length;i++){
+                    fpty.push({
+                        label:fpList[i].invoiceTypeDesc,
+                        value:fpList[i].invoiceTypeDesc
+                    });
+                    fptt.push({
+                        label:fpList[i].title,
+                        value:fpList[i].title
+                    });
+                    fpxz.push({
+                        label:fpList[i].invoicePropertyDesc,
+                        value:fpList[i].invoicePropertyDesc
+                    });
+                    fpzt.push({
+                        label:fpList[i].invoiceStatusDesc,
+                        value:fpList[i].invoiceStatusDesc
+                    });
+                }
+                const xTable = this.$refs.xTable;
+                const column = xTable.getColumnByField('invoiceTypeDesc');
+                const column1 = xTable.getColumnByField('title');
+                const column2 = xTable.getColumnByField('invoicePropertyDesc');
+                const column3 = xTable.getColumnByField('invoiceStatusDesc');
+                xTable.setFilter(column,that.deWeight(fpty,'label'));
+                xTable.setFilter(column1,that.deWeight(fptt,'label'));
+                xTable.setFilter(column2,that.deWeight(fpxz,'label'));
+                xTable.setFilter(column3,that.deWeight(fpzt,'label'));
+                xTable.updateData()
+            }
+            else{
+               this.$message.error(res.message||'请求发票列表数据失败！')
+            }
         }).catch(err=>{
-
+            this.$message.error('请求发票列表数据失败！')
         });
+    },
+    filterNameMethod ({ value, row, column }) {
+        return row.title == value
+    },
+    filtertypeMethod({ value, row, column }){
+        return row.invoiceTypeDesc == value
+    },
+    filterxzMethod({ value, row, column }){
+        return row.invoicePropertyDesc == value
+    },
+    filterztMethod({ value, row, column }){
+        return row.invoiceStatusDesc == value
     }
   },
 };
@@ -372,6 +436,9 @@ export default {
     border-radius: 2px;
     padding: 25px 19px;
     box-sizing: border-box;
+    /deep/ .el-tabs .el-tabs__content{
+        overflow: inherit;
+    }
   }
 }
 </style>
