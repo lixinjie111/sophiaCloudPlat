@@ -71,13 +71,40 @@
                     :loading="loading"
                     ref="xTable"
                 >
+                    <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                     <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
                     <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
-                    <vxe-table-column field="totalAmount" title="发票总额"></vxe-table-column>
+                    <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
                     <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
                     <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
-                    <vxe-table-column field="invoiceStatusDesc" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
-                    <vxe-table-column field="operation" title="操作"></vxe-table-column>
+                    <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod" ></vxe-table-column>
+                    <vxe-table-column field="operation" title="操作" show-overflow>
+                        <template v-slot="{ row }">
+                            <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
+                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                            </div>
+                            <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
+                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                                <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
+                            </div>
+                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已拒绝') || (formatHtml(row.invoiceStatusDesc) == '已撤销') || (formatHtml(row.invoiceStatusDesc) == '已作废') || (formatHtml(row.invoiceStatusDesc) == '退票中')">
+                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                            </div>
+                           <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
+                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                <a style="color:#0376FD;" @click="cancelFn(row)">下载</a>
+                            </div>
+                        </template>
+                    </vxe-table-column>
+                    <template v-slot:empty>
+                        <span>暂无已索取发票数据，</span><span>索取发票</span>
+                    </template>
                 </vxe-table>
                 <vxe-pager
                     border
@@ -142,6 +169,27 @@ export default {
       this.getfpManData();
   },
   methods: {
+    goDetail(e){
+        this.$router.push({
+            path:'/invoiceDetail',
+            query:{
+                detailData:e
+            }
+        });
+    },
+    exportDetail(e){
+        console.log(e,'222222')
+    },
+    cancelFn(e){
+        console.log(e,'333333')
+    },
+    downLoad(e){
+        console.log(e,'444444')
+    },
+    formatHtml(dom){
+        let frag = document.createRange().createContextualFragment(dom).children[0].innerText;
+        return frag;
+    },
     changeDataRange(e){
       var dateList = e || [];
       this.beginDate = dateList[0];
@@ -221,6 +269,25 @@ export default {
                 var getData = res.data || {};
                 var fpty = [],fptt=[],fpxz=[],fpzt=[];
                 var fpList = getData.list ? getData.list : [];
+                fpList.forEach(item=>{
+                    var fontColor = '';
+                    if(item.invoiceStatusDesc == '待审核'){
+                        fontColor = '#0376FD';
+                    }
+                    else if(item.invoiceStatusDesc == '开票中' || item.invoiceStatusDesc == '退票中'){
+                        fontColor = '#FAAD14';
+                    }
+                    else if(item.invoiceStatusDesc == '已开票'){
+                        fontColor = '#51C41B';
+                    }
+                    else if(item.invoiceStatusDesc == '已拒绝'){
+                        fontColor = '#FF4D4F';
+                    }
+                    else{
+                        fontColor = 'rgba(0, 0, 0, 0.65)';
+                    }
+                    item.invoiceStatusDesc = `<span style="color:${fontColor};">${item.invoiceStatusDesc || ''}</span>`;
+                });
                 this.tableData = fpList;
                 this.tablePage2.totalResult = getData.total ? getData.total : 0;
                 for(var i=0;i<fpList.length;i++){
