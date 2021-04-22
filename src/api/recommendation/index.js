@@ -137,6 +137,16 @@ export const createDocument = params => {
   return axios.post(`${totalUrl}/recommend/excel/addDocument`,params).then(res => res.data)
 }
 
+// 数据管理基本信息
+export const getTableDetail = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getTableDetail`,params).then(res => res.data)
+}
+
+// 数据详情表结构
+export const getTableColumn = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getTableColumn`,params).then(res => res.data)
+}
+
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {

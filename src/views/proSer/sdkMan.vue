@@ -335,7 +335,6 @@ export default {
       };
       getSdkAuthList(getParms)
         .then(res => {
-          console.log(res,'分页相关！')
           if (res.code == 200000) {
             const pagination = { ...this.pagination };
             pagination.total = res.data.total;
@@ -438,9 +437,6 @@ export default {
       myChart.setOption(option);
     },
     changePage(pagination, filters, sorter) {
-      console.log(pagination, "pagination");
-      console.log(filters, "filters");
-      console.log(sorter, "sorter");
       this.getSdkAuthList(pagination);
     }
   }

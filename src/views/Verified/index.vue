@@ -418,7 +418,6 @@ export default {
         }
       },
       qybeforeAvatarUpload(file) {
-        console.log(file,'file')
         const isLt2M = file.size / 1024 / 1024 < 8;
         if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/bmp') {
           let imgType = file.type.split('/')[1];
@@ -432,7 +431,6 @@ export default {
         return true;
       },
       zzbeforeAvatarUpload(file){
-        console.log(file,'file')
         const isLt2M = file.size / 1024 / 1024 < 8;
         if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/bmp') {
           let imgType = file.type.split('/')[1];

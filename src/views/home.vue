@@ -349,7 +349,13 @@
                         itemKey: "shujuguanli",
                         path: "/recommendation/data/list",
                         fourkey:'shujuguanlik'
-                      }
+                      },
+                      // {
+                      //   title: "数据详情",
+                      //   itemKey: "shujuxiangqing",
+                      //   path: "/recommendation/data/detail",
+                      //   fourkey:'shujuxiangqing'
+                      // }
                     ]
                   },
                   {
@@ -585,7 +591,6 @@
         }
       },
       menuHandleClick(e) {
-        console.log(e,'zjjjjjjjjjjj');
         this.breadArr = [];
         if (e.key == "sys1") {
           this.breadArr.splice(0, 0, "系统管理", "企业设置");
@@ -657,7 +662,6 @@
           });
         } else {
           this.menuList.forEach(item => {
-            console.log(item,'item')
             if (item.list.length > 0) {
               item.list.forEach(subItem => {
                 if (subItem.seckey == e.keyPath[e.keyPath.length-1]) {
@@ -676,7 +680,6 @@
                       })
                     }else if (child.threekey == e.keyPath[0]) {
                       this.breadArr.push(child.title);
-                      // console.log(child, "child");
                       if (child.path) {
                         this.$router.push({
                           path: child.path,
@@ -698,8 +701,6 @@
         openPath.splice(inx,1);
         var operPatnlist = openPath.reverse();
         localStorage.setItem('openkey',operPatnlist)
-        console.log(e.key,'activKey')
-        console.log(operPatnlist,'openkey')
       }
     }
   };
