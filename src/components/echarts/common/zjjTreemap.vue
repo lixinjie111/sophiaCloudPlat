@@ -37,7 +37,6 @@ export default {
         tooltip: {
           show: true,
           formatter(params) {
-            console.log(params)
               var result = "<div style='color:black;'>" + params.treePathInfo[1].name + "</div>";
               result += `<span style="display:block;margin-right:5px;margin-bottom:2px;border-radius:10px;color:black;'">${params.treePathInfo[2].name} ：${params.treePathInfo[2].value}</span>`;
               return result;

@@ -169,8 +169,7 @@ export default {
         alert('编辑地址信息！！！');
     },
     handleClick(tab, event) {
-        console.log(tab,'tab');
-        console.log(event,'event');
+
     },
     findList2 () {
         // this.loading = true

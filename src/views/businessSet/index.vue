@@ -147,12 +147,11 @@ export default {
                     item['key']=index
                 })
                 this.userIndata=result;
-                console.log(this.userIndata)
                 }
             })
         },
        callback(key) {
-            console.log(key);
+            // console.log(key);
        },
        onSearch(value) {
             this.initList();

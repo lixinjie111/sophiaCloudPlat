@@ -47,7 +47,6 @@
         this.showModal = type
       },
       onNext(values){
-        console.log('[[[[[[[')
         this.showModal = 2
       },
       onCreate(values){

@@ -181,9 +181,6 @@
           }
         });
       },
-      tradeChange(value) {
-        // console.log(value);
-      },
       getList(current) {
         let params = {
           appType: 1,//应用类型, 0普通，1推荐

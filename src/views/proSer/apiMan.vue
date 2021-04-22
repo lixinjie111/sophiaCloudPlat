@@ -347,7 +347,6 @@ export default {
       fwqsInfoParm.append("serviceModel",this.routerData);   
       apiVisitTrendInfo(fwqsInfoParm)
         .then(res => {
-          console.log(res,'趋势详情')
           if (res.code == 200000) {
             var serListdata = res.data.list || [];
             serListdata.forEach(item=>{
@@ -377,7 +376,6 @@ export default {
       fwqsParm.append("serviceModel",this.routerData); 
       apiVisitTrend(fwqsParm)
         .then(res => {
-          console.log(res,'趋势')
           if (res.code == 200000) {
             var serListdata = res.data || [];
             this.initBarEcharts(serListdata);

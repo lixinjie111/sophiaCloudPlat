@@ -242,7 +242,6 @@
 		  lineM3,barEcharts,barL,barM,cLine,lineM,barC,barLine,barT,lineS,funnel,barCH,barHM,lineO,lineSp,pieP
 		},
 		created(){
-			console.log(this.$lxjData)
 		},
     }
 </script>

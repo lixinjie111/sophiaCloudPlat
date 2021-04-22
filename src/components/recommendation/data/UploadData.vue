@@ -164,7 +164,6 @@ export default {
         current: 1,
         pageSize: 10,
         showQuickJumper: true, 
-        showSizeChanger: true,
         onChange: (pageNum) => {
           this.getFileDetail(pageNum);
         }

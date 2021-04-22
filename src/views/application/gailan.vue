@@ -336,7 +336,6 @@ export default {
     },
     getCount(){
         appCount().then(res => {
-          console.log(res)
               if(res.code==200000){
                 this.count=res.data;
               }
@@ -493,7 +492,6 @@ export default {
       fwqsParm.append("serviceModel",this.selectModel); 
       apiVisitTrend(fwqsParm)
         .then(res => {
-          console.log(res,'趋势')
           if (res.code == 200000) {
             var serListdata = res.data || [];
             this.initBarEcharts(serListdata);

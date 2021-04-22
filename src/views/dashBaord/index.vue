@@ -368,7 +368,6 @@ export default {
                        setTimeout(()=>{
                            this.showList=true;
                            this.$forceUpdate();
-                            //console.log(this.vistedInfo)
                        },300)
                         
                    }
@@ -536,7 +535,6 @@ export default {
                     //   serviceName: "全部"
                     // });
                     this.serListArr = serListdata;
-                    // console.log(serListdata)
                 } else {
                     this.$message.error(res.message || "请求失败！");
                 }
@@ -579,7 +577,6 @@ export default {
                    }
                    this.$set(this.vistedInfo,'abc',this.currentNo) 
                    this.$forceUpdate();
-                    console.log(this.vistedInfo)
                 }else {
                     
                 }
@@ -594,9 +591,6 @@ export default {
         onChange1(value,index){
             this.$forceUpdate();
             this.getVistedInfo1(value,index)
-        },
-        onSubmit() {
-            console.log('submit!');
         },
         choiceRange(e) {
             if(e == 'cl7'){
