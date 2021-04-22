@@ -101,6 +101,7 @@
 <script>
 import moment from "moment";
 import "moment/locale/zh-cn";
+import {fapSearch} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceMan",
   data() {
@@ -124,10 +125,14 @@ export default {
             currentPage: 1,
             pageSize: 10,
             totalResult: 0
-        }
+        },
+        beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),
+        endDate:moment(new Date()).format('YYYY-MM-DD'),
     };
   },
-  created() {},
+  created() {
+      this.getfpManData();
+  },
   methods: {
     changeDataRange(e){
       var dateList = e || [];
@@ -186,6 +191,21 @@ export default {
         // this.tablePage2.currentPage = currentPage
         // this.tablePage2.pageSize = pageSize
         // this.findList2()
+    },
+    getfpManData(){
+        var parms = {
+            beginDate:this.beginDate,
+            endDate:this.endDate,
+            invoiceId:'',
+            page:'',
+            pageSize:'',
+            title:''
+        };
+        fapSearch(parms).then(res=>{
+
+        }).catch(err=>{
+
+        });
     }
   },
 };
