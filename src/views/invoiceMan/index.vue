@@ -182,8 +182,7 @@ export default {
         alert('编辑地址信息！！！');
     },
     handleClick(tab, event) {
-        console.log(tab,'tab');
-        console.log(event,'event');
+
     },
     handlePageChange2 ({ currentPage, pageSize }) {
         this.tablePage2.currentPage = currentPage

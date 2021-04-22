@@ -82,7 +82,6 @@
 <script>
 import {HTTPURL} from '@/api/requestUrl';
 import { updateInfo} from '@/api/user';
-console.log(HTTPURL)
 export default {
     data() {
         return {
@@ -127,7 +126,6 @@ export default {
         },
         initInfo(val){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
-            console.log(this.userInfomation,'this.userInfomation')
             this.ruleForm.uName=this.userInfomation.name;
             this.avatUrl = this.userInfomation.icon;
             this.$forceUpdate();
@@ -150,15 +148,8 @@ export default {
                 this.$message.error(`上传失败`);
             }
         },
-       callback(key) {
-            console.log(key);
-       },
-       onSearch(value) {
-        console.log(value);
-        },
         onChange(checked,ev) {
             checked.isCheck = !checked.isCheck;
-            console.log(checked,ev);
         },
         showModal() {
             this.visible = true;
@@ -210,7 +201,6 @@ export default {
             })
         },
         handleCancel(e) {
-            console.log('Clicked cancel button');
             this.visible = false;
         },
     }

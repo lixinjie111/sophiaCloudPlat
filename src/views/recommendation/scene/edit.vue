@@ -147,7 +147,6 @@
         });
       },
       onTabChange(key, type) {
-        console.log(key, type);
         this[type] = key;
       }
     }
