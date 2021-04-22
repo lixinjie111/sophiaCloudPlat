@@ -116,6 +116,8 @@ export default {
           let result = JSON.stringify(res.data, null, 2);
           this.result = result
         }else {
+          let result = JSON.stringify(res.data, null, 2);
+          this.result = result
           this.$message.error('查询错误')
         }
       })
