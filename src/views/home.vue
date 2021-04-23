@@ -76,7 +76,7 @@
               </span>
               <template v-for="item1 in subItem.menuItmList">
                 <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.threekey">
-                  <a-menu-item v-for="child in item1.children" :key="child.fourkey" >
+                  <a-menu-item v-for="child in item1.children" :key="child.fourkey">
                     {{child.title}}
                   </a-menu-item>
                 </a-sub-menu>

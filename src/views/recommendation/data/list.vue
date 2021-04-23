@@ -16,7 +16,7 @@
         <div>
             数据类型:
           <a-select style="width: 160px" placeholder="请选择场景类型" v-model="dataTypeDesc" @change="sceneTypeChange">
-            <a-select-option value="">全部</a-select-option>
+            <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </div>
@@ -138,7 +138,7 @@
           },
         ],
         appName: "all",
-        dataTypeDesc: "",
+        dataTypeDesc: "all",
         appNameList:[],
         sceneList:[],
         pagination: {
@@ -213,7 +213,7 @@
       getDataList(pageNum){
         let params = {
           applicationId: this.appName=="all"?"":this.appName,
-          dataType:this.dataTypeDesc==""?"":this.dataTypeDesc,
+          dataType:this.dataTypeDesc=="all"?"":this.dataTypeDesc,
           name:this.searchText,
           pageNum: pageNum||1,
           pageSize: this.pagination.pageSize
@@ -242,7 +242,7 @@
         createDocument(this.dataForm).then(res=>{
           if(res.code == 200000){
             this.newFile = false
-            this.$message.success(res.message||"success")
+            this.$message.success('创建成功')
           }else{
             this.$message.error(res.message||"请求失败")
           }
