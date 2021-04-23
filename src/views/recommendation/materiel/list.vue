@@ -32,6 +32,7 @@
       </div>
     </div>
     <a-table
+      :scroll="scrollColumn"
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
@@ -50,20 +51,24 @@
     name: "list",
     data() {
       return {
+        scrollColumn:{x:1200},
         tableList:[],
         columns: [
           {
             title: '序号',
+            width:60,
             customRender: (text, record, index) => `${index + 1}`
           },
           {
             title: '物料ID',
+            width:130,
+            ellipsis:true,
             dataIndex: 'materiel_id'
           },
           {
             title: '物料名称',
-            width: 300,
-            dataIndex: 'material_name'
+            dataIndex: 'material_name',
+            ellipsis:true
           },
           {
             title: '物料类型',
@@ -100,6 +105,8 @@
           {
             title: '操作',
             dataIndex: 'operation',
+            width:140,
+            fixed:"right",
             scopedSlots: {customRender: 'operation'},
           },
         ],
@@ -247,6 +254,9 @@
           margin-left: 10px;
         }
       }
+    }
+    .ant-btn{
+      padding: 0;
     }
   }
 </style>

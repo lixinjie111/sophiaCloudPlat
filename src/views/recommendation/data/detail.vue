@@ -2,17 +2,30 @@
   <div class="data_center_detail">
     <a-tabs default-active-key="1" @change="callback" v-model="activeKey">
       <a-tab-pane key="1" tab="基本信息">
-          <ul class="table_base_info">
-            <li v-for="(value,key,index) in baseInfo" :key="index">
-              <span>{{key}}:</span><span>{{value}}</span>
-            </li>
-          </ul>
+        <div class="base_info_container">
+          <div class="base_left">
+              <ul class="table_base_info">
+                <li>创建人:{{baseInfo.username}}</li>
+                  <li>创建时间:{{baseInfo.createTime}}</li>
+                  <li>所属租户:{{baseInfo.tenant}}</li>
+                  <li>存储量:{{baseInfo.size}}</li>
+                  <li>文件夹:{{baseInfo.documentName}}</li>
+                  <li>来源分类:{{baseInfo.documentType}}</li>
+              </ul>
+              <p>数据描述:{{baseInfo.dataDescription}}</p>
+          </div>
+          <!-- <a-divider type="vertical"/> -->
+          <div class="base_right">
+            <p>数据变更:{{baseInfo.updateTime}}</p> 
+            <p>负责人:{{baseInfo.username}}</p> 
+          </div>
+        </div>
       </a-tab-pane>
       <a-tab-pane key="2" tab="表结构" force-render class="tabs_item">
         <a-table :columns="columns" :data-source="tableColumn"></a-table>
       </a-tab-pane>
       <a-tab-pane key="3" tab="数据预览" class="tabs_item">
-        <a-table :columns="showColumns" :data-source="showData" :pagination="pagination"></a-table>
+        <a-table :scroll="{x:2000}" :columns="showColumns" :data-source="showData" :pagination="pagination"></a-table>
       </a-tab-pane>
     </a-tabs>
     <div class="back" @click="back">返回</div>
@@ -143,18 +156,38 @@ export default {
 <style scoped lang="scss">
 .data_center_detail {
   position: relative;
-  .table_base_info{
-    padding: 0 20px;
-    li{
-      margin: 6px 0;
-      font-size: 14px;
-      >span{
-        font-weight: 500;
-        &:first-child{
-          margin-right: 6px;
-          font-weight: 600;
+  .base_info_container{
+    display: flex;
+    .base_left{
+      width: 50%;
+      margin-right: 20px;
+      border-right: 1px solid #ada8a8;
+      .table_base_info{
+        display: flex;
+        padding: 0 20px;
+        flex-wrap: wrap;
+        li{
+          width: 50%;
+          margin: 6px 0;
+          font-size: 14px;
+          >span{
+            font-weight: 500;
+            &:first-child{
+              margin-right: 6px;
+              font-weight: 600;
+            }
+          }
         }
       }
+      >p{
+        padding-left:20px;
+        margin-top:6px
+      }
+    }
+    .base_right{
+      width: 50%;
+      display: flex;
+      justify-content: space-around;
     }
   }
   .back{
