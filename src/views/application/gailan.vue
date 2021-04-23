@@ -126,12 +126,22 @@
       <div class="table_container">
         <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage" :pagination="pagination">
           <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-          <a slot="openBuy" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-          <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
+          <template  slot="openBuy"  slot-scope="text, record">
+            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD">{{ text }}</span>
+          </template >
+          <a slot="Purchases" class="ant-dropdown-link" slot-scope="text"><span  @click="openMoney(record)">{{ text }}</span></a>
         </a-table>
       </div>
     </div>
      <create-app-modal v-if="showModal" @cancel="closeModal" @refreshList="refreshList"/>
+     <a-modal v-model="visible" title="温馨提示" @ok="handleOk" cancelText="取消" centered okText="确定">
+        <p>即将前往购买页面开通服务</p>
+        <p>1、开通服务将会 <span style="color:#0376FD">产生服务调用费用</span>  </p>
+        <p>2、如在服务试用期内，开通服务再停止后，将不再支持试用服务</p>
+      </a-modal>
+      <a-modal v-model="visible1" title="停止付费" @ok="handleOk1" cancelText="取消" centered okText="确定">
+        <p>您确定要终止付费吗？终止付费后，您的资源将回归至免费状态，超过免费资源的调用将不再响应。后续如需使用付费资源，可再次开通付费。</p>
+      </a-modal>
 </div>
 </template>
 
@@ -155,6 +165,8 @@ export default {
   components:{CreateAppModal},
   data() {
     return {
+      visible:false,
+      visible1:false,
       showModal:false,
       count:0,
       selectModel:'',
@@ -313,6 +325,17 @@ export default {
      this.getPageData();
   },
   methods: {
+    handleOk1(e) {
+      console.log(e);
+      this.visible1 = false;
+    },
+    handleOk(e) {
+      console.log(e);
+      this.visible = false;
+    },
+    openMoney(item){
+      this.visible = true;
+    },
     refreshList(){
       this.$router.push({
         path:'/application/list'
