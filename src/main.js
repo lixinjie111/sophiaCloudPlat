@@ -64,6 +64,7 @@ import echarts from "echarts";
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$lxjData = lxjData;
 Vue.prototype.$fjData = fjData;
+Vue.prototype.$myUtilsFn = XEUtils;
 
 // 进度条
 // 进度条
@@ -133,4 +134,5 @@ const vm = new Vue({
 
 // axios 过滤器
 import axiosFilter from './api/axiosConfig.js';
+import Vue from 'vue';
 axiosFilter(vm);

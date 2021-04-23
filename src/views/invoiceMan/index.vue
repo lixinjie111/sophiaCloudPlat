@@ -33,7 +33,7 @@
         <div class="sear_label">发票抬头：</div>
         <div class="sear_input">
             <el-input v-model="fpttVal" class="fptt_class"></el-input>
-            <el-button type="primary">搜 索</el-button>
+            <el-button type="primary" @click="searchInvoice">搜 索</el-button>
         </div>
       </div>
     </div>
@@ -41,21 +41,40 @@
         <div class="fp_money">
             <div class="fp_money_til">可索取发票金额</div>
             <div class="fp_money_num">¥ {{moneyNum}}</div>
-            <div class="fp_money_btn">查看明细及索取发票</div>
+            <div class="fp_money_btn" :class="{'activeBtn': moneyNum != '0.00'}" @click="watchDetailGetMoney">查看明细及索取发票</div>
         </div>
         <div class="fp_info">
             <div class="til_edit_con">
                 <div class="til_txt">发票信息</div>
                 <i class="el-icon-edit" @click="editfpInfo"></i>
             </div>
-            <div class="no_fp_info_con">暂无有效的发票信息</div>
+            <div class="no_fp_info_con" v-if="nofpInfo">暂无有效的发票信息</div>
+            <div class="has_fp_info_con" v-else>
+                <div class="fptt_con">
+                    <span>发票抬头：</span>
+                    <span>{{fpinfoObj.title}}</span>
+                </div>
+                <div class="kjlx_con">
+                    <span>开具类型：</span>
+                    <span>{{fpinfoObj.type}}</span>
+                </div>
+            </div>
         </div>
         <div class="fp_address">
             <div class="til_edit_con">
                 <div class="til_txt">默认寄送地址</div>
                 <i class="el-icon-edit" @click="editfpaddress"></i>
             </div>
-            <div class="no_fp_info_con">暂无默认地址信息</div>
+            <div class="no_fp_info_con" v-if="nofpAddress">暂无默认地址信息</div>
+            <div class="has_fp_info_con" v-else>
+                <div class="fptt_con">
+                    <span>{{addressObj.name}}</span>
+                    <span>{{addressObj.phone}}</span>
+                </div>
+                <div class="kjlx_con">
+                    <span>{{addressObj.address}}</span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="three_area">
@@ -129,7 +148,7 @@
 <script>
 import moment from "moment";
 import "moment/locale/zh-cn";
-import {fapSearch} from "../../api/invoiceMan/index";
+import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceMan",
   data() {
@@ -137,16 +156,27 @@ export default {
         rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*365)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
         selVal:'cl7',
         fpttVal:'',
-        moneyNum:'0.00',
+        money:0,
         activeName:'first',
         allAlign: null,
         tableData: [],
         loading:false,
         loading2: false,
+        nofpInfo:false,
+        nofpAddress:false,
         tablePage2: {
             currentPage: 1,
             pageSize: 10,
             totalResult: 0
+        },
+        fpinfoObj:{
+            title:'',
+            type:''
+        },
+        addressObj:{
+            name:'',
+            phone:'',
+            address:''
         },
         beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*365)).format('YYYY-MM-DD'),
         endDate:moment(new Date()).format('YYYY-MM-DD'),
@@ -167,8 +197,25 @@ export default {
   },
   created() {
       this.getfpManData();
+      this.getInvoiceBase();
+  },
+  computed:{
+      moneyNum(){
+        return this.$myUtilsFn.commafy(this.$myUtilsFn.toNumber(this.money), { digits:2 })
+      }
   },
   methods: {
+    watchDetailGetMoney(){
+        var ifCanClick = this.moneyNum == '0.00' ? false : true;
+        if(ifCanClick){
+            this.$router.push({
+                path:'/InvoiceReq'
+            });
+        }
+        else{
+            return;
+        }
+    },
     goDetail(e){
         this.$router.push({
             path:'/invoiceDetail',
@@ -249,6 +296,9 @@ export default {
         }
         return arr;
     },
+    searchInvoice(){
+        this.getfpManData();
+    },
     getfpManData(){
         var that = this;
         this.loading = true;
@@ -259,7 +309,7 @@ export default {
             invoiceId:'',
             page:this.tablePage2.currentPage,
             pageSize:this.tablePage2.pageSize,
-            title:''
+            title:this.fpttVal
         };
         fapSearch(parms).then(res=>{
             this.loading = false;
@@ -323,6 +373,57 @@ export default {
             }
         }).catch(err=>{
             this.$message.error('请求发票列表数据失败！')
+        });
+    },
+    getInvoiceBase(){
+        var parms = {
+            invoiceDetailId:''
+        };
+        queryInvoiceBase(parms).then(res=>{
+            console.log(res,'res')
+            if(res.code == 200000){
+                var InvoiceMsgObj = res.data || {};
+                this.money = InvoiceMsgObj.totalAmount;
+                if(InvoiceMsgObj.title){
+                    this.nofpInfo = false;
+                    var typeTxt = '';
+                    if(InvoiceMsgObj.invoiceType == 0){
+                        typeTxt = '增值税普通发票';
+                    }
+                    else if(InvoiceMsgObj.invoiceType == 1){
+                        typeTxt = '增值税专用发票';
+                    }
+                    else if(InvoiceMsgObj.invoiceType == 2){
+                        typeTxt = '组织（非企业）增值税普通发票';
+                    }
+                    else{
+                        typeTxt = '';
+                    }
+                    this.fpinfoObj = {
+                        title:InvoiceMsgObj.title,
+                        type:typeTxt
+                    };
+                }
+                else{
+                    this.nofpInfo = true;
+                }
+                if(!InvoiceMsgObj.addressComplete && !InvoiceMsgObj.recipient && !InvoiceMsgObj.contactPhone){
+                    this.nofpAddress = true;
+                }
+                else{
+                    this.nofpAddress = false;
+                    this.addressObj={
+                        name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
+                        phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
+                        address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete + InvoiceMsgObj.postAddressVo.addressDetail: '',
+                    };
+                }
+            }
+            else{
+                this.$message.error(res.message||'请求发票列表数据失败！')
+            }
+        }).catch(err=>{
+            this.$message.error('请求发票基本信息数据失败！')
         });
     },
     filterNameMethod ({ value, row, column }) {
@@ -462,6 +563,12 @@ export default {
             font-weight: 400;
             color: #FFFFFF;
         }
+        .activeBtn{
+            background: #0376FD;
+            &:hover{
+                cursor: pointer;
+            }
+        }
     }
     .fp_info,.fp_address{
         width: 37.08%;
@@ -492,6 +599,15 @@ export default {
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #121C33;
+        }
+        .has_fp_info_con{
+            width: 100%;
+            .fptt_con,.kjlx_con{
+                width: 100%;
+                margin: 18px 0;
+                display: flex;
+                align-items: center;
+            }
         }
     }
   }
