@@ -96,7 +96,7 @@
                     <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
                     <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
                     <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
-                    <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod" ></vxe-table-column>
+                    <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
                     <vxe-table-column field="operation" title="操作" show-overflow>
                         <template v-slot="{ row }">
                             <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
@@ -137,7 +137,9 @@
                 >
                 </vxe-pager>
             </el-tab-pane>
-            <el-tab-pane label="发票信息管理" name="second">发票信息管理</el-tab-pane>
+            <el-tab-pane label="发票信息管理" name="second">
+
+            </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">寄送地址管理</el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">电子邮箱</el-tab-pane>
         </el-tabs>
@@ -271,13 +273,13 @@ export default {
       }
     },
     editfpInfo(){
-        alert('编辑发票信息！！！');
+        this.activeName = 'second'; 
     },
     editfpaddress(){
         alert('编辑地址信息！！！');
     },
     handleClick(tab, event) {
-
+        this.activeName = tab.paneName; 
     },
     handlePageChange2 ({ currentPage, pageSize }) {
         this.tablePage2.currentPage = currentPage
