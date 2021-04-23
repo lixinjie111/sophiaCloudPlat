@@ -22,11 +22,6 @@ export default {
       required: true
     }
   },
-  watch:{
-    collapse(newVal,oldVal){
-      console.log(newVal,oldVal)
-    }
-  },
   data() {
     return {
       title: 'Vue Admin Template',

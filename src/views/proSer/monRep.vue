@@ -145,7 +145,6 @@ export default {
       });
     },
     getApiList(parms){
-      console.log(parms,'parms')
       getRepApiList(parms).then(res=>{
         if(res.code == 200000){
           this.apiList = res.data.appServiceList || [];
@@ -185,7 +184,6 @@ export default {
         });
     },
     changeDataRange(e) {
-      console.log(e, "sssssssqqqqq");
     },
     handleAppListChange(e){
       var appList = this.appNameList || [];
@@ -199,11 +197,9 @@ export default {
       this.getApiList({id:idVal})
     },
     handleApIListChange(e){
-      console.log(e,'api')
       this.apiVal = e;
     },
     initLineEcharts(MonitorData) {
-      console.log(MonitorData,'MonitorData')
       var successData = MonitorData['1'] || [];
       var failData = MonitorData['2'] || [];
       var xAxisData = [];

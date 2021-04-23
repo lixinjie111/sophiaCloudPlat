@@ -107,7 +107,6 @@ export default {
       this.$router.go(-1);
     },
     submitApply() {
-      console.log(this.sqNum,'33333333')
       if (!this.hasChicedSdk) {
         this.$message.error("SDK选择不能为空！");
         return;

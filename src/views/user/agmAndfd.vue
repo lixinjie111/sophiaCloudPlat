@@ -229,7 +229,6 @@ export default {
       var userIfon = localStorage.getItem('yk-userInfo');
       var userIfonObj = JSON.parse(userIfon);
       this.myCount = userIfonObj['email'];
-      console.log(userIfonObj,'userIfon')
     }
   },
 };

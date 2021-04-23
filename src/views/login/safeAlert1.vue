@@ -35,7 +35,6 @@ export default {
     },
     created() {
         this.tel = this.useTel.substr(0,3)+"****"+this.useTel.substr(7);
-        console.log(this.tel)
     },
     methods: {
         sendMeg(){

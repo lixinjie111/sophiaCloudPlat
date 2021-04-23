@@ -52,6 +52,7 @@
     <div class="steps_content" v-if="current==2">
       <div class="table_name">{{dataForm.name}}</div>
       <a-table
+      :scroll="{x:800}"
       :columns="columns"
       :data-source="viewList"
       :pagination="pagination">
@@ -164,7 +165,6 @@ export default {
         current: 1,
         pageSize: 10,
         showQuickJumper: true, 
-        showSizeChanger: true,
         onChange: (pageNum) => {
           this.getFileDetail(pageNum);
         }
@@ -174,6 +174,19 @@ export default {
   methods: {   
     // 下一步
     async next() {
+      if(this.current==0&&this.fileList.length==0){
+        return
+      }
+      if(this.current==1){
+        let obj = JSON.parse(JSON.stringify(this.dataForm))
+        delete(obj.description)
+        for(let key in obj){
+          let boolean = obj[key]+""
+          if(!boolean){
+            return
+          }
+        }
+      }
       this.current++;
       if(this.current==1){
         // 设置属性

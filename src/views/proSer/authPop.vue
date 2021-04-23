@@ -187,7 +187,6 @@ export default {
           this.shengyuNum = sokInfoList[i].surplus;
         }
       }
-      console.log(`selected ${value}`,sokInfoList);
     },
     handleAppListChange(value) {
       var appNameDataList = this.appNameList || [];

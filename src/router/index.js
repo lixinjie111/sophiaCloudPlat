@@ -41,12 +41,15 @@ const recommendationSceneRule = resolve => require(['@/views/recommendation/scen
 
 //数据服务 数据管理
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
+const recommendationDataDetail = resolve => require(['@/views/recommendation/data/detail'], resolve);
 
 //数据服务 推荐运营
 const recommendationOperationResult = resolve => require(['@/views/recommendation/operation/result'], resolve);
 
 //发票管理
 const invoiceMan = resolve => require(['@/views/invoiceMan/index'], resolve);
+const invoiceDetail = resolve => require(['@/views/invoiceMan/invoiceDetail'], resolve);
+const InvoiceReq = resolve => require(['@/views/invoiceMan/InvoiceReq'], resolve);
 //推荐运营 物料及用户管理
 const recommendationMateriel = resolve => require(['@/views/recommendation/materiel/list'], resolve);
 //必推物品池
@@ -202,6 +205,11 @@ export const menuRouterMap = [{
           component: recommendationDataList
         },
         {
+          name: "recommendationDataDetail",
+          path: "/recommendation/data/detail",
+          component: recommendationDataDetail
+        },
+        {
           name: "recommendationOperationResult",
           path: "/recommendation/operation/result",
           component: recommendationOperationResult
@@ -210,6 +218,16 @@ export const menuRouterMap = [{
           name:'invoiceMan',
           path:'/invoiceMan',
           component:invoiceMan
+        },
+        {
+          name:'invoiceDetail',
+          path:'/invoiceDetail',
+          component:invoiceDetail
+        },
+        {
+          name:'InvoiceReq',
+          path:'/InvoiceReq',
+          component:InvoiceReq
         },
         {
           name: "recommendationMateriel",

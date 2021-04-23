@@ -91,7 +91,6 @@ export default {
         },
         settime(id) {
             var sendMsg=document.getElementById('sendMsg');
-            console.log(sendMsg)
             if(sendMsg){
                  if (this.countdown == 0) {
                     sendMsg.removeAttribute("disabled");

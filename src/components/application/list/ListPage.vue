@@ -185,7 +185,6 @@
         const parmas = { pageIndex: this.current, pageSize: this.pageSize, appName: this.searchInputValue };
         getApplicationList(parmas).then((res)=>{
           this.data = res.data.list
-          console.log('res.data.total', res.data.total)
           this.total = res.data.total
         })
       },

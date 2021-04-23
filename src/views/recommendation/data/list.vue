@@ -16,7 +16,7 @@
         <div>
             数据类型:
           <a-select style="width: 160px" placeholder="请选择场景类型" v-model="dataTypeDesc" @change="sceneTypeChange">
-            <a-select-option value="">全部</a-select-option>
+            <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </div>
@@ -29,8 +29,8 @@
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
-      <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link">查看</a-button>
+      <template slot="operation" slot-scope="text,record">
+        <a-button type="link" @click.stop="showDetail(record)">查看</a-button>
         <a-button type="link" disabled>修改</a-button>
         <a-button type="link" disabled>删除</a-button>
       </template>
@@ -75,7 +75,6 @@
 </template>
  
 <script>
-  // import NewFile from "@/components/recommendation/data/NewFile";
   import UploadData from "@/components/recommendation/data/UploadData";
   import {getSceneAll,getDataTypes,getDataTableList,createDocument} from "@/api/recommendation/index"
   export default {
@@ -135,10 +134,11 @@
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
+            width:100
           },
         ],
         appName: "all",
-        dataTypeDesc: "",
+        dataTypeDesc: "all",
         appNameList:[],
         sceneList:[],
         pagination: {
@@ -146,7 +146,6 @@
           current: 1,
           pageSize: 10,
           showQuickJumper: true, 
-          showSizeChanger: true,
           onChange: (pageNum) => {
             this.getDataList(pageNum);
           }
@@ -172,16 +171,13 @@
       },
       appNameChange (value){
         this.appName = value
-        // console.log(value)
         this.getDataList(this.pagination.current)
       },
       sceneTypeChange (value){
         this.dataTypeDesc = value
-        // console.log(value)
         this.getDataList(this.pagination.current)
       },
       onSearch(){
-        // console.log(this.searchText)
         this.getDataList(this.pagination.current)
       },
       // 应用名称
@@ -207,7 +203,6 @@
               ary.push(...item.subDataTypes)
             })
             this.sceneList = ary
-            // console.log(this.sceneList)
           }else{
             this.$message.error(res.message||"请求失败!")
           }
@@ -218,7 +213,7 @@
       getDataList(pageNum){
         let params = {
           applicationId: this.appName=="all"?"":this.appName,
-          dataType:this.dataTypeDesc==""?"":this.dataTypeDesc,
+          dataType:this.dataTypeDesc=="all"?"":this.dataTypeDesc,
           name:this.searchText,
           pageNum: pageNum||1,
           pageSize: this.pagination.pageSize
@@ -238,13 +233,16 @@
           this.$message.error("请求失败！");
         });        
       },
+      // 查看
+      showDetail(row){
+        this.$router.push({path:"/recommendation/data/detail",query:{name:row.tableName}})
+      },       
       // 创建
       create() {
-        console.log(this.dataForm)
         createDocument(this.dataForm).then(res=>{
           if(res.code == 200000){
             this.newFile = false
-            this.$message.success(res.message||"success")
+            this.$message.success('创建成功')
           }else{
             this.$message.error(res.message||"请求失败")
           }
@@ -261,7 +259,7 @@
       },
       mouldChange(val) {
         this.dataForm.superior = val
-      },    
+      }
     },
     mounted(){
       Promise.all([this.getSceneAll(),this.getAppList()]).then(res=>{

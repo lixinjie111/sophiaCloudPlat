@@ -179,7 +179,6 @@ import {HTTPURL} from '@/api/requestUrl';
 import safeAlert from './safeAlert';
 import { updateInfo} from '@/api/user';
 import { securityInfo,disableProtect,enableProtect} from '@/api/safeSet';
-console.log(HTTPURL)
 export default {
     data() {
         return {
