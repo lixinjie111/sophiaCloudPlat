@@ -77,11 +77,11 @@
           :loading="loading"
           ref="xTable"
         >
+          <vxe-table-column field="orderSn" title="订单编号"></vxe-table-column>
           <vxe-table-column
-            field="orderSn"
-            title="订单编号"
+            field="serviceName"
+            title="产品名称"
           ></vxe-table-column>
-          <vxe-table-column field="serviceName" title="产品名称"></vxe-table-column>
           <vxe-table-column
             field="paySuccessTime"
             title="订单支付时间"
@@ -116,7 +116,10 @@
 </template>
 
 <script>
-import { queryInvoiceDetail } from "../../api/invoiceMan/index";
+import {
+  queryInvoiceDetail,
+  queryInvoiceOrderList,
+} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceDetail",
   data() {
@@ -138,6 +141,7 @@ export default {
   },
   created() {
     this.getPageData();
+    this.getOrderList();
   },
   computed: {
     moneyNum() {
@@ -148,25 +152,22 @@ export default {
     },
   },
   methods: {
-    downInvoice(arg){
-        console.log(arg,'arg');
-        location.href=arg.invoiceFile || '';
+    downInvoice(arg) {
+      console.log(arg, "arg");
+      location.href = arg.invoiceFile || "";
     },
     handlePageChange2({ currentPage, pageSize }) {
       this.tablePage2.currentPage = currentPage;
       this.tablePage2.pageSize = pageSize;
+      this.getOrderList();
     },
     getPageData() {
-      this.loading = true;
-      this.loading2 = true;
       var parms = this.$route.query.detailData;
       var getParm = {
         invoiceId: parms.invoiceId || "",
       };
       queryInvoiceDetail(getParm)
         .then((res) => {
-          this.loading = false;
-          this.loading2 = false;
           if (res.code == 200000) {
             var getData = res.data || {};
             if (
@@ -195,8 +196,31 @@ export default {
               };
             }
             this.detailTableData = getData;
-            this.myTableData = getData.orderList || [];
-            console.log(getData, "getData");
+          } else {
+            this.$message.error(res.message || "请求发票列表数据失败！");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("请求发票列表数据失败！");
+        });
+    },
+    getOrderList() {
+      this.loading = true;
+      this.loading2 = true;
+      var parms = this.$route.query.detailData;
+      var getParm = {
+        invoiceId: parms.invoiceId || "",
+        page: this.tablePage2.currentPage,
+        pageSize: this.tablePage2.pageSize,
+      };
+      queryInvoiceOrderList(getParm)
+        .then((res) => {
+          this.loading = false;
+          this.loading2 = false;
+          if (res.code == 200000) {
+            var getData = res.data || {};
+            this.myTableData = getData.list || [];
+            this.tablePage2.totalResult = getData.total || 0;
           } else {
             this.$message.error(res.message || "请求发票列表数据失败！");
           }

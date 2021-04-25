@@ -13,3 +13,7 @@ export const queryInvoiceBase = params => {
 export const queryInvoiceDetail = params => {
     return axios.post(`${toUrl}/Invoice/queryInvoiceInfo`, params).then(res => res.data);
 }
+//发票详情，订单信息接口
+export const queryInvoiceOrderList = params => {
+    return axios.post(`${toUrl}/Invoice/queryInvoiceOrderList`, params).then(res => res.data);
+}
