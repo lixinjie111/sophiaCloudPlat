@@ -37,9 +37,9 @@
       :data-source="tableList"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" disabled @click="goToDetail(record)">查看</a-button>
-        <a-button type="link" disabled>修改</a-button>
-        <a-button type="link" disabled>删除</a-button>
+        <a-button class="p0" type="link" disabled @click="goToDetail(record)">查看</a-button>
+        <a-button class="p0" type="link" disabled>修改</a-button>
+        <a-button class="p0" type="link" disabled>删除</a-button>
       </template>
     </a-table>
   </div>
@@ -255,7 +255,7 @@
         }
       }
     }
-    .ant-btn{
+    .p0{
       padding: 0;
     }
   }
