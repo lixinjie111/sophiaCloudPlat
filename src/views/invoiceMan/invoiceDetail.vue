@@ -2,12 +2,12 @@
   <div class="invoiceDetail_con">
     <div class="title_container">发票详情</div>
     <div class="content_container">
-      <div class="info_con">
+      <!-- <div class="info_con">
         <span>您的发票申请分</span>
         <span class="info_num">{{ fpNum }}</span>
         <span>张发票开具，开票总额：</span>
         <span class="info_num">¥ {{ fpMoney }}</span>
-      </div>
+      </div> -->
       <div class="label_txt">发票1</div>
       <div class="fp_table">
         <table class="fp1_class">
@@ -31,6 +31,7 @@
                 type="primary"
                 icon="download"
                 size="small"
+                @click="downInvoice(detailTableData)"
                 >下载</a-button
               >
             </td>
@@ -77,10 +78,10 @@
           ref="xTable"
         >
           <vxe-table-column
-            field="orderNum"
+            field="orderSn"
             title="订单编号"
           ></vxe-table-column>
-          <vxe-table-column field="proName" title="产品名称"></vxe-table-column>
+          <vxe-table-column field="serviceName" title="产品名称"></vxe-table-column>
           <vxe-table-column
             field="payTime"
             title="订单支付时间"
@@ -176,6 +177,10 @@ export default {
     },
   },
   methods: {
+    downInvoice(arg){
+        console.log(arg,'arg');
+        location.href=arg.invoiceFile || '';
+    },
     handlePageChange2({ currentPage, pageSize }) {
       this.tablePage2.currentPage = currentPage;
       this.tablePage2.pageSize = pageSize;
@@ -219,6 +224,7 @@ export default {
               };
             }
             this.detailTableData = getData;
+            this.myTableData = getData.orderList || [];
             console.log(getData, "getData");
           } else {
             this.$message.error(res.message || "请求发票列表数据失败！");
@@ -279,10 +285,8 @@ export default {
     }
     .fp_table {
       width: 100%;
-      height: 285px;
       .fp1_class {
         width: 100%;
-        height: 100%;
         border-radius: 2px;
         .tr_class {
           width: 100%;
