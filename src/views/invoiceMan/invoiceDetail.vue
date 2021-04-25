@@ -86,7 +86,7 @@
             field="paySuccessTime"
             title="订单支付时间"
           ></vxe-table-column>
-          <vxe-table-column field="orderAmount" title="金额"></vxe-table-column>
+          <vxe-table-column field="invoiceAmount" title="金额" formatter="formatAmount"></vxe-table-column>
           <vxe-table-column
             field="openTime"
             title="成功时间"
