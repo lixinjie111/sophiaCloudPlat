@@ -308,7 +308,6 @@ export default {
         var parms = {
             beginDate:this.beginDate,
             endDate:this.endDate,
-            invoiceId:'',
             page:this.tablePage2.currentPage,
             pageSize:this.tablePage2.pageSize,
             title:this.fpttVal

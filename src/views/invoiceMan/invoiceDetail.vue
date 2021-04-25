@@ -10,36 +10,61 @@
       </div>
       <div class="label_txt">发票1</div>
       <div class="fp_table">
-          <table class="fp1_class">
-              <tr class="tr_class">
-                  <td class="td_label">所属账号</td>
-                  <td>psychic0111</td>
-                  <td class="td_label">发票金额</td>
-                  <td>¥ 123.00</td>
-              </tr>
-              <tr class="tr_class">
-                  <td class="td_label">发票性质</td>
-                  <td>电子发票</td>
-                  <td class="td_label">发票状态</td>
-                  <td>待审核</td>
-              </tr>
-              <tr class="tr_class">
-                  <td class="td_label">发票类型</td>
-                  <td>增值税普通发票</td>
-                  <td class="td_label">发票抬头</td>
-                  <td>上海元知晟睿科技研究有限公司北京分公司</td>
-              </tr>
-              <tr class="tr_class">
-                  <td class="td_label">申请时间</td>
-                  <td>2021-02-21 18:00:02</td>
-                  <td class="td_label">发票编号</td>
-                  <td>--</td>
-              </tr>
-              <tr class="tr_class tr_class1">
-                  <td class="td_label">备注</td>
-                  <td colspan="3"></td>
-              </tr>
-          </table>
+        <table class="fp1_class">
+          <tr class="tr_class">
+            <td class="td_label">所属账号</td>
+            <td>{{ detailTableData.userAccount }}</td>
+            <td class="td_label">发票金额</td>
+            <td>¥ {{ moneyNum }}</td>
+          </tr>
+          <tr class="tr_class">
+            <td class="td_label">发票性质</td>
+            <td>
+              {{ detailTableData.invoicePropertyDesc }} &nbsp;&nbsp;&nbsp;&nbsp;
+              <a-button
+                v-if="
+                  detailTableData.invoiceStatusDesc == '已开票' ||
+                  detailTableData.invoiceStatusDesc == '已作废' ||
+                  detailTableData.invoiceStatusDesc == '已红冲' ||
+                  detailTableData.invoiceStatusDesc == '退票中'
+                "
+                type="primary"
+                icon="download"
+                size="small"
+                >下载</a-button
+              >
+            </td>
+            <td class="td_label">发票状态</td>
+            <td :style="detailTableData.styleObject">
+              {{ detailTableData.invoiceStatusDesc }}
+            </td>
+          </tr>
+          <tr class="tr_class">
+            <td class="td_label">发票类型</td>
+            <td>{{ detailTableData.invoiceTypeDesc }}</td>
+            <td class="td_label">发票抬头</td>
+            <td>{{ detailTableData.title }}</td>
+          </tr>
+          <tr class="tr_class">
+            <td class="td_label">申请时间</td>
+            <td>{{ detailTableData.applyTime }}</td>
+            <td class="td_label">发票编号</td>
+            <td>{{ detailTableData.orderSn }}</td>
+          </tr>
+          <tr
+            class="tr_class"
+            v-if="detailTableData.invoiceStatusDesc == '已拒绝'"
+          >
+            <td class="td_label">拒绝原因</td>
+            <td colspan="3" :style="detailTableData.styleObject">
+              {{ detailTableData.refundTypeDesc }}
+            </td>
+          </tr>
+          <tr class="tr_class tr_class1">
+            <td class="td_label">备注</td>
+            <td colspan="3">{{ detailTableData.remark }}</td>
+          </tr>
+        </table>
       </div>
       <div class="label_txt">订单信息</div>
       <div class="order_table">
@@ -48,6 +73,8 @@
           :data="myTableData"
           highlight-hover-row
           show-header-overflow
+          :loading="loading"
+          ref="xTable"
         >
           <vxe-table-column
             field="orderNum"
@@ -88,6 +115,7 @@
 </template>
 
 <script>
+import { queryInvoiceDetail } from "../../api/invoiceMan/index";
 export default {
   name: "invoiceDetail",
   data() {
@@ -131,16 +159,75 @@ export default {
         pageSize: 10,
         totalResult: 0,
       },
+      loading: false,
+      loading2: false,
+      detailTableData: {},
     };
   },
   created() {
-
+    this.getPageData();
+  },
+  computed: {
+    moneyNum() {
+      return this.$myUtilsFn.commafy(
+        this.$myUtilsFn.toNumber(this.detailTableData.totalAmount),
+        { digits: 2 }
+      );
+    },
   },
   methods: {
-    handlePageChange2 ({ currentPage, pageSize }) {
-        this.tablePage2.currentPage = currentPage
-        this.tablePage2.pageSize = pageSize
-    }
+    handlePageChange2({ currentPage, pageSize }) {
+      this.tablePage2.currentPage = currentPage;
+      this.tablePage2.pageSize = pageSize;
+    },
+    getPageData() {
+      this.loading = true;
+      this.loading2 = true;
+      var parms = this.$route.query.detailData;
+      var getParm = {
+        invoiceId: parms.invoiceId || "",
+      };
+      queryInvoiceDetail(getParm)
+        .then((res) => {
+          this.loading = false;
+          this.loading2 = false;
+          if (res.code == 200000) {
+            var getData = res.data || {};
+            if (
+              getData.invoiceStatusDesc == "待审核" ||
+              getData.invoiceStatusDesc == "已开票"
+            ) {
+              getData.styleObject = {
+                color: "#51C41B",
+              };
+            } else if (getData.invoiceStatusDesc == "开票中") {
+              getData.styleObject = {
+                color: "#FAAD14",
+              };
+            } else if (
+              getData.invoiceStatusDesc == "已拒绝" ||
+              getData.invoiceStatusDesc == "已作废" ||
+              getData.invoiceStatusDesc == "已红冲" ||
+              getData.invoiceStatusDesc == "退票中"
+            ) {
+              getData.styleObject = {
+                color: "#FF4D4F",
+              };
+            } else if (getData.invoiceStatusDesc == "已撤销") {
+              getData.styleObject = {
+                color: "#121C33",
+              };
+            }
+            this.detailTableData = getData;
+            console.log(getData, "getData");
+          } else {
+            this.$message.error(res.message || "请求发票列表数据失败！");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("请求发票列表数据失败！");
+        });
+    },
   },
 };
 </script>
@@ -193,27 +280,29 @@ export default {
     .fp_table {
       width: 100%;
       height: 285px;
-      .fp1_class{
+      .fp1_class {
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+        .tr_class {
           width: 100%;
-          height: 100%;
-          border-radius: 2px;
-          .tr_class{
-              width: 100%;
-              height: 45px;
-              .td_label{
-                  width: 144px;
-                  background-color:#FAFAFA;
-              }
+          height: 45px;
+          .td_label {
+            width: 144px;
+            background-color: #fafafa;
           }
-          .tr_class1{
-              height: 104px;
-          }
+        }
+        .tr_class1 {
+          height: 104px;
+        }
       }
-      .fp1_class,tr,td{
-          border: 1px solid rgba(0, 0, 0, 0.15);
-          text-align: left;
-          padding-left: 24px;
-          box-sizing: border-box;
+      .fp1_class,
+      tr,
+      td {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        text-align: left;
+        padding-left: 24px;
+        box-sizing: border-box;
       }
     }
     .order_table {

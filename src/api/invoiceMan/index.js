@@ -9,3 +9,7 @@ export const fapSearch = params => {
 export const queryInvoiceBase = params => {
     return axios.post(`${toUrl}/Invoice/queryInvoiceBase`, params).then(res => res.data);
 }
+//发票详情查询接口    
+export const queryInvoiceDetail = params => {
+    return axios.post(`${toUrl}/Invoice/queryInvoiceInfo`, params).then(res => res.data);
+}
