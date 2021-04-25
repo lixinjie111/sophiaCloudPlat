@@ -10,14 +10,36 @@
       </div>
       <div class="label_txt">发票1</div>
       <div class="fp_table">
-        <vxe-grid
-          border
-          highlight-hover-row
-          class="reverse-table"
-          :show-header="false"
-          :columns="tableColumn"
-          :data="tableData"
-        ></vxe-grid>
+          <table class="fp1_class">
+              <tr class="tr_class">
+                  <td class="td_label">所属账号</td>
+                  <td>psychic0111</td>
+                  <td class="td_label">发票金额</td>
+                  <td>¥ 123.00</td>
+              </tr>
+              <tr class="tr_class">
+                  <td class="td_label">发票性质</td>
+                  <td>电子发票</td>
+                  <td class="td_label">发票状态</td>
+                  <td>待审核</td>
+              </tr>
+              <tr class="tr_class">
+                  <td class="td_label">发票类型</td>
+                  <td>增值税普通发票</td>
+                  <td class="td_label">发票抬头</td>
+                  <td>上海元知晟睿科技研究有限公司北京分公司</td>
+              </tr>
+              <tr class="tr_class">
+                  <td class="td_label">申请时间</td>
+                  <td>2021-02-21 18:00:02</td>
+                  <td class="td_label">发票编号</td>
+                  <td>--</td>
+              </tr>
+              <tr class="tr_class tr_class1">
+                  <td class="td_label">备注</td>
+                  <td colspan="3"></td>
+              </tr>
+          </table>
       </div>
       <div class="label_txt">订单信息</div>
       <div class="order_table">
@@ -72,8 +94,6 @@ export default {
     return {
       fpNum: 1,
       fpMoney: "123.00",
-      tableColumn: [],
-      tableData: [],
       allAlign: null,
       myTableData: [
         {
@@ -114,57 +134,13 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.query.detailData, "detailData");
-    const myColumns = [
-      { field: "name", title: "所属账号" },
-      { field: "role", title: "发票性质" },
-      { field: "sex", title: "发票类型" },
-      { field: "age", title: "申请时间" },
-      { field: "address", title: "退票原因" },
-    ];
-    const myData = [
-      {
-        id: 10001,
-        name: "Test1",
-        nickname: "T1",
-        role: "Develop",
-        sex: "Man",
-        age: 28,
-        address: "Shenzhen",
-      },
-    ];
-    this.reverseTable(myColumns, myData);
+
   },
   methods: {
     handlePageChange2 ({ currentPage, pageSize }) {
         this.tablePage2.currentPage = currentPage
         this.tablePage2.pageSize = pageSize
-        // this.getfpManData()
-    },
-    reverseTable(columns, list) {
-      const buildData = columns.map((column) => {
-        const item = { col0: column.title };
-        list.forEach((row, index) => {
-          item[`col${index + 1}`] = row[column.field];
-        });
-        return item;
-      });
-      const buildColumns = [
-        {
-          field: "col0",
-          fixed: "left",
-          width: 80,
-        },
-      ];
-      list.forEach((item, index) => {
-        buildColumns.push({
-          field: `col${index + 1}`,
-          minWidth: 120,
-        });
-      });
-      this.tableData = buildData;
-      this.tableColumn = buildColumns;
-    },
+    }
   },
 };
 </script>
@@ -216,6 +192,29 @@ export default {
     }
     .fp_table {
       width: 100%;
+      height: 285px;
+      .fp1_class{
+          width: 100%;
+          height: 100%;
+          border-radius: 2px;
+          .tr_class{
+              width: 100%;
+              height: 45px;
+              .td_label{
+                  width: 144px;
+                  background-color:#FAFAFA;
+              }
+          }
+          .tr_class1{
+              height: 104px;
+          }
+      }
+      .fp1_class,tr,td{
+          border: 1px solid rgba(0, 0, 0, 0.15);
+          text-align: left;
+          padding-left: 24px;
+          box-sizing: border-box;
+      }
     }
     .order_table {
       width: 100%;
