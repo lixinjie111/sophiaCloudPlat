@@ -83,12 +83,12 @@
           ></vxe-table-column>
           <vxe-table-column field="serviceName" title="产品名称"></vxe-table-column>
           <vxe-table-column
-            field="payTime"
+            field="paySuccessTime"
             title="订单支付时间"
           ></vxe-table-column>
-          <vxe-table-column field="money" title="金额"></vxe-table-column>
+          <vxe-table-column field="orderAmount" title="金额"></vxe-table-column>
           <vxe-table-column
-            field="successTime"
+            field="openTime"
             title="成功时间"
           ></vxe-table-column>
         </vxe-table>
@@ -124,36 +124,7 @@ export default {
       fpNum: 1,
       fpMoney: "123.00",
       allAlign: null,
-      myTableData: [
-        {
-          orderNum: "Test1",
-          proName: "Develop",
-          payTime: "Man",
-          money: 28,
-          successTime: "vxe-table 从入门到放弃",
-        },
-        {
-          orderNum: "Test2",
-          proName: "Test",
-          payTime: "Women",
-          money: 22,
-          successTime: "Guangzhou",
-        },
-        {
-          orderNum: "Test3",
-          proName: "PM",
-          payTime: "Man",
-          money: 32,
-          successTime: "Shanghai",
-        },
-        {
-          orderNum: "Test4",
-          proName: "Designer",
-          payTime: "Women ",
-          money: 24,
-          successTime: "Shanghai",
-        },
-      ],
+      myTableData: [],
       loading2: false,
       tablePage2: {
         currentPage: 1,
