@@ -26,7 +26,7 @@
         :data-source="list"
         :rowKey="record=>record.id">
         <template slot="operation" slot-scope="text, record, index">
-          <a-button type="link">详情</a-button>
+          <a-button type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
         </template>
       </a-table>
     </a-card>
@@ -84,6 +84,11 @@
       this.getAppDetail();
     },
     methods: {
+      toDetail(applicationId,id) {
+        this.$router.push({
+          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+        });
+      },
       getAppDetail (){
         let params = {
           id: this.$route.query.id
@@ -102,7 +107,7 @@
       },
       addScene() {
         this.$router.push({
-          path: '/recommendation/scene/list'
+          path: '/recommendation/scene/list?show=1'
         });
       }
     }

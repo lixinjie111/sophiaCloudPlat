@@ -131,10 +131,14 @@
         };
         saveSceneConfigData(params).then(res => {
           if (res.code == 200000) {
-            this.$message.success("添加成功！");
-            this.$router.push({
-              path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
-            });
+            if(this.type == 'edit'){
+              this.$message.success("编辑成功！");
+            }else {
+              this.$message.success("添加成功！");
+              this.$router.push({
+                path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
+              });
+            }
           } else {
             this.$message.error(res.message || "请求失败！");
           }

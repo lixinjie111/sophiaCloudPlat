@@ -146,6 +146,7 @@
             <div>逻辑判断</div>
             <div>规则数值</div>
           </div>
+          <a-divider />
           <div v-for="(item,index) in detail.ruleInfo.filterItemParams" :key="item.id" class="rule-info">
             <div>{{index+1}}</div>
             <div>{{item.firstLevelCategory}}</div>
@@ -172,6 +173,7 @@
             <div>逻辑判断</div>
             <div>值</div>
           </div>
+          <a-divider />
           <div v-for="(item,index) in detail.ruleInfo.recommendParams" :key="item.id" class="rule-info1">
             <div>{{index+1}}</div>
             <div>{{item.property}}</div>
@@ -287,6 +289,10 @@
           width: 60%;
         }
       }
+    }
+
+    .ant-divider-horizontal {
+      margin: 4px 0;
     }
   }
 </style>

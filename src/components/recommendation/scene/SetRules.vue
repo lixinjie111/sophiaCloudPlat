@@ -133,9 +133,9 @@
 
       },
       test() {
-
+         this.finish('test');
       },
-      finish() {
+      finish(type) {
         let params = {
           filterItemParams: this.filterItemParams,
           applicationId: this.$route.query.appId,
@@ -150,10 +150,20 @@
         }
         saveSceneConfigRule(params).then(res => {
           if (res.code == 200000) {
-            this.$message.success("添加成功！");
-            this.$router.push({
-              path: '/recommendation/scene/list'
-            });
+            if(this.type == 'edit'){
+              this.$message.success("编辑成功！");
+            }else {
+              this.$message.success("添加成功！");
+              if(type =='test'){
+                this.$router.push({
+                  path: '/recommendation/operation/result'
+                });
+              }else {
+                this.$router.push({
+                  path: '/recommendation/scene/list'
+                });
+              }
+            }
           } else {
             this.$message.error(res.message || "请求失败！");
           }

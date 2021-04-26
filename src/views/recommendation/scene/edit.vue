@@ -130,9 +130,6 @@
             addScene(params).then(res => {
               if (res.code == 200000) {
                 this.$message.success("编辑成功！");
-                // this.$router.push({
-                //   path: '/recommendation/scene/data?appId='+ this.$refs.sceneForm.$refs.sceneForm.model.applicationId + '&sceneId=' + res.data
-                // });
               } else {
                 this.$message.error(res.message || "请求失败！");
               }
