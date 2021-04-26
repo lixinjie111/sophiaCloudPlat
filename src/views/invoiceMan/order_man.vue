@@ -153,7 +153,7 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
 <script>
     import moment from "moment";
     import "moment/locale/zh-cn";
-    import {orderList, cancelOrder} from '@/api/invoiceMan';
+    import {orderList, cancelOrder} from '@/api/invoiceMan/order';
     import {MessageBox} from 'element-ui'
 
     export default {
