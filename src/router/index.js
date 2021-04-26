@@ -58,8 +58,8 @@ const recommendationMaterielWillPush = resolve => require(['@/views/recommendati
 const recommendationMaterielDetail = resolve => require(['@/views/recommendation/materiel/detail'], resolve);
 //订单管理
 const order_man = resolve => require(['@/views/invoiceMan/order_man'], resolve);
-const pay = resolve => require(['@/views/invoiceMan/pay'], resolve);
-const order_info = resolve => require(['@/views/invoiceMan/order_info'], resolve);
+// const pay = resolve => require(['@/views/invoiceMan/pay'], resolve);
+// const order_info = resolve => require(['@/views/invoiceMan/order_info'], resolve);
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
