@@ -56,7 +56,10 @@ const recommendationMateriel = resolve => require(['@/views/recommendation/mater
 const recommendationMaterielWillPush = resolve => require(['@/views/recommendation/materiel/willPush'], resolve);
 // 物料详情
 const recommendationMaterielDetail = resolve => require(['@/views/recommendation/materiel/detail'], resolve);
-
+//订单管理
+const order_man = resolve => require(['@/views/invoiceMan/order_man'], resolve);
+const pay = resolve => require(['@/views/invoiceMan/pay'], resolve);
+const order_info = resolve => require(['@/views/invoiceMan/order_info'], resolve);
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
@@ -69,6 +72,21 @@ export const menuRouterMap = [{
     component: Home,
     redirect: "/dashBaord",
     children: [
+      {
+        name: 'order_man',
+        path: '/order_man',
+        component: order_man
+      },
+      {
+        name: 'pay',
+        path: '/pay',
+        component: pay
+      },
+      {
+        name: 'order_info',
+        path: '/order_info',
+        component: order_info
+      },
         {
             name: "applicationList",
             path: "application/list",

@@ -20,6 +20,14 @@ export default {
 
 <style lang="scss">
 #app {
+.el-step__head.is-success {
+  color: #1890FF !important;
+  border-color: #1890FF !important;
+}
+
+.el-step__title.is-success {
+  color: #1890FF !important;
+}
 	height: 100%;
 }
 ::-webkit-scrollbar {

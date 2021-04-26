@@ -442,7 +442,7 @@
               {
                 subKey: "caiwu5",
                 title: "订单管理",
-                path: "",
+                path: "/order_man",
                 seckey:'caiwu5',
               },
               {
@@ -626,9 +626,9 @@
           }
           else if(keyVal == 'caiwu5'){
             this.breadArr.splice(0, 0, "财务中心", "订单管理");
-            // this.$router.push({
-            //   path: "/businessSet"
-            // });
+             this.$router.push({
+               path: "/order_man"
+             });
           }
           else if(keyVal == 'caiwu6'){
             this.breadArr.splice(0, 0, "财务中心", "续费管理");
