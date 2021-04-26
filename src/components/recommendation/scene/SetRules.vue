@@ -20,7 +20,7 @@
         <div class="best_goods">
           <div class="best_goods_title">
             <p>筛选必推物品：</p>
-            <a-button type="primary">必推物品池</a-button>
+            <a-button type="primary" @click="toWillPush">必推物品池</a-button>
           </div>
           <AddBestGoods :list="recommendParams" :propertiesList="mustPushPropertiesList"></AddBestGoods>
         </div>
@@ -79,6 +79,11 @@
       this.getSceneMustPushProperties();
     },
     methods: {
+      toWillPush() {
+        this.$router.push({
+          path: '/recommendation/materiel/willPush'
+        });
+      },
       getSceneItems() {
         let params = {
           applicationId: this.$route.query.appId,

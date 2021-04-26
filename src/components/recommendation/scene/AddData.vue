@@ -22,7 +22,7 @@
         <a-select-option :value="item.sourceTableId" v-for="(item,index) in sourceTablesList" :key="index">{{item.sourceUserTableName}}
         </a-select-option>
       </a-select>
-      <a-button type="primary" icon="profile" class="c-mr-20">详情</a-button>
+      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.sourceTableName)">详情</a-button>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -83,6 +83,11 @@
       }
     },
     methods: {
+      toDetail(name) {
+        this.$router.push({
+          path: '/recommendation/data/detail?name='+ name
+        });
+      },
       getSceneSourceTables(folderId,dataType) {
         let params = {
           dataSourceId: folderId, //文件夹id
