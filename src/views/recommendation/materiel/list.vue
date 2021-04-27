@@ -2,8 +2,8 @@
   <div class="data-admin">
     <div class="top">
       <div class="left">
-        <a-button type="primary" style="margin-right: 10px">删除</a-button>
-        <a-button type="primary" >必推物料池</a-button>
+        <!-- <a-button type="primary" style="margin-right: 10px">删除</a-button>
+        <a-button type="primary" >必推物料池</a-button> -->
       </div>
       <div class="right">
         <div>

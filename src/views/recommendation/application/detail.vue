@@ -107,7 +107,11 @@
       },
       addScene() {
         this.$router.push({
-          path: '/recommendation/scene/list?show=1'
+          path: '/recommendation/scene/list?show=1',
+          query:{
+            activekey:['tuijianchangjing'],
+            openkey:['dataSer1']
+          }
         });
       }
     }

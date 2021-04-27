@@ -236,7 +236,11 @@
       },
       toTest() {
         this.$router.push({
-          path: '/recommendation/operation/result'
+          path: '/recommendation/operation/result',
+          query:{
+            activekey:['tuijianceshijijieguo'],
+            openkey:['dataSer1',"tuijianyunying"]
+          }
         });
       },
       add() {
