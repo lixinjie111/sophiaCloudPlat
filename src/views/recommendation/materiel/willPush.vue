@@ -5,14 +5,16 @@
       <div class="right">
         <div>
           推荐应用：
-          <a-select style="width:160px" placeholder="请选择推荐应用" v-model="appName" @change="appNameChange">
+          <a-select style="width:160px" placeholder="请选择推荐应用" v-model="appName" @change="appNameChange"
+                    :getPopupContainer="triggerNode => {return triggerNode}">
             <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in appNameList" :key="item.id">{{item.appName}}</a-select-option>
           </a-select>
         </div>
         <div>
           业务场景:
-          <a-select disabled style="width: 160px" placeholder="请选择业务场景" v-model="sceneId" @change="sceneTypeChange">
+          <a-select disabled style="width: 160px" placeholder="请选择业务场景" v-model="sceneId" @change="sceneTypeChange"
+                    :getPopupContainer="triggerNode => {return triggerNode}">
             <a-select-option v-for="item in sceneList" :key="item.id" :value="item.id">{{item.title}}</a-select-option>
           </a-select>
         </div>

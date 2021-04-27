@@ -5,7 +5,8 @@
         <a-input placeholder="请输入应用名称" v-model="createForm.appName" :maxLength="14"/>
       </a-form-model-item>
       <a-form-model-item label="所属行业" prop="industry">
-        <a-select placeholder="请选择行业" v-model="createForm.industry" @change="tradeChange">
+        <a-select placeholder="请选择行业" v-model="createForm.industry" @change="tradeChange"
+                  :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
           <a-select-option :value="item.id" v-for="(item,index) in industryList" :key="index">{{item.industry}}</a-select-option>
         </a-select>
       </a-form-model-item>

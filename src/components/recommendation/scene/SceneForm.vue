@@ -5,7 +5,8 @@
         <a-input placeholder="请输入场景名称" v-model="sceneForm.title" :maxLength="14" :disabled="isEdit"/>
       </a-form-model-item>
       <a-form-model-item label="所属应用" prop="applicationId">
-        <a-select placeholder="请选择所属应用" v-model="sceneForm.applicationId" :disabled="isEdit">
+        <a-select placeholder="请选择所属应用" v-model="sceneForm.applicationId" :disabled="isEdit"
+                  :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
           <a-select-option :value="app.id" v-for="(app,index) in appList" :key="index">{{app.appName}}</a-select-option>
         </a-select>
       </a-form-model-item>
@@ -41,7 +42,8 @@
         <a-input placeholder="请输入推荐位置" v-model="sceneForm.place" :maxLength="14"/>
       </a-form-model-item>
       <a-form-model-item label="场景模板">
-        <a-select placeholder="请选择场景模板" @change="mouldChange" disabled>
+        <a-select placeholder="请选择场景模板" @change="mouldChange" disabled
+                  :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
           <a-select-option value="1">个性推荐模板01</a-select-option>
           <a-select-option value="2">个性推荐模板02</a-select-option>
         </a-select>

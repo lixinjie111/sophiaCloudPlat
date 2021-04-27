@@ -11,19 +11,24 @@
     </div>
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <div class="index">{{index+1}}</div>
-      <a-select class="c-mr-10" placeholder="请选择1级品类" v-model="item.firstLevelCategory" @change="changeLevelCategory(item,1)" style="width:100px">
+      <a-select class="c-mr-10" placeholder="请选择1级品类" v-model="item.firstLevelCategory" @change="changeLevelCategory(item,1)" style="width:100px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item" v-for="(item,index) in itemList" :key="index">{{item}}</a-select-option>
       </a-select>
-      <a-select class="c-mr-10" placeholder="请选择2级品类" v-model="item.secondLevelCategory" @change="changeLevelCategory(item,2)" style="width:100px">
+      <a-select class="c-mr-10" placeholder="请选择2级品类" v-model="item.secondLevelCategory" @change="changeLevelCategory(item,2)" style="width:100px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item" v-for="(item,index) in itemList2" :key="index">{{item}}</a-select-option>
       </a-select>
-      <a-select class="c-mr-10" placeholder="请选择品牌" v-model="item.brand" @change="changeBrand" style="width:100px">
+      <a-select class="c-mr-10" placeholder="请选择品牌" v-model="item.brand" @change="changeBrand" style="width:100px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item" v-for="(item,index) in itemList3" :key="index">{{item}}</a-select-option>
       </a-select>
-      <a-select class="c-mr-10" placeholder="请选择物品特征" v-model="item.itemProperty" @change="changeProperty" style="width:100px">
+      <a-select class="c-mr-10" placeholder="请选择物品特征" v-model="item.itemProperty" @change="changeProperty" style="width:100px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.fieldValue" v-for="(item,index) in itemPropertiesList" :key="index">{{item.fieldValue}}</a-select-option>
       </a-select>
-      <a-select class="c-mr-10" placeholder="请选择逻辑判断" v-model="item.logicCalc" @change="changeLogicCalc" style="width:100px">
+      <a-select class="c-mr-10" placeholder="请选择逻辑判断" v-model="item.logicCalc" @change="changeLogicCalc" style="width:100px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option value="大于">大于</a-select-option>
         <a-select-option value="小于">小于</a-select-option>
         <a-select-option value="等于">等于</a-select-option>

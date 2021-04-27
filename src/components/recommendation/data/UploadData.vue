@@ -34,12 +34,14 @@
           <a-input placeholder="请输入表名" v-model="dataForm.name" :maxLength="14"/>
         </a-form-model-item>
         <a-form-model-item label="添加文件夹" prop="file">
-          <a-select label-in-value placeholder="请选择所属文件夹" @change="fileChange">
+          <a-select label-in-value placeholder="请选择所属文件夹" @change="fileChange"
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option v-for="item in filePackageList" :key="item.id">{{item.name}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="数据类型" prop="type">
-          <a-select label-in-value placeholder="请选择数据类型" @change="dataTypeChange">
+          <a-select label-in-value placeholder="请选择数据类型" @change="dataTypeChange"
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option v-for="item in dataType" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
         </a-form-model-item>

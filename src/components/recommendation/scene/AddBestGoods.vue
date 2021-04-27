@@ -1,10 +1,12 @@
 <template>
   <div class="add_box">
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
-      <a-select class="c-mr-10" placeholder="请选择品牌" v-model="item.property" @change="changeProperty" style="width:160px">
+      <a-select class="c-mr-10" placeholder="请选择品牌" v-model="item.property" @change="changeProperty" style="width:160px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.fieldValue" v-for="(item,index) in propertiesList" :key="index">{{item.fieldValue}}</a-select-option>
       </a-select>
-      <a-select class="c-mr-10" placeholder="请选择条件" v-model="item.logicCalc" @change="change" style="width:160px">
+      <a-select class="c-mr-10" placeholder="请选择条件" v-model="item.logicCalc" @change="change" style="width:160px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option value="等于">等于</a-select-option>
         <a-select-option value="不等于">不等于</a-select-option>
         <a-select-option value="大于">大于</a-select-option>

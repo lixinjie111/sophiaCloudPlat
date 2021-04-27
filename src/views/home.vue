@@ -763,7 +763,7 @@
         background: #fff;
         justify-content: space-between;
         padding: 0;
-        z-index: 999 !important;
+        z-index: 9999 !important;
         .headerRight {
           margin-right: 24px;
           width: 50%;
