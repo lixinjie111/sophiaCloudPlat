@@ -28,11 +28,12 @@
     <a-table
       :columns="columns"
       :data-source="tableList"
+      :scroll="{ x: 1500}"
       :pagination="pagination">
       <template slot="operation" slot-scope="text,record">
-        <a-button type="link" @click.stop="showDetail(record)">查看</a-button>
-        <a-button type="link" disabled>修改</a-button>
-        <a-button type="link" disabled>删除</a-button>
+        <a-button class="p0" type="link" @click.stop="showDetail(record)">查看</a-button>
+        <a-button class="p0" type="link" disabled>修改</a-button>
+        <a-button class="p0" type="link" disabled>删除</a-button>
       </template>
     </a-table>
     <a-modal v-model="newFile" title="创建文件夹">
@@ -96,7 +97,9 @@
         columns: [
           {
             title: '序号',
-            dataIndex: 'index'
+            dataIndex: 'index',
+            width: 60,
+            fixed: 'left'
           },
           {
             title: '表名',
@@ -134,7 +137,8 @@
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            width:100
+            width: 200,
+            fixed: 'right'
           },
         ],
         appName: "all",
@@ -288,6 +292,10 @@
           margin-left: 10px;
         }
       }
+    }
+
+    .p0 {
+      padding: 0 20px 0 0;
     }
   }
 </style>

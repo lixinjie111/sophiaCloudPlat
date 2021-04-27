@@ -40,6 +40,7 @@
       :columns="columns"
       :data-source="list"
       :rowKey="record=>record.id"
+      :scroll="{ x: 1500}"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <div class="operate">
@@ -93,12 +94,12 @@
           {
             title: '序号',
             customRender: (text, record, index) => `${index + 1}`,
-            width:60
+            width: 60,
+            fixed: 'left'
           },
           {
             title: '场景名称',
-            dataIndex: 'title',
-            ellipsis:true
+            dataIndex: 'title'
           },
           {
             title: '所属应用',
@@ -118,23 +119,23 @@
           },
           {
             title: '调用次数',
-            dataIndex: 'recallTimes',
-            width:100
+            dataIndex: 'recallTimes'
           },
           {
             title: '创建时间',
-            dataIndex: 'createTime'
+            dataIndex: 'createTime',
+            width: 200
           },
           {
             title: '创建人',
-            dataIndex: 'creator',
-            width:100
+            dataIndex: 'creator'
           },
           {
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            // width: 300
+            width: 260,
+            fixed: 'right'
           },
         ],
         appList: [],
@@ -318,7 +319,7 @@
       }
     }
     .p0{
-      padding: 0;
+      padding: 0 20px 0  0;
     }
     .operate{
       display: flex;

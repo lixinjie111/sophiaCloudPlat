@@ -24,7 +24,7 @@
       </div>
     </div>
     <a-table
-      :scroll="{x:1400}"
+      :scroll="{x:1500}"
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
@@ -49,7 +49,8 @@
           {
             title: '序号',
             customRender: (text, record, index) => `${index + 1}`,
-            width:60
+            width: 60,
+            fixed: "left"
           },
           {
             title: '物料ID',
@@ -57,9 +58,8 @@
           },
           {
             title: '物料名称',
-            width: 300,
-            dataIndex: 'goodsName',
-            ellipsis:true
+            width: 200,
+            dataIndex: 'goodsName'
           },
           {
             title: '品类1',
@@ -85,6 +85,8 @@
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
+            width: 200,
+            fixed: "right"
           },
         ],
         appName: 'all',
@@ -233,7 +235,7 @@
       }
     }
     .p0{
-      padding: 0;
+      padding: 0 20px 0 0;
     }
   }
 </style>

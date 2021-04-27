@@ -16,6 +16,7 @@
       :columns="columns"
       :data-source="list"
       :rowKey="record=>record.id"
+      :scroll="{ x: 1500}"
       :pagination="pagination">
       <template slot="appKey" slot-scope="text, record, index">
         <span v-if="record.isAppKeyShow">{{text}}</span>
@@ -27,15 +28,15 @@
         {{formatTime(text)}}
       </template>
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link">报表</a-button>
-        <a-button type="link" @click="toDetail(record.id)">详情</a-button>
-        <a-button type="link" @click="toScene">配置</a-button>
+        <a-button class="p0" type="link">报表</a-button>
+        <a-button class="p0" type="link" @click="toDetail(record.id)">详情</a-button>
+        <a-button class="p0" type="link" @click="toScene">配置</a-button>
         <a-popconfirm
           title="是否删除该应用?"
           ok-text="是"
           cancel-text="否"
           @confirm="del(record.id)">
-          <a-button type="link" style="color:red;">删除</a-button>
+          <a-button class="p0" type="link" style="color:red;">删除</a-button>
         </a-popconfirm>
       </template>
     </a-table>
@@ -65,33 +66,36 @@
         columns: [
           {
             title: '应用名称',
-            dataIndex: 'appName'
+            dataIndex: 'appName',
+            width: 200,
+            fixed: 'left'
           },
           {
             title: 'APP ID',
-            dataIndex: 'appId',
-            width: 180
+            dataIndex: 'appId'
           },
           {
             title: 'API Key',
             dataIndex: 'appKey',
             scopedSlots: {customRender: 'appKey'},
-            width: 160
+            width: 200
           },
           {
             title: 'Secret Key',
             dataIndex: 'appSecret',
-            width: 160
           },
           {
             title: '创建时间',
             dataIndex: 'createTime',
-            scopedSlots: {customRender: 'createTime'}
+            scopedSlots: {customRender: 'createTime'},
+            width: 140
           },
           {
             title: '操作',
             dataIndex: 'operation',
-            scopedSlots: {customRender: 'operation'}
+            scopedSlots: {customRender: 'operation'},
+            width: 260,
+            fixed: 'right'
           },
         ],
         pagination: {
@@ -246,6 +250,10 @@
     .app-key-show {
       cursor: pointer;
       color: #2373FF;
+    }
+
+    .p0 {
+      padding: 0 20px 0 0;
     }
   }
 </style>

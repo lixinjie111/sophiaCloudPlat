@@ -32,13 +32,14 @@
       </div>
     </div>
     <a-table
+      :scroll="{ x: 1500}"
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" @click="goToDetail(record)">查看</a-button>
-        <a-button type="link" disabled>修改</a-button>
-        <a-button type="link" disabled>删除</a-button>
+        <a-button class="p0" type="link" @click="goToDetail(record)">查看</a-button>
+        <a-button class="p0" type="link" disabled>修改</a-button>
+        <a-button class="p0" type="link" disabled>删除</a-button>
       </template>
     </a-table>
   </div>
@@ -54,6 +55,8 @@
         columns: [
           {
             title: '序号',
+            width: 60,
+            fixed: "left",
             customRender: (text, record, index) => `${index + 1}`
           },
           {
@@ -62,7 +65,7 @@
           },
           {
             title: '物料名称',
-            width: 300,
+            width: 200,
             dataIndex: 'material_name'
           },
           {
@@ -100,6 +103,8 @@
           {
             title: '操作',
             dataIndex: 'operation',
+            width: 200,
+            fixed: "right",
             scopedSlots: {customRender: 'operation'},
           },
         ],
@@ -247,6 +252,10 @@
           margin-left: 10px;
         }
       }
+    }
+
+    .p0{
+      padding: 0 20px 0 0;
     }
   }
 </style>

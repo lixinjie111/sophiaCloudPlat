@@ -8,31 +8,31 @@
       <div class="right">
         <div>
           应用名称：
-          <a-select style="width:160px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange">
+          <a-select style="width: 140px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange">
             <a-select-option v-for="item in appNameList" :key="item.id">{{item.appName}}</a-select-option>
           </a-select>
         </div>
         <div>
           应用场景:
-          <a-select style="width: 160px" placeholder="请选择应用场景" v-model="sceneId" @change="sceneTypeChange">
+          <a-select style="width: 140px" placeholder="请选择应用场景" v-model="sceneId" @change="sceneTypeChange">
             <a-select-option v-for="item in sceneList" :key="item.id" :value="item.id">{{item.title}}</a-select-option>
           </a-select>
         </div>
         <div>
           数据源表:
-          <a-select style="width: 160px" placeholder="请选择数据源表" v-model="tableName">
+          <a-select style="width: 140px" placeholder="请选择数据源表" v-model="tableName">
             <a-select-option v-for="item in dataSourceTable" :key="item.id" :value="item.tableName">{{item.userTableName}}</a-select-option>
           </a-select>
         </div>
         <div>
           关键词:
-          <a-input v-model="searchText" placeholder="请输入关键词" style="width: 160px"/>
+          <a-input v-model="searchText" placeholder="请输入关键词" style="width: 140px"/>
         </div>
         <a-button type="primary" @click="onSearch" style="margin-left: 10px">查询</a-button>
       </div>
     </div>
     <a-table
-      :scroll="scrollColumn"
+      :scroll="{ x: 1500}"
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
@@ -51,24 +51,22 @@
     name: "list",
     data() {
       return {
-        scrollColumn:{x:1200},
         tableList:[],
         columns: [
           {
             title: '序号',
-            width:60,
+            width: 60,
+            fixed: "left",
             customRender: (text, record, index) => `${index + 1}`
           },
           {
             title: '物料ID',
-            width:130,
-            ellipsis:true,
             dataIndex: 'materiel_id'
           },
           {
             title: '物料名称',
             dataIndex: 'material_name',
-            ellipsis:true
+            width: 200
           },
           {
             title: '物料类型',
@@ -105,8 +103,8 @@
           {
             title: '操作',
             dataIndex: 'operation',
-            width:140,
-            fixed:"right",
+            width: 200,
+            fixed: "right",
             scopedSlots: {customRender: 'operation'},
           },
         ],
@@ -255,7 +253,7 @@
       }
     }
     .p0{
-      padding: 0;
+      padding: 0 20px 0 0;
     }
   }
 </style>
