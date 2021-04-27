@@ -42,16 +42,19 @@
       :rowKey="record=>record.id"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
-        <a-button type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
-        <a-button type="link" @click="toTest">测试</a-button>
+        <div class="operate">
+        <a-button class="p0" type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
+        <a-button class="p0" type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
+        <a-button class="p0" type="link" @click="toTest">测试</a-button>
         <a-popconfirm
           title="是否删除该应用?"
           ok-text="是"
           cancel-text="否"
           @confirm="del(record.id)">
-          <a-button type="link" style="color:red;">删除</a-button>
+          <a-button class="p0" type="link" style="color:red;">删除</a-button>
         </a-popconfirm>
+        </div>
+
       </template>
     </a-table>
     <a-modal v-model="sceneModalShow" title="创建业务场景" :width="640">
@@ -89,11 +92,13 @@
         columns: [
           {
             title: '序号',
-            customRender: (text, record, index) => `${index + 1}`
+            customRender: (text, record, index) => `${index + 1}`,
+            width:60
           },
           {
             title: '场景名称',
-            dataIndex: 'title'
+            dataIndex: 'title',
+            ellipsis:true
           },
           {
             title: '所属应用',
@@ -113,7 +118,8 @@
           },
           {
             title: '调用次数',
-            dataIndex: 'recallTimes'
+            dataIndex: 'recallTimes',
+            width:100
           },
           {
             title: '创建时间',
@@ -121,13 +127,14 @@
           },
           {
             title: '创建人',
-            dataIndex: 'creator'
+            dataIndex: 'creator',
+            width:100
           },
           {
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            width: 300
+            // width: 300
           },
         ],
         appList: [],
@@ -309,6 +316,14 @@
           margin-left: 10px;
         }
       }
+    }
+    .p0{
+      padding: 0;
+    }
+    .operate{
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
     }
   }
 </style>

@@ -77,16 +77,16 @@ export const menuRouterMap = [{
         path: '/order_man',
         component: order_man
       },
-      {
-        name: 'pay',
-        path: '/pay',
-        component: pay
-      },
-      {
-        name: 'order_info',
-        path: '/order_info',
-        component: order_info
-      },
+      // {
+      //   name: 'pay',
+      //   path: '/pay',
+      //   component: pay
+      // },
+      // {
+      //   name: 'order_info',
+      //   path: '/order_info',
+      //   component: order_info
+      // },
         {
             name: "applicationList",
             path: "application/list",

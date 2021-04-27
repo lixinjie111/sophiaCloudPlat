@@ -153,7 +153,7 @@
         searchText:"",
         newFile: false,
         setLoading: false,
-        uploadData:false
+        uploadData:this.$route.query.show||false
       }
     },
     methods: {
