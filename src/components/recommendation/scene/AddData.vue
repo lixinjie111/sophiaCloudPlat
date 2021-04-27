@@ -24,7 +24,7 @@
         <a-select-option :value="item.sourceTableId" v-for="(item,index) in sourceTablesList" :key="index">{{item.sourceUserTableName}}
         </a-select-option>
       </a-select>
-      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.sourceTableName)">详情</a-button>
+      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.sourceTableId)">详情</a-button>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -85,9 +85,16 @@
       }
     },
     methods: {
-      toDetail(name) {
+      toDetail(id) {
+        let name = this.sourceTablesList.find((item)=>{
+          return item.sourceTableId == id
+        })        
         this.$router.push({
-          path: '/recommendation/data/detail?name='+ name
+          path: '/recommendation/data/detail?name='+ name.sourceTableName,
+          query:{
+            activekey:['shujuguanlik'],
+            openkey:['dataSer1','shujuzhongxin']
+          }
         });
       },
       getSceneSourceTables(folderId,dataType) {

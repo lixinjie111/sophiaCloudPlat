@@ -272,7 +272,7 @@ export default {
       }
     },
     uploadSuc(){
-      this.current = 0;
+      // this.current = 0;
       this.$emit('close',true)
     }
     

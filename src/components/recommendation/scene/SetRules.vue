@@ -161,7 +161,11 @@
               this.$message.success("添加成功！");
               if(type =='test'){
                 this.$router.push({
-                  path: '/recommendation/operation/result'
+                  path: '/recommendation/operation/result',
+                  query:{
+                    activekey:['tuijianceshijijieguo'],
+                    openkey:['dataSer1',"tuijianyunying"]
+                  }
                 });
               }else {
                 this.$router.push({
