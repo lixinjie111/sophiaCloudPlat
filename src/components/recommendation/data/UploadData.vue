@@ -52,7 +52,7 @@
     <div class="steps_content" v-if="current==2">
       <div class="table_name">{{dataForm.name}}</div>
       <a-table
-      :scroll="{x:800}"
+      :scroll="{x:2400}"
       :columns="columns"
       :data-source="viewList"
       :pagination="pagination">
@@ -122,43 +122,7 @@ export default {
       fileList: [],
       filePackageList:[],
       tableName:"",
-      columns:[
-        // {
-        //   title:"序号",
-        //   dataIndex:"id",
-        //   key :"viewNo"
-        // },
-        // {
-        //   title:"拜访人",
-        //   dataIndex:"viewName",
-        //   key:"viewName",
-        // },
-        // {
-        //   title:"员工编号",
-        //   dataIndex:"",
-        //   key:"file",
-        // },
-        // {
-        //   title:"部门",
-        //   dataIndex:"setting",
-        //   key:"setting",
-        // },
-        // {
-        //   title:"职位",
-        //   dataIndex:"type",
-        //   key:"type",
-        // },
-        // {
-        //   title:"拜访日期",
-        //   dataIndex:"description",
-        //   key:"description",
-        // },
-        // {
-        //   title:"拜访时间",
-        //   dataIndex:"description",
-        //   key:"description",
-        // }
-      ],
+      columns:[],
       viewList:[],
       pagination: {
         total: 0,
@@ -251,12 +215,23 @@ export default {
           this.viewList = res.data.list
           this.pagination.total = res.data.total
           this.pagination.current = pageNum||1
-          Object.keys(this.viewList[0]).slice(0,7).forEach((item,index)=>{
-            this.columns[index] = {
-              title:item,
-              dataIndex:item,
-              key:item
+          Object.keys(this.viewList[0]).forEach((item,index)=>{
+            if(item=="id"){
+              this.columns.unshift({
+                  title:item,
+                  dataIndex:item,
+                  key:item,
+                  width:60
+              })
+            }else{
+              this.columns[index] = {
+                title:item,
+                dataIndex:item,
+                key:item,
+                ellipsis:true
+              }
             }
+
           })
         }else{
           this.$message.error(res.message||'请求失败')
