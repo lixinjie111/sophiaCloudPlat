@@ -1,8 +1,10 @@
 <template>
   <div class="set_data_container">
-    <a-button type="primary" class="c-mb-10" @click="toUpload" v-if="type != 'edit'">
-      上传数据
-    </a-button>
+    <div class="c-mb-10 upload-btn">
+      <a-button type="primary" @click="toUpload" v-if="type != 'edit'">
+        上传数据
+      </a-button>
+    </div>
     <a-card title="用户数据" size="small">
       <div class="card_item c-mb-10">
         <p class="title">历史数据：</p>
@@ -81,7 +83,9 @@
     },
     methods: {
       toUpload() {
-
+        this.$router.push({
+          path: '/recommendation/data/list?show=1'
+        });
       },
       getDataTypes() {
         getDataTypes({}).then(res => {
@@ -171,6 +175,10 @@
     .btns {
       margin-top: 20px;
       text-align: center;
+    }
+
+    .upload-btn {
+      text-align: right;
     }
   }
 </style>
