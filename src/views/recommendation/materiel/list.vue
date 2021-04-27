@@ -2,25 +2,28 @@
   <div class="data-admin">
     <div class="top">
       <div class="left">
-        <a-button type="primary" style="margin-right: 10px">删除</a-button>
-        <a-button type="primary" >必推物料池</a-button>
+        <!-- <a-button type="primary" style="margin-right: 10px">删除</a-button>
+        <a-button type="primary" >必推物料池</a-button> -->
       </div>
       <div class="right">
         <div>
           应用名称：
-          <a-select style="width: 140px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange">
+          <a-select style="width: 140px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange"
+                    :getPopupContainer="triggerNode => {return triggerNode}">
             <a-select-option v-for="item in appNameList" :key="item.id">{{item.appName}}</a-select-option>
           </a-select>
         </div>
         <div>
           应用场景:
-          <a-select style="width: 140px" placeholder="请选择应用场景" v-model="sceneId" @change="sceneTypeChange">
+          <a-select style="width: 140px" placeholder="请选择应用场景" v-model="sceneId" @change="sceneTypeChange"
+                    :getPopupContainer="triggerNode => {return triggerNode}">
             <a-select-option v-for="item in sceneList" :key="item.id" :value="item.id">{{item.title}}</a-select-option>
           </a-select>
         </div>
         <div>
           数据源表:
-          <a-select style="width: 140px" placeholder="请选择数据源表" v-model="tableName">
+          <a-select style="width: 140px" placeholder="请选择数据源表" v-model="tableName"
+                    :getPopupContainer="triggerNode => {return triggerNode}">
             <a-select-option v-for="item in dataSourceTable" :key="item.id" :value="item.tableName">{{item.userTableName}}</a-select-option>
           </a-select>
         </div>

@@ -3,13 +3,14 @@
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <div class="index c-mr-20">{{index+1}}</div>
       <div class="c-mr-20">数据类型：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据类型" v-model="item.dataType" @change="dataTypeChange(item)"
-                style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据类型" v-model="item.dataType" @change="dataTypeChange(item)" style="width:140px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.id" v-for="(item,index) in dataTypeList" :key="index">{{item.dataTypeDesc}}
         </a-select-option>
       </a-select>
       <div class="c-mr-20">数据源：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.folderId" @change="sourceChange(item)" style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据源" v-model="item.folderId" @change="sourceChange(item)" style="width:140px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-opt-group v-for="(sources,index) in sourcesList" :key="index">
           <span slot="label">{{sources.folderName}}</span>
           <a-select-option :value="item.folderId" v-for="(item,index1) in sources.subDataSources" :key="index1">
@@ -18,11 +19,12 @@
         </a-select-opt-group>
       </a-select>
       <div class="c-mr-20">数据源表：</div>
-      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.sourceTableId" @change="tableChange" style="width:140px">
+      <a-select class="c-mr-20" placeholder="请选择数据源表" v-model="item.sourceTableId" @change="tableChange" style="width:140px"
+                :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.sourceTableId" v-for="(item,index) in sourceTablesList" :key="index">{{item.sourceUserTableName}}
         </a-select-option>
       </a-select>
-      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.sourceTableName)">详情</a-button>
+      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.sourceTableId)">详情</a-button>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -83,9 +85,16 @@
       }
     },
     methods: {
-      toDetail(name) {
+      toDetail(id) {
+        let name = this.sourceTablesList.find((item)=>{
+          return item.sourceTableId == id
+        })        
         this.$router.push({
-          path: '/recommendation/data/detail?name='+ name
+          path: '/recommendation/data/detail?name='+ name.sourceTableName,
+          query:{
+            activekey:['shujuguanlik'],
+            openkey:['dataSer1','shujuzhongxin']
+          }
         });
       },
       getSceneSourceTables(folderId,dataType) {

@@ -50,7 +50,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -64,7 +64,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -82,7 +82,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -96,7 +96,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -114,7 +114,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -128,7 +128,7 @@
             <div>数据源表：</div>
             <div>{{item.sourceUserTableName}}</div>
             <div>
-              <a-button type="primary">详情</a-button>
+              <a-button type="primary" @click="toDetail(item)">详情</a-button>
             </div>
           </div>
         </a-descriptions-item>
@@ -207,8 +207,21 @@
       },
       toTest() {
         this.$router.push({
-          path: '/recommendation/operation/result'
+          path: '/recommendation/operation/result',
+          query:{
+            activekey:['tuijianceshijijieguo'],
+            openkey:['dataSer1',"tuijianyunying"]
+          }
         });
+      },
+      toDetail(item){
+        this.$router.push({
+          path: '/recommendation/data/detail?name='+ item.sourceTableName,
+          query:{
+            activekey:['shujuguanlik'],
+            openkey:['dataSer1',"shujuzhongxin"]
+          }
+        });        
       },
       getSceneDetail() {
         let params = {

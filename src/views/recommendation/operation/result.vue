@@ -4,7 +4,8 @@
       <sapn class="result_top_item">测试结果</sapn>
       <div class="result_top_item">
         推荐应用:
-        <a-select v-model="param1.applicationId" style="width: 120px" @select="onSelect">
+        <a-select v-model="param1.applicationId" style="width: 120px" @select="onSelect"
+                  :getPopupContainer="triggerNode => {return triggerNode}">
           <a-select-option v-for="it in tools" :key="it.id" :value="it.id">
             {{it.appName}}
           </a-select-option>
@@ -12,7 +13,8 @@
       </div>
       <div class="result_top_item">
         业务场景:
-        <a-select v-model="param1.sceneId" style="width: 120px">
+        <a-select v-model="param1.sceneId" style="width: 120px"
+                  :getPopupContainer="triggerNode => {return triggerNode}">
           <a-select-option v-for="it in scenes" :key="it.id" :value="it.id">
             {{it.title}}
           </a-select-option>
