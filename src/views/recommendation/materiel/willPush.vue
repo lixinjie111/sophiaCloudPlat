@@ -24,13 +24,14 @@
       </div>
     </div>
     <a-table
+      :scroll="{x:1400}"
       :columns="columns"
       :data-source="tableList"
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
-        <a-button type="link" disabled>查看</a-button>
-        <a-button type="link" disabled>修改</a-button>
-        <a-button type="link" disabled>删除</a-button>
+        <a-button class="p0" type="link" disabled>查看</a-button>
+        <a-button class="p0" type="link" disabled>修改</a-button>
+        <a-button class="p0" type="link" disabled>删除</a-button>
       </template>
     </a-table>
   </div>
@@ -47,7 +48,8 @@
         columns: [
           {
             title: '序号',
-            customRender: (text, record, index) => `${index + 1}`
+            customRender: (text, record, index) => `${index + 1}`,
+            width:60
           },
           {
             title: '物料ID',
@@ -56,11 +58,8 @@
           {
             title: '物料名称',
             width: 300,
-            dataIndex: 'goodsName'
-          },
-          {
-            title: '物料类型',
-            dataIndex: 'type'
+            dataIndex: 'goodsName',
+            ellipsis:true
           },
           {
             title: '品类1',
@@ -232,6 +231,9 @@
           margin-left: 10px;
         }
       }
+    }
+    .p0{
+      padding: 0;
     }
   }
 </style>

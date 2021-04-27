@@ -238,7 +238,6 @@
 <style scoped lang="scss">
   .data-admin {
     padding: 20px;
-
     .top {
       margin-bottom: 20px;
       display: flex;

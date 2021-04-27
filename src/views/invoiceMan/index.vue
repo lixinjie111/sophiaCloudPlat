@@ -276,7 +276,7 @@ export default {
         this.activeName = 'second'; 
     },
     editfpaddress(){
-        alert('编辑地址信息！！！');
+        this.activeName = 'third'; 
     },
     handleClick(tab, event) {
         this.activeName = tab.paneName; 
