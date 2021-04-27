@@ -160,7 +160,6 @@
             this.nextLoading = true;
             setTimeout(() => {
               this.addApp();
-              this.getList();
               this.nextLoading = false;
               this.createModalShow = false;
               this.$router.push({
@@ -179,7 +178,6 @@
             this.createLoading = true;
             setTimeout(() => {
               this.addApp();
-              this.getList();
               this.createLoading = false;
               this.createModalShow = false;
             }, 1000);
@@ -229,6 +227,7 @@
         addApp(params).then(res => {
           if (res.code == 200000) {
             this.$message.success("添加成功！");
+            this.getList();
           } else {
             this.$message.error(res.message || "请求失败！");
           }
