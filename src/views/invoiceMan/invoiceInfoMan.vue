@@ -4,7 +4,6 @@
     <div class="invoice_con">
       <el-form
         :model="IssuingTypeRuleForm"
-        :rules="IssuingTypeRules"
         label-width="140px"
         class="demo-ruleForm"
       >
@@ -46,7 +45,9 @@
             </el-tooltip>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="personSubmitForm('personalRuleForm')"
+            <el-button
+              type="primary"
+              @click="personSubmitForm('personalRuleForm')"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -54,18 +55,54 @@
       </div>
       <div class="company" v-if="IssuType === 'company'">
         <el-form
+          :model="invoiveTitleRulePutongForm"
+          :rules="invoiveTitlePutongRules"
+          label-width="140px"
+          class="demo-ruleForm"
+          v-if="ruleForm.invoiceType == 'zzputong'"
+        >
+        <el-form-item label="发票抬头：" prop="invoiveZzputongTitle">
+            <el-input
+              v-model="invoiveTitleRulePutongForm.invoiveZzputongTitle"
+              placeholder="请输入发票抬头"
+            ></el-input>
+        </el-form-item>
+        </el-form>
+        <el-form
+          :model="invoiveTitleRuleZhuanyongForm"
+          :rules="invoiveTitleZhuanyongRules"
+          label-width="140px"
+          class="demo-ruleForm"
+          v-else-if="ruleForm.invoiceType == 'zzzhuanyong'"
+        >
+        <el-form-item label="发票抬头：" prop="invoiveZhuanyongTitle">
+            <el-input
+              v-model="invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle"
+              placeholder="请输入发票抬头"
+            ></el-input>
+        </el-form-item>
+        </el-form>
+        <el-form
+          :model="invoiveTitleRulezuzhiForm"
+          :rules="invoiveTitlezuzhiRules"
+          label-width="140px"
+          class="demo-ruleForm"
+          v-else
+        >
+        <el-form-item label="发票抬头：" prop="invoivezuzhiTitle">
+            <el-input
+              v-model="invoiveTitleRulezuzhiForm.invoivezuzhiTitle"
+              placeholder="请输入发票抬头"
+            ></el-input>
+        </el-form-item>
+        </el-form>
+        <el-form
           :model="ruleForm"
           :rules="rules"
           ref="ruleForm"
           label-width="140px"
           class="demo-ruleForm"
         >
-          <el-form-item label="发票抬头：" prop="invoiveTitle">
-            <el-input
-              v-model="ruleForm.invoiveTitle"
-              placeholder="请输入发票抬头"
-            ></el-input>
-          </el-form-item>
           <el-form-item label="发票类型：" prop="invoiceType">
             <el-radio-group
               v-model="ruleForm.invoiceType"
@@ -160,20 +197,38 @@ export default {
       }
     };
     return {
-      IssuingTypeRuleForm:{
+      IssuingTypeRuleForm: {
         IssuingType: "company",
       },
-      IssuingTypeRules:{
-        IssuingType: [
-          { required: true, message: "请选择开具类型", trigger: "change" },
+      personalRuleForm: {
+        personalInvoiveTitle: "个人",
+        personalInvoiceType: "增值税普通发票",
+      },
+      invoiveTitleRulePutongForm:{
+        invoiveZzputongTitle:''
+      },
+      invoiveTitleRuleZhuanyongForm:{
+          invoiveZhuanyongTitle:''
+      },
+      invoiveTitleRulezuzhiForm:{
+          invoivezuzhiTitle:''
+      },
+      invoiveTitlePutongRules:{
+        invoiveZzputongTitle: [
+          { required: true, message: "请输入发票抬头", trigger: "blur" },
         ],
       },
-      personalRuleForm:{
-          personalInvoiveTitle:'个人',
-          personalInvoiceType:'增值税普通发票'
+      invoiveTitleZhuanyongRules:{
+        invoiveZhuanyongTitle: [
+          { required: true, message: "请输入发票抬头", trigger: "blur" },
+        ],
+      },
+      invoiveTitlezuzhiRules:{
+        invoivezuzhiTitle: [
+          { required: true, message: "请输入发票抬头", trigger: "blur" },
+        ],
       },
       ruleForm: {
-        invoiveTitle: "",
         invoiceType: "zzputong",
         taIdeNu: "",
         bankName: "",
@@ -182,9 +237,6 @@ export default {
         regFixtel: "",
       },
       rules: {
-        invoiveTitle: [
-          { required: true, message: "请输入发票抬头", trigger: "blur" },
-        ],
         invoiceType: [
           { required: true, message: "请选择发票类型", trigger: "change" },
         ],
@@ -209,8 +261,8 @@ export default {
         }
       });
     },
-    personSubmitForm(formName){
-        this.$refs[formName].validate((valid) => {
+    personSubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");
         } else {
@@ -223,6 +275,7 @@ export default {
       this.$refs[formName].resetFields();
     },
     changeInvType(e) {
+        console.log(this.ruleForm.invoiceType,'ruleForm.invoiceType')
       if (e === "zzputong") {
       } else if (e === "zzzhuanyong") {
       }
@@ -263,15 +316,20 @@ export default {
       color: #121c33;
     }
     .person {
-        width: 35%;
-        /deep/ .personalRuleForm .el-form-item .el-form-item__content .el-input .el-input__inner{
-            border: none;
-            background-color: inherit;
-        }
-        /deep/ .personalRuleForm .el-form-item .el-form-item__content{
-            display: flex;
-            align-items: center;
-        }
+      width: 35%;
+      /deep/
+        .personalRuleForm
+        .el-form-item
+        .el-form-item__content
+        .el-input
+        .el-input__inner {
+        border: none;
+        background-color: inherit;
+      }
+      /deep/ .personalRuleForm .el-form-item .el-form-item__content {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
