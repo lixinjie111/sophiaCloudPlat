@@ -10,7 +10,7 @@
         <div>
           应用名称：
           <a-select placeholder="请选择应用名称" v-model="applicationId" @change="appNameChange" style="width: 120px;"
-                    :getPopupContainer="triggerNode => {return triggerNode}">
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="app.id" v-for="(app,index) in appList" :key="index">{{app.appName}}
             </a-select-option>
@@ -19,7 +19,7 @@
         <div>
           推荐类型：
           <a-select placeholder="请选择推荐类型" v-model="recommendType" @change="recommendTypeChange" style="width: 120px;"
-                    :getPopupContainer="triggerNode => {return triggerNode}">
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="item.value" v-for="(item,index) in typeList" :key="index">{{item.label}}
             </a-select-option>
@@ -28,7 +28,7 @@
         <div>
           场景类型：
           <a-select placeholder="请选择场景类型" v-model="sceneType" @change="sceneTypeChange" style="width: 120px;"
-                    :getPopupContainer="triggerNode => {return triggerNode}">
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option value="">全部</a-select-option>
             <a-select-option :value="item.value" v-for="(item,index) in sceneList" :key="index">{{item.label}}
             </a-select-option>
@@ -321,6 +321,7 @@
         align-items: center;
 
         > div {
+          position: relative;
           margin-left: 10px;
         }
       }

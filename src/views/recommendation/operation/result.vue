@@ -5,7 +5,7 @@
       <div class="result_top_item">
         推荐应用:
         <a-select v-model="param1.applicationId" style="width: 120px" @select="onSelect"
-                  :getPopupContainer="triggerNode => {return triggerNode}">
+                  :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
           <a-select-option v-for="it in tools" :key="it.id" :value="it.id">
             {{it.appName}}
           </a-select-option>
@@ -14,7 +14,7 @@
       <div class="result_top_item">
         业务场景:
         <a-select v-model="param1.sceneId" style="width: 120px"
-                  :getPopupContainer="triggerNode => {return triggerNode}">
+                  :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
           <a-select-option v-for="it in scenes" :key="it.id" :value="it.id">
             {{it.title}}
           </a-select-option>
@@ -163,6 +163,7 @@ export default {
     padding: 20px;
     background-color: #ffffff;
     .result_top_item{
+      position: relative;
       margin-right: 30px;
     }
   }

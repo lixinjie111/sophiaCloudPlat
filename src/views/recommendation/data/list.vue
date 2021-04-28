@@ -9,7 +9,7 @@
         <div>
           应用名称：
           <a-select style="width:160px" placeholder="请选择应用名称" v-model="appName" @change="appNameChange"
-                    :getPopupContainer="triggerNode => {return triggerNode}">
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in appNameList" :key="item.id">{{item.appName}}</a-select-option>
           </a-select>
@@ -17,7 +17,7 @@
         <div>
             数据类型:
           <a-select style="width: 160px" placeholder="请选择场景类型" v-model="dataTypeDesc" @change="sceneTypeChange"
-                    :getPopupContainer="triggerNode => {return triggerNode}">
+                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
             <a-select-option value="all">全部</a-select-option>
             <a-select-option v-for="item in sceneList" :key="item.id">{{item.dataTypeDesc}}</a-select-option>
           </a-select>
@@ -46,14 +46,14 @@
           </a-form-model-item>
           <a-form-model-item label="数据分类" prop="type">
             <a-select placeholder="请选择所属应用" v-model="dataForm.type" @change="applyChange"
-                      :getPopupContainer="triggerNode => {return triggerNode}">
+                      :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
               <a-select-option value="0">上传文件</a-select-option>
               <a-select-option value="1">同步文件</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item label="文件夹上级" prop="mould">
             <a-select placeholder="请选择场景模板" v-model="dataForm.superior" @change="mouldChange"
-                      :getPopupContainer="triggerNode => {return triggerNode}">
+                      :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
               <a-select-option value="0">推荐数据</a-select-option>
               <a-select-option value="1">营销数据</a-select-option>
             </a-select>
@@ -293,6 +293,7 @@
         align-items: center;
 
         > div {
+          position: relative;
           margin-left: 10px;
         }
       }
