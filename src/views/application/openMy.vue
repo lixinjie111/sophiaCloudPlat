@@ -126,7 +126,7 @@ import {
 export default {
   data() {
     return {
-      currentIndex:2,
+      currentIndex:1,
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },

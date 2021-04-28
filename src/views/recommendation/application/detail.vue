@@ -86,7 +86,11 @@
     methods: {
       toDetail(applicationId,id) {
         this.$router.push({
-          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id,
+          query:{
+            activekey:['tuijianchangjing'],
+            openkey:['dataSer1']
+          }
         });
       },
       getAppDetail (){
