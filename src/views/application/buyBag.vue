@@ -17,7 +17,7 @@
           <template v-if="currentIndex==0">
               <div class="payForm">
                 <div class="payLeft">
-                    <div class="payTitle">资源包类型：短语音识别-中文普通话</div>
+                    <div class="payTitle">{{serviceName}}</div>
                     <div class="payDesc">
                      温馨提示：资源包有剩余时优先使用资源包抵扣
                     </div>
@@ -30,12 +30,15 @@
                         show-header-overflow
                         show-overflow
                         highlight-hover-row
-                        :data="tableData">
-                        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-                        <vxe-table-column field="name" title="Name"></vxe-table-column>
-                        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-                        <vxe-table-column field="age" title="Age"></vxe-table-column>
-                        <vxe-table-column field="address" title="Address"></vxe-table-column>
+                        :data="tableData0">
+                        <vxe-table-column field="numStandard" title="规格(万次)"></vxe-table-column>
+                        <vxe-table-column field="validPeriod" title="购买时长(月)"></vxe-table-column>
+                        <vxe-table-column field="packagePrice" title="单价(元)"></vxe-table-column>
+                        <vxe-table-column field="num" title="数量">
+                          <template #default="{ row }">
+                            <vxe-input v-model="row.num" placeholder="数值类型" type="number" min="0" max="50"></vxe-input>
+                          </template>
+                        </vxe-table-column>
                     </vxe-table>
                 </div>
                 <div class="payRt">
@@ -49,17 +52,17 @@
                           资源包类型：
                       </div>
                       <div class="payRight">
-                          短语音识别-中文普通话
+                          {{serviceName}}
                       </div>
                     </div>
                     <div class="payItem">
                       <div class="payLf">
                           资源包配置：
                       </div>
-                      <div class="payRight">
-                        <p>100万次 * 1个</p>
-                        <p>100万次 * 1个</p>
-                        <p>100万次 * 1个</p>
+                      <div class="payRight"  >
+                        <div v-for="item in tableData0" :key="item.id">
+                          <p  v-if="item.num!=0" >{{item.numStandard}}万次 * {{item.num}}个</p>
+                        </div>
                       </div>
                     </div>
                     <div class="payItem">
@@ -75,11 +78,11 @@
                           价格：       
                       </div>
                       <div class="payRight">
-                        <div class="price">¥ 40,800.00</div>
+                        <div class="price">¥ {{format(sumPrice)}}</div>
                       </div>
                     </div>
                     <div class="confirmBtn">
-                      <el-button type="primary" style="width:80%">确认开通</el-button>
+                      <el-button type="primary" style="width:80%" @click="next0">确认开通</el-button>
                     </div>
                     <div class="payDesc1">
                       资源包购买成功后即刻生效，资源包使用后剩余流量不支持退订
@@ -192,7 +195,7 @@
               资源包类型：
           </div>
           <div class="payRight">
-              短语音识别-中文普通话
+             {{serviceName}}
           </div>
         </div>
         <div class="payItem">
@@ -227,18 +230,14 @@
 
 <script>
 import {
-  apiVisitTrend,
-  apiVisitTrendInfo,
-  serviceList
-} from "../../api/proSer/index";
-import {
-  appCount,
-  apiVisitDosage,
-  userServiceModels
-} from "../../api/gailan/index";
+  getPrepaidFeePackage,
+} from "../../api/bugBag/index";
 export default {
   data() {
     return {
+      sumPrice:0,
+      serviceName:'',
+      serviceId:'',
       activeName: 'second',
       radio:'1',
       checked:false,
@@ -246,7 +245,8 @@ export default {
       visible1:false,
       visible2:false,
       visible3:false,
-      currentIndex:3,
+      currentIndex:0,
+      tableData0:[],
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -257,11 +257,54 @@ export default {
       cities: ['短语音识别-中文普通话', '短语音识别-英语', '短语音识别-英语', '短语音识别-英语'],
     };
   },
+  watch:{
+    'tableData0':{ // 监视选中的数据（单位）
+      handler:function(newValue,oldValue){
+        let sum=0;
+        newValue.forEach(item=>{
+          if(item.num!=0){
+            sum+=item.num*item.packagePrice;
+          }
+        })
+        this.sumPrice=sum;
+      },
+      deep:true,
+      },
+  },
   created() {
+    this.serviceId=this.$route.query.serviceId;
+    this.serviceName=this.$route.query.serviceName;
+    this.initInfo();
   },
   mounted() {
   },
   methods: {
+     format (num) {
+        return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+    },
+    next0(){
+      this.currentIndex=1;
+    },
+    initInfo(){
+      var fwqsParm = new FormData();
+      fwqsParm.append("serviceId",this.serviceId);
+      getPrepaidFeePackage(fwqsParm)
+        .then(res => {
+          if (res.code == 200000) {
+            let _result=res.data;
+            _result.forEach(item=>{
+              item['num']=0;
+            })
+            this.tableData0=_result;
+            console.log(res)
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
     changeEvent(e) {
       console.log(e);
     },
