@@ -294,6 +294,11 @@
             addScene(params).then(res => {
               if (res.code == 200000) {
                 this.$message.success("添加成功！");
+                let sceneInfo= {
+                  sceneType: params.sceneType,// 场景类型 0-智能场景 1-自定义场景 2-模板场景
+                  recommendObjectType: params.recommendObjectType // 推荐种类 0-推荐商品 1-推荐用户 2-推荐资讯 3-推荐活动
+                };
+                localStorage.setItem("sceneInfo",JSON.stringify(sceneInfo));
                 this.$router.push({
                   path: '/recommendation/scene/data?appId='+ this.$refs.sceneForm.$refs.sceneForm.model.applicationId + '&sceneId=' + res.data
                 });

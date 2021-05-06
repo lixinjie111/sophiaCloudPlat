@@ -134,7 +134,8 @@
         </a-descriptions-item>
       </a-descriptions>
     </a-card>
-    <a-card title="规则推荐" size="small">
+    <!--智能场景规则-->
+    <a-card title="规则推荐" size="small" v-if="sceneType == '0'">
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="筛选物品" v-if="detail.ruleInfo.filterItemParams.length">
           <div class="rule-info">
@@ -183,6 +184,10 @@
         </a-descriptions-item>
       </a-descriptions>
     </a-card>
+    <!--自定义场景规则-->
+    <a-card title="规则推荐" size="small" v-if="sceneType == '1'">
+
+    </a-card>
   </div>
 </template>
 
@@ -198,6 +203,12 @@
     },
     created() {
       this.getSceneDetail();
+    },
+    computed: {
+      // 场景类型 0-智能场景 1-自定义场景 2-模板场景
+      sceneType() {
+        return JSON.parse(localStorage.getItem('sceneInfo')).sceneType
+      }
     },
     methods: {
       toEdit(applicationId,id) {
@@ -231,6 +242,11 @@
         getSceneDetail(params).then(res => {
           if (res.code == 200000) {
             this.detail = res.data;
+            let sceneInfo= {
+              sceneType: res.data.sceneType,
+              recommendObjectType: res.data.recommendObjectType
+            };
+            localStorage.setItem("sceneInfo",JSON.stringify(sceneInfo));
           } else {
             this.$message.error(res.message || "请求失败！");
           }
