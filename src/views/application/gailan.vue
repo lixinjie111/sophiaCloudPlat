@@ -129,7 +129,7 @@
           <template  slot="openBuy"  slot-scope="text, record">
             <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD">{{ text }}</span>
           </template >
-          <a slot="Purchases" class="ant-dropdown-link" slot-scope="text"><span  @click="openMoney(record)">{{ text }}</span></a>
+          <a slot="Purchases" class="ant-dropdown-link"  slot-scope="text, record"><span  @click="openMoney1(record)">{{ text }}</span></a>
         </a-table>
       </div>
     </div>
@@ -141,6 +141,9 @@
       </a-modal>
       <a-modal v-model="visible1" title="停止付费" @ok="handleOk1" cancelText="取消" centered okText="确定">
         <p>您确定要终止付费吗？终止付费后，您的资源将回归至免费状态，超过免费资源的调用将不再响应。后续如需使用付费资源，可再次开通付费。</p>
+      </a-modal>
+      <a-modal v-model="visible2" title="提醒" @ok="handleOk2" cancelText="取消" centered okText="确定">
+        <p>您开通的录音文件识别、实时语音识别、一句话识别、语音合成免费试用版即将到期，请尽快购买以保证服务正常使用。</p>
       </a-modal>
 </div>
 </template>
@@ -167,6 +170,7 @@ export default {
     return {
       visible:false,
       visible1:false,
+      visible2:false,
       showModal:false,
       count:0,
       selectModel:'',
@@ -325,16 +329,29 @@ export default {
      this.getPageData();
   },
   methods: {
+    handleOk2(e) {
+      this.visible2 = false;
+    },
     handleOk1(e) {
-      console.log(e);
       this.visible1 = false;
     },
     handleOk(e) {
-      console.log(e);
       this.visible = false;
+      this.$router.push({
+        path:'/openMy'
+      })
     },
     openMoney(item){
       this.visible = true;
+    },
+    openMoney1(item){
+      this.$router.push({
+        path:'/buyBag?serviceId='+item.serviceId,
+        query:{
+          serviceId:item.serviceId,
+          serviceName:item.serviceModelName+'—'+item.serviceName,
+        },
+      })
     },
     refreshList(){
       this.$router.push({
