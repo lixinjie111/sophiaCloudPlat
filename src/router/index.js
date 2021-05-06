@@ -38,6 +38,7 @@ const recommendationSceneEdit = resolve => require(['@/views/recommendation/scen
 const recommendationSceneDetail = resolve => require(['@/views/recommendation/scene/detail'], resolve);
 const recommendationSceneData = resolve => require(['@/views/recommendation/scene/data'], resolve);
 const recommendationSceneRule = resolve => require(['@/views/recommendation/scene/rule'], resolve);
+const recommendationSceneCustom = resolve => require(['@/views/recommendation/scene/custom'], resolve);
 
 //数据服务 数据管理
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
@@ -211,6 +212,11 @@ export const menuRouterMap = [{
           name: "recommendationSceneRule",
           path: "/recommendation/scene/rule",
           component: recommendationSceneRule
+        },
+        {
+          name: "recommendationSceneCustom",
+          path: "/recommendation/scene/custom",
+          component: recommendationSceneCustom
         },
         {
           name: "recommendationSceneEdit",
