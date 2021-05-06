@@ -19,7 +19,7 @@
       </a-form-model-item>
       <a-form-model-item label="推荐种类">
         <a-radio-group v-model="sceneForm.recommendObjectType">
-          <a-radio :value="item.value" v-for="(item,index) in kindList" :key="index">
+          <a-radio :value="item.value" v-for="(item,index) in kindList" :key="index" :disabled="item.disabled">
             {{item.label}}
           </a-radio>
         </a-radio-group>
@@ -122,13 +122,15 @@
             value: '0'
           }, {
             label: '推荐用户',
-            value: '1'
+            value: '1',
+            disabled: true
           }, {
             label: '推荐资讯',
             value: '2'
           }, {
             label: '推荐活动',
-            value: '3'
+            value: '3',
+            disabled: true
           }
         ],
         typeList: [

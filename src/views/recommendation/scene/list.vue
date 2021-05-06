@@ -47,6 +47,7 @@
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <div class="operate">
+        <a-button class="p0" type="link" @click="toPublish">发布</a-button>
         <a-button class="p0" type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
         <a-button class="p0" type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
         <a-button class="p0" type="link" @click="toTest">测试</a-button>
@@ -105,6 +106,10 @@
             dataIndex: 'title'
           },
           {
+            title: '场景ID',
+            dataIndex: 'id'
+          },
+          {
             title: '所属应用',
             dataIndex: 'applicationName'
           },
@@ -112,13 +117,17 @@
             title: '推荐类型',
             dataIndex: 'recommendTypeDesc'
           },
-          {
-            title: '场景类型',
-            dataIndex: 'sceneTypeDesc'
-          },
+          // {
+          //   title: '场景类型',
+          //   dataIndex: 'sceneTypeDesc'
+          // },
           {
             title: '推荐种类',
             dataIndex: 'recommendObjectTypeDesc'
+          },
+          {
+            title: '发布状态',
+            dataIndex: ''
           },
           {
             title: '调用次数',
@@ -137,7 +146,7 @@
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            width: 260,
+            width: 300,
             fixed: 'right'
           },
         ],
@@ -222,6 +231,9 @@
           this.$message.error("请求失败！");
           console.log(err, "err");
         });
+      },
+      toPublish() {
+
       },
       toDetail(applicationId,id) {
         // const {href} = this.$router.resolve({
