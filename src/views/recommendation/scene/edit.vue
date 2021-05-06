@@ -28,7 +28,7 @@
       <div v-else-if="noTitleKey === '2'">
         <SetData type="edit" :dataInfo="dataInfo"></SetData>
       </div>
-      <div v-else="noTitleKey === '3'">
+      <div v-else>
         <!--智能场景规则-->
         <template v-if="sceneType == '0'">
           <SetRules type="edit" :ruleInfo="ruleInfo"></SetRules>
