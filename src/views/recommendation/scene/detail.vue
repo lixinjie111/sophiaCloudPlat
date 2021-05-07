@@ -186,7 +186,7 @@
     </a-card>
     <!--自定义场景规则-->
     <a-card title="规则推荐" size="small" v-if="sceneType == '1'">
-
+<!-- 自定义详情 -->
     </a-card>
   </div>
 </template>

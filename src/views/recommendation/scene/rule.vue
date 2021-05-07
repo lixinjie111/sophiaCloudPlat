@@ -6,14 +6,15 @@
     </template>
     <!--自定义场景规则-->
     <template v-if="sceneType == '1'">
-
+      <!-- 自定义配置 -->
+      <Custom></Custom>
     </template>
   </div>
 </template>
 
 <script>
   import SetRules from "@/components/recommendation/scene/SetRules";
-
+  import Custom from "@/components/recommendation/scene/Custom"
   export default {
     name: "scene",
     computed: {
@@ -22,7 +23,7 @@
         return JSON.parse(localStorage.getItem('sceneInfo')).sceneType
       }
     },
-    components: {SetRules},
+    components: {SetRules,Custom},
   }
 </script>
 
