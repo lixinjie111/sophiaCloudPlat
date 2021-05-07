@@ -153,7 +153,7 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
 <script>
     import moment from "moment";
     import "moment/locale/zh-cn";
-    import {orderList, cancelOrder} from '@/api/invoiceMan/order';
+    import {orderList, cancelOrder} from '@/api/order/order';
     import {MessageBox} from 'element-ui'
 
     export default {
@@ -217,7 +217,7 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
         methods: {
             getDetail(id) {
                 this.$router.push({
-                    path: "/order_info?id=" + id
+                    path: "/orderInfo?id=" + id
                 })
             },
             payOne(id) {

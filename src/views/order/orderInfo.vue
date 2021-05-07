@@ -199,7 +199,7 @@
 </template>
 
 <script>
-    import {getOrderInfo, cancelOrder} from '@/api/invoiceMan';
+    import {getOrderInfo, cancelOrder} from '@/api/order/order';
     import {MessageBox} from 'element-ui'
 
     export default {
