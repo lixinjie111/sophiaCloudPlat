@@ -47,7 +47,7 @@
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <div class="operate">
-        <a-button class="p0" type="link" @click="toPublish">发布</a-button>
+<!--        <a-button class="p0" type="link" @click="toPublish">发布</a-button>-->
         <a-button class="p0" type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
         <a-button class="p0" type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
         <a-button class="p0" type="link" @click="toTest">测试</a-button>
@@ -117,18 +117,18 @@
             title: '推荐类型',
             dataIndex: 'recommendTypeDesc'
           },
-          // {
-          //   title: '场景类型',
-          //   dataIndex: 'sceneTypeDesc'
-          // },
+          {
+            title: '场景类型',
+            dataIndex: 'sceneTypeDesc'
+          },
           {
             title: '推荐种类',
             dataIndex: 'recommendObjectTypeDesc'
           },
-          {
-            title: '发布状态',
-            dataIndex: ''
-          },
+          // {
+          //   title: '发布状态',
+          //   dataIndex: ''
+          // },
           {
             title: '调用次数',
             dataIndex: 'recallTimes'
@@ -146,7 +146,7 @@
             title: '操作',
             dataIndex: 'operation',
             scopedSlots: {customRender: 'operation'},
-            width: 300,
+            width: 260,
             fixed: 'right'
           },
         ],
