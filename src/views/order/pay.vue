@@ -173,7 +173,7 @@
 </template>
 
 <script>
-    import {batchOrderInfoList, payBulk, userAccount} from '@/api/invoiceMan';
+    import {batchOrderInfoList, payBulk, userAccount} from '@/api/order/order';
 
     export default {
         data() {
@@ -198,7 +198,7 @@
         methods: {
             getDetail() {
                 this.$router.push({
-                    path: "/order_info?id=" + this.$route.query.id
+                    path: "/orderInfo?id=" + this.$route.query.id
                 })
             },
             getOrderAllocations(item) {
