@@ -29,14 +29,12 @@
             <el-input
               v-model="personalRuleForm.personalInvoiveTitle"
               placeholder="个人"
-              disabled
             ></el-input>
           </el-form-item>
           <el-form-item label="发票类型：" prop="personalInvoiceType">
             <el-input
               v-model="personalRuleForm.personalInvoiceType"
               placeholder="增值税普通发票"
-              disabled
             ></el-input>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">
@@ -176,7 +174,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm()"
+            <el-button type="primary" @click="zzputongsubmitForm()"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -223,7 +221,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm()"
+            <el-button type="primary" @click="zzzhuanyongsubmitForm()"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -270,7 +268,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm()"
+            <el-button type="primary" @click="zuzhizzsubmitForm()"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -395,16 +393,11 @@ export default {
   },
   created() {},
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    zzputongsubmitForm() {
+
     },
+    zzzhuanyongsubmitForm(){},
+    zuzhizzsubmitForm(){},
     personSubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -464,6 +457,14 @@ export default {
         border: none;
         background-color: inherit;
       }
+      /deep/
+        .personalRuleForm
+        .el-form-item
+        .el-form-item__content
+        .el-input
+        {
+          width: 100px;
+        }
       /deep/ .personalRuleForm .el-form-item .el-form-item__content {
         display: flex;
         align-items: center;

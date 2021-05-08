@@ -1,6 +1,4 @@
 import {HTTPURL} from '../requestUrl';
-import qs from 'qs';
-
 let totalUrl = HTTPURL+'/admin';
 //发票管理搜索接口
 export const fapSearch = params => {
