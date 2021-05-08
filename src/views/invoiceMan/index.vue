@@ -138,7 +138,8 @@
                 </vxe-pager>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
-                <vInvoInfo></vInvoInfo>
+                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn"></vInvoInfoShow>
+                <vInvoInfo v-else></vInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">寄送地址管理</el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">电子邮箱</el-tab-pane>
@@ -152,6 +153,7 @@ import moment from "moment";
 import "moment/locale/zh-cn";
 import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
 import vInvoInfo from "./invoiceInfoMan";
+import vInvoInfoShow from "./invoInfoShow";
 export default {
   name: "invoiceMan",
   data() {
@@ -195,7 +197,8 @@ export default {
         fptypeFilter:[],
         fpttFilter:[],
         fpxzFilter:[],
-        fpztFilter:[]
+        fpztFilter:[],
+        ifShowShowPanel:true
     };
   },
   created() {
@@ -208,7 +211,8 @@ export default {
       }
   },
   components:{
-      vInvoInfo
+      vInvoInfo,
+      vInvoInfoShow
   },
   methods: {
     watchDetailGetMoney(){
@@ -278,6 +282,10 @@ export default {
     },
     editfpInfo(){
         this.activeName = 'second'; 
+        this.ifShowShowPanel = false; 
+    },
+    showeditpanelfaFn(arg){
+        this.ifShowShowPanel = arg; 
     },
     editfpaddress(){
         this.activeName = 'third'; 
