@@ -141,7 +141,9 @@
                 <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn"></vInvoInfoShow>
                 <vInvoInfo v-else></vInvoInfo>
             </el-tab-pane>
-            <el-tab-pane label="寄送地址管理" name="third">寄送地址管理</el-tab-pane>
+            <el-tab-pane label="寄送地址管理" name="third">
+                <vshipAddressMan></vshipAddressMan>
+            </el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">电子邮箱</el-tab-pane>
         </el-tabs>
     </div>
@@ -154,6 +156,7 @@ import "moment/locale/zh-cn";
 import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
 import vInvoInfo from "./invoiceInfoMan";
 import vInvoInfoShow from "./invoInfoShow";
+import vshipAddressMan from "./shipAddressMan";
 export default {
   name: "invoiceMan",
   data() {
@@ -212,7 +215,8 @@ export default {
   },
   components:{
       vInvoInfo,
-      vInvoInfoShow
+      vInvoInfoShow,
+      vshipAddressMan
   },
   methods: {
     watchDetailGetMoney(){
