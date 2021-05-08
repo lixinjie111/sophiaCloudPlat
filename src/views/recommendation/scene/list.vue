@@ -236,19 +236,24 @@
 
       },
       toDetail(applicationId,id) {
-        // const {href} = this.$router.resolve({
-        //   name: "recommendation-scene-detail",
-        //   query: {id: id}
-        // });
-        // window.open(href, '_blank');
-        this.$router.push({
-          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+        const {href} = this.$router.resolve({
+          name: "recommendationSceneDetail",
+          query: {applicationId: applicationId,sceneId: id}
         });
+        window.open(href, '_blank');
+        // this.$router.push({
+        //   path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+        // });
       },
       toEdit(applicationId,id) {
-        this.$router.push({
-          path: '/recommendation/scene/edit?appId=' + applicationId + '&sceneId=' + id
+        const {href} = this.$router.resolve({
+          name: "recommendationSceneEdit",
+          query: {applicationId: applicationId,sceneId: id}
         });
+        window.open(href, '_blank');
+        // this.$router.push({
+        //   path: '/recommendation/scene/edit?appId=' + applicationId + '&sceneId=' + id
+        // });
       },
       toTest() {
         this.$router.push({
@@ -258,6 +263,11 @@
             openkey:['dataSer1',"tuijianyunying"]
           }
         });
+        // const {href} = this.$router.resolve({
+        //   name: "recommendationOperationResult",
+        //   query: {activekey: ['tuijianceshijijieguo'],openkey: ['dataSer1', 'tuijianyunying']}
+        // });
+        // window.open(href, '_blank');
       },
       add() {
         this.sceneModalShow = true;

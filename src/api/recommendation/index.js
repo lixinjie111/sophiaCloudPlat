@@ -111,6 +111,21 @@ export const getSceneDetail = params => {
   return axios.post(`${totalUrl}/recommend/scene/get`, params).then(res => res.data);
 };
 
+// 保存特征抽取
+export const saveSceneFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/scene/saveFeatures`, params).then(res => res.data);
+};
+
+// 获得特征名称
+export const getSceneFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getFeatures`, params).then(res => res.data);
+};
+
+// 根据应用和业务场景以及数据类型获得数据源表信息
+export const getFeaturesDataTables = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDataTablesByDataType`, params).then(res => res.data);
+};
+
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
