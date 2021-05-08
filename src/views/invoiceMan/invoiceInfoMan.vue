@@ -29,14 +29,12 @@
             <el-input
               v-model="personalRuleForm.personalInvoiveTitle"
               placeholder="个人"
-              disabled
             ></el-input>
           </el-form-item>
           <el-form-item label="发票类型：" prop="personalInvoiceType">
             <el-input
               v-model="personalRuleForm.personalInvoiceType"
               placeholder="增值税普通发票"
-              disabled
             ></el-input>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">
@@ -176,11 +174,106 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm()"
+            <el-button type="primary" @click="zzputongsubmitForm()"
               >保存发票信息</el-button
             >
           </el-form-item>
         </el-form>
+
+        <el-form
+          :model="zzzhuanyongConRuleForm"
+          :rules="zzzhuanyongConRules"
+          label-width="140px"
+          class="demo-ruleForm"
+          v-else-if="invoiceTypeRuleForm.invoiceType =='zzzhuanyong'"
+        >
+          <el-form-item label="纳税人识别号：" prop="zzzhuanyongTaIdeNu">
+            <el-input
+              v-model="zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu"
+              placeholder="请输入纳税人识别号"
+            ></el-input>
+            <p>
+              请与贵公司财务人员核实后，仔细填写准确的三证合一后的社会统一信用代码或税务登记证号，否则将影响后续发票的正常使用
+            </p>
+          </el-form-item>
+          <el-form-item label="开户银行名称：" prop="zzzhuanyongBankName">
+            <el-input
+              v-model="zzzhuanyongConRuleForm.zzzhuanyongBankName"
+              placeholder="请输入开户银行名称"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="开户账号：" prop="zzzhuanyongBankNumber">
+            <el-input
+              v-model="zzzhuanyongConRuleForm.zzzhuanyongBankNumber"
+              placeholder="请输入开户账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="注册场所地址：" prop="zzzhuanyongRegAdderss">
+            <el-input
+              v-model="zzzhuanyongConRuleForm.zzzhuanyongRegAdderss"
+              placeholder="请输入地址"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="注册固定电话：" prop="zzzhuanyongRegFixtel">
+            <el-input
+              v-model="zzzhuanyongConRuleForm.zzzhuanyongRegFixtel"
+              placeholder="请输入电话"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="zzzhuanyongsubmitForm()"
+              >保存发票信息</el-button
+            >
+          </el-form-item>
+        </el-form>
+
+        <el-form
+          :model="zuzhizzConRuleForm"
+          :rules="zuzhizzConRules"
+          label-width="140px"
+          class="demo-ruleForm"
+          v-else
+        >
+          <el-form-item label="纳税人识别号：" prop="zuzhizzTaIdeNu">
+            <el-input
+              v-model="zuzhizzConRuleForm.zuzhizzTaIdeNu"
+              placeholder="请输入纳税人识别号"
+            ></el-input>
+            <p>
+              请与贵公司财务人员核实后，仔细填写准确的三证合一后的社会统一信用代码或税务登记证号，否则将影响后续发票的正常使用
+            </p>
+          </el-form-item>
+          <el-form-item label="开户银行名称：" prop="zuzhizzBankName">
+            <el-input
+              v-model="zuzhizzConRuleForm.zuzhizzBankName"
+              placeholder="请输入开户银行名称"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="开户账号：" prop="zuzhizzBankNumber">
+            <el-input
+              v-model="zuzhizzConRuleForm.zuzhizzBankNumber"
+              placeholder="请输入开户账号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="注册场所地址：" prop="zuzhizzRegAdderss">
+            <el-input
+              v-model="zuzhizzConRuleForm.zuzhizzRegAdderss"
+              placeholder="请输入地址"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="注册固定电话：" prop="zuzhizzRegFixtel">
+            <el-input
+              v-model="zuzhizzConRuleForm.zuzhizzRegFixtel"
+              placeholder="请输入电话"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="zuzhizzsubmitForm()"
+              >保存发票信息</el-button
+            >
+          </el-form-item>
+        </el-form>
+
       </div>
     </div>
   </div>
@@ -252,6 +345,42 @@ export default {
         zzputongRegAdderss: "",
         zzputongRegFixtel: "",
       },
+      zzzhuanyongConRuleForm:{
+        zzzhuanyongTaIdeNu:'',
+        zzzhuanyongBankName:'',
+        zzzhuanyongBankNumber:'',
+        zzzhuanyongRegAdderss:'',
+        zzzhuanyongRegFixtel:''
+      },
+      zuzhizzConRuleForm:{
+        zuzhizzTaIdeNu:'',
+        zuzhizzBankName:'',
+        zuzhizzBankNumber:'',
+        zuzhizzRegAdderss:'',
+        zuzhizzRegFixtel:''
+      },
+      zuzhizzConRules:{
+        zuzhizzTaIdeNu: [
+          {trigger: "blur", validator: taIdeNuvalida },
+        ]
+      },
+      zzzhuanyongConRules:{
+        zzzhuanyongTaIdeNu: [
+          { required: true, trigger: "blur", validator: taIdeNuvalida },
+        ],
+        zzzhuanyongBankName:[
+          {required: true, message: '请输入开户银行名称', trigger: 'blur'}
+        ],
+        zzzhuanyongBankNumber:[
+          {required: true, message: '请输入开户账号', trigger: 'blur'}
+        ],
+        zzzhuanyongRegAdderss:[
+          {required: true, message: '请输入地址', trigger: 'blur'}
+        ],
+        zzzhuanyongRegFixtel:[
+          {required: true, message: '请输入电话', trigger: 'blur'}
+        ]
+      },
       zzputongConRules: {
         zzputongTaIdeNu: [
           { required: true, trigger: "blur", validator: taIdeNuvalida },
@@ -264,16 +393,11 @@ export default {
   },
   created() {},
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    zzputongsubmitForm() {
+
     },
+    zzzhuanyongsubmitForm(){},
+    zuzhizzsubmitForm(){},
     personSubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -333,6 +457,14 @@ export default {
         border: none;
         background-color: inherit;
       }
+      /deep/
+        .personalRuleForm
+        .el-form-item
+        .el-form-item__content
+        .el-input
+        {
+          width: 100px;
+        }
       /deep/ .personalRuleForm .el-form-item .el-form-item__content {
         display: flex;
         align-items: center;
