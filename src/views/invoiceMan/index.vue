@@ -142,9 +142,11 @@
                 <vInvoInfo v-else></vInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
-                <vshipAddressMan></vshipAddressMan>
+                <vShipAddressMan></vShipAddressMan>
             </el-tab-pane>
-            <el-tab-pane label="电子邮箱" name="fourth">电子邮箱</el-tab-pane>
+            <el-tab-pane label="电子邮箱" name="fourth">
+                <vEmailMan></vEmailMan>
+            </el-tab-pane>
         </el-tabs>
     </div>
   </div>
@@ -156,7 +158,8 @@ import "moment/locale/zh-cn";
 import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
 import vInvoInfo from "./invoiceInfoMan";
 import vInvoInfoShow from "./invoInfoShow";
-import vshipAddressMan from "./shipAddressMan";
+import vShipAddressMan from "./shipAddressMan";
+import vEmailMan from "./emailMan";
 export default {
   name: "invoiceMan",
   data() {
@@ -216,7 +219,8 @@ export default {
   components:{
       vInvoInfo,
       vInvoInfoShow,
-      vshipAddressMan
+      vShipAddressMan,
+      vEmailMan
   },
   methods: {
     watchDetailGetMoney(){
