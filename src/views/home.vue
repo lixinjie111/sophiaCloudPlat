@@ -2,86 +2,28 @@
   <a-layout id="components-layout-demo-custom-trigger" style="height:100%">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="250">
       <div class="logo">
-        <template v-if="collapsed" class="sidebar-logo-link" to="/">
+        <template class="sidebar-logo-link" to="/">
           <div class="pic" v-if="logo">
             <img :src="logo" class="sidebar-logo" />
           </div>
           <h1 v-else class="sidebar-title">{{ title }}</h1>
         </template>
-        <template v-else class="sidebar-logo-link" to="/">
-          <div class="pic" v-if="logo">
-            <img :src="logo" class="sidebar-logo" />
-          </div>
-          <h1 class="sidebar-title">{{ title }}</h1>
-        </template>
       </div>
     <a-menu
       style="width: 256px"
-      :default-selected-keys="['1']"
+      :default-selected-keys="[]"
       :open-keys.sync="openKeys"
       mode="inline"
       @click="handleClick"
     >
     <template v-for="item in menuAry">
-      <a-menu-item v-if="!item.list" :key="item.key"><a-icon type="user"/>{{item.moduleTitle}}</a-menu-item>
-      <a-menu-item-group v-else :key="item.key">
-        <sub-menu :key="item.key" :menu-info="item"></sub-menu>
+      <a-menu-item v-if="!item.children" :key="item.key"><a-icon type="user"/><span>{{item.title}}</span></a-menu-item>
+      <a-menu-item-group v-else :key="item.key" :title="item.title">
+        <template v-for="ele in item.children">
+          <sub-menu :menu-info="ele" :key="ele.key"></sub-menu>
+        </template>
       </a-menu-item-group>
     </template>
-      
-
-      <a-menu-item-group key="g1">
-          <a-menu-item key="1">
-            Option 1
-          </a-menu-item>
-          <a-menu-item key="2">
-            Option 2
-          </a-menu-item>
-        </a-menu-item-group>
-        <a-menu-item-group key="g2" title="Item 2">
-          <a-menu-item key="3">
-            Option 3
-          </a-menu-item>
-          <a-menu-item key="4">
-            Option 4
-          </a-menu-item>
-      </a-menu-item-group>
-      <a-menu-item-group key="g3" title="Item 3">
-        <a-sub-menu key="sub2" @titleClick="titleClick">
-          <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
-          <a-menu-item key="5">
-            Option 5
-          </a-menu-item>
-          <a-menu-item key="6">
-            Option 6
-          </a-menu-item>
-          <a-sub-menu key="sub3" title="Submenu">
-            <a-menu-item key="7">
-              Option 7
-            </a-menu-item>
-            <a-menu-item key="8">
-              Option 8
-            </a-menu-item>
-          </a-sub-menu>
-        </a-sub-menu>
-      </a-menu-item-group>
-      <a-menu-item-group key="g4" title="Item 4">
-        <a-sub-menu key="sub4">
-          <span slot="title"><a-icon type="setting" /><span>Navigation Three</span></span>
-          <a-menu-item key="9">
-            Option 9
-          </a-menu-item>
-          <a-menu-item key="10">
-            Option 10
-          </a-menu-item>
-          <a-menu-item key="11">
-            Option 11
-          </a-menu-item>
-          <a-menu-item key="12">
-            Option 12
-          </a-menu-item>
-        </a-sub-menu>
-      </a-menu-item-group>
     </a-menu>
 
 
@@ -223,216 +165,151 @@ const SubMenu = {
     },
     data() {
       return {
+        title: "Shopia云服务平台",
+        logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
         menuAry:[
           {
-            moduleTitle: "概览",
+            title: "概览",
             key:'1'
           },
           {
-            moduleTitle: "产品服务",
-            list: [
+            title: "产品服务",
+            key:"2",
+            children: [
               {
-                subKey: "pro1",
+                key:"2.1",
                 title: "自然语言处理",
-                seckey:'pro1',
-                menuItmList: [
+                children: [
                   {
+                    key:"2.1.1",
                     title: "API管理",
-                    itemKey: "yuyanAPI",
                     path: "/apiMan",
-                    serviceModel: 1,
-                    threekey:'apiMan1'
                   },
                   {
+                    key:"2.1.2",
                     title: "SDK管理",
-                    itemKey: "yuyanSDK",
                     path: "/sdkMan",
-                    serviceModel: 1,
-                    threekey:'sdkMan1'
                   }
                 ]
               },
               {
-                subKey: "pro2",
+                key: "2.2",
                 title: "语音技术",
-                seckey:'pro2',
-                menuItmList: [
+                children: [
                   {
+                    key:"2.2.1",
                     title: "API管理",
-                    itemKey: "yuyinAPI",
                     path: "/apiMan",
-                    serviceModel: 2,
-                    threekey:'apiMan2'
                   },
                   {
+                    key:"2.2.2",
                     title: "SDK管理",
-                    itemKey: "yuyinSDK",
                     path: "/sdkMan",
-                    serviceModel: 2,
-                    threekey:'sdkMan2'
                   }
                 ]
               },
               {
-                subKey: "pro3",
+                subKey: "2.3",
                 title: "人脸识别",
-                seckey:'pro3',
-                menuItmList: [
+                children: [
                   {
                     title: "API管理",
-                    itemKey: "renlianAPI",
-                    path: "/apiMan",
-                    serviceModel: 6,
-                    threekey:'apiMan3'
+                    key: "2.3.1",
+                    path: "/apiMan"
                   },
                   {
                     title: "SDK管理",
-                    itemKey: "renlianSDK",
-                    path: "/sdkMan",
-                    serviceModel: 6,
-                    threekey:'sdkMan3'
+                    key: "2.3.2",
+                    path: "/sdkMan"
                   }
                 ]
               },
               {
-                subKey: "pro4",
+                subKey: "2.4",
                 title: "人体分析",
-                seckey:'pro4',
-                menuItmList: [
+                children: [
                   {
                     title: "API管理",
-                    itemKey: "rentiAPI",
-                    path: "/apiMan",
-                    serviceModel: 7,
-                    threekey:'apiMan4'
+                    key: "2.4.1",
+                    path: "/apiMan"
                   },
                   {
                     title: "SDK管理",
-                    itemKey: "rentiSDK",
-                    path: "/sdkMan",
-                    serviceModel: 7,
-                    threekey:'sdkMan4'
+                    key: "2.4.2",
+                    path: "/sdkMan"
                   }
                 ]
               },
               {
-                subKey: "pro5",
+                subKey: "2.5",
                 title: "文字识别",
-                seckey:'pro5',
-                menuItmList: [
+                children: [
                   {
                     title: "API管理",
-                    itemKey: "wenziAPI",
-                    path: "/apiMan",
-                    serviceModel: 3,
-                    threekey:'apiMan5'
+                    key: "2.5.1",
+                    path: "/apiMan"
                   },
                   {
                     title: "SDK管理",
-                    itemKey: "wenziSDK",
-                    path: "/sdkMan",
-                    serviceModel: 3,
-                    threekey:'sdkMan5'
-                  }
-                ]
-              },
-              {
-                subKey: "pro6",
-                title: "图像技术",
-                seckey:'pro6',
-                menuItmList: [
-                  {
-                    title: "API管理",
-                    itemKey: "tuxiangAPI",
-                    path: "/apiMan",
-                    serviceModel: 4,
-                    threekey:'apiMan6'
-                  },
-                  {
-                    title: "SDK管理",
-                    itemKey: "tuxiangSDK",
-                    path: "/sdkMan",
-                    serviceModel: 4,
-                    threekey:'sdkMan6'
-                  }
-                ]
-              },
-              {
-                subKey: "pro7",
-                title: "视频技术",
-                seckey:'pro7',
-                menuItmList: [
-                  {
-                    title: "API管理",
-                    itemKey: "shipinAPI",
-                    path: "/apiMan",
-                    serviceModel: 5,
-                    threekey:'apiMan7'
-                  },
-                  {
-                    title: "SDK管理",
-                    itemKey: "shipinSDK",
-                    path: "/sdkMan",
-                    serviceModel: 5,
-                    threekey:'sdkMan7'
+                    key: "2.5.2",
+                    path: "/sdkMan"
                   }
                 ]
               }
             ]
           },
           {
-            moduleTitle: "数据服务",
-            list: [
+            title: "数据服务",
+            key:"3",
+            children: [
               {
-                subKey: "dataSer1",
+                key: "3.1",
                 title: "智能推荐",
-                seckey:'dataSer1',
-                menuItmList: [
+                children: [
                   {
                     title: "推荐应用管理",
-                    itemKey: "tuijianyingyong",
+                    key: "3.1.1",
                     path: "/recommendation/application/list",
                     threekey:'tuijianyingyong'
                   },
                   {
                     title: "推荐场景管理",
-                    itemKey: "tuijianchangjing",
+                    key: "3.1.2",
                     path: "/recommendation/scene/list",
                     threekey:'tuijianchangjing'
                   },
                   {
                     title: "数据中心",
-                    itemKey: "shujuzhongxin",
+                    key: "3.1.3",
                     threekey:'shujuzhongxin',
                     children: [
                       {
                         title: "数据管理",
-                        itemKey: "shujuguanli",
+                        key: "3.1.3.1",
                         path: "/recommendation/data/list",
-                        fourkey:'shujuguanlik'
                       }
                     ]
                   },
                   {
                     title: "推荐运营",
-                    itemKey: "tuijianyunying",
+                    key: "3.1.4",
                     threekey:'tuijianyunying',
                     children: [
                       {
                         title: "推荐测试及结果",
-                        itemKey: "tuijianceshijijieguo",
+                        key: "3.1.4.1",
                         path: "/recommendation/operation/result",
                         fourkey:'tuijianceshijijieguo'
                       },
                       {
                         title: "物料及用户管理",
-                        itemKey: "wupinguanli",
+                        key: "3.1.4.2",
                         path: "/recommendation/materiel",
                         fourkey:'wupinguanli'
                       },
                       {
                         title: "必推物品池",
-                        itemKey: "bitui",
+                        key: "3.1.4.3",
                         path: "/recommendation/materiel/willPush",
                         fourkey:'bitui'
                       }
@@ -441,14 +318,14 @@ const SubMenu = {
                 ]
               },
               {
-                subKey: "dataSer2",
+                key: "3.2",
                 title: "用户画像",
                 seckey:'dataSer2',
               }
             ]
           },         
         ],
-        openKeys: ['sub1'],
+        openKeys: [],
         breadcrumbMargin: {margin: '84px 16px 24px 16px'},
         contentStyle:{
           margin: '0px 16px 24px 16px',
@@ -456,8 +333,6 @@ const SubMenu = {
           minHeight:'auto'
         },
         userInfomation:{},
-        title: "Shopia云服务平台",
-        logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
         collapsed: false,
         breadArr: [],
         menuList: [
