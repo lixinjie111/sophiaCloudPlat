@@ -105,6 +105,7 @@
                                 <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
                             </div>
                             <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
+                                <a style="color:#0376FD;" @click="returnTicket(row)">退票</a>
                                 <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
                                 <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
                                 <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
@@ -117,7 +118,7 @@
                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
                                 <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
                                 <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">下载</a>
+                                <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
                             </div>
                         </template>
                     </vxe-table-column>
@@ -149,6 +150,9 @@
             </el-tab-pane>
         </el-tabs>
     </div>
+    <!--发票退票弹框-->
+    <vInvoiceReturn v-if="ifShowPtInvReturn" :invoiceInfo="invoiceParm" @closePopWin="closePtInvoReturnPop"></vInvoiceReturn>
+    <vInvoiceZpReturn v-if="ifShowZpInvReturn" :invoiceInfo="invoiceParm" @closePopWin="closeZpInvoReturnPop"></vInvoiceZpReturn>
   </div>
 </template>
 
@@ -160,6 +164,8 @@ import vInvoInfo from "./invoiceInfoMan";
 import vInvoInfoShow from "./invoInfoShow";
 import vShipAddressMan from "./shipAddressMan";
 import vEmailMan from "./emailMan";
+import vInvoiceReturn from "./invoiceReturn";
+import vInvoiceZpReturn from "./invoiceZpReturn";
 export default {
   name: "invoiceMan",
   data() {
@@ -204,7 +210,10 @@ export default {
         fpttFilter:[],
         fpxzFilter:[],
         fpztFilter:[],
-        ifShowShowPanel:true
+        ifShowShowPanel:true,
+        ifShowPtInvReturn:false,
+        ifShowZpInvReturn:false,
+        invoiceParm:null
     };
   },
   created() {
@@ -220,7 +229,9 @@ export default {
       vInvoInfo,
       vInvoInfoShow,
       vShipAddressMan,
-      vEmailMan
+      vEmailMan,
+      vInvoiceReturn,
+      vInvoiceZpReturn
   },
   methods: {
     watchDetailGetMoney(){
@@ -234,6 +245,25 @@ export default {
             return;
         }
     },
+    returnTicket(e){
+        var testFlag = 2;
+        this.invoiceParm = e;
+        if(testFlag == 1){   //普通
+            this.ifShowPtInvReturn = true;
+            this.ifShowZpInvReturn = false;
+        }
+        else{
+            this.ifShowZpInvReturn = true;
+            this.ifShowPtInvReturn = false;
+        }
+        
+    },
+    closePtInvoReturnPop(e){
+        this.ifShowPtInvReturn = e;
+    },
+    closeZpInvoReturnPop(e){
+        this.ifShowZpInvReturn = e;
+    },
     goDetail(e){
         this.$router.push({
             path:'/invoiceDetail',
@@ -245,8 +275,17 @@ export default {
     exportDetail(e){
         console.log(e,'222222')
     },
-    cancelFn(e){
-        console.log(e,'333333')
+    cancelFn() {
+        this.$comfirm('撤销后将不会为您开具相应的发票，您是否要撤销此次发票申请？', '撤销发票', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          customClass:'configPopwin'
+        }).then(() => {
+            console.log('成功！')
+        }).catch(() => {
+          console.log('失败！')         
+        });
     },
     downLoad(e){
         console.log(e,'444444')
@@ -462,6 +501,17 @@ export default {
   },
 };
 </script>
+<style>
+.v-modal{
+    z-index: 9999999 !important; 
+}
+.el-message-box__wrapper{
+    z-index: 999999991 !important;
+}
+.el-message-box__wrapper .configPopwin{
+    z-index: 999999992 !important;
+}
+</style>
 <style lang="scss" scoped>
 .invoice_con {
   width: 100%;
