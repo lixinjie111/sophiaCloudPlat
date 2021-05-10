@@ -5,13 +5,13 @@
       <div class="c-mr-20">特征名称：</div>
       <a-select class="c-mr-20" placeholder="请选择特征名称" v-model="item.featureId" @change="featureChange(item)" style="width:140px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
-        <a-select-option :value="item.id" v-for="(item,index) in dataTypeList" :key="index">{{item.fieldValue}}
+        <a-select-option :value="item.id" v-for="(item,index) in dataTypeList" :key="index">{{item.name}}
         </a-select-option>
       </a-select>
       <div class="c-mr-20">抽取范围：</div>
       <a-select class="c-mr-20" placeholder="请选择抽取范围" v-model="item.scope" @change="scopeChange(item)" style="width:140px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
-        <a-select-option :value="item.id" v-for="(item,index) in scopeList" :key="index">{{item.tableName}}
+        <a-select-option :value="item.id" v-for="(item,index) in scopeList" :key="index">{{item.userTableName}}
         </a-select-option>
       </a-select>
       <div class="c-mr-20">应用于：</div>
@@ -20,7 +20,6 @@
         <a-select-option :value="item.id" v-for="(item,index) in applyList" :key="index">{{item.value}}
         </a-select-option>
       </a-select>
-      <a-button type="primary" icon="profile" class="c-mr-20" @click="toDetail(item.id)">详情</a-button>
       <a-popconfirm
         title="是否删除该条目?"
         ok-text="是"
@@ -41,7 +40,7 @@
   export default {
     name: "AddData",
     props: {
-      // 用户数据列表
+      // 数据列表
       list: {
         type: Array,
         default: () => []
@@ -74,25 +73,20 @@
       }
     },
     created() {
-    //   if(this.type == 'edit'){ //编辑
-    //     this.addList.forEach((item)=> {
-    //       this.getScopeList(item.folderId,item.dataType)
-    //     });
-    //   }
+      if(this.type == 'edit'){ //编辑
+        this.addList.forEach((item)=> {
+          this.getScopeList(item.featureId)
+        });
+      }
     },
     methods: {
-      // toDetail(id) {
-      //   let name = this.sourceTablesList.find((item)=>{
-      //     return item.sourceTableId == id
-      //   })
-      //   this.$router.push({
-      //     path: '/recommendation/data/detail?name='+ name.sourceTableName,
-      //     query:{
-      //       activekey:['shujuguanlik'],
-      //       openkey:['dataSer1','shujuzhongxin']
-      //     }
-      //   });
-      // },
+      resetSceneFeatures() {
+        this.addList.forEach((item)=> {
+          item.featureId = undefined;
+          item.scope = undefined;
+          item.applyTo = undefined;
+        });
+      },
       getScopeList(dataType) {
         let params = {
           applicationId: this.$route.query.appId,
@@ -121,14 +115,14 @@
           featureId: undefined,
           scope: undefined,
           applyTo: undefined
-        })
+        });
       },
       del(index) {
         this.addList.splice(index, 1);
       },
       featureChange(item) {
         item.scope = undefined;
-        this.getScopeList(item.id);
+        this.getScopeList(item.featureId);
       },
       scopeChange(item) {
 

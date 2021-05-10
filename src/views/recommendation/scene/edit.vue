@@ -28,6 +28,9 @@
       <div v-else-if="noTitleKey === '2'">
         <SetData type="edit" :dataInfo="dataInfo"></SetData>
       </div>
+      <div v-else-if="noTitleKey === '3'">
+        <SetFeature type="edit" :dataInfo="dataInfo"></SetFeature>
+      </div>
       <div v-else>
         <!--智能场景规则-->
         <template v-if="sceneType == '0'">
@@ -45,13 +48,14 @@
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
   import SceneForm from "@/components/recommendation/scene/SceneForm";
+  import SetFeature from "@/components/recommendation/scene/SetFeature";
   import SetData from "@/components/recommendation/scene/SetData";
   import SetRules from "@/components/recommendation/scene/SetRules";
   import {getSceneDetail, addScene, getSceneAll} from "@/api/recommendation/index";
 
   export default {
     name: "edit",
-    components: {SetData, SetRules, SceneForm, CreateForm},
+    components: {SetData, SetFeature, SetRules, SceneForm, CreateForm},
     data() {
       return {
         tabListNoTitle: [
@@ -65,6 +69,11 @@
           },
           {
             key: '3',
+            tab: '特征抽取',
+          },
+          ,
+          {
+            key: '4',
             tab: '推荐规则',
           },
         ],
@@ -72,6 +81,7 @@
         sceneForm: {},
         appList:[],
         dataInfo: {},
+        featureInfo: {},
         ruleInfo: {}
       }
     },
@@ -131,6 +141,7 @@
               description: res.data.description
             };
             this.dataInfo = res.data.dataInfo;
+            this.featureInfo = res.data.featureInfo;
             this.ruleInfo = res.data.ruleInfo;
             let sceneInfo= {
               sceneType: res.data.sceneType,

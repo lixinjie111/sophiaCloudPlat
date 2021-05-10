@@ -134,6 +134,12 @@
         </a-descriptions-item>
       </a-descriptions>
     </a-card>
+    <a-card title="用户特征抽取" size="small" class="c-mb-20">
+    </a-card>
+    <a-card title="物料特征抽取" size="small" class="c-mb-20">
+    </a-card>
+    <a-card title="行为特征抽取" size="small" class="c-mb-20">
+    </a-card>
     <!--智能场景规则-->
     <a-card title="规则推荐" size="small" v-if="sceneType == '0'">
       <a-descriptions bordered :column="1" size="small">
