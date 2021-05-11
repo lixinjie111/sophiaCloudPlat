@@ -15,7 +15,77 @@
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
-      <a-menu
+    <a-menu
+      style="width: 256px"
+      :default-selected-keys="['1']"
+      :open-keys.sync="openKeys"
+      mode="inline"
+      @click="handleClick"
+    >
+    <template v-for="item in menuAry">
+      <a-menu-item v-if="!item.list" :key="item.key"><a-icon type="user"/>{{item.moduleTitle}}</a-menu-item>
+      <a-menu-item-group v-else :key="item.key">
+        <sub-menu :key="item.key" :menu-info="item"></sub-menu>
+      </a-menu-item-group>
+    </template>
+      
+
+      <a-menu-item-group key="g1">
+          <a-menu-item key="1">
+            Option 1
+          </a-menu-item>
+          <a-menu-item key="2">
+            Option 2
+          </a-menu-item>
+        </a-menu-item-group>
+        <a-menu-item-group key="g2" title="Item 2">
+          <a-menu-item key="3">
+            Option 3
+          </a-menu-item>
+          <a-menu-item key="4">
+            Option 4
+          </a-menu-item>
+      </a-menu-item-group>
+      <a-menu-item-group key="g3" title="Item 3">
+        <a-sub-menu key="sub2" @titleClick="titleClick">
+          <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
+          <a-menu-item key="5">
+            Option 5
+          </a-menu-item>
+          <a-menu-item key="6">
+            Option 6
+          </a-menu-item>
+          <a-sub-menu key="sub3" title="Submenu">
+            <a-menu-item key="7">
+              Option 7
+            </a-menu-item>
+            <a-menu-item key="8">
+              Option 8
+            </a-menu-item>
+          </a-sub-menu>
+        </a-sub-menu>
+      </a-menu-item-group>
+      <a-menu-item-group key="g4" title="Item 4">
+        <a-sub-menu key="sub4">
+          <span slot="title"><a-icon type="setting" /><span>Navigation Three</span></span>
+          <a-menu-item key="9">
+            Option 9
+          </a-menu-item>
+          <a-menu-item key="10">
+            Option 10
+          </a-menu-item>
+          <a-menu-item key="11">
+            Option 11
+          </a-menu-item>
+          <a-menu-item key="12">
+            Option 12
+          </a-menu-item>
+        </a-sub-menu>
+      </a-menu-item-group>
+    </a-menu>
+
+
+      <!-- <a-menu
         theme="dark"
         mode="inline"
         :default-selected-keys="defaultChoiceList"
@@ -85,7 +155,7 @@
             </a-sub-menu>
           </template>
         </template>
-      </a-menu>
+      </a-menu> -->
     </a-layout-sider>
     <a-layout class="cloudContainer">
       <a-layout-header class="cloudHeader">
@@ -104,28 +174,287 @@
           </a-dropdown>
         </div>
       </a-layout-header>
-      <a-breadcrumb :style="{
-          margin: '84px 16px 24px 16px',
-        }">
-        <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
+      <a-breadcrumb :style="breadcrumbMargin" :routes="breadArr">
+        <!-- <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item> -->
+        <template slot="itemRender" slot-scope="{route,params,routes,paths}">
+          <span v-if="routes.indexOf(route) == routes.length - 1">{{route.title}}</span>
+          <router-link v-else :to="`${paths.join('/')}`">{{route.title}}</router-link>
+        </template>
       </a-breadcrumb>
-      <a-layout-content
-        :style="{
-          margin: '0px 16px 24px 16px',
-          background: '#fff',
-          minHeight:'auto'
-        }"
-      >
+      <a-layout-content :style="contentStyle">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 <script>
-  import { userInfo } from '@/api/user';
+import { userInfo } from '@/api/user';
+import {Menu} from "x-intelligent-ui"
+const SubMenu = {
+  template: `
+      <a-sub-menu :key="menuInfo.key" v-bind="$props" v-on="$listeners">
+        <span slot="title">
+          <a-icon type="mail" /><span>{{ menuInfo.title }}</span>
+        </span>
+        <template v-for="item in menuInfo.children">
+          <a-menu-item v-if="!item.children" :key="item.key">
+            <a-icon type="pie-chart" />
+            <span>{{ item.title }}</span>
+          </a-menu-item>
+          <sub-menu v-else :key="item.key" :menu-info="item" />
+        </template>
+      </a-sub-menu>
+    `,
+  name: 'SubMenu',
+  // must add isSubMenu: true
+  isSubMenu: true,
+  props: {
+    ...Menu.SubMenu.props,
+    // Cannot overlap with properties within Menu.SubMenu.props
+    menuInfo: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+};
   export default {
+    components:{
+      'sub-menu':SubMenu
+    },
     data() {
       return {
+        menuAry:[
+          {
+            moduleTitle: "概览",
+            key:'1'
+          },
+          {
+            moduleTitle: "产品服务",
+            list: [
+              {
+                subKey: "pro1",
+                title: "自然语言处理",
+                seckey:'pro1',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "yuyanAPI",
+                    path: "/apiMan",
+                    serviceModel: 1,
+                    threekey:'apiMan1'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "yuyanSDK",
+                    path: "/sdkMan",
+                    serviceModel: 1,
+                    threekey:'sdkMan1'
+                  }
+                ]
+              },
+              {
+                subKey: "pro2",
+                title: "语音技术",
+                seckey:'pro2',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "yuyinAPI",
+                    path: "/apiMan",
+                    serviceModel: 2,
+                    threekey:'apiMan2'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "yuyinSDK",
+                    path: "/sdkMan",
+                    serviceModel: 2,
+                    threekey:'sdkMan2'
+                  }
+                ]
+              },
+              {
+                subKey: "pro3",
+                title: "人脸识别",
+                seckey:'pro3',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "renlianAPI",
+                    path: "/apiMan",
+                    serviceModel: 6,
+                    threekey:'apiMan3'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "renlianSDK",
+                    path: "/sdkMan",
+                    serviceModel: 6,
+                    threekey:'sdkMan3'
+                  }
+                ]
+              },
+              {
+                subKey: "pro4",
+                title: "人体分析",
+                seckey:'pro4',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "rentiAPI",
+                    path: "/apiMan",
+                    serviceModel: 7,
+                    threekey:'apiMan4'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "rentiSDK",
+                    path: "/sdkMan",
+                    serviceModel: 7,
+                    threekey:'sdkMan4'
+                  }
+                ]
+              },
+              {
+                subKey: "pro5",
+                title: "文字识别",
+                seckey:'pro5',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "wenziAPI",
+                    path: "/apiMan",
+                    serviceModel: 3,
+                    threekey:'apiMan5'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "wenziSDK",
+                    path: "/sdkMan",
+                    serviceModel: 3,
+                    threekey:'sdkMan5'
+                  }
+                ]
+              },
+              {
+                subKey: "pro6",
+                title: "图像技术",
+                seckey:'pro6',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "tuxiangAPI",
+                    path: "/apiMan",
+                    serviceModel: 4,
+                    threekey:'apiMan6'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "tuxiangSDK",
+                    path: "/sdkMan",
+                    serviceModel: 4,
+                    threekey:'sdkMan6'
+                  }
+                ]
+              },
+              {
+                subKey: "pro7",
+                title: "视频技术",
+                seckey:'pro7',
+                menuItmList: [
+                  {
+                    title: "API管理",
+                    itemKey: "shipinAPI",
+                    path: "/apiMan",
+                    serviceModel: 5,
+                    threekey:'apiMan7'
+                  },
+                  {
+                    title: "SDK管理",
+                    itemKey: "shipinSDK",
+                    path: "/sdkMan",
+                    serviceModel: 5,
+                    threekey:'sdkMan7'
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            moduleTitle: "数据服务",
+            list: [
+              {
+                subKey: "dataSer1",
+                title: "智能推荐",
+                seckey:'dataSer1',
+                menuItmList: [
+                  {
+                    title: "推荐应用管理",
+                    itemKey: "tuijianyingyong",
+                    path: "/recommendation/application/list",
+                    threekey:'tuijianyingyong'
+                  },
+                  {
+                    title: "推荐场景管理",
+                    itemKey: "tuijianchangjing",
+                    path: "/recommendation/scene/list",
+                    threekey:'tuijianchangjing'
+                  },
+                  {
+                    title: "数据中心",
+                    itemKey: "shujuzhongxin",
+                    threekey:'shujuzhongxin',
+                    children: [
+                      {
+                        title: "数据管理",
+                        itemKey: "shujuguanli",
+                        path: "/recommendation/data/list",
+                        fourkey:'shujuguanlik'
+                      }
+                    ]
+                  },
+                  {
+                    title: "推荐运营",
+                    itemKey: "tuijianyunying",
+                    threekey:'tuijianyunying',
+                    children: [
+                      {
+                        title: "推荐测试及结果",
+                        itemKey: "tuijianceshijijieguo",
+                        path: "/recommendation/operation/result",
+                        fourkey:'tuijianceshijijieguo'
+                      },
+                      {
+                        title: "物料及用户管理",
+                        itemKey: "wupinguanli",
+                        path: "/recommendation/materiel",
+                        fourkey:'wupinguanli'
+                      },
+                      {
+                        title: "必推物品池",
+                        itemKey: "bitui",
+                        path: "/recommendation/materiel/willPush",
+                        fourkey:'bitui'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                subKey: "dataSer2",
+                title: "用户画像",
+                seckey:'dataSer2',
+              }
+            ]
+          },         
+        ],
+        openKeys: ['sub1'],
+        breadcrumbMargin: {margin: '84px 16px 24px 16px'},
+        contentStyle:{
+          margin: '0px 16px 24px 16px',
+          background: '#fff',
+          minHeight:'auto'
+        },
         userInfomation:{},
         title: "Shopia云服务平台",
         logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
@@ -537,7 +866,10 @@
           localStorage.setItem('openkey',routerParm.openkey)
         }
         this.$forceUpdate();
-      }
+      },
+      openKeys(val) {
+        console.log('openKeys', val);
+      },
     },
     created(){
       this.$store.dispatch('getUserInfo');
@@ -561,6 +893,12 @@
       this.showHeader();
     },
     methods: {
+    handleClick(e) {
+      console.log('click', e);
+    },
+    titleClick(e) {
+      console.log('titleClick', e);
+    },      
       getUserInfo(){
         userInfo().then(res => {
           if(res.code == 200000) {
@@ -701,6 +1039,7 @@
         openPath.splice(inx,1);
         var operPatnlist = openPath.reverse();
         localStorage.setItem('openkey',operPatnlist)
+        console.log("click menu",this.breadArr)
       }
     }
   };

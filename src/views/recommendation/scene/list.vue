@@ -258,6 +258,11 @@
             openkey:['dataSer1',"tuijianyunying"]
           }
         });
+        // const {href} = this.$router.resolve({
+        //   name: "recommendationOperationResult",
+        //   query: {activekey: ['tuijianceshijijieguo'],openkey: ['dataSer1', 'tuijianyunying']}
+        // });
+        // window.open(href, '_blank');        
       },
       add() {
         this.sceneModalShow = true;
