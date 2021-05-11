@@ -246,23 +246,35 @@ export default {
         }
     },
     returnTicket(e){
-        var testFlag = 2;
+        var titleFlg = e.invoiceTypeDesc;
         this.invoiceParm = e;
-        if(testFlag == 1){   //普通
-            this.ifShowPtInvReturn = true;
-            this.ifShowZpInvReturn = false;
-        }
-        else{
+        if(titleFlg == '增值税专用发票'){
             this.ifShowZpInvReturn = true;
             this.ifShowPtInvReturn = false;
         }
-        
+        else{
+            this.ifShowPtInvReturn = true;
+            this.ifShowZpInvReturn = false;
+        }        
     },
     closePtInvoReturnPop(e){
-        this.ifShowPtInvReturn = e;
+        if(e.refreshParm == 'refresh'){
+            this.ifShowPtInvReturn = e.operParm;
+            this.getfpManData();
+        }
+        else{
+            this.ifShowPtInvReturn = e.operParm;
+        }
     },
     closeZpInvoReturnPop(e){
-        this.ifShowZpInvReturn = e;
+        console.log(e,'e')
+        if(e.refreshParm == 'refresh'){
+            this.ifShowZpInvReturn = e.operParm;
+            this.getfpManData();
+        }
+        else{
+            this.ifShowZpInvReturn = e.operParm;
+        }
     },
     goDetail(e){
         this.$router.push({
@@ -278,7 +290,15 @@ export default {
             invoiceId:invoiceId
         };
         exportInvoiceDetail(parms).then(res=>{
-            console.log(res,'res111')
+          var eleLink = document.createElement('a');
+          eleLink.download = '发票明细';
+          eleLink.style.display = 'none'
+          var blob = new Blob([res],{type: 'application/vnd.ms-excel'});
+          eleLink.href = URL.createObjectURL(blob);
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
         }).catch(err=>{
             this.$message.error('导出明细失败！')
         });
