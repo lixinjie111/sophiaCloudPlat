@@ -20,7 +20,7 @@
               style="width: 100%"
             >
               <el-option
-                v-for="item in options"
+                v-for="item in returnResOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -29,16 +29,28 @@
             </el-select>
           </el-form-item>
           <el-form-item label="收件人：" prop="Recipient">
-            <el-input v-model="invoiceReturnResForm.Recipient" placeholder="请填写收件人姓名"></el-input>
+            <el-input
+              v-model="invoiceReturnResForm.Recipient"
+              placeholder="请填写收件人姓名"
+            ></el-input>
           </el-form-item>
           <el-form-item label="联系电话：" prop="contactNum">
-            <el-input v-model="invoiceReturnResForm.contactNum" placeholder="请填写收件人联系电话"></el-input>
+            <el-input
+              v-model="invoiceReturnResForm.contactNum"
+              placeholder="请填写收件人联系电话"
+            ></el-input>
           </el-form-item>
           <el-form-item label="地址：" prop="address">
-            <el-input v-model="invoiceReturnResForm.address" placeholder="请填写收件人地址"></el-input>
+            <el-input
+              v-model="invoiceReturnResForm.address"
+              placeholder="请填写收件人地址"
+            ></el-input>
           </el-form-item>
-         <el-form-item label=" 运单号：" prop="waybillNum">
-            <el-input v-model="invoiceReturnResForm.waybillNum" placeholder="请填写运单号"></el-input>
+          <el-form-item label=" 运单号：" prop="waybillNum">
+            <el-input
+              v-model="invoiceReturnResForm.waybillNum"
+              placeholder="请填写运单号"
+            ></el-input>
           </el-form-item>
           <el-form-item label="备注：" prop="remarks">
             <el-input
@@ -46,23 +58,27 @@
               v-model="invoiceReturnResForm.remarks"
             ></el-input>
           </el-form-item>
+          <el-form-item class="btn_con">
+            <el-button @click="closePopWin">关闭</el-button>
+            <el-button type="primary" @click="submitForm('invoiceReturnResForm')"
+              >确定</el-button
+            >
+          </el-form-item>
         </el-form>
-      </div>
-      <div class="footer_con">
-        <el-button @click="closePopWin">取消</el-button>
-        <el-button type="primary">确定</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {operateInvoice} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceZpReturn",
   data() {
     var telNumValida = (rule, value, callback) => {
-      var mobile = /^1[0-9]{10}$/, phone = /^0\d{2,3}-?\d{7,8}$/;
-      var ifValb =  mobile.test(value) || phone.test(value);
+      var mobile = /^1[0-9]{10}$/,
+        phone = /^0\d{2,3}-?\d{7,8}$/;
+      var ifValb = mobile.test(value) || phone.test(value);
       if (value === "") {
         callback(new Error("请填写收件人联系电话!"));
       } else if (!ifValb) {
@@ -74,47 +90,46 @@ export default {
     return {
       invoiceReturnResForm: {
         reson: "",
-        Recipient:'',
-        contactNum:'',
-        address:'',
-        waybillNum:'',
+        Recipient: "",
+        contactNum: "",
+        address: "",
+        waybillNum: "",
         remarks: "",
       },
       invoiceReturnRules: {
         reson: [{ required: true, message: "退票原因", trigger: "change" }],
-        Recipient: [{ required: true, message: "请填写收件人姓名", trigger: "blur" }],
-        address: [{ required: true, message: "请填写收件人地址", trigger: "blur" }],
-        waybillNum: [{ required: true, message: "请填写运单号", trigger: "blur" }],
-        contactNum:[{ required: true,trigger: "blur",validator: telNumValida },],
+        Recipient: [
+          { required: true, message: "请填写收件人姓名", trigger: "blur" },
+        ],
+        address: [
+          { required: true, message: "请填写收件人地址", trigger: "blur" },
+        ],
+        waybillNum: [
+          { required: true, message: "请填写运单号", trigger: "blur" },
+        ],
+        contactNum: [
+          { required: true, trigger: "blur", validator: telNumValida },
+        ],
         remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
       },
-      options: [
+      returnResOptions: [
         {
-          value: "选项1",
-          label: "黄金糕",
+          value: "1",
+          label: "发票信息错误",
         },
         {
-          value: "选项2",
-          label: "双皮奶",
+          value: "2",
+          label: "发票类型错误",
         },
         {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
+          value: "3",
+          label: "退款",
         },
       ],
-      aa: "",
     };
   },
   created() {
-    console.log(this.invoiceInfo, "this.invoiceInfo");
+
   },
   props: {
     invoiceInfo: {
@@ -124,8 +139,46 @@ export default {
   },
   methods: {
     closePopWin() {
-      this.$emit("closePopWin", false);
+      var operArg = {
+          operParm:false,
+          refreshParm:'noRefresh'
+      };
+      this.$emit("closePopWin", operArg);
     },
+    submitForm(formName){
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+              var parms = this.invoiceReturnResForm;
+              var invoiceInfo = this.invoiceInfo;
+              var operParms = {
+                  addressDetail:parms.address,
+                  contactPhone:parms.contactNum,
+                  invoiceId:invoiceInfo.invoiceId || '',
+                  invoiceStatus:7,
+                  recipient:parms.Recipient,
+                  refundType:parms.reson,
+                  trackingNumber:parms.waybillNum,
+                  remark:parms.remarks
+              };
+              console.log(invoiceInfo,'invoiceInfo')
+              operateInvoice(operParms).then(res=>{
+                  if(res.code == 200000){
+                    var operArg = {
+                        operParm:false,
+                        refreshParm:'refresh'
+                    };
+                    this.$emit("closePopWin",operArg);
+                  }
+                  else{this.$message.error('退票失败！')}
+              }).catch(err=>{
+                   this.$message.error('退票失败！')
+              });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    }
   },
 };
 </script>
@@ -183,6 +236,9 @@ export default {
       .el-form {
         .el-form-item {
           margin-bottom: 10 !important;
+        }
+        .btn_con{
+            float: right;
         }
       }
     }

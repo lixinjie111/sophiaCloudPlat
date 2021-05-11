@@ -20,7 +20,7 @@
               style="width: 100%"
             >
               <el-option
-                v-for="item in options"
+                v-for="item in returnResOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -34,11 +34,13 @@
               v-model="invoiceReturnResForm.remarks"
             ></el-input>
           </el-form-item>
+          <el-form-item class="btn_con">
+            <el-button @click="closePopWin">关闭</el-button>
+            <el-button type="primary" @click="submitForm('invoiceReturnResForm')"
+              >确定</el-button
+            >
+          </el-form-item>
         </el-form>
-      </div>
-      <div class="footer_con">
-        <el-button @click="closePopWin">取消</el-button>
-        <el-button type="primary">确定</el-button>
       </div>
     </div>
   </div>
@@ -57,33 +59,25 @@ export default {
         reson: [{ required: true, message: "退票原因", trigger: "change" }],
         remarks: [{ required: true, message: "请输入备注", trigger: "blur" }],
       },
-      options: [
+      returnResOptions: [
         {
-          value: "选项1",
-          label: "黄金糕",
+          value: "1",
+          label: "发票信息错误",
         },
         {
-          value: "选项2",
-          label: "双皮奶",
+          value: "2",
+          label: "发票类型错误",
         },
         {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
+          value: "3",
+          label: "退款",
+        }
       ],
       aa: "",
     };
   },
   created() {
-    console.log(this.invoiceInfo, "this.invoiceInfo");
+
   },
   props: {
     invoiceInfo: {
@@ -93,8 +87,46 @@ export default {
   },
   methods: {
     closePopWin() {
-      this.$emit("closePopWin", false);
+      var operArg = {
+          operParm:false,
+          refreshParm:'noRefresh'
+      };
+      this.$emit("closePopWin", operArg);
     },
+    submitForm(formName){
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+              var parms = this.invoiceReturnResForm;
+              var invoiceInfo = this.invoiceInfo;
+              var operParms = {
+                  addressDetail:'',
+                  contactPhone:'',
+                  invoiceId:invoiceInfo.invoiceId || '',
+                  invoiceStatus:7,
+                  recipient:'',
+                  refundType:parms.reson,
+                  trackingNumber:'',
+                  remark:parms.remarks
+              };
+              console.log(invoiceInfo,'invoiceInfo')
+              operateInvoice(operParms).then(res=>{
+                  if(res.code == 200000){
+                    var operArg = {
+                        operParm:false,
+                        refreshParm:'refresh'
+                    };
+                    this.$emit("closePopWin",operArg);
+                  }
+                  else{this.$message.error('退票失败！')}
+              }).catch(err=>{
+                   this.$message.error('退票失败！')
+              });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    }
   },
 };
 </script>
@@ -153,17 +185,10 @@ export default {
         .el-form-item {
           margin-bottom: 10 !important;
         }
+        .btn_con{
+            float: right;
+        }
       }
-    }
-    .footer_con {
-      width: 100%;
-      height: 80px;
-      border-top: 1px solid rgba(0, 0, 0, 0.09);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 24px;
-      box-sizing: border-box;
     }
   }
 }
