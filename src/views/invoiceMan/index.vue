@@ -159,7 +159,7 @@
 <script>
 import moment from "moment";
 import "moment/locale/zh-cn";
-import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
+import {fapSearch,queryInvoiceBase,exportInvoiceDetail,operateInvoice} from "../../api/invoiceMan/index";
 import vInvoInfo from "./invoiceInfoMan";
 import vInvoInfoShow from "./invoInfoShow";
 import vShipAddressMan from "./shipAddressMan";
@@ -273,16 +273,39 @@ export default {
         });
     },
     exportDetail(e){
-        console.log(e,'222222')
+        var invoiceId = e.invoiceId || '';
+        var parms = {
+            invoiceId:invoiceId
+        };
+        exportInvoiceDetail(parms).then(res=>{
+            console.log(res,'res111')
+        }).catch(err=>{
+            this.$message.error('导出明细失败！')
+        });
     },
-    cancelFn() {
+    cancelFn(arg) {
+        var invoiceId = arg.invoiceId || '';
+        var parms = {
+            invoiceId:invoiceId,
+            invoiceStatus:'4'
+        };
         this.$comfirm('撤销后将不会为您开具相应的发票，您是否要撤销此次发票申请？', '撤销发票', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           customClass:'configPopwin'
-        }).then(() => {
-            console.log('成功！')
+        }).then(() => { 
+            operateInvoice(parms).then(res=>{
+                console.log(res,'撤销结果')
+                if(res.code == 200000){
+                    this.getfpManData();
+                }
+                else{
+                    this.$message.error('撤销失败！')
+                }
+            }).catch(err=>{
+                this.$message.error('撤销失败！')
+            });
         }).catch(() => {
           console.log('失败！')         
         });
@@ -467,7 +490,7 @@ export default {
                 else{
                     this.nofpInfo = true;
                 }
-                if(!InvoiceMsgObj.addressComplete && !InvoiceMsgObj.recipient && !InvoiceMsgObj.contactPhone){
+                if(!InvoiceMsgObj.postAddressVo){
                     this.nofpAddress = true;
                 }
                 else{
