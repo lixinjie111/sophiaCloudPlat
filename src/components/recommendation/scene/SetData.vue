@@ -36,7 +36,7 @@
       </div>
     </a-card>
     <div class="btns">
-      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '配置规则'}}</a-button>
+      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '特征抽取'}}</a-button>
       <a-button @click="cancel">取消</a-button>
     </div>
   </div>

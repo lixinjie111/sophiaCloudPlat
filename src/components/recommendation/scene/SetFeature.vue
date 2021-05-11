@@ -20,7 +20,7 @@
       <addFeature :list="behaviorFeaturesData" :type="type" :dataTypeList="behaviorFeaturesList" :scopeList="itemScopeList"></addFeature>
     </a-card>
     <div class="btns">
-      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '下一步'}}</a-button>
+      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '配置规则'}}</a-button>
       <a-button @click="cancel">取消</a-button>
     </div>
   </div>
