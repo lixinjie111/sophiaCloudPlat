@@ -238,7 +238,7 @@
       toDetail(applicationId,id) {
         const {href} = this.$router.resolve({
           name: "recommendationSceneDetail",
-          query: {applicationId: applicationId,sceneId: id}
+          query: {appId: applicationId,sceneId: id}
         });
         window.open(href, '_blank');
         // this.$router.push({
@@ -248,7 +248,7 @@
       toEdit(applicationId,id) {
         const {href} = this.$router.resolve({
           name: "recommendationSceneEdit",
-          query: {applicationId: applicationId,sceneId: id}
+          query: {appId: applicationId,sceneId: id}
         });
         window.open(href, '_blank');
         // this.$router.push({

@@ -6,18 +6,18 @@
       <a-checkbox @click="onChange2" :checked="tableFeatureFlag">使用原表特征</a-checkbox>
     </div>
     <a-card title="用户特征抽取" size="small">
-      <addFeature :list="userFeaturesData" :type="type" :dataTypeList="userFeaturesList"></addFeature>
+      <addFeature :list="userFeaturesData" :type="type" :dataTypeList="userFeaturesList" :scopeList="userScopeList"></addFeature>
     </a-card>
     <a-card title="物料特征抽取" size="small" style="margin-top: 20px;position: relative">
       <a-select class="card-select c-mr-20" placeholder="选择物料数据类型" v-model="itemType" @change="itemTypeChange" style="width:140px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
-        <a-select-option :value="item.value" v-for="(item,index) in itemTypeList" :key="index">{{item.name}}
+        <a-select-option :value="item.id" v-for="(item,index) in itemTypeList" :key="index">{{item.dataTypeDesc}}
         </a-select-option>
       </a-select>
-      <addFeature :list="itemFeaturesData" :type="type" :dataTypeList="itemFeaturesList" ref="itemFeatures"></addFeature>
+      <addFeature :list="itemFeaturesData" :type="type" :dataTypeList="itemFeaturesList" :scopeList="behaviorScopeList" ref="itemFeatures"></addFeature>
     </a-card>
     <a-card title="行为特征抽取" size="small" style="margin-top: 20px;">
-      <addFeature :list="behaviorFeaturesData" :type="type" :dataTypeList="behaviorFeaturesList"></addFeature>
+      <addFeature :list="behaviorFeaturesData" :type="type" :dataTypeList="behaviorFeaturesList" :scopeList="itemScopeList"></addFeature>
     </a-card>
     <div class="btns">
       <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '下一步'}}</a-button>
@@ -28,7 +28,7 @@
 
 <script>
   import addFeature from "./addFeature"
-  import {getSceneFeatures, saveSceneConfigRule} from "@/api/recommendation/index";
+  import {getSceneFeatures, saveSceneFeatures, getFeaturesDataType, getFeaturesDataTables} from "@/api/recommendation/index";
 
   export default {
     name: "SetFeature",
@@ -45,39 +45,49 @@
     },
     data() {
       return {
-        featureExtractFlag: this.dataInfo.featureExtractFlag || false,
-        tableFeatureFlag: this.dataInfo.tableFeatureFlag || false,
+        featureExtractFlag: this.dataInfo.featureExtractFlag || 0,
+        tableFeatureFlag: this.dataInfo.tableFeatureFlag || 0,
         userFeaturesList: [],
         itemFeaturesList: [],
         behaviorFeaturesList: [],
+        userScopeList: [],
+        behaviorScopeList: [],
+        itemScopeList: [],
         userFeaturesData: this.dataInfo.userFeatures || [],
         itemFeaturesData: this.dataInfo.itemFeatures || [],
         behaviorFeaturesData: this.dataInfo.behaviorFeatures || [],
         itemType: this.dataInfo.dataType || 1,
-        itemTypeList: [{
-          value: 1,
-          name: '商品数据'
-        },{
-          value: 3,
-          name: '商业服务数据'
-        },{
-          value: 4,
-          name: '店铺数据'
-        },{
-          value: 5,
-          name: '资讯数据'
-        },{
-          value: 6,
-          name: '活动数据'
-        }]
+        itemTypeList: []
       }
     },
     created() {
+      // 获取特征名称
       this.getSceneFeatures(0);
       this.getSceneFeatures(1);
       this.getSceneFeatures(2);
+      // 获取物料特征类型
+      this.getFeaturesDataType(1);
+      // 获取抽取范围
+      this.getScopeList(0);
+      this.getScopeList(1);
+      this.getScopeList(2);
     },
     methods: {
+      getFeaturesDataType(type) {
+        let params = {
+          parentDataType: type //0：用户数据 1：物料数据 2：行为数据 3:黑名单
+        };
+        getFeaturesDataType(params).then(res => {
+          if (res.code == 200000) {
+            this.itemTypeList = res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
       getSceneFeatures(type) {
         let params = {
           dataType: type // 0：用户数据 1：商品数据 2：行为数据 3：商业服务数据 4：店铺数据 5：资讯数据 6：活动数据 7：黑名单
@@ -90,6 +100,29 @@
               this.behaviorFeaturesList = res.data;
             } else {
               this.itemFeaturesList = res.data;
+            }
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        }).catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+      },
+      getScopeList(type) {
+        let params = {
+          applicationId: this.$route.query.appId,
+          dataType: type,
+          sceneId: this.$route.query.sceneId,
+        };
+        getFeaturesDataTables(params).then(res => {
+          if (res.code == 200000) {
+            if (type == 0) {
+              this.userScopeList = res.data;
+            } else if (type == 2) {
+              this.behaviorScopeList  = res.data;
+            } else {
+              this.itemScopeList  = res.data;
             }
           } else {
             this.$message.error(res.message || "请求失败！");
@@ -122,7 +155,7 @@
           itemFeatures: this.itemFeaturesData,
           userFeatures: this.userFeaturesData
         };
-        saveSceneConfigRule(params).then(res => {
+        saveSceneFeatures(params).then(res => {
           if (res.code == 200000) {
             if(this.type == 'edit'){
               this.$message.success("编辑成功！");

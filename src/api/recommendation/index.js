@@ -126,6 +126,11 @@ export const getFeaturesDataTables = params => {
   return axios.post(`${totalUrl}/recommend/excel/getDataTablesByDataType`, params).then(res => res.data);
 };
 
+// 根据一级数据类型获得子数据类型
+export const getFeaturesDataType = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getByParentDataType`, params).then(res => res.data);
+};
+
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {

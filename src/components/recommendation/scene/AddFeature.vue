@@ -11,7 +11,7 @@
       <div class="c-mr-20">抽取范围：</div>
       <a-select class="c-mr-20" placeholder="请选择抽取范围" v-model="item.scope" @change="scopeChange(item)" style="width:140px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
-        <a-select-option :value="item.id" v-for="(item,index) in scopeList" :key="index">{{item.userTableName}}
+        <a-select-option :value="item.id + ''" v-for="(item,index) in scopeList" :key="index">{{item.userTableName}}
         </a-select-option>
       </a-select>
       <div class="c-mr-20">应用于：</div>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-  import {getFeaturesDataTables} from "@/api/recommendation/index";
-
   export default {
     name: "AddData",
     props: {
@@ -45,8 +43,13 @@
         type: Array,
         default: () => []
       },
-      //特征列表
+      //特征名称列表
       dataTypeList: {
+        type: Array,
+        default: () => []
+      },
+      //抽取范围列表
+      scopeList: {
         type: Array,
         default: () => []
       },
@@ -59,7 +62,6 @@
     data() {
       return {
         addList: this.list,
-        scopeList: [],
         applyList: [{
           id: 0,
           value: '仅抽取'
@@ -72,38 +74,12 @@
         }]
       }
     },
-    created() {
-      if(this.type == 'edit'){ //编辑
-        this.addList.forEach((item)=> {
-          this.getScopeList(item.featureId)
-        });
-      }
-    },
     methods: {
       resetSceneFeatures() {
         this.addList.forEach((item)=> {
           item.featureId = undefined;
           item.scope = undefined;
           item.applyTo = undefined;
-        });
-      },
-      getScopeList(dataType) {
-        let params = {
-          applicationId: this.$route.query.appId,
-          dataType: dataType,
-          sceneId: this.$route.query.sceneId,
-        };
-        getFeaturesDataTables(params).then(res => {
-          if (res.code == 200000) {
-            this.scopeList = res.data;
-          } else if (res.code == 500000) {
-            this.scopeList = [];
-          } else {
-            this.$message.error(res.message || "请求失败！");
-          }
-        }).catch(err => {
-          this.$message.error("请求失败！");
-          console.log(err, "err");
         });
       },
       add() {
@@ -121,8 +97,7 @@
         this.addList.splice(index, 1);
       },
       featureChange(item) {
-        item.scope = undefined;
-        this.getScopeList(item.featureId);
+
       },
       scopeChange(item) {
 

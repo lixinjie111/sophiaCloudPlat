@@ -29,7 +29,7 @@
         <SetData type="edit" :dataInfo="dataInfo"></SetData>
       </div>
       <div v-else-if="noTitleKey === '3'">
-        <SetFeature type="edit" :dataInfo="dataInfo"></SetFeature>
+        <SetFeature type="edit" :dataInfo="featureInfo"></SetFeature>
       </div>
       <div v-else>
         <!--智能场景规则-->
