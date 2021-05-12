@@ -17,10 +17,10 @@ export const queryInvoiceOrderList = params => {
     return axios.post(`${totalUrl}/Invoice/queryInvoiceOrderList`, params).then(res => res.data);
 }
 //导出开票订单信息
-export const exportInvoiceDetail = params => {
-    return axios.post(`${totalUrl}/Invoice/exportInvoiceOrder`, params).then(res => res.data);
-}
+export const exportInvoiceDetail = params => { return axios.get(`${totalUrl}/Invoice/exportInvoiceOrder`, {params: params,responseType: "blob"}).then(res => res.data); };
 //发票操作接口   
 export const operateInvoice = params => {
     return axios.post(`${totalUrl}/Invoice/operateInvoice`, params).then(res => res.data);
 }
+//获取用户信息
+export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/user/info`, params).then(res => res.data); };
