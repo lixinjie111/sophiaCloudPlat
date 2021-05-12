@@ -24,3 +24,8 @@ export const operateInvoice = params => {
 }
 //获取用户信息
 export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/user/info`, params).then(res => res.data); };
+
+//发票基本信息修改
+export const editInvoiceBase = params => {
+    return axios.post(`${totalUrl}/Invoice/updateInvoiceBase`, params).then(res => res.data);
+}

@@ -13,8 +13,8 @@
             v-model="IssuingTypeRuleForm.IssuingType"
             @change="changeIssuType"
           >
-            <el-radio label="personal">个人</el-radio>
-            <el-radio label="company">企业</el-radio>
+            <el-radio label="0">个人</el-radio>
+            <el-radio label="1">企业</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -58,7 +58,7 @@
           :rules="invoiveTitlePutongRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-if="invoiceTypeRuleForm.invoiceType == 'zzputong'"
+          v-if="invoiceTypeRuleForm.invoiceType == '0'"
         >
           <el-form-item label="发票抬头：" prop="invoiveZzputongTitle">
             <el-input
@@ -67,12 +67,13 @@
             ></el-input>
           </el-form-item>
         </el-form>
+
         <el-form
           :model="invoiveTitleRuleZhuanyongForm"
           :rules="invoiveTitleZhuanyongRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-else-if="invoiceTypeRuleForm.invoiceType == 'zzzhuanyong'"
+          v-else-if="invoiceTypeRuleForm.invoiceType == '1'"
         >
           <el-form-item label="发票抬头：" prop="invoiveZhuanyongTitle">
             <el-input
@@ -81,6 +82,7 @@
             ></el-input>
           </el-form-item>
         </el-form>
+
         <el-form
           :model="invoiveTitleRulezuzhiForm"
           :rules="invoiveTitlezuzhiRules"
@@ -95,6 +97,7 @@
             ></el-input>
           </el-form-item>
         </el-form>
+
         <el-form
           :model="invoiceTypeRuleForm"
           :rules="invoiceTypeRules"
@@ -103,7 +106,7 @@
         >
           <el-form-item label="发票类型：" prop="invoiceType">
             <el-radio-group v-model="invoiceTypeRuleForm.invoiceType">
-              <el-radio label="zzputong">
+              <el-radio label="0">
                 增值税普通发票
                 <el-tooltip class="item" effect="dark" placement="top">
                   <div slot="content">
@@ -111,7 +114,7 @@
                   </div>
                   <a-icon type="question-circle" /> </el-tooltip
               ></el-radio>
-              <el-radio label="zzzhuanyong">
+              <el-radio label="1">
                 增值税专用发票
                 <el-tooltip class="item" effect="dark" placement="top">
                   <div slot="content">
@@ -120,7 +123,7 @@
                   <a-icon type="question-circle" />
                 </el-tooltip>
               </el-radio>
-              <el-radio label="zuzhizz">
+              <el-radio label="2">
                 组织（非企业）增值税普通发票
                 <el-tooltip class="item" effect="dark" placement="top">
                   <div slot="content">
@@ -138,7 +141,7 @@
           :rules="zzputongConRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-if="invoiceTypeRuleForm.invoiceType =='zzputong'"
+          v-if="invoiceTypeRuleForm.invoiceType =='0'"
         >
           <el-form-item label="纳税人识别号：" prop="zzputongTaIdeNu">
             <el-input
@@ -185,7 +188,7 @@
           :rules="zzzhuanyongConRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-else-if="invoiceTypeRuleForm.invoiceType =='zzzhuanyong'"
+          v-else-if="invoiceTypeRuleForm.invoiceType =='1'"
         >
           <el-form-item label="纳税人识别号：" prop="zzzhuanyongTaIdeNu">
             <el-input
@@ -280,6 +283,7 @@
 </template>
 
 <script>
+import {editInvoiceBase} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceInfoMan",
   data() {
@@ -297,7 +301,7 @@ export default {
     };
     return {
       IssuingTypeRuleForm: {
-        IssuingType: "company",
+        IssuingType: "1",
       },
       personalRuleForm: {
         personalInvoiveTitle: "个人",
@@ -313,7 +317,7 @@ export default {
         invoivezuzhiTitle: "",
       },
       invoiceTypeRuleForm: {
-        invoiceType: "zzputong",
+        invoiceType: "0",
       },
       IssuingTypeRules: {
         IssuingType: [{ required: true }],
@@ -335,7 +339,7 @@ export default {
       },
       invoiceTypeRules: {
         invoiceType: [
-          { required: true, message: "请输入发票抬头", trigger: "blur" },
+          { required: true, message: "选择发票类型", trigger: "blur" },
         ],
       },
       zzputongConRuleForm: {
@@ -391,13 +395,86 @@ export default {
       IssuType: "company",
     };
   },
-  created() {},
+  created() {
+    console.log(this.invoiceDetailIdInfo,'invoiceDetailIdInfo')
+  },
+  props:['invoiceDetailIdInfo'],
   methods: {
     zzputongsubmitForm() {
+      alert('ssssss')
+      var parms={
+        issueType:this.IssuingTypeRuleForm.IssuingType,
+        title:this.invoiveTitleRulePutongForm.invoiveZzputongTitle,
+        invoiceType:this.invoiceTypeRuleForm.invoiceType,
+        taxpayerNumber:this.zzputongConRuleForm.zzputongTaIdeNu,
+        bankName:this.zzputongConRuleForm.zzputongBankName,
+        bankNumber:this.zzputongConRuleForm.zzputongBankNumber,
+        companyAddress:this.zzputongConRuleForm.zzputongRegAdderss,
+        companyPhone:this.zzputongConRuleForm.zzputongRegFixtel,
+        invoiceDetailId:this.invoiceDetailIdInfo
+      };
+      editInvoiceBase(parms).then(res=>{
+        console.log(res)
+        if(res.code == 200000){
 
+        }
+        else{
+          this.$message.error(res.message || "修改发票信息失败！");
+        }
+      }).catch(err=>{
+         this.$message.error("修改发票信息失败！");
+      });
     },
-    zzzhuanyongsubmitForm(){},
-    zuzhizzsubmitForm(){},
+    zzzhuanyongsubmitForm(){
+        alert('ssssss1')
+      var parms={
+        issueType:this.IssuingTypeRuleForm.IssuingType,
+        title:this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle,
+        invoiceType:this.invoiceTypeRuleForm.invoiceType,
+        taxpayerNumber:this.zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu,
+        bankName:this.zzzhuanyongConRuleForm.zzzhuanyongBankName,
+        bankNumber:this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber,
+        companyAddress:this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss,
+        companyPhone:this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel,
+        invoiceDetailId:this.invoiceDetailIdInfo
+      };
+      editInvoiceBase(parms).then(res=>{
+        console.log(res)
+        if(res.code == 200000){
+
+        }
+        else{
+          this.$message.error(res.message || "修改发票信息失败！");
+        }
+      }).catch(err=>{
+         this.$message.error("修改发票信息失败！");
+      });
+    },
+    zuzhizzsubmitForm(){
+        alert('ssssss2')
+      var parms={
+        issueType:this.IssuingTypeRuleForm.IssuingType,
+        title:this.invoiveTitleRulezuzhiForm.invoiveZzputongTitle,
+        invoiceType:this.invoiceTypeRuleForm.invoiceType,
+        taxpayerNumber:this.zuzhizzConRuleForm.zuzhizzTaIdeNu,
+        bankName:this.zuzhizzConRuleForm.zuzhizzBankName,
+        bankNumber:this.zuzhizzConRuleForm.zuzhizzBankNumber,
+        companyAddress:this.zuzhizzConRuleForm.zuzhizzRegAdderss,
+        companyPhone:this.zuzhizzConRuleForm.zuzhizzRegFixtel,
+        invoiceDetailId:this.invoiceDetailIdInfo
+      };
+      editInvoiceBase(parms).then(res=>{
+        console.log(res)
+        if(res.code == 200000){
+
+        }
+        else{
+          this.$message.error(res.message || "修改发票信息失败！");
+        }
+      }).catch(err=>{
+         this.$message.error("修改发票信息失败！");
+      });
+    },
     personSubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
