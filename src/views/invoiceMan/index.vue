@@ -139,8 +139,8 @@
                 </vxe-pager>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
-                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn"></vInvoInfoShow>
-                <vInvoInfo v-else></vInvoInfo>
+                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceInfo="infoMsg"></vInvoInfoShow>
+                <vEditInvoInfo v-else></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
                 <vShipAddressMan></vShipAddressMan>
@@ -160,7 +160,7 @@
 import moment from "moment";
 import "moment/locale/zh-cn";
 import {fapSearch,queryInvoiceBase,exportInvoiceDetail,operateInvoice} from "../../api/invoiceMan/index";
-import vInvoInfo from "./invoiceInfoMan";
+import vEditInvoInfo from "./editInvoiceInfo";
 import vInvoInfoShow from "./invoInfoShow";
 import vShipAddressMan from "./shipAddressMan";
 import vEmailMan from "./emailMan";
@@ -213,7 +213,8 @@ export default {
         ifShowShowPanel:true,
         ifShowPtInvReturn:false,
         ifShowZpInvReturn:false,
-        invoiceParm:null
+        invoiceParm:null,
+        infoMsg:{}
     };
   },
   created() {
@@ -226,7 +227,7 @@ export default {
       }
   },
   components:{
-      vInvoInfo,
+      vEditInvoInfo,
       vInvoInfoShow,
       vShipAddressMan,
       vEmailMan,
@@ -287,7 +288,7 @@ export default {
     exportDetail(e){
         var invoiceId = e.invoiceId || '';
         var parms = {
-            invoiceId:invoiceId
+            invoiceId:invoiceId,
         };
         exportInvoiceDetail(parms).then(res=>{
           var eleLink = document.createElement('a');
@@ -331,7 +332,7 @@ export default {
         });
     },
     downLoad(e){
-        console.log(e,'444444')
+        console.log('下载后端说暂时做不了')
     },
     formatHtml(dom){
         let frag = document.createRange().createContextualFragment(dom).children[0].innerText;
@@ -505,6 +506,15 @@ export default {
                     this.fpinfoObj = {
                         title:InvoiceMsgObj.title,
                         type:typeTxt
+                    };
+                    this.infoMsg={
+                        fptitle:InvoiceMsgObj.title,
+                        fptype:typeTxt,
+                        taxNum:InvoiceMsgObj.taxpayerNumber,
+                        bankName:InvoiceMsgObj.bankName,
+                        bankNumber:InvoiceMsgObj.bankNumber,
+                        companyAddress:InvoiceMsgObj.companyAddress,
+                        companyPhone:InvoiceMsgObj.companyPhone
                     };
                 }
                 else{
