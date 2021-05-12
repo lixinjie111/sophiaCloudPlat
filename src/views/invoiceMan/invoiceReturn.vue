@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import {operateInvoice} from "../../api/invoiceMan/index";
 export default {
   name: "invoiceReturn",
   data() {
@@ -117,7 +118,9 @@ export default {
                     };
                     this.$emit("closePopWin",operArg);
                   }
-                  else{this.$message.error('退票失败！')}
+                  else{
+                      this.$message.error('退票失败！')
+                   }
               }).catch(err=>{
                    this.$message.error('退票失败！')
               });
