@@ -127,7 +127,7 @@
     data() {
       return {
         userInfomation:{},
-        title: "Shopia云服务平台",
+        title: "Sophia云服务平台",
         logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
         collapsed: false,
         breadArr: [],
