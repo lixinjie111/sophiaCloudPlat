@@ -514,7 +514,7 @@ export default {
             bankNumber: '',
             companyAddress: '',
             companyPhone: '',
-            invoiceDetailId: ''
+            invoiceDetailId: this.invoiceDetailIdInfo
           };
           editInvoiceBase(parms)
             .then((res) => {
