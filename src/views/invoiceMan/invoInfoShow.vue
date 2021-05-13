@@ -88,45 +88,113 @@ export default {
         regFixtelnum: "",
       },
       IssuType: "company",
+      InvoiceData: {},
     };
   },
-  props: {
-    invoiceInfo: {
-      type: Object,
-      default: {},
+  props: ["invoiceShowInfo"],
+  watch: {
+    invoiceShowInfo(val1, val2) {
+      // this.InvoiceData = val1;
+      if (val1.issueType == 1) {
+        this.IssuType = "company";
+        setTimeout(() => {
+          var typeTxt = "";
+          if (val1.invoiceType == 0) {
+            typeTxt = "增值税普通发票";
+          } else if (val1.invoiceType == 1) {
+            typeTxt = "增值税专用发票";
+          } else if (val1.invoiceType == 2) {
+            typeTxt = "组织（非企业）增值税普通发票";
+          } else {
+            typeTxt = "";
+          }
+          this.qiyeInvInfo = {
+            invoiveTitle: val1.title,
+            invoivekjType: "企业",
+            invoiveType: typeTxt,
+            TaIdeNum: val1.taxNum,
+            khBankName: val1.bankName,
+            khBankNumber: val1.bankNumber,
+            regAdderss: val1.companyAddress,
+            regFixtelnum: val1.companyPhone,
+          };
+        }, 300);
+      } else {
+        this.IssuType = "personal";
+        setTimeout(() => {
+          var typeTxt = "";
+          if (val1.invoiceType == 0) {
+            typeTxt = "增值税普通发票";
+          } else if (val1.invoiceType == 1) {
+            typeTxt = "增值税专用发票";
+          } else if (val1.invoiceType == 2) {
+            typeTxt = "组织（非企业）增值税普通发票";
+          } else {
+            typeTxt = "";
+          }
+          this.personalRuleForm = {
+            personalInvoiveTitle: val1.title,
+            personalInvokjType: "个人",
+            personalInvoiceType: typeTxt,
+          };
+        }, 300);
+      }
     },
   },
-  created() {
-    this.getUserMsg();
+  mounted() {
+    // this.getUserMsg();
   },
   methods: {
     editInvoiceInfo() {
       this.$emit("showEditPanel", false);
     },
     getUserMsg() {
-      var fpInfo = this.invoiceInfo;
       getUserInfo()
         .then((res) => {
           if (res.code == 200000) {
             if (res.data.authType == 1 || res.data.authType == 2) {
               this.IssuType = "company";
-              this.qiyeInvInfo = {
-                invoiveTitle: fpInfo.fptitle,
-                invoivekjType: "企业",
-                invoiveType: fpInfo.typeTxt,
-                TaIdeNum: fpInfo.taxpayerNumber,
-                khBankName: fpInfo.bankName,
-                khBankNumber: fpInfo.bankNumber,
-                regAdderss: fpInfo.companyAddress,
-                regFixtelnum: fpInfo.companyPhone
-              };
+              setTimeout(() => {
+                var typeTxt = "";
+                if (this.InvoiceData.invoiceType == 0) {
+                  typeTxt = "增值税普通发票";
+                } else if (this.InvoiceData.invoiceType == 1) {
+                  typeTxt = "增值税专用发票";
+                } else if (this.InvoiceData.invoiceType == 2) {
+                  typeTxt = "组织（非企业）增值税普通发票";
+                } else {
+                  typeTxt = "";
+                }
+                this.qiyeInvInfo = {
+                  invoiveTitle: this.InvoiceData.title,
+                  invoivekjType: "企业",
+                  invoiveType: typeTxt,
+                  TaIdeNum: this.InvoiceData.taxNum,
+                  khBankName: this.InvoiceData.bankName,
+                  khBankNumber: this.InvoiceData.bankNumber,
+                  regAdderss: this.InvoiceData.companyAddress,
+                  regFixtelnum: this.InvoiceData.companyPhone,
+                };
+              }, 300);
             } else {
               this.IssuType = "personal";
-              this.personalRuleForm = {
-                personalInvoiveTitle: fpInfo.fptitle,
-                personalInvokjType: "个人",
-                personalInvoiceType: fpInfo.typeTxt,
-              };
+              setTimeout(() => {
+                var typeTxt = "";
+                if (this.InvoiceData.invoiceType == 0) {
+                  typeTxt = "增值税普通发票";
+                } else if (this.InvoiceData.invoiceType == 1) {
+                  typeTxt = "增值税专用发票";
+                } else if (this.InvoiceData.invoiceType == 2) {
+                  typeTxt = "组织（非企业）增值税普通发票";
+                } else {
+                  typeTxt = "";
+                }
+                this.personalRuleForm = {
+                  personalInvoiveTitle: this.InvoiceData.title,
+                  personalInvokjType: "个人",
+                  personalInvoiceType: typeTxt,
+                };
+              }, 300);
             }
           } else {
             this.$message.error("获取用户信息失败！");
@@ -136,7 +204,6 @@ export default {
           this.$message.error("获取用户信息失败！");
         });
     },
-    getInvoiceInfo() {},
   },
 };
 </script>

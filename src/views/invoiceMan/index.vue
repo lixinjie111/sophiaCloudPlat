@@ -139,8 +139,8 @@
                 </vxe-pager>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
-                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceInfo="infoMsg"></vInvoInfoShow>
-                <vEditInvoInfo v-else></vEditInvoInfo>
+                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceShowInfo="infoMsg"></vInvoInfoShow>
+                <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
                 <vShipAddressMan></vShipAddressMan>
@@ -214,7 +214,8 @@ export default {
         ifShowPtInvReturn:false,
         ifShowZpInvReturn:false,
         invoiceParm:null,
-        infoMsg:{}
+        infoMsg:{},
+        invoiceDetailIdData:''
     };
   },
   created() {
@@ -372,11 +373,15 @@ export default {
       }
     },
     editfpInfo(){
-        this.activeName = 'second'; 
-        this.ifShowShowPanel = false; 
+        this.activeName = 'second';
     },
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg; 
+    },
+    closeEditShowFn(arg){
+        this.ifShowShowPanel = arg;
+        this.getInvoiceBase();
+        console.log(arg,'arg')
     },
     editfpaddress(){
         this.activeName = 'third'; 
@@ -488,48 +493,48 @@ export default {
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
                 this.money = InvoiceMsgObj.totalAmount;
-                if(InvoiceMsgObj.title){
-                    this.nofpInfo = false;
-                    var typeTxt = '';
-                    if(InvoiceMsgObj.invoiceType == 0){
-                        typeTxt = '增值税普通发票';
-                    }
-                    else if(InvoiceMsgObj.invoiceType == 1){
-                        typeTxt = '增值税专用发票';
-                    }
-                    else if(InvoiceMsgObj.invoiceType == 2){
-                        typeTxt = '组织（非企业）增值税普通发票';
+                if(!InvoiceMsgObj){
+                    this.ifShowShowPanel = false;
+                }
+                else{
+                    this.infoMsg = InvoiceMsgObj;
+                    console.log(this.infoMsg,'this.infoMsg')
+                    this.ifShowShowPanel = true;
+                    this.invoiceDetailIdData = InvoiceMsgObj.invoiceDetailId || '';
+                    if(InvoiceMsgObj.title){
+                        this.nofpInfo = false;
+                        var typeTxt = '';
+                        if(InvoiceMsgObj.invoiceType == 0){
+                            typeTxt = '增值税普通发票';
+                        }
+                        else if(InvoiceMsgObj.invoiceType == 1){
+                            typeTxt = '增值税专用发票';
+                        }
+                        else if(InvoiceMsgObj.invoiceType == 2){
+                            typeTxt = '组织（非企业）增值税普通发票';
+                        }
+                        else{
+                            typeTxt = '';
+                        }
+                        this.fpinfoObj = {
+                            title:InvoiceMsgObj.title,
+                            type:typeTxt
+                        };
                     }
                     else{
-                        typeTxt = '';
+                        this.nofpInfo = true;
                     }
-                    this.fpinfoObj = {
-                        title:InvoiceMsgObj.title,
-                        type:typeTxt
-                    };
-                    this.infoMsg={
-                        fptitle:InvoiceMsgObj.title,
-                        fptype:typeTxt,
-                        taxNum:InvoiceMsgObj.taxpayerNumber,
-                        bankName:InvoiceMsgObj.bankName,
-                        bankNumber:InvoiceMsgObj.bankNumber,
-                        companyAddress:InvoiceMsgObj.companyAddress,
-                        companyPhone:InvoiceMsgObj.companyPhone
-                    };
-                }
-                else{
-                    this.nofpInfo = true;
-                }
-                if(!InvoiceMsgObj.postAddressVo){
-                    this.nofpAddress = true;
-                }
-                else{
-                    this.nofpAddress = false;
-                    this.addressObj={
-                        name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
-                        phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
-                        address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete + InvoiceMsgObj.postAddressVo.addressDetail: '',
-                    };
+                    if(!InvoiceMsgObj.postAddressVo){
+                        this.nofpAddress = true;
+                    }
+                    else{
+                        this.nofpAddress = false;
+                        this.addressObj={
+                            name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
+                            phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
+                            address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete + InvoiceMsgObj.postAddressVo.addressDetail: '',
+                        };
+                    }
                 }
             }
             else{
