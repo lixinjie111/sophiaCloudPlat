@@ -29,3 +29,7 @@ export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/use
 export const editInvoiceBase = params => {
     return axios.post(`${totalUrl}/Invoice/updateInvoiceBase`, params).then(res => res.data);
 }
+//查询寄送地址列表信息
+export const queryPostAddressList = params => {
+    return axios.post(`${totalUrl}/Invoice/queryPostAddressList`, params).then(res => res.data);
+}
