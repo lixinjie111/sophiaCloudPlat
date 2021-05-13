@@ -1,22 +1,22 @@
 <template>
   <div class="add_operation_box">
     <div class="add_item">
-      <a-checkbox @click="onChange1" :checked="operationObject.varietyFlag">商品多样性</a-checkbox>
-      一次推荐请求返回的结果里面，相邻的
+      <a-checkbox @click="varietyChange" :checked="operationObject.varietyFlag">{{descList[recommendObjectType].varietyName}}</a-checkbox>
+      {{descList[recommendObjectType].varietyDesc1}}
       <a-input v-model="operationObject.varietyNum" style="width: 60px;"/>
-      个商品，作者不重复
+      {{descList[recommendObjectType].varietyDesc2}}
     </div>
     <div class="add_item">
-      <a-checkbox @click="onChange2" :checked="operationObject.scatterFlag">根据店铺进行打散</a-checkbox>
-      一次推荐请求返回的结果里面，相邻的
+      <a-checkbox @click="scatterChange" :checked="operationObject.scatterFlag">{{descList[recommendObjectType].scatterName}}</a-checkbox>
+      {{descList[recommendObjectType].scatterDesc1}}
       <a-input v-model="operationObject.scatterNum" style="width: 60px;"/>
-      个商品，
+      {{descList[recommendObjectType].scatterDesc2}}
       <a-input v-model="operationObject.scatterChannelNum" style="width: 60px;"/>
-      级频道不重复
+      {{descList[recommendObjectType].scatterDesc3}}
     </div>
     <div class="add_item">
-      <a-checkbox @click="onChange3" :checked="operationObject.shufflingFlag">根据商品类型进行混排</a-checkbox>
-      一次推荐请求返回的结果里面：
+      <a-checkbox @click="shufflingChange" :checked="operationObject.shufflingFlag">{{descList[recommendObjectType].shufflingName}}</a-checkbox>
+      {{descList[recommendObjectType].shufflingDesc}}
       <AddMix :itemList="itemList" :list="operationObject.shufflings" ref="mixChild"></AddMix>
     </div>
   </div>
@@ -37,7 +37,20 @@
     },
     data() {
       return {
-        itemList: []
+        itemList: [],
+        descList: [
+          {
+            varietyName: '商品多样性',
+            varietyDesc1: '一次推荐请求返回的结果里面，相邻的',
+            varietyDesc2: '个商品，品牌不重复',
+            scatterName: '根据店铺进行打散',
+            scatterDesc1: '一次推荐请求返回的结果里面，相邻的',
+            scatterDesc2: '个商品，',
+            scatterDesc3: '个店铺不重复',
+            shufflingName: '根据商品类型进行混排',
+            shufflingDesc: '一次推荐请求返回的结果里面：'
+          }
+        ]
       }
     },
     computed: {
@@ -65,7 +78,7 @@
           console.log(err, "err");
         });
       },
-      onChange1(e) {
+      varietyChange(e) {
         if(e.target.checked){
           this.operationObject.varietyFlag = 1;
         }else {
@@ -73,7 +86,7 @@
           this.operationObject.varietyNum = '';
         }
       },
-      onChange2(e) {
+      scatterChange(e) {
         if(e.target.checked){
           this.operationObject.scatterFlag = 1;
         }else {
@@ -82,7 +95,7 @@
           this.operationObject.scatterChannelNum = '';
         }
       },
-      onChange3(e) {
+      shufflingChange(e) {
         if(e.target.checked){
           this.operationObject.shufflingFlag = 1;
         }else {

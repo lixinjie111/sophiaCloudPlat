@@ -20,7 +20,7 @@
             <SceneForm ref="sceneForm" :sceneForm="sceneForm" :app-list="appList" type="edit"></SceneForm>
           </div>
         </a-card>
-        <div class="basic-btn">
+        <div class="basic_btn">
           <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
           <a-button @click="cancel">取消</a-button>
         </div>
@@ -187,7 +187,7 @@
   .scene_edit_container {
     padding: 20px;
 
-    .basic-btn {
+    .basic_btn {
       margin-top: 20px;
       text-align: center;
     }

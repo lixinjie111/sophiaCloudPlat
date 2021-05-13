@@ -9,7 +9,7 @@
       <addFeature :list="userFeaturesData" :type="type" :dataTypeList="userFeaturesList" :scopeList="userScopeList"></addFeature>
     </a-card>
     <a-card title="物料特征抽取" size="small" style="margin-top: 20px;position: relative">
-      <a-select class="card-select c-mr-20" placeholder="选择物料数据类型" v-model="itemType" @change="itemTypeChange" style="width:140px"
+      <a-select class="card_select c-mr-20" placeholder="选择物料数据类型" v-model="itemType" @change="itemTypeChange" style="width:140px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.id" v-for="(item,index) in itemTypeList" :key="index">{{item.dataTypeDesc}}
         </a-select-option>
@@ -216,7 +216,7 @@
       text-align: center;
     }
 
-    .card-select {
+    .card_select {
       position: absolute;
       top: 2px;
       left: 110px;

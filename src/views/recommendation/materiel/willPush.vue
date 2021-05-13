@@ -1,5 +1,5 @@
 <template>
-  <div class="data-admin">
+  <div class="data_admin">
     <div class="top">
       <div class="left"></div>
       <div class="right">
@@ -217,7 +217,7 @@
 </script>
 
 <style scoped lang="scss">
-  .data-admin {
+  .data_admin {
     padding: 20px;
 
     .top {

@@ -7,9 +7,9 @@
       </div>
       <div class="scene_box">
         <p class="title">过滤行为：</p>
-        <a-checkbox @click="onChange1" :checked="buyFlag">有购买行为的物品</a-checkbox>
-        <a-checkbox @click="onChange2" :checked="hasPushFlag">用户过去3天内有过曝光行为的物品</a-checkbox>
-        <a-checkbox @click="onChange3" :checked="complainFlag">用户投诉的物品</a-checkbox>
+        <a-checkbox @click="buyChange" :checked="buyFlag">有购买行为的物品</a-checkbox>
+        <a-checkbox @click="hasPushChange" :checked="hasPushFlag">用户过去3天内有过曝光行为的物品</a-checkbox>
+        <a-checkbox @click="complainChange" :checked="complainFlag">用户投诉的物品</a-checkbox>
       </div>
       <div class="scene_box">
         <p class="title">运营策略：</p>
@@ -139,13 +139,13 @@
           console.log(err, "err");
         });
       },
-      onChange1(e){
+      buyChange(e){
         e.target.checked ? this.buyFlag = 1 : this.buyFlag = 0;
       },
-      onChange2(e){
+      hasPushChange(e){
         e.target.checked ? this.hasPushFlag = 1 : this.hasPushFlag = 0;
       },
-      onChange3(e){
+      complainChange(e){
         e.target.checked ? this.complainFlag = 1 : this.complainFlag = 0;
       },
       bestChange(e) {

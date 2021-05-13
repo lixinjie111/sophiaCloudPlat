@@ -46,6 +46,7 @@
         this.addList.forEach((item)=> {
           item.t = undefined;
           item.c = '';
+          item.d = '';
         });
       },
       add() {
@@ -55,11 +56,20 @@
         }
         this.addList.push({
           t: undefined,
-          c: ''
+          c: '',
+          d: ''
         })
       },
       changeType(value) {
-
+        this.itemList.forEach((item)=>{
+          if(item.id == value){
+            this.addList.forEach((item1,index1)=>{
+              if(item1.t == item.id){
+                this.addList[index1].d = item.name;
+              }
+            });
+          }
+        });
       },
       del(index) {
         this.addList.splice(index, 1);

@@ -39,10 +39,10 @@
       </a-descriptions>
     </a-card>
     <a-card title="推荐数据" size="small" class="c-mb-20">
-      <p class="desc-title">用户数据</p>
+      <p class="desc_title">用户数据</p>
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="历史数据" v-if="userHistoryData.length">
-          <div v-for="(item,index) in userHistoryData" :key="index" class="data-info">
+          <div v-for="(item,index) in userHistoryData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型：</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -56,7 +56,7 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="新增数据" v-if="userNewData.length">
-          <div v-for="(item,index) in userNewData" :key="index" class="data-info">
+          <div v-for="(item,index) in userNewData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型：</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -70,10 +70,10 @@
           </div>
         </a-descriptions-item>
       </a-descriptions>
-      <p class="desc-title">物料数据</p>
+      <p class="desc_title">物料数据</p>
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="历史数据" v-if="itemHistoryData.length">
-          <div v-for="(item,index) in itemHistoryData" :key="index" class="data-info">
+          <div v-for="(item,index) in itemHistoryData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型:</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -87,7 +87,7 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="新增数据" v-if="itemNewData.length">
-          <div v-for="(item,index) in itemNewData" :key="index" class="data-info">
+          <div v-for="(item,index) in itemNewData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型：</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -101,10 +101,10 @@
           </div>
         </a-descriptions-item>
       </a-descriptions>
-      <p class="desc-title">行为数据</p>
+      <p class="desc_title">行为数据</p>
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="历史数据" v-if="behaviorHistoryData.length">
-          <div v-for="(item,index) in behaviorHistoryData" :key="index" class="data-info">
+          <div v-for="(item,index) in behaviorHistoryData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型：</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -118,7 +118,7 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="新增数据" v-if="behaviorNewData.length">
-          <div v-for="(item,index) in behaviorNewData" :key="index" class="data-info">
+          <div v-for="(item,index) in behaviorNewData" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>数据类型：</div>
             <div>{{item.dataTypeDesc}}</div>
@@ -140,7 +140,7 @@
           <div v-if="featureInfo.tableFeatureFlag">使用原表特征</div>
         </a-descriptions-item>
         <a-descriptions-item label="用户特征抽取" v-if="userFeatures.length">
-          <div v-for="(item,index) in userFeatures" :key="index" class="data-info">
+          <div v-for="(item,index) in userFeatures" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>特征名称：</div>
             <div>{{item.featureDesc}}</div>
@@ -151,7 +151,7 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item :label="'物料特征抽取（ '+ featureInfo.dataTypeDesc+' ）'" v-if="itemFeatures.length">
-          <div v-for="(item,index) in itemFeatures" :key="index" class="data-info">
+          <div v-for="(item,index) in itemFeatures" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>特征名称：</div>
             <div>{{item.featureDesc}}</div>
@@ -162,7 +162,7 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="行为特征抽取" v-if="behaviorFeatures.length">
-          <div v-for="(item,index) in behaviorFeatures" :key="index" class="data-info">
+          <div v-for="(item,index) in behaviorFeatures" :key="index" class="data_info">
             <div>{{index+1}}</div>
             <div>特征名称：</div>
             <div>{{item.featureDesc}}</div>
@@ -178,7 +178,7 @@
     <a-card title="规则推荐" size="small" v-if="sceneType == '0'">
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="筛选物品" v-if="filterItemParams.length">
-          <div class="rule-info">
+          <div class="rule_info">
             <div>序号</div>
             <div>1级品类</div>
             <div>2级品类</div>
@@ -188,7 +188,7 @@
             <div>规则数值</div>
           </div>
           <a-divider/>
-          <div v-for="(item,index) in filterItemParams" :key="item.id" class="rule-info">
+          <div v-for="(item,index) in filterItemParams" :key="item.id" class="rule_info">
             <div>{{index+1}}</div>
             <div>{{item.firstLevelCategory}}</div>
             <div>{{item.secondLevelCategory}}</div>
@@ -208,14 +208,14 @@
           <div v-else>无必推商品</div>
         </a-descriptions-item>
         <a-descriptions-item label="有必推商品" v-if="recommendParams.length">
-          <div class="rule-info1">
+          <div class="rule_info1">
             <div>序号</div>
             <div>品牌</div>
             <div>逻辑判断</div>
             <div>值</div>
           </div>
           <a-divider/>
-          <div v-for="(item,index) in recommendParams" :key="item.id" class="rule-info1">
+          <div v-for="(item,index) in recommendParams" :key="item.id" class="rule_info1">
             <div>{{index+1}}</div>
             <div>{{item.property}}</div>
             <div>{{item.logicCalc}}</div>
@@ -345,7 +345,7 @@
       }
     }
 
-    .data-info {
+    .data_info {
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -364,7 +364,7 @@
       }
     }
 
-    .rule-info {
+    .rule_info {
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -375,7 +375,7 @@
       }
     }
 
-    .rule-info1 {
+    .rule_info1 {
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -394,7 +394,7 @@
       margin: 4px 0;
     }
 
-    .desc-title {
+    .desc_title {
       margin: 10px 0 5px;
       font-weight: 500;
     }
