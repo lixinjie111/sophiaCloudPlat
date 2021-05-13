@@ -17,7 +17,7 @@
     <div class="add_item">
       <a-checkbox @click="shufflingChange" :checked="operationObject.shufflingFlag">{{descList[recommendObjectType].shufflingName}}</a-checkbox>
       {{descList[recommendObjectType].shufflingDesc}}
-      <AddMix :itemList="itemList" :list="operationObject.shufflings" ref="mixChild"></AddMix>
+      <AddMix :itemList="itemList" :list="operationObject.shufflings" :title="descList[recommendObjectType].shufflingTitle" ref="mixChild"></AddMix>
     </div>
   </div>
 </template>
@@ -48,7 +48,8 @@
             scatterDesc2: '个商品，',
             scatterDesc3: '个店铺不重复',
             shufflingName: '根据商品类型进行混排',
-            shufflingDesc: '一次推荐请求返回的结果里面：'
+            shufflingDesc: '一次推荐请求返回的结果里面：',
+            shufflingTitle: '物品'
           }
         ]
       }

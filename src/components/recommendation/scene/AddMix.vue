@@ -1,12 +1,12 @@
 <template>
   <div class="add_mix_box">
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
-      <span>物品类型为</span>
+      <span>{{title}}类型为</span>
       <a-select class="c-mr-10" placeholder="请选择物品类型" v-model="item.t" @change="changeType" style="width:160px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
         <a-select-option :value="item.id" v-for="(item,index) in itemList" :key="index">{{item.name}}</a-select-option>
       </a-select>
-      <span>的物品占比为</span>
+      <span>的{{title}}占比为</span>
       <a-input class="c-mr-10" v-model="item.c" :maxLength="14" style="width:60px"/>
       <a-popconfirm
         title="是否删除该条目?"
@@ -33,6 +33,10 @@
       itemList: {
         type: Array,
         default: () => []
+      },
+      title: {
+        type: String,
+        default: ''
       }
     },
     data() {

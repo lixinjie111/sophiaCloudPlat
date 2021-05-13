@@ -136,8 +136,8 @@
     <a-card title="特征抽取" size="small" class="c-mb-20">
       <a-descriptions bordered :column="1" size="small">
         <a-descriptions-item label="推荐算法使用特征">
-          <div v-if="featureInfo.featureExtractFlag">使用抽取特征</div>
-          <div v-if="featureInfo.tableFeatureFlag">使用原表特征</div>
+          <div class="text_left" v-if="featureInfo.featureExtractFlag">使用抽取特征</div>
+          <div class="text_left" v-if="featureInfo.tableFeatureFlag">使用原表特征</div>
         </a-descriptions-item>
         <a-descriptions-item label="用户特征抽取" v-if="userFeatures.length">
           <div v-for="(item,index) in userFeatures" :key="index" class="data_info">
@@ -199,15 +199,39 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="过滤行为">
-          <div v-if="ruleInfo.buyFlag">有购买行为的物品</div>
-          <div v-if="ruleInfo.hasPushFlag">用户过去3天内有过曝光行为的物品</div>
-          <div v-if="ruleInfo.complainFlag">用户投诉的物品</div>
+          <div class="text_left" v-if="ruleInfo.buyFlag">有购买行为的物品</div>
+          <div class="text_left" v-if="ruleInfo.hasPushFlag">用户过去3天内有过曝光行为的物品</div>
+          <div class="text_left" v-if="ruleInfo.complainFlag">用户投诉的物品</div>
+        </a-descriptions-item>
+        <a-descriptions-item label="运营策略">
+          <div class="text_left" v-if="ruleInfo.varietyFlag">
+              {{operationDescList[recommendObjectType].varietyName}}:
+              {{operationDescList[recommendObjectType].varietyDesc1}}
+              {{ruleInfo.varietyNum}}
+              {{operationDescList[recommendObjectType].varietyDesc2}}
+            </div>
+          <div class="text_left" v-if="ruleInfo.scatterFlag">
+              {{operationDescList[recommendObjectType].scatterName}}:
+              {{operationDescList[recommendObjectType].scatterDesc1}}
+              {{ruleInfo.scatterNum}}
+              {{operationDescList[recommendObjectType].scatterDesc2}}
+              {{ruleInfo.scatterChannelNum}}
+              {{operationDescList[recommendObjectType].scatterDesc3}}
+            </div>
+          <div class="text_left" v-if="ruleInfo.shufflingFlag">
+              {{operationDescList[recommendObjectType].shufflingName}}:
+              {{operationDescList[recommendObjectType].shufflingDesc}}
+              <div v-for="(item,index) in ruleInfo.shufflings" :key="index">
+                <span>{{index+1}}.</span>
+                <span>{{item.d}}的占比为{{item.c}}</span>
+              </div>
+            </div>
         </a-descriptions-item>
         <a-descriptions-item label="必推行为">
-          <div v-if="ruleInfo.mustRecommendFlag">有必推商品</div>
-          <div v-else>无必推商品</div>
+          <div class="text_left" v-if="ruleInfo.mustRecommendFlag">有必推商品</div>
+          <div class="text_left" v-else>无必推商品</div>
         </a-descriptions-item>
-        <a-descriptions-item label="有必推商品" v-if="recommendParams.length">
+        <a-descriptions-item label="必推物品" v-if="recommendParams.length">
           <div class="rule_info1">
             <div>序号</div>
             <div>品牌</div>
@@ -251,7 +275,20 @@
         behaviorFeatures: [],
         ruleInfo: {},
         filterItemParams: [],
-        recommendParams: []
+        recommendParams: [],
+        operationDescList: [
+          {
+            varietyName: '商品多样性',
+            varietyDesc1: '一次推荐请求返回的结果里面，相邻的',
+            varietyDesc2: '个商品，品牌不重复',
+            scatterName: '根据店铺进行打散',
+            scatterDesc1: '一次推荐请求返回的结果里面，相邻的',
+            scatterDesc2: '个商品，',
+            scatterDesc3: '个店铺不重复',
+            shufflingName: '根据商品类型进行混排',
+            shufflingDesc: '一次推荐请求返回的结果里面：'
+          }
+        ]
       }
     },
     created() {
@@ -261,6 +298,10 @@
       // 场景类型 0-智能场景 1-自定义场景 2-模板场景
       sceneType() {
         return JSON.parse(localStorage.getItem('sceneInfo')).sceneType
+      },
+      // 推荐种类 0：推荐商品 1：推荐用户 2：推荐咨询 3:推荐活动
+      recommendObjectType() {
+        return JSON.parse(localStorage.getItem('sceneInfo')).recommendObjectType
       }
     },
     methods: {
@@ -390,13 +431,17 @@
       }
     }
 
-    .ant-divider-horizontal {
-      margin: 4px 0;
+    .desc_title {
+      margin: 10px 0 10px;
+      font-weight: 500;
     }
 
-    .desc_title {
-      margin: 10px 0 5px;
-      font-weight: 500;
+    .text_left {
+      text-align: left;
+    }
+
+    .ant-divider-horizontal {
+      margin: 4px 0;
     }
   }
 </style>
