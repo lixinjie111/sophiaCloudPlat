@@ -2,7 +2,7 @@
   <div class="addShipAddress_con">
     <div class="white_con">
       <div class="header_con">
-        <span>添加地址</span>
+        <span>{{title}}</span>
         <i class="el-icon-close" @click="closePopWin"></i>
       </div>
       <div class="content_con">
@@ -105,9 +105,14 @@ export default {
           { required: true,trigger: "blur",validator: PostCodevalida },
         ],
       },
+      title:''
     };
   },
-  created() {},
+  props:['operParms'],
+  created() {
+    var propsData = this.operParms;
+    this.title = propsData.title;
+  },
   methods: {
     closePopWin() {
       this.$emit("closePopWin", false);

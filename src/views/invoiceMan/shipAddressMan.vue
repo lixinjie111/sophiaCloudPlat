@@ -19,27 +19,22 @@
       >
         <vxe-table-column
           field="recsName"
-          width="15%"
           title="收件人姓名"
         ></vxe-table-column>
         <vxe-table-column
           field="telNum"
-          width="15%"
           title="电话号码"
         ></vxe-table-column>
         <vxe-table-column
           field="address"
-          width="35%"
           title="地址"
         ></vxe-table-column>
         <vxe-table-column
           field="postCode"
-          width="10%"
           title="邮编"
         ></vxe-table-column>
         <vxe-table-column
           field="operation"
-          width="25%"
           title="操作"
           show-overflow
         >
@@ -65,12 +60,12 @@
         新增地址
       </a-button>
     </div>
-    <vAddShipAddress v-if="ifShowPopwin" @closePopWin="closeMyPopWin"></vAddShipAddress>
+    <vAddShipAddress v-if="ifShowPopwin" @closePopWin="closeMyPopWin" :operParms='operParmsFath'></vAddShipAddress>
   </div>
 </template>
 
 <script>
-import {queryPostAddressList} from "../../api/invoiceMan/index";
+import {queryPostAddressList,deletePostAddress} from "../../api/invoiceMan/index";
 import vAddShipAddress from "./addShipAddress";
 export default {
   name: "shipAddressMan",
@@ -82,6 +77,7 @@ export default {
       ],
       loading: false,
       ifShowPopwin: false,
+      operParmsFath:{}
     };
   },
   created() {
@@ -93,10 +89,34 @@ export default {
   methods: {
     settingAddress(arg) {},
     editRow(arg) {
-      console.log(arg,'arg........')
+      this.operParmsFath = {
+        title:'编辑地址',
+        operType:'edit'
+      };
+      this.ifShowPopwin = true;
     },
-    deleteRow(arg) {},
+    deleteRow(arg) {
+      var parms = {
+        addressId:arg.addressId,
+        page:1,
+        pageSize:10
+      };
+      deletePostAddress(parms).then(res=>{
+        if(res.code == 200000){
+          this.getTableData(); 
+        }
+        else{
+          this.$message.error('删除寄送地址失败！')
+        }
+      }).catch(err=>{
+        this.$message.error('删除寄送地址失败！')
+      });
+    },
     addAddress() {
+      this.operParmsFath = {
+        title:'添加地址',
+        operType:'add'
+      };
       this.ifShowPopwin = true;
     },
     closeMyPopWin(arg){
@@ -120,7 +140,8 @@ export default {
               telNum:element.contactPhone,
               address:element.addressComplete + element.addressDetail,
               postCode:element.postalCode,
-              isDefaultFlag:element.isDefaultFlag
+              isDefaultFlag:element.isDefaultFlag,
+              addressId:element.addressId
             });
           });
           this.tableData = newTableData;
@@ -163,13 +184,6 @@ export default {
     /deep/
       .vxe-table--render-default
       .vxe-table--main-wrapper
-      .body--wrapper
-      .vxe-table--header {
-      width: 100%;
-    }
-    /deep/
-      .vxe-table--render-default
-      .vxe-table--main-wrapper
       .vxe-table--body-wrapper
       .vxe-table--body tbody .vxe-body--row .vxe-body--column .vxe-cell .operDiv{
         a:nth-child(1){
@@ -184,9 +198,6 @@ export default {
           border: 1px solid #FAAD14;
           color: #FAAD14;
         }
-    }
-    /deep/ .vxe-table .vxe-table--empty-placeholder {
-      margin-top: 46px;
     }
     /deep/ .vxe-table .vxe-table--empty-placeholder .vxe-table--empty-content {
       span:nth-child(1),

@@ -33,3 +33,7 @@ export const editInvoiceBase = params => {
 export const queryPostAddressList = params => {
     return axios.post(`${totalUrl}/Invoice/queryPostAddressList`, params).then(res => res.data);
 }
+//删除寄送地址  
+export const deletePostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/deletePostAddress`, params).then(res => res.data);
+}
