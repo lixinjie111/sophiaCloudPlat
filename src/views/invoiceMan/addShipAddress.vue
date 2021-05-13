@@ -2,7 +2,7 @@
   <div class="addShipAddress_con">
     <div class="white_con">
       <div class="header_con">
-        <span>添加地址</span>
+        <span>{{title}}</span>
         <i class="el-icon-close" @click="closePopWin"></i>
       </div>
       <div class="content_con">
@@ -19,10 +19,13 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="选择地区" prop="area">
-            <el-input
+            <el-cascader
+              class="widthSmall"
+              style="width:100%"
+              :options="addressOptions"
               v-model="addressFormData.area"
-              placeholder="请选择"
-            ></el-input>
+              @change="addressChange">
+            </el-cascader>
           </el-form-item>
           <el-form-item label="详细地址" prop="detailAddress">
             <el-input
@@ -59,6 +62,7 @@
 </template>
 
 <script>
+import {getProvince,getCity} from "../../api/invoiceMan/index";
 export default {
   name: "addShipAddress",
   data() {
@@ -105,16 +109,79 @@ export default {
           { required: true,trigger: "blur",validator: PostCodevalida },
         ],
       },
+      title:'',
+      addressOptions:[]
     };
   },
-  created() {},
+  props:['operParms'],
+  created() {
+    var propsData = this.operParms;
+    this.title = propsData.title;
+    this.getProvinceData();
+  },
   methods: {
     closePopWin() {
       this.$emit("closePopWin", false);
     },
+    getCityData(arg){
+      var pid = arg[0];
+      var parms = {
+        pid:pid
+      };
+      getCity(parms).then(res=>{
+        if(res.code == 200000){
+          var proviceData = this.addressOptions;
+          var cityData = res.data || [];
+          var cityList = [];
+          cityData.forEach(element => {
+            cityList.push({
+              value:element.code,
+              label:element.name
+            })
+          });
+          proviceData.forEach(element => {
+            if(element.value == pid){
+              element.children = cityList
+            }
+          });
+          console.log(proviceData,'proviceData')
+          this.addressOptions = proviceData;
+        }
+        else{
+          this.$message.error(res.message || "获取市数据失败！");
+        }
+      }).catch(err=>{
+        this.$message.error("获取市数据失败！");
+      });
+    },
+    getProvinceData(){
+      getProvince().then(res=>{
+        if(res.code == 200000){
+          var proviceData = res.data || [];
+          var proviceList = [];
+          proviceData.forEach(element => {
+            this.addressOptions.push({
+              value:element.code,
+              label:element.name
+            })
+            this.getCityData(element.code)
+          });
+        }
+        else{
+          this.$message.error(res.message || "获取省数据失败！");
+        }
+      }).catch(err=>{
+        this.$message.error("获取省数据失败！");
+      });
+    }
   },
 };
 </script>
+<style>
+.el-cascader__dropdown{
+  z-index: 99999 !important;
+}
+</style>
 <style lang="scss" scoped>
 .addShipAddress_con {
   position: fixed;

@@ -80,70 +80,72 @@
     <div class="three_area">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="发票列表" name="first">
-                <vxe-table
-                    border
-                    show-header-overflow
-                    show-overflow
-                    highlight-hover-row
-                    :align="allAlign"
-                    :data="tableData"
-                    :loading="loading"
-                    ref="xTable"
-                >
-                    <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                    <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
-                    <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
-                    <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
-                    <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
-                    <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
-                    <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
-                    <vxe-table-column field="operation" title="操作" show-overflow>
-                        <template v-slot="{ row }">
-                            <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
-                            </div>
-                            <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
-                                <a style="color:#0376FD;" @click="returnTicket(row)">退票</a>
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
-                                <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
-                            </div>
-                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已拒绝') || (formatHtml(row.invoiceStatusDesc) == '已撤销') || (formatHtml(row.invoiceStatusDesc) == '已作废') || (formatHtml(row.invoiceStatusDesc) == '退票中')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                            </div>
-                           <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
-                            </div>
+                <div v-if="ifShowfpList">
+                    <vxe-table
+                        border
+                        show-header-overflow
+                        show-overflow
+                        highlight-hover-row
+                        :align="allAlign"
+                        :data="tableData"
+                        :loading="loading"
+                        ref="xTable"
+                    >
+                        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                        <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
+                        <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
+                        <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
+                        <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
+                        <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
+                        <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
+                        <vxe-table-column field="operation" title="操作" show-overflow>
+                            <template v-slot="{ row }">
+                                <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                                </div>
+                                <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
+                                    <a style="color:#0376FD;" @click="returnTicket(row)">退票</a>
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                                    <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
+                                </div>
+                                <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已拒绝') || (formatHtml(row.invoiceStatusDesc) == '已撤销') || (formatHtml(row.invoiceStatusDesc) == '已作废') || (formatHtml(row.invoiceStatusDesc) == '退票中')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                </div>
+                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
+                                </div>
+                            </template>
+                        </vxe-table-column>
+                        <template v-slot:empty>
+                            <span>暂无已索取发票数据，</span><span>索取发票</span>
                         </template>
-                    </vxe-table-column>
-                    <template v-slot:empty>
-                        <span>暂无已索取发票数据，</span><span>索取发票</span>
-                    </template>
-                </vxe-table>
-                <vxe-pager
-                    border
-                    size="medium"
-                    :loading="loading2"
-                    :current-page="tablePage2.currentPage"
-                    :page-size="tablePage2.pageSize"
-                    :total="tablePage2.totalResult"
-                    :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-                    @page-change="handlePageChange2"
-                >
-                </vxe-pager>
+                    </vxe-table>
+                    <vxe-pager
+                        border
+                        size="medium"
+                        :loading="loading2"
+                        :current-page="tablePage2.currentPage"
+                        :page-size="tablePage2.pageSize"
+                        :total="tablePage2.totalResult"
+                        :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
+                        @page-change="handlePageChange2"
+                    >
+                    </vxe-pager>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
                 <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceShowInfo="infoMsg"></vInvoInfoShow>
                 <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
-                <vShipAddressMan></vShipAddressMan>
+                <vShipAddressMan v-if="ifShowjsAddress"></vShipAddressMan>
             </el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">
                 <vEmailMan></vEmailMan>
@@ -215,7 +217,9 @@ export default {
         ifShowZpInvReturn:false,
         invoiceParm:null,
         infoMsg:{},
-        invoiceDetailIdData:''
+        invoiceDetailIdData:'',
+        ifShowjsAddress:false,
+        ifShowfpList:true
     };
   },
   created() {
@@ -374,6 +378,7 @@ export default {
     },
     editfpInfo(){
         this.activeName = 'second';
+        this.ifShowShowPanel = false;
     },
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg; 
@@ -387,6 +392,21 @@ export default {
         this.activeName = 'third'; 
     },
     handleClick(tab, event) {
+        if(tab.paneName == "first"){
+            this.ifShowfpList = true;
+        }
+        else{
+            this.ifShowfpList = false;
+        }
+        if(tab.paneName == "second"){
+            this.ifShowShowPanel = true;
+        }
+        if(tab.paneName == "third"){
+            this.ifShowjsAddress = true;
+        }
+        else{
+            this.ifShowjsAddress = false;
+        }
         this.activeName = tab.paneName; 
     },
     handlePageChange2 ({ currentPage, pageSize }) {

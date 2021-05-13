@@ -26,7 +26,22 @@ export const operateInvoice = params => {
 export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/user/info`, params).then(res => res.data); };
 
 //发票基本信息修改
-var aa = 'http://10.16.47.153:8001/admin/Invoice/updateInvoiceBase';
 export const editInvoiceBase = params => {
-    return axios.post(aa, params).then(res => res.data);
+    return axios.post(`${totalUrl}/Invoice/updateInvoiceBase`, params).then(res => res.data);
+}
+//查询寄送地址列表信息
+export const queryPostAddressList = params => {
+    return axios.post(`${totalUrl}/Invoice/queryPostAddressList`, params).then(res => res.data);
+}
+//删除寄送地址  
+export const deletePostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/deletePostAddress`, params).then(res => res.data);
+}
+//获取省信息列表
+export const getProvince = params => {
+    return axios.post(`${totalUrl}/Area/getProvince`, params).then(res => res.data);
+}
+//获得市信息列表    
+export const getCity = params => {
+    return axios.post(`${totalUrl}/Area/getCity`, params).then(res => res.data);
 }
