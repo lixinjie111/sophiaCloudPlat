@@ -94,11 +94,55 @@ export default {
   props: ["invoiceShowInfo"],
   watch: {
     invoiceShowInfo(val1, val2) {
-      this.InvoiceData = val1;
+      // this.InvoiceData = val1;
+      if (val1.issueType == 1) {
+        this.IssuType = "company";
+        setTimeout(() => {
+          var typeTxt = "";
+          if (val1.invoiceType == 0) {
+            typeTxt = "增值税普通发票";
+          } else if (val1.invoiceType == 1) {
+            typeTxt = "增值税专用发票";
+          } else if (val1.invoiceType == 2) {
+            typeTxt = "组织（非企业）增值税普通发票";
+          } else {
+            typeTxt = "";
+          }
+          this.qiyeInvInfo = {
+            invoiveTitle: val1.title,
+            invoivekjType: "企业",
+            invoiveType: typeTxt,
+            TaIdeNum: val1.taxNum,
+            khBankName: val1.bankName,
+            khBankNumber: val1.bankNumber,
+            regAdderss: val1.companyAddress,
+            regFixtelnum: val1.companyPhone,
+          };
+        }, 300);
+      } else {
+        this.IssuType = "personal";
+        setTimeout(() => {
+          var typeTxt = "";
+          if (val1.invoiceType == 0) {
+            typeTxt = "增值税普通发票";
+          } else if (val1.invoiceType == 1) {
+            typeTxt = "增值税专用发票";
+          } else if (val1.invoiceType == 2) {
+            typeTxt = "组织（非企业）增值税普通发票";
+          } else {
+            typeTxt = "";
+          }
+          this.personalRuleForm = {
+            personalInvoiveTitle: val1.title,
+            personalInvokjType: "个人",
+            personalInvoiceType: typeTxt,
+          };
+        }, 300);
+      }
     },
   },
   mounted() {
-    this.getUserMsg();
+    // this.getUserMsg();
   },
   methods: {
     editInvoiceInfo() {
@@ -160,7 +204,6 @@ export default {
           this.$message.error("获取用户信息失败！");
         });
     },
-    getInvoiceInfo() {},
   },
 };
 </script>

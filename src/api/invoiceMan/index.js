@@ -26,6 +26,7 @@ export const operateInvoice = params => {
 export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/user/info`, params).then(res => res.data); };
 
 //发票基本信息修改
+var aa = 'http://10.16.47.153:8001/admin/Invoice/updateInvoiceBase';
 export const editInvoiceBase = params => {
-    return axios.post(`${totalUrl}/Invoice/updateInvoiceBase`, params).then(res => res.data);
+    return axios.post(aa, params).then(res => res.data);
 }

@@ -401,7 +401,6 @@ export default {
   props:['invoiceDetailIdInfo'],
   methods: {
     zzputongsubmitForm() {
-      alert('ssssss')
       var parms={
         issueType:this.IssuingTypeRuleForm.IssuingType,
         title:this.invoiveTitleRulePutongForm.invoiveZzputongTitle,
@@ -414,9 +413,8 @@ export default {
         invoiceDetailId:this.invoiceDetailIdInfo
       };
       editInvoiceBase(parms).then(res=>{
-        console.log(res)
         if(res.code == 200000){
-
+          this.$emit('closeEditShow',true)
         }
         else{
           this.$message.error(res.message || "修改发票信息失败！");
@@ -426,7 +424,6 @@ export default {
       });
     },
     zzzhuanyongsubmitForm(){
-        alert('ssssss1')
       var parms={
         issueType:this.IssuingTypeRuleForm.IssuingType,
         title:this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle,
@@ -441,7 +438,7 @@ export default {
       editInvoiceBase(parms).then(res=>{
         console.log(res)
         if(res.code == 200000){
-
+          this.$emit('closeEditShow',true)
         }
         else{
           this.$message.error(res.message || "修改发票信息失败！");
@@ -466,7 +463,7 @@ export default {
       editInvoiceBase(parms).then(res=>{
         console.log(res)
         if(res.code == 200000){
-
+          this.$emit('closeEditShow',true)
         }
         else{
           this.$message.error(res.message || "修改发票信息失败！");

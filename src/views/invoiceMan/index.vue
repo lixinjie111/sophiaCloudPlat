@@ -140,7 +140,7 @@
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
                 <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceShowInfo="infoMsg"></vInvoInfoShow>
-                <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData"></vEditInvoInfo>
+                <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
                 <vShipAddressMan></vShipAddressMan>
@@ -378,6 +378,11 @@ export default {
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg; 
     },
+    closeEditShowFn(arg){
+        this.ifShowShowPanel = arg;
+        this.getInvoiceBase();
+        console.log(arg,'arg')
+    },
     editfpaddress(){
         this.activeName = 'third'; 
     },
@@ -487,13 +492,13 @@ export default {
             console.log(res,'res')
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
-                this.infoMsg = InvoiceMsgObj;
-                console.log(this.infoMsg,'this.infoMsg')
                 this.money = InvoiceMsgObj.totalAmount;
                 if(!InvoiceMsgObj){
                     this.ifShowShowPanel = false;
                 }
                 else{
+                    this.infoMsg = InvoiceMsgObj;
+                    console.log(this.infoMsg,'this.infoMsg')
                     this.ifShowShowPanel = true;
                     this.invoiceDetailIdData = InvoiceMsgObj.invoiceDetailId || '';
                     if(InvoiceMsgObj.title){
