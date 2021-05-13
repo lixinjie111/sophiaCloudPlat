@@ -374,6 +374,7 @@ export default {
     },
     editfpInfo(){
         this.activeName = 'second';
+        this.ifShowShowPanel = false;
     },
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg; 
@@ -387,6 +388,9 @@ export default {
         this.activeName = 'third'; 
     },
     handleClick(tab, event) {
+        if(tab.paneName == "second"){
+            this.ifShowShowPanel = true;
+        }
         this.activeName = tab.paneName; 
     },
     handlePageChange2 ({ currentPage, pageSize }) {
