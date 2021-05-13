@@ -37,3 +37,11 @@ export const queryPostAddressList = params => {
 export const deletePostAddress = params => {
     return axios.post(`${totalUrl}/Invoice/deletePostAddress`, params).then(res => res.data);
 }
+//获取省信息列表
+export const getProvince = params => {
+    return axios.post(`${totalUrl}/Area/getProvince`, params).then(res => res.data);
+}
+//获得市信息列表    
+export const getCity = params => {
+    return axios.post(`${totalUrl}/Area/getCity`, params).then(res => res.data);
+}
