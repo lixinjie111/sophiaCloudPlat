@@ -12,7 +12,7 @@ const safeEmail = resolve => require(['@/views/user/safeEmail'], resolve);
 const authentPop = resolve => require(['@/views/user/authentPop'], resolve);
 const agmAndfd = resolve => require(['@/views/user/agmAndfd'], resolve);
 const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
-const gailan = resolve => require(['@/views/application/gailan'], resolve);
+const overview = resolve => require(['@/views/application/overview'], resolve);
 const openMy = resolve => require(['@/views/application/openMy'], resolve);
 const buyBag = resolve => require(['@/views/application/buyBag'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
@@ -124,9 +124,9 @@ export const menuRouterMap = [{
           component:agmAndfd
         },
         {
-            name: "gailan",
-            path: "/gailan",
-            component: gailan
+            name: "overview",
+            path: "/overview",
+            component: overview
         },
         {
             name: "openMy",

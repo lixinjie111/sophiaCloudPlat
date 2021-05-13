@@ -148,7 +148,7 @@
                   {
                     title: "概览",
                     itemKey: "yingyong1",
-                    path: "/gailan",
+                    path: "/overview",
                     threekey:'yingyong1'
                   },
                   {

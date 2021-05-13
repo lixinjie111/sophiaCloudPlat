@@ -98,48 +98,71 @@
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
-                  :data="tableData">
-                  <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-                  <vxe-table-column field="name" title="Name"></vxe-table-column>
-                  <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-                  <vxe-table-column field="age" title="Age"></vxe-table-column>
-                  <vxe-table-column field="address" title="Address"></vxe-table-column>
+                  :data="tableData1">
+                  <vxe-table-column field="pagName" title="资源包类型"></vxe-table-column>
+                  <vxe-table-column field="" title="付费方式">
+                     <template>
+                       预付费
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="num" title="数量"></vxe-table-column>
+                  <vxe-table-column field="numStandard" title="配置(万次)"></vxe-table-column>
+                  <vxe-table-column field="validPeriod" title="时长(月)"></vxe-table-column>
+                  <vxe-table-column field="packagePrice" title="单价(个)"></vxe-table-column>
+                  <vxe-table-column field="" title="计费方式">
+                    <template #default="{ row }">
+                      <span v-if="row.packageType==1">次数包</span>
+                      <span v-else>时长包</span>
+                    </template>
+                  </vxe-table-column>
               </vxe-table>
               <div class="payBox">
                   <div class="payTotal">
-                      应付款： <span>¥ 40,800.00 </span>
+                      应付款： <span>¥ {{format(sumPrice)}} </span>
                   </div>
                   <div class="confirmBtn1">
-                      <el-button type="primary" @click="onSubmit">去支付</el-button>
-                      <el-button>返回修改</el-button>
+                      <el-button type="primary" @click="goPay">去支付</el-button>
+                      <el-button @click="goBack">返回修改</el-button>
                   </div>
                   <div class="payCheck">
-                    <a-checkbox v-model="checked" @change="changeEvent">我已我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
+                    <a-checkbox v-model="checked">我已我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
                   </div>
               </div>
           </template> 
           <template v-if="currentIndex==2"> 
             <div class="navTitle">
                <div class="detailTitle">待支付订单</div>
-               <div class="detailTotal">待支付总金额：<span>¥ 40,800.00 </span></div>
+               <div class="detailTotal">待支付总金额：<span>¥ {{format(tableData2[0].orderAmount)}} </span></div>
             </div>
              <vxe-table
                   border
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
-                  :data="tableData">
-                  <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-                  <vxe-table-column field="name" title="Name"></vxe-table-column>
-                  <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-                  <vxe-table-column field="age" title="Age"></vxe-table-column>
-                  <vxe-table-column field="address" title="Address"></vxe-table-column>
+                  :data="tableData2">
+                  <vxe-table-column field="orderSn" title="订单号"></vxe-table-column>
+                  <vxe-table-column field="" title="产品名称">
+                    <template #default="{ row }">
+                      {{row.serviceModelName}}-{{row.serviceName}}
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="" title="配置">
+                      <template #default="{ row }">
+                        <span style="color: #0376FD;cursor:pointer" @click="lookSet(row)">详情</span>
+                      </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="orderPackageTime" title="时长(月)"></vxe-table-column>
+                  <vxe-table-column field="orderAmount" title="总额">
+                    <template #default="{ row }">
+                        <span>¥ {{format(row.orderAmount)}}</span>
+                      </template>
+                  </vxe-table-column>
               </vxe-table>
               <div class="detailTitle" style="margin-top:30px">选择支付方式</div>
               <div class="payType">
-                 <p><el-radio v-model="radio" label="1">账户余额（当前账户余额 ¥ 23,430.00）</el-radio></p>
+                 <p><el-radio v-model="radio" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
                  <div class="payMust">
-                      需支付： <span class="payPrice">¥ 40,800.00 </span> <span  class="payTip">当前帐户余额不足，请<span>充值</span>或选择其他方式支付</span>
+                      需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span>充值</span>或选择其他方式支付</span>
                   </div>
                    <div class="payDesc1">
                      温馨提示：如果您有正在使用中的后付费产品，请保证有足够余额。
@@ -156,10 +179,10 @@
                   </el-tabs>
                   <div class="payBox payBox1">
                       <div class="payTotal">
-                          应付金额： <span>¥ 40,800.00 </span>
+                          应付金额： <span>¥ {{format(tableData2[0].orderAmount)}}</span>
                       </div>
                       <div class="confirmBtn1">
-                          <el-button type="primary" @click="onSubmit">支付</el-button>
+                          <el-button type="primary" @click="realPay">支付</el-button>
                       </div>
                   </div>
                 </div>
@@ -174,7 +197,7 @@
                 您购买的服务将在1～5分钟内开通，请耐心等待。
               </div>
               <div class="text3">
-                <el-button type="primary" @click="onSubmit" size="small" style="margin-right:10px">控制台</el-button><el-link type="primary">查看订单明细</el-link>
+                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button><el-link type="primary" @click="goLink">查看订单明细</el-link>
               </div>
             </div> 
           </template>  
@@ -183,13 +206,13 @@
    <a-modal v-model="visible" title="提醒" @ok="handleOk" cancelText="取消" centered okText="购买">
       <p>资源包使用完毕会自动切换为按量后付费模式以保证您的正常使用</p>
     </a-modal>
-   <a-modal v-model="visible1" title="您还有未支付的订单" @ok="handleOk1" cancelText="取消" centered okText="购买">
+   <a-modal v-model="visible1" title="您还有未支付的订单" @ok="handleOk1" cancelText="取消" centered okText="查看已有订单">
       <p>该服务存在未支付的订单，请完成支付或取消已有订单后再进行购买。</p>
     </a-modal>
    <a-modal v-model="visible2" title="付款完成前请不要关掉页面" @ok="handleOk2" cancelText="提交工单" centered okText="完成付款">
       <p>请在新页面完成付款，如付款遇到问题请选择提交工单或致电：4008-123-456（转1）</p>
     </a-modal>
-   <a-modal v-model="visible3" title="当前配置" :footer="null">
+   <a-modal v-model="visible3" title="当前配置" :footer="null" v-if="tableData2.length>0">
         <div class="payItem">
           <div class="payLf">
               资源包类型：
@@ -203,9 +226,9 @@
               资源包配置：
           </div>
           <div class="payRight">
-            <p>100万次 * 1个</p>
-            <p>100万次 * 1个</p>
-            <p>100万次 * 1个</p>
+            <div v-for="item in tableData2[0].orderAllocations" :key="item.packageAllocation">
+              <p  v-if="item.num!=0" >{{format1(item.packageAllocation)}}次 * {{item.orderNum}}个</p>
+            </div>
           </div>
         </div>
         <div class="payItem">
@@ -213,7 +236,7 @@
               购买时长：       
           </div>
           <div class="payRight">
-            1年
+            {{tableData2[0].orderPackageTime}}个月
           </div>
         </div>
         <div class="payItem">
@@ -221,7 +244,7 @@
               价格：       
           </div>
           <div class="payRight">
-            <div class="price">¥ 40,800.00</div>
+            <div class="price">¥ {{format(tableData2[0].orderAmount)}}</div>
           </div>
         </div>
     </a-modal>
@@ -230,7 +253,7 @@
 
 <script>
 import {
-  getPrepaidFeePackage,
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk
 } from "../../api/bugBag/index";
 export default {
   data() {
@@ -240,6 +263,7 @@ export default {
       serviceId:'',
       activeName: 'second',
       radio:'1',
+      orderSn:'',
       checked:false,
       visible:false,
       visible1:false,
@@ -247,6 +271,11 @@ export default {
       visible3:false,
       currentIndex:0,
       tableData0:[],
+      tableData1:[],
+      tableData2:[],
+      tableData3:[],
+      orderList:[],
+      account:{},
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -261,11 +290,15 @@ export default {
     'tableData0':{ // 监视选中的数据（单位）
       handler:function(newValue,oldValue){
         let sum=0;
+        let _newArr=[];
         newValue.forEach(item=>{
+          item['pagName']=this.serviceName;
           if(item.num!=0){
             sum+=item.num*item.packagePrice;
+            _newArr.push(item)
           }
         })
+        this.tableData1=_newArr;
         this.sumPrice=sum;
       },
       deep:true,
@@ -275,12 +308,141 @@ export default {
     this.serviceId=this.$route.query.serviceId;
     this.serviceName=this.$route.query.serviceName;
     this.initInfo();
+    this.userAccount();
   },
   mounted() {
   },
   methods: {
-     format (num) {
+    goLink1(){
+       this.$router.push({
+        path:'/overview',
+         query:{
+          activekey:['yingyong1'],
+          openkey:['myYingyong']
+        }
+      })
+    },
+    goLink(){
+       this.$router.push({
+        path:'/orderInfo',
+        query:{
+          id:this.tableData2[0].orderSn,
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
+    },
+    realPay(){
+      let _param=[this.tableData2[0].orderSn];
+      payBulk(_param)
+        .then(res => {
+          if (res.code == 200000) {
+              this.currentIndex++;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
+    userAccount(){
+      userAccount().then(res => {
+          if (res.code == 200000) {
+               this.account=res.data;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
+    lookSet(val){
+      this.visible3=true;
+      this.tableData3=val.orderAllocations;
+    },
+    getOrderInfo(){
+     var fwqsParm = new FormData();
+      fwqsParm.append("orderSn",this.orderList[0]);
+      this.tableData2=[];
+      getOrderInfo(fwqsParm)
+        .then(res => {
+          if (res.code == 200000) {
+              this.tableData2.push(res.data);
+              // this.$message.success(res.message);
+              this.currentIndex++;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+
+    },
+    goPay(){
+      if(!this.checked){
+        this.$message.warning('请勾选Sophia云平台线上订购协议');
+        return
+      }
+      var fwqsParm = new FormData();
+      fwqsParm.append("serviceId",this.serviceId);
+      createPreOderVerify(fwqsParm).then(res => {
+          if (res.code == 200000) {
+              if(res.data.verifyFlag){
+                this.order();
+              }else{
+                this.orderSn=res.data.orderSn;
+                this.visible1=true;
+                return;
+              }
+          } else {
+            return;
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
+    order(){
+      let _serviceList=[];
+      this.tableData1.forEach(item=>{
+        _serviceList.push(
+          {
+            serviceId:this.serviceId,
+            prepaidPackageId:item.prepaidPackageId,
+            packageQuantity:item.num,
+          }
+        )
+      })
+     let _param={
+      "orderAssort": 2,
+      "orderSource": 1,
+      "orderType": 1,
+      "serviceList": _serviceList
+     };
+      createOrder(_param).then(res => {
+          if (res.code == 200000) {
+              this.orderList=res.data;
+              this.getOrderInfo();
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+
+    },
+    goBack(){
+      this.currentIndex--;
+    },
+    format (num) {
         return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+    },
+    format1 (num) {
+        return (num.toFixed(0) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
     },
     next0(){
       this.currentIndex=1;
@@ -305,15 +467,18 @@ export default {
           this.$message.error("请求失败！");
         });
     },
-    changeEvent(e) {
-      console.log(e);
-    },
     handleOk(e) {
       console.log(e);
       this.visible = false;
     },
     handleOk1(e) {
-      console.log(e);
+       this.$router.push({
+        path:'/orderInfo?id='+this.orderSn,
+        query:{
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
       this.visible1 = false;
     },
     handleOk2(e) {
