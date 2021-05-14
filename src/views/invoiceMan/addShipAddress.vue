@@ -83,6 +83,18 @@ export default {
         callback();
       }
     };
+    var telNumValida = (rule, value, callback) => {
+      var mobile = /^1[0-9]{10}$/,
+        phone = /^0\d{2,3}-?\d{7,8}$/;
+      var ifValb = mobile.test(value) || phone.test(value);
+      if (value === "") {
+        callback(new Error("请填写联系电话!"));
+      } else if (!ifValb) {
+        callback(new Error("请填写正确的联系电话!"));
+      } else {
+        callback();
+      }
+    };
     return {
       labelPosition: "top",
       addressFormData: {
@@ -108,7 +120,7 @@ export default {
           { required: true, message: "请填写详细地址", trigger: "blur" },
         ],
         contacNumber: [
-          { required: true, message: "请填写联系电话", trigger: "blur" },
+          { required: true, message: "请填写联系电话", trigger: "blur",validator: telNumValida },
         ],
         PostCode: [
           { required: true, trigger: "blur", validator: PostCodevalida },
@@ -116,9 +128,6 @@ export default {
       },
       title: "",
       addressOptions: [],
-      province: "",
-      city: "",
-      district: "",
     };
   },
   props: ["operParms"],
@@ -146,12 +155,6 @@ export default {
       };
       this.$emit("closePopWin", operObj);
     },
-    changeOptions(opt) {
-      var areaList = opt || [];
-      this.province = areaList[0];
-      this.city = areaList[1];
-      this.district = areaList[2];
-    },
     getProvinceData() {
       this.addressOptions = regionData;
     },
@@ -160,15 +163,16 @@ export default {
         if (valid) {
           var operData = this.operParms;
           var inputData = this.addressFormData;
+          console.log(inputData,'inputDatainputDatainputData')
           if(operData.operType == 'add'){
             var parms = {
               addressDetail: inputData.detailAddress,
-              city:this.city,
+              city:(inputData.area)[1],
               contactPhone:inputData.contacNumber,
-              district:this.district,
+              district:(inputData.area)[2],
               isDefaultFlag:inputData.settingAddress ? 1 : 0,
               postalCode:inputData.PostCode,
-              province:this.province,
+              province:(inputData.area)[0],
               recipient:inputData.recsName
             };
             addPostAddress(parms).then(res=>{
@@ -189,12 +193,12 @@ export default {
             var parms = {
               addressDetail: inputData.detailAddress,
               addressId:operData.arg.addressId,
-              city:this.city,
+              city:(inputData.area)[1],
               contactPhone:inputData.contacNumber,
-              district:this.district,
+              district:(inputData.area)[2],
               isDefaultFlag:inputData.settingAddress ? 1 : 0,
               postalCode:inputData.PostCode,
-              province:this.province,
+              province:(inputData.area)[0],
               recipient:inputData.recsName
             };
             updatePostAddress(parms).then(res=>{
