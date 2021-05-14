@@ -35,7 +35,7 @@
               <div class="behavior_item" v-for="(item,index) in behaviorList" :key="index">
                 <div>
                   <div style="margin-bottom:6px">行为类型:
-                    <a-select labelInValue v-model="item.type" @change="handleChange" style="width:100px">
+                    <a-select labelInValue v-model="item.type" style="width:100px">
                       <a-select-option v-for="ele in behaviorTypes" :key="ele.id">{{ele.name}}</a-select-option>
                     </a-select>
                   </div>
