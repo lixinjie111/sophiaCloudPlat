@@ -56,7 +56,7 @@ Vue.use(VXETable);
 // 全局修改message距离顶部高度
 import { message } from 'x-intelligent-ui';
 message.config({
-  top: `100px`
+  top:'40%'
 });
 
 import lxjData from "./utils/lxjData.js"

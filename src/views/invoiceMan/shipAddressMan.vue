@@ -128,6 +128,10 @@ export default {
       });
     },
     addAddress() {
+      if(this.remainNum == 0){
+        this.$message.warning('添加地址条数已到上限！');
+        return;
+      }
       this.operParmsFath = {
         title:'添加地址',
         operType:'add'
