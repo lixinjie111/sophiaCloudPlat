@@ -91,7 +91,8 @@ export default {
     editRow(arg) {
       this.operParmsFath = {
         title:'编辑地址',
-        operType:'edit'
+        operType:'edit',
+        arg:arg
       };
       this.ifShowPopwin = true;
     },
@@ -120,7 +121,10 @@ export default {
       this.ifShowPopwin = true;
     },
     closeMyPopWin(arg){
-      this.ifShowPopwin = arg;
+      this.ifShowPopwin = arg.bl;
+      if(arg.op == 'ref'){
+        this.getTableData();
+      }
     },
     getTableData(){
       var parms = {
