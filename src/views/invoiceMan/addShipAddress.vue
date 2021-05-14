@@ -2,7 +2,7 @@
   <div class="addShipAddress_con">
     <div class="white_con">
       <div class="header_con">
-        <span>{{title}}</span>
+        <span>{{ title }}</span>
         <i class="el-icon-close" @click="closePopWin"></i>
       </div>
       <div class="content_con">
@@ -11,6 +11,7 @@
           label-width="80px"
           :model="addressFormData"
           :rules="addressFormRules"
+          ref="shipAddressRuleForm"
         >
           <el-form-item label="收件人姓名" prop="recsName">
             <el-input
@@ -21,10 +22,11 @@
           <el-form-item label="选择地区" prop="area">
             <el-cascader
               class="widthSmall"
-              style="width:100%"
+              style="width: 100%"
               :options="addressOptions"
               v-model="addressFormData.area"
-              @change="addressChange">
+              @change="changeOptions"
+            >
             </el-cascader>
           </el-form-item>
           <el-form-item label="详细地址" prop="detailAddress">
@@ -51,25 +53,28 @@
               v-model="addressFormData.settingAddress"
             ></el-checkbox>
           </el-form-item>
+          <el-form-item class="btn_container">
+            <el-button @click="closePopWin">取消</el-button>
+            <el-button
+              type="primary"
+              @click="addAddresSubmitForm('shipAddressRuleForm')"
+              >确定</el-button
+            >
+          </el-form-item>
         </el-form>
-      </div>
-      <div class="footer_con">
-        <el-button @click="closePopWin">取消</el-button>
-        <el-button type="primary">确定</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {getProvince,getCity} from "../../api/invoiceMan/index";
+import { regionData } from "element-china-area-data";
+import {addPostAddress,updatePostAddress} from "../../api/invoiceMan/index";
 export default {
   name: "addShipAddress",
   data() {
-     var PostCodevalida = (rule, value, callback) => {
-      var ifValb = /^\d{6}$/gi.test(
-        value
-      );
+    var PostCodevalida = (rule, value, callback) => {
+      var ifValb = /^\d{6}$/gi.test(value);
       if (value === "") {
         callback(new Error("邮政编码不能为空!"));
       } else if (!ifValb) {
@@ -86,7 +91,7 @@ export default {
         detailAddress: "",
         contacNumber: "",
         PostCode: "",
-        settingAddress:false
+        settingAddress: false,
       },
       addressFormRules: {
         recsName: [
@@ -106,14 +111,17 @@ export default {
           { required: true, message: "请填写联系电话", trigger: "blur" },
         ],
         PostCode: [
-          { required: true,trigger: "blur",validator: PostCodevalida },
+          { required: true, trigger: "blur", validator: PostCodevalida },
         ],
       },
-      title:'',
-      addressOptions:[]
+      title: "",
+      addressOptions: [],
+      province: "",
+      city: "",
+      district: "",
     };
   },
-  props:['operParms'],
+  props: ["operParms"],
   created() {
     var propsData = this.operParms;
     this.title = propsData.title;
@@ -121,64 +129,89 @@ export default {
   },
   methods: {
     closePopWin() {
-      this.$emit("closePopWin", false);
-    },
-    getCityData(arg){
-      var pid = arg[0];
-      var parms = {
-        pid:pid
+      var operObj = {
+        bl:false,
+        op:'noref'
       };
-      getCity(parms).then(res=>{
-        if(res.code == 200000){
-          var proviceData = this.addressOptions;
-          var cityData = res.data || [];
-          var cityList = [];
-          cityData.forEach(element => {
-            cityList.push({
-              value:element.code,
-              label:element.name
-            })
-          });
-          proviceData.forEach(element => {
-            if(element.value == pid){
-              element.children = cityList
-            }
-          });
-          console.log(proviceData,'proviceData')
-          this.addressOptions = proviceData;
+      this.$emit("closePopWin", operObj);
+    },
+    changeOptions(opt) {
+      var areaList = opt || [];
+      this.province = areaList[0];
+      this.city = areaList[1];
+      this.district = areaList[2];
+    },
+    getProvinceData() {
+      this.addressOptions = regionData;
+    },
+    addAddresSubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var operData = this.operParms;
+          var inputData = this.addressFormData;
+          if(operData.operType == 'add'){
+            var parms = {
+              addressDetail: inputData.detailAddress,
+              city:this.city,
+              contactPhone:inputData.contacNumber,
+              district:inputData.district,
+              isDefaultFlag:inputData.settingAddress ? 1 : 0,
+              postalCode:inputData.PostCode,
+              province:this.province,
+              recipient:inputData.recsName
+            };
+            addPostAddress(parms).then(res=>{
+              console.log(res,'添加地址结果')
+              if (res.code == 200000) {
+                var operObj = {
+                  bl:false,
+                  op:'ref'
+                };
+                this.$emit("closePopWin",operObj);
+              } else {
+                this.$message.error(res.message || "添加地址失败！");
+              }
+            }).catch((err) => {
+              this.$message.error("添加地址失败！");
+            });
+          }
+          else if(operData.operType == 'edit'){
+            var parms = {
+              addressDetail: inputData.detailAddress,
+              addressId:operData.arg.addressId,
+              city:this.city,
+              contactPhone:inputData.contacNumber,
+              district:inputData.district,
+              isDefaultFlag:inputData.settingAddress ? 1 : 0,
+              postalCode:inputData.PostCode,
+              province:this.province,
+              recipient:inputData.recsName
+            };
+            updatePostAddress(parms).then(res=>{
+              if (res.code == 200000) {
+                var operObj = {
+                  bl:false,
+                  op:'ref'
+                };
+                this.$emit("closePopWin",operObj);
+              } else {
+                this.$message.error(res.message || "添加地址失败！");
+              }
+            }).catch((err) => {
+              this.$message.error("添加地址失败！");
+            });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
         }
-        else{
-          this.$message.error(res.message || "获取市数据失败！");
-        }
-      }).catch(err=>{
-        this.$message.error("获取市数据失败！");
       });
     },
-    getProvinceData(){
-      getProvince().then(res=>{
-        if(res.code == 200000){
-          var proviceData = res.data || [];
-          var proviceList = [];
-          proviceData.forEach(element => {
-            this.addressOptions.push({
-              value:element.code,
-              label:element.name
-            })
-            this.getCityData(element.code)
-          });
-        }
-        else{
-          this.$message.error(res.message || "获取省数据失败！");
-        }
-      }).catch(err=>{
-        this.$message.error("获取省数据失败！");
-      });
-    }
   },
 };
 </script>
 <style>
-.el-cascader__dropdown{
+.el-cascader__dropdown {
   z-index: 99999 !important;
 }
 </style>
@@ -227,24 +260,17 @@ export default {
     }
     .content_con {
       width: 100%;
-      height: 636px;
       padding: 24px;
+      padding-bottom: 30px;
       box-sizing: border-box;
       .el-form {
         .el-form-item {
           margin-bottom: 10 !important;
         }
+        /deep/ .btn_container .el-form-item__content {
+          float: right;
+        }
       }
-    }
-    .footer_con {
-      width: 100%;
-      height: 80px;
-      border-top: 1px solid rgba(0, 0, 0, 0.09);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 24px;
-      box-sizing: border-box;
     }
   }
 }

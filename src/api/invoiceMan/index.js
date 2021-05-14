@@ -45,3 +45,11 @@ export const getProvince = params => {
 export const getCity = params => {
     return axios.post(`${totalUrl}/Area/getCity`, params).then(res => res.data);
 }
+//新增寄送地址信息   
+export const addPostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/addPostAddress`, params).then(res => res.data);
+}
+//修改寄送地址    
+export const updatePostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/updatePostAddress`, params).then(res => res.data);
+}
