@@ -14,23 +14,16 @@
             title="是否删除该条目?"
             ok-text="是"
             cancel-text="否"
-            @confirm="del(item,index)">
-            <a-button class="item_del" type="link" style="color: red">删除</a-button>
+            @confirm="delItem(item.id,index)">
+            <a-button class="item_del" type="link">删除</a-button>
           </a-popconfirm>            
-        </li>          
-        <!-- <li>
-          <div>
-            <span>排序策略1:</span>
-            <span class="item_name">逻辑回归01</span>
-          </div>
-          <span class="item_del">删除</span>
-        </li> -->
+        </li>
       </ul>
       <a-button class="add_btn" @click="add" :width="100" v-if="list.length<5">
         <a-icon type="plus" />
       </a-button>
     </div>
-    <a-modal destroyOnClose v-model="addModal" title="基于物品的协同过滤" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" destroyOnClose>
+    <a-modal centered destroyOnClose v-model="addModal" title="梯度下降树(GBDT)" @cancel="handleCancel" @ok="handleOk">
         <a-form-model :model="dataForm" :rules="rules">
         <a-form-model-item label="策略名称" prop="name">
             <a-input placeholder="请输入策略名称" v-model="dataForm.name"/>
@@ -50,6 +43,7 @@
   </div>
 </template>
 <script>
+import {getStrategiesDetail, deleteStrategy} from "@/api/recommendation/index"
 export default {
   name: "CustomSort",
   props: {},
@@ -58,31 +52,25 @@ export default {
         list:[],
         addModal:false,
         dataForm:{
-            name:"",
-            date:"",
-            num:""
+            name:""
         },
         rules:{
-            name:[{required:true,message:"请输入策略名称",trigger:"blur"}],
-            date:[{required:true,message:"请输入时间跨度（天）",trigger:"blur"}],
-            num:[{required:true,message:"请输入推荐商品数",trigger:"blur"}]
+            name:[{required:true,message:"请输入策略名称",trigger:"blur"}]
         }        
     };
   },
   methods: {
-      del(item){
-          console.log(item,index)
-          this.list.splice(index,1)
+      delItem(id,index){
+          console.log(id,index)
       },
       add(){
           this.addModal = true
       },
       handleCancel(){
-
+        this.addModal = false
       },
       handleOk(){
-          this.addModal = false
-          this.list.push({name:this.dataForm.name})
+        this.addModal = false
       }      
   },
 };
@@ -103,6 +91,7 @@ export default {
     ul {
       > li {
         display: flex;
+        align-items: center;
         margin: 16px 0;
         .item_name {
           font-weight: 600;
