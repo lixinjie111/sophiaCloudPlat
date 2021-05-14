@@ -41,9 +41,15 @@
           <template v-slot="{ row }">
             <div class="operDiv">
               <a
+                v-if="row.isDefaultFlag == 1"
                 :class="{'isdefault':row.isDefaultFlag == 1}"
                 @click="settingAddress(row)"
                 >默认地址</a
+              >
+              <a
+                v-else
+                @click="settingAddress(row)"
+                >设为默认</a
               >
               <a style="color: #0376fd" @click="editRow(row)">修改</a>
               <a style="color: #ff4d4f" @click="deleteRow(row)">删除</a>
@@ -87,7 +93,14 @@ export default {
     vAddShipAddress,
   },
   methods: {
-    settingAddress(arg) {},
+    settingAddress(arg) {
+      if(arg.isDefaultFlag == 1){
+        return;
+      }
+      else{
+
+      }
+    },
     editRow(arg) {
       this.operParmsFath = {
         title:'编辑地址',
@@ -104,6 +117,7 @@ export default {
       };
       deletePostAddress(parms).then(res=>{
         if(res.code == 200000){
+          this.$message.success('删除成功！')
           this.getTableData(); 
         }
         else{
@@ -124,6 +138,7 @@ export default {
       this.ifShowPopwin = arg.bl;
       if(arg.op == 'ref'){
         this.getTableData();
+        this.$emit('getNewAddress')
       }
     },
     getTableData(){
@@ -142,10 +157,13 @@ export default {
             newTableData.push({
               recsName:element.recipient,
               telNum:element.contactPhone,
-              address:element.addressComplete + element.addressDetail,
+              address:element.addressComplete,
               postCode:element.postalCode,
               isDefaultFlag:element.isDefaultFlag,
-              addressId:element.addressId
+              addressId:element.addressId,
+              province:element.province,
+              city:element.city,
+              district:element.district
             });
           });
           this.tableData = newTableData;
@@ -190,7 +208,7 @@ export default {
       .vxe-table--main-wrapper
       .vxe-table--body-wrapper
       .vxe-table--body tbody .vxe-body--row .vxe-body--column .vxe-cell .operDiv{
-        a:nth-child(1){
+        a{
           border: 1px solid rgba(0, 0, 0, 0.3);
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;

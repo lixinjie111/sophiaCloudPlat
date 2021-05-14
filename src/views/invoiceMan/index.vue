@@ -68,7 +68,7 @@
             <div class="no_fp_info_con" v-if="nofpAddress">暂无默认地址信息</div>
             <div class="has_fp_info_con" v-else>
                 <div class="fptt_con">
-                    <span>{{addressObj.name}}</span>
+                    <span>{{addressObj.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span>{{addressObj.phone}}</span>
                 </div>
                 <div class="kjlx_con">
@@ -145,7 +145,7 @@
                 <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
-                <vShipAddressMan v-if="ifShowjsAddress"></vShipAddressMan>
+                <vShipAddressMan v-if="ifShowjsAddress" @getNewAddress="getNewAddressFa"></vShipAddressMan>
             </el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">
                 <vEmailMan></vEmailMan>
@@ -503,6 +503,9 @@ export default {
         }).catch(err=>{
             this.$message.error('请求发票列表数据失败！')
         });
+    },
+    getNewAddressFa(){
+        this.getInvoiceBase();
     },
     getInvoiceBase(){
         var parms = {

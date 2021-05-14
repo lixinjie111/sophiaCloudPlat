@@ -124,7 +124,18 @@ export default {
   props: ["operParms"],
   created() {
     var propsData = this.operParms;
+    var propsFormData = propsData.arg;
     this.title = propsData.title;
+    if(propsData.operType == "edit"){
+      this.addressFormData = {
+        recsName:propsFormData.recsName,
+        area:[propsFormData.province,propsFormData.city,propsFormData.district],
+        detailAddress:propsFormData.address,
+        contacNumber:propsFormData.telNum,
+        PostCode:propsFormData.postCode,
+        settingAddress:propsFormData.isDefaultFlag == 1 ? true : false
+      }
+    }
     this.getProvinceData();
   },
   methods: {
@@ -154,14 +165,13 @@ export default {
               addressDetail: inputData.detailAddress,
               city:this.city,
               contactPhone:inputData.contacNumber,
-              district:inputData.district,
+              district:this.district,
               isDefaultFlag:inputData.settingAddress ? 1 : 0,
               postalCode:inputData.PostCode,
               province:this.province,
               recipient:inputData.recsName
             };
             addPostAddress(parms).then(res=>{
-              console.log(res,'添加地址结果')
               if (res.code == 200000) {
                 var operObj = {
                   bl:false,
@@ -181,7 +191,7 @@ export default {
               addressId:operData.arg.addressId,
               city:this.city,
               contactPhone:inputData.contacNumber,
-              district:inputData.district,
+              district:this.district,
               isDefaultFlag:inputData.settingAddress ? 1 : 0,
               postalCode:inputData.PostCode,
               province:this.province,
