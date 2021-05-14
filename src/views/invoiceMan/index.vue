@@ -141,7 +141,7 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
-                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn" :invoiceShowInfo="infoMsg"></vInvoInfoShow>
+                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn"></vInvoInfoShow>
                 <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
             <el-tab-pane label="寄送地址管理" name="third">
@@ -217,7 +217,7 @@ export default {
         ifShowZpInvReturn:false,
         invoiceParm:null,
         infoMsg:{},
-        invoiceDetailIdData:'',
+        invoiceDetailIdData:{},
         ifShowjsAddress:false,
         ifShowfpList:true
     };
@@ -381,7 +381,8 @@ export default {
         this.ifShowShowPanel = false;
     },
     showeditpanelfaFn(arg){
-        this.ifShowShowPanel = arg; 
+        this.ifShowShowPanel = arg.opt; 
+        this.invoiceDetailIdData = arg;
     },
     closeEditShowFn(arg){
         this.ifShowShowPanel = arg;
@@ -523,7 +524,7 @@ export default {
                     this.infoMsg = InvoiceMsgObj;
                     console.log(this.infoMsg,'this.infoMsg')
                     this.ifShowShowPanel = true;
-                    this.invoiceDetailIdData = InvoiceMsgObj.invoiceDetailId || '';
+                    this.invoiceDetailIdData = InvoiceMsgObj || {};
                     if(InvoiceMsgObj.title){
                         this.nofpInfo = false;
                         var typeTxt = '';

@@ -406,9 +406,51 @@ export default {
   },
   created() {
     console.log(this.invoiceDetailIdInfo, "invoiceDetailIdInfo");
+    if(this.invoiceDetailIdInfo.hasD){
+      this.initPageData();
+    }
   },
   props: ["invoiceDetailIdInfo"],
   methods: {
+    initPageData(){
+      var pageD = this.invoiceDetailIdInfo.invoData;
+      if(pageD.issueType == 0){
+        this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
+      }
+      else{
+        this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
+        if(pageD.invoiceType == 0){
+          this.invoiveTitleRulePutongForm.invoiveZzputongTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zzputongConRuleForm.zzputongTaIdeNu = pageD.taxpayerNumber;
+          this.zzputongConRuleForm.zzputongBankName = pageD.bankName;
+          this.zzputongConRuleForm.zzputongBankNumber=pageD.bankNumber;
+          this.zzputongConRuleForm.zzputongRegAdderss=pageD.companyAddress;
+          this.zzputongConRuleForm.zzputongRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
+        }
+        else if(pageD.invoiceType == 1){
+          this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu=pageD.taxpayerNumber;
+          this.zzzhuanyongConRuleForm.zzzhuanyongBankName=pageD.bankName;
+          this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber=pageD.bankNumber;
+          this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss=pageD.companyAddress;
+          this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
+        }
+        else if(pageD.invoiceType == 2){
+          this.invoiveTitleRulezuzhiForm.invoivezuzhiTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zuzhizzConRuleForm.zuzhizzTaIdeNu=pageD.taxpayerNumber;
+          this.zuzhizzConRuleForm.zuzhizzBankName=pageD.bankName;
+          this.zuzhizzConRuleForm.zuzhizzBankNumber=pageD.bankNumber;
+          this.zuzhizzConRuleForm.zuzhizzRegAdderss=pageD.companyAddress;
+          this.zuzhizzConRuleForm.zuzhizzRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
+        }
+      }
+    },
     zzputongsubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -421,7 +463,7 @@ export default {
             bankNumber: this.zzputongConRuleForm.zzputongBankNumber,
             companyAddress: this.zzputongConRuleForm.zzputongRegAdderss,
             companyPhone: this.zzputongConRuleForm.zzputongRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -452,7 +494,7 @@ export default {
             bankNumber: this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber,
             companyAddress: this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss,
             companyPhone: this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -483,7 +525,7 @@ export default {
             bankNumber: this.zuzhizzConRuleForm.zuzhizzBankNumber,
             companyAddress: this.zuzhizzConRuleForm.zuzhizzRegAdderss,
             companyPhone: this.zuzhizzConRuleForm.zuzhizzRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -514,7 +556,7 @@ export default {
             bankNumber: '',
             companyAddress: '',
             companyPhone: '',
-            invoiceDetailId: this.invoiceDetailIdInfo
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId
           };
           editInvoiceBase(parms)
             .then((res) => {

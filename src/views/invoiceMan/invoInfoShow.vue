@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getUserInfo } from "../../api/invoiceMan/index";
+import { queryInvoiceBase } from "../../api/invoiceMan/index";
 export default {
   name: "invoInfoShow",
   data() {
@@ -91,117 +91,74 @@ export default {
       InvoiceData: {},
     };
   },
-  props: ["invoiceShowInfo"],
-  watch: {
-    invoiceShowInfo(val1, val2) {
-      // this.InvoiceData = val1;
-      if (val1.issueType == 1) {
-        this.IssuType = "company";
-        setTimeout(() => {
-          var typeTxt = "";
-          if (val1.invoiceType == 0) {
-            typeTxt = "增值税普通发票";
-          } else if (val1.invoiceType == 1) {
-            typeTxt = "增值税专用发票";
-          } else if (val1.invoiceType == 2) {
-            typeTxt = "组织（非企业）增值税普通发票";
-          } else {
-            typeTxt = "";
-          }
-          this.qiyeInvInfo = {
-            invoiveTitle: val1.title,
-            invoivekjType: "企业",
-            invoiveType: typeTxt,
-            TaIdeNum: val1.taxNum,
-            khBankName: val1.bankName,
-            khBankNumber: val1.bankNumber,
-            regAdderss: val1.companyAddress,
-            regFixtelnum: val1.companyPhone,
-          };
-        }, 300);
-      } else {
-        this.IssuType = "personal";
-        setTimeout(() => {
-          var typeTxt = "";
-          if (val1.invoiceType == 0) {
-            typeTxt = "增值税普通发票";
-          } else if (val1.invoiceType == 1) {
-            typeTxt = "增值税专用发票";
-          } else if (val1.invoiceType == 2) {
-            typeTxt = "组织（非企业）增值税普通发票";
-          } else {
-            typeTxt = "";
-          }
-          this.personalRuleForm = {
-            personalInvoiveTitle: val1.title,
-            personalInvokjType: "个人",
-            personalInvoiceType: typeTxt,
-          };
-        }, 300);
-      }
-    },
-  },
   mounted() {
-    // this.getUserMsg();
+    this.getInvoiceMsg();
   },
   methods: {
     editInvoiceInfo() {
-      this.$emit("showEditPanel", false);
+      var operData = {
+        opt:false,
+        invoData:this.InvoiceData,
+        hasD:true
+      };
+      this.$emit("showEditPanel", operData);
     },
-    getUserMsg() {
-      getUserInfo()
+    getInvoiceMsg() {
+      var parms = {
+        invoiceDetailId: "",
+      };
+      queryInvoiceBase(parms)
         .then((res) => {
+          console.log(res, "res");
           if (res.code == 200000) {
-            if (res.data.authType == 1 || res.data.authType == 2) {
+            var InvoiceMsgObj = res.data || {};
+            this.InvoiceData = InvoiceMsgObj;
+            if (InvoiceMsgObj.issueType == 1) {
               this.IssuType = "company";
-              setTimeout(() => {
-                var typeTxt = "";
-                if (this.InvoiceData.invoiceType == 0) {
-                  typeTxt = "增值税普通发票";
-                } else if (this.InvoiceData.invoiceType == 1) {
-                  typeTxt = "增值税专用发票";
-                } else if (this.InvoiceData.invoiceType == 2) {
-                  typeTxt = "组织（非企业）增值税普通发票";
-                } else {
-                  typeTxt = "";
-                }
-                this.qiyeInvInfo = {
-                  invoiveTitle: this.InvoiceData.title,
-                  invoivekjType: "企业",
-                  invoiveType: typeTxt,
-                  TaIdeNum: this.InvoiceData.taxNum,
-                  khBankName: this.InvoiceData.bankName,
-                  khBankNumber: this.InvoiceData.bankNumber,
-                  regAdderss: this.InvoiceData.companyAddress,
-                  regFixtelnum: this.InvoiceData.companyPhone,
-                };
-              }, 300);
+              var typeTxt = "";
+              if (InvoiceMsgObj.invoiceType == 0) {
+                typeTxt = "增值税普通发票";
+              } else if (InvoiceMsgObj.invoiceType == 1) {
+                typeTxt = "增值税专用发票";
+              } else if (InvoiceMsgObj.invoiceType == 2) {
+                typeTxt = "组织（非企业）增值税普通发票";
+              } else {
+                typeTxt = "";
+              }
+              this.qiyeInvInfo = {
+                invoiveTitle: InvoiceMsgObj.title,
+                invoivekjType: "企业",
+                invoiveType: typeTxt,
+                TaIdeNum: InvoiceMsgObj.taxpayerNumber,
+                khBankName: InvoiceMsgObj.bankName,
+                khBankNumber: InvoiceMsgObj.bankNumber,
+                regAdderss: InvoiceMsgObj.companyAddress,
+                regFixtelnum: InvoiceMsgObj.companyPhone,
+              };
             } else {
               this.IssuType = "personal";
-              setTimeout(() => {
-                var typeTxt = "";
-                if (this.InvoiceData.invoiceType == 0) {
-                  typeTxt = "增值税普通发票";
-                } else if (this.InvoiceData.invoiceType == 1) {
-                  typeTxt = "增值税专用发票";
-                } else if (this.InvoiceData.invoiceType == 2) {
-                  typeTxt = "组织（非企业）增值税普通发票";
-                } else {
-                  typeTxt = "";
-                }
-                this.personalRuleForm = {
-                  personalInvoiveTitle: this.InvoiceData.title,
-                  personalInvokjType: "个人",
-                  personalInvoiceType: typeTxt,
-                };
-              }, 300);
+              var typeTxt = "";
+              if (InvoiceMsgObj.invoiceType == 0) {
+                typeTxt = "增值税普通发票";
+              } else if (InvoiceMsgObj.invoiceType == 1) {
+                typeTxt = "增值税专用发票";
+              } else if (InvoiceMsgObj.invoiceType == 2) {
+                typeTxt = "组织（非企业）增值税普通发票";
+              } else {
+                typeTxt = "";
+              }
+              this.personalRuleForm = {
+                personalInvoiveTitle: InvoiceMsgObj.title,
+                personalInvokjType: "个人",
+                personalInvoiceType: typeTxt,
+              };
             }
           } else {
-            this.$message.error("获取用户信息失败！");
+            this.$message.error(res.message || "请求发票列表数据失败！");
           }
         })
         .catch((err) => {
-          this.$message.error("获取用户信息失败！");
+          this.$message.error("请求发票基本信息数据失败！");
         });
     },
   },
