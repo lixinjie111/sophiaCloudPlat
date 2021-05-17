@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { queryEmailList,deleteEmail } from "../../api/invoiceMan/index";
+import { queryEmailList,deleteEmail,updateEmail } from "../../api/invoiceMan/index";
 import vAddEmail from "./addEmail";
 export default {
   name: "shipAddressMan",
@@ -82,7 +82,28 @@ export default {
     vAddEmail,
   },
   methods: {
-    settingAddress(arg) {},
+    settingAddress(arg) {
+      if (arg.isDefaultFlag == 1) {
+        return;
+      } else {
+        var parms = {
+          mailId: arg.mailId,
+          isDefaultFlag: 1,
+        };
+        updateEmail(parms)
+          .then((res) => {
+            if (res.code == 200000) {
+              this.$message.success("设为默认邮箱成功！");
+              this.getTableData();
+            } else {
+              this.$message.error(res.message || "设为默认邮箱失败！");
+            }
+          })
+          .catch((err) => {
+            this.$message.error("设为默认邮箱失败！");
+          });
+      }
+    },
     editRow(arg) {
       this.operParmsFath = {
         title: "编辑邮箱",
