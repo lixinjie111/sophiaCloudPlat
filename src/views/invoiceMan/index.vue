@@ -512,6 +512,11 @@ export default {
         var parms = {
             invoiceDetailId:''
         };
+        this.addressObj = {
+            name:'',
+            phone:'',
+            address:''
+        };
         queryInvoiceBase(parms).then(res=>{
             console.log(res,'res')
             if(res.code == 200000){
@@ -556,7 +561,7 @@ export default {
                         this.addressObj={
                             name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
                             phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
-                            address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete + InvoiceMsgObj.postAddressVo.addressDetail: '',
+                            address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete : '',
                         };
                     }
                 }

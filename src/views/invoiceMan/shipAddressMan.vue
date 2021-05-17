@@ -95,6 +95,7 @@ export default {
           .then((res) => {
             if (res.code == 200000) {
               this.$message.success("设为默认地址成功！");
+              this.$emit("getNewAddress");
               this.getTableData();
             } else {
               this.$message.error(res.message || "设为默认地址失败！");
