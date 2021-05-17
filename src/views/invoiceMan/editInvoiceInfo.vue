@@ -405,7 +405,6 @@ export default {
     };
   },
   created() {
-    console.log(this.invoiceDetailIdInfo, "invoiceDetailIdInfo");
     if(this.invoiceDetailIdInfo.hasD){
       this.initPageData();
     }
@@ -576,7 +575,6 @@ export default {
       });
     },
     changeIssuType(e) {
-      console.log(e, "aaaaaa");
       this.IssuType = e;
     },
   },

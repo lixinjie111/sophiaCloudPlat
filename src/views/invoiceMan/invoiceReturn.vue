@@ -109,7 +109,6 @@ export default {
                   trackingNumber:'',
                   remark:parms.remarks
               };
-              console.log(invoiceInfo,'invoiceInfo')
               operateInvoice(operParms).then(res=>{
                   if(res.code == 200000){
                     var operArg = {

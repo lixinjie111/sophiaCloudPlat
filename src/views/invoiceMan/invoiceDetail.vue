@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     downInvoice(arg) {
-      console.log(arg, "arg");
       location.href = arg.invoiceFile || "";
     },
     handlePageChange2({ currentPage, pageSize }) {

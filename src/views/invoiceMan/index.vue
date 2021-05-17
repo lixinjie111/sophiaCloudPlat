@@ -226,6 +226,7 @@ export default {
   created() {
       this.getfpManData();
       this.getInvoiceBase();
+      this.settitle();
   },
   computed:{
       moneyNum(){
@@ -240,12 +241,31 @@ export default {
       vInvoiceReturn,
       vInvoiceZpReturn
   },
+  watch:{
+      $route( to , from ){
+        console.log(to,'to');
+        console.log(from,'from');
+      }
+  },
   methods: {
+    settitle(){
+        var setObj = this.$route.query.setting;
+        this.activeName = 'first';
+        console.log(setObj,'setObj')
+        if(setObj == 'now'){
+          this.activeName = 'second';
+          this.ifShowShowPanel = false;
+        }
+    },
     watchDetailGetMoney(){
         var ifCanClick = this.moneyNum == '0.00' ? false : true;
+        var fpttObj = this.fpinfoObj;
         if(ifCanClick){
             this.$router.push({
-                path:'/InvoiceReq'
+                path:'/InvoiceReq',
+                query:{
+                    fpttObj
+                }
             });
         }
         else{
@@ -274,7 +294,6 @@ export default {
         }
     },
     closeZpInvoReturnPop(e){
-        console.log(e,'e')
         if(e.refreshParm == 'refresh'){
             this.ifShowZpInvReturn = e.operParm;
             this.getfpManData();
@@ -323,7 +342,6 @@ export default {
           customClass:'configPopwin'
         }).then(() => { 
             operateInvoice(parms).then(res=>{
-                console.log(res,'撤销结果')
                 if(res.code == 200000){
                     this.getfpManData();
                 }
@@ -388,7 +406,6 @@ export default {
     closeEditShowFn(arg){
         this.ifShowShowPanel = arg;
         this.getInvoiceBase();
-        console.log(arg,'arg')
     },
     editfpaddress(){
         this.activeName = 'third'; 
@@ -525,7 +542,6 @@ export default {
             address:''
         };
         queryInvoiceBase(parms).then(res=>{
-            console.log(res,'res')
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
                 this.money = InvoiceMsgObj.totalAmount;
@@ -534,7 +550,6 @@ export default {
                 }
                 else{
                     this.infoMsg = InvoiceMsgObj;
-                    console.log(this.infoMsg,'this.infoMsg')
                     this.ifShowShowPanel = true;
                     this.invoiceDetailIdData = InvoiceMsgObj || {};
                     if(InvoiceMsgObj.title){

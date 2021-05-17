@@ -10,12 +10,12 @@
         </a-steps>
       </div>
       <template v-if="current==0"> 
-        <div class="invo_get_con2">
+        <div class="invo_get_con2" v-if="ifShowFpinfo">
           <i class="el-icon-warning"></i>
           <span
             >您的发票模板信息还不完善，请先在发票信息管理里填写相关信息后，再申请发票！</span
           >
-          <span class="setting_now">立即设置发票抬头</span>
+          <span class="setting_now" @click="settingTitleNow">立即设置发票抬头</span>
         </div>
         <div class="invo_get_con3">
           <p>
@@ -336,9 +336,24 @@ export default {
         pageSize: 10,
         totalResult: 0,
       },
+      ifShowFpinfo:true
     };
   },
+  created(){
+    var fpttObj = this.$route.query.fpttObj;
+    if(!fpttObj.title){
+      this.ifShowFpinfo = true;
+    }
+  },
   methods: {
+    settingTitleNow(){
+      this.$router.push({
+          path:'/invoiceMan',
+          query:{
+            setting:'now'
+          }
+      });
+    },
     onChange(current) {
       console.log("onChange:", current);
       this.current = current;

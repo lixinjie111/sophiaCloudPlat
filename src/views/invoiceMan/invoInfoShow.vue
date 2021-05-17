@@ -109,7 +109,6 @@ export default {
       };
       queryInvoiceBase(parms)
         .then((res) => {
-          console.log(res, "res");
           if (res.code == 200000) {
             var InvoiceMsgObj = res.data || {};
             this.InvoiceData = InvoiceMsgObj;
