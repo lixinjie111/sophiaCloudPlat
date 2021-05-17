@@ -9,13 +9,15 @@
           <a-step title="申请完成" />
         </a-steps>
       </div>
-      <template v-if="current==0"> 
+      <template v-if="current == 0">
         <div class="invo_get_con2" v-if="ifShowFpinfo">
           <i class="el-icon-warning"></i>
           <span
             >您的发票模板信息还不完善，请先在发票信息管理里填写相关信息后，再申请发票！</span
           >
-          <span class="setting_now" @click="settingTitleNow">立即设置发票抬头</span>
+          <span class="setting_now" @click="settingTitleNow"
+            >立即设置发票抬头</span
+          >
         </div>
         <div class="invo_get_con3">
           <p>
@@ -62,6 +64,7 @@
                   <el-input
                     v-model="moneyRange"
                     placeholder="请选择金额范围"
+                    @focus="choiceMoneyRange"
                   ></el-input>
                 </div>
                 <span class="inp_label">订单编号：</span>
@@ -80,7 +83,7 @@
                   style="margin-right: 8px"
                 ></el-checkbox>
                 <span>全选(支持跨分页)：有</span>
-                <span class="active_num">0</span>
+                <span class="active_num">{{ invoiceNum }}</span>
                 <span>个订单可申请发票，可开票总额：</span>
                 <span class="active_num">￥ 0.00</span>
               </div>
@@ -92,7 +95,10 @@
                   show-overflow
                   highlight-hover-row
                 >
-                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                  <vxe-table-column
+                    type="checkbox"
+                    width="60"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="orderNum"
                     title="订单编号"
@@ -134,10 +140,12 @@
                   <div class="tab_bom_lef">
                     <el-checkbox v-model="setingChecked"></el-checkbox>
                     <el-button type="info" plain>下一步</el-button>
-                    <span class="set_info"
-                      >您尚未设置有效的开票信息，无法开具发票</span
-                    >
-                    <span class="set_txt">立即设置发票抬头</span>
+                    <div v-if="ifShowFpinfo">
+                      <span class="set_info"
+                        >您尚未设置有效的开票信息，无法开具发票</span
+                      >
+                      <span class="set_txt">立即设置发票抬头</span>
+                    </div>
                   </div>
                   <div class="tab_bom_rig">
                     <vxe-pager
@@ -168,7 +176,7 @@
           </el-tabs>
         </div>
       </template>
-      <template v-if="current==1"> 
+      <template v-if="current == 1">
         <div class="invo_get_con2">
           <span
             >您选取了3条单据开具发票（若选中多条订单，订单金额将合并开具在一张票据中），开票金额合计：</span
@@ -177,7 +185,9 @@
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">发票抬头：</span>
-          <span class="setting_now1">上海元知晟睿科技研究有限公司北京分公司</span>
+          <span class="setting_now1"
+            >上海元知晟睿科技研究有限公司北京分公司</span
+          >
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">开具类型：</span>
@@ -192,7 +202,9 @@
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">纳税人识别号：</span>
-          <span class="setting_now1">上海元知晟睿科技研究有限公司北京分公司</span>
+          <span class="setting_now1"
+            >上海元知晟睿科技研究有限公司北京分公司</span
+          >
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">开户银行名称：</span>
@@ -216,60 +228,83 @@
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">电子发票邮寄地址：</span>
-          <span class="setting_now1">660306@gdpr.com <span class="setting_now">更换地址</span></span>
+          <span class="setting_now1"
+            >660306@gdpr.com <span class="setting_now">更换地址</span></span
+          >
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">备注：</span>
-          <span class="setting_now1"><el-input type="textarea" v-model="memo" style="width:600px" placeholder="该备注信息会展示在发票上，如有需要请录入，否则无需录入任何信息。"></el-input> <br/>建议不要超过25个汉字或50个（数字+字母），否则盖章的时候有可能压到。<span class="setting_now">查看样例</span></span>
+          <span class="setting_now1"
+            ><el-input
+              type="textarea"
+              v-model="memo"
+              style="width: 600px"
+              placeholder="该备注信息会展示在发票上，如有需要请录入，否则无需录入任何信息。"
+            ></el-input>
+            <br />建议不要超过25个汉字或50个（数字+字母），否则盖章的时候有可能压到。<span
+              class="setting_now"
+              >查看样例</span
+            ></span
+          >
         </div>
-        <div class="table_con" style="width:100%;margin-top:20px">
-                <vxe-table
-                  :align="allAlign"
-                  :data="tableData"
-                  show-header-overflow
-                  show-overflow
-                  highlight-hover-row
-                >
-                  <vxe-table-column
-                    field="orderNum"
-                    title="发票名称"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderNum"
-                    title="开票内容"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="moneyType"
-                    title="规格型号"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderType"
-                    title="数量"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="proName"
-                    title="单位"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderMoney"
-                    title="总价"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="kpMoney"
-                    title="税率"
-                  ></vxe-table-column>
-                  <template v-slot:empty>
-                    <i class="el-icon-warning-outline"></i>
-                    <span>暂无可开票订单/账单</span>
-                  </template>
-                </vxe-table>
-                <div class="tab_bom_con" style="margin-top:20px">
-                    <el-button plain>上一步</el-button>
-                    <el-button  type="primary">索要发票</el-button>
-                </div>
-              </div>
+        <div class="table_con" style="width: 100%; margin-top: 20px">
+          <vxe-table
+            :align="allAlign"
+            :data="tableData"
+            show-header-overflow
+            show-overflow
+            highlight-hover-row
+          >
+            <vxe-table-column
+              field="orderNum"
+              title="发票名称"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="orderNum"
+              title="开票内容"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="moneyType"
+              title="规格型号"
+            ></vxe-table-column>
+            <vxe-table-column field="orderType" title="数量"></vxe-table-column>
+            <vxe-table-column field="proName" title="单位"></vxe-table-column>
+            <vxe-table-column
+              field="orderMoney"
+              title="总价"
+            ></vxe-table-column>
+            <vxe-table-column field="kpMoney" title="税率"></vxe-table-column>
+            <template v-slot:empty>
+              <i class="el-icon-warning-outline"></i>
+              <span>暂无可开票订单/账单</span>
+            </template>
+          </vxe-table>
+          <div class="tab_bom_con" style="margin-top: 20px">
+            <el-button plain>上一步</el-button>
+            <el-button type="primary">索要发票</el-button>
+          </div>
+        </div>
       </template>
     </div>
+    <el-dialog title="金额范围" :visible.sync="dialogFormVisible" style="z-index:99999;">
+      <el-form :model="rangeForm">
+        <el-form-item>
+          <el-input v-model="rangeForm.min" autocomplete="off"></el-input>
+        </el-form-item>
+        &nbsp;&nbsp;
+        <div class="henxian">-</div>
+        &nbsp;&nbsp;
+        <el-form-item>
+          <el-input v-model="rangeForm.max" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -278,7 +313,7 @@ export default {
   name: "InvoiceReq",
   data() {
     return {
-      memo:"",
+      memo: "",
       current: 0,
       activeName: "first",
       proName: "",
@@ -336,26 +371,35 @@ export default {
         pageSize: 10,
         totalResult: 0,
       },
-      ifShowFpinfo:true
+      ifShowFpinfo: false,
+      invoiceNum: 0,
+      dialogFormVisible:false,
+      rangeForm:{
+        min:'',
+        max:''
+      }
     };
   },
-  created(){
+  created() {
+    this.invoiceNum = this.tableData.length;
     var fpttObj = this.$route.query.fpttObj;
-    if(!fpttObj.title){
+    if (!fpttObj.title) {
       this.ifShowFpinfo = true;
     }
   },
   methods: {
-    settingTitleNow(){
+    choiceMoneyRange(){
+      this.dialogFormVisible = true;
+    },
+    settingTitleNow() {
       this.$router.push({
-          path:'/invoiceMan',
-          query:{
-            setting:'now'
-          }
+        path: "/invoiceMan",
+        query: {
+          setting: "now",
+        },
       });
     },
     onChange(current) {
-      console.log("onChange:", current);
       this.current = current;
     },
     handleClick(tab, event) {
@@ -424,24 +468,24 @@ export default {
         }
       }
     }
-    .invo_get_item{
+    .invo_get_item {
       width: 100%;
       display: flex;
       margin-top: 20px;
-      .setting_now0{
+      .setting_now0 {
         width: 150px;
         text-align: right;
         margin-right: 50px;
       }
-      .setting_now1{
-       flex:1;
-       .setting_now {
-         margin-left: 20px;
-        color: #0376fd;
-        &:hover {
-          cursor: pointer;
+      .setting_now1 {
+        flex: 1;
+        .setting_now {
+          margin-left: 20px;
+          color: #0376fd;
+          &:hover {
+            cursor: pointer;
+          }
         }
-      }
       }
     }
     .invo_get_con3 {
@@ -578,6 +622,18 @@ export default {
         }
       }
     }
+  }
+  /deep/ .el-dialog{
+    width: 28% !important;
+    margin-top: 18% !important;
+  }
+  /deep/ .el-dialog .el-dialog__body .el-form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /deep/ .el-dialog .el-dialog__body .el-form .henxian{
+    height: 40px;
   }
 }
 </style>

@@ -241,17 +241,10 @@ export default {
       vInvoiceReturn,
       vInvoiceZpReturn
   },
-  watch:{
-      $route( to , from ){
-        console.log(to,'to');
-        console.log(from,'from');
-      }
-  },
   methods: {
     settitle(){
         var setObj = this.$route.query.setting;
         this.activeName = 'first';
-        console.log(setObj,'setObj')
         if(setObj == 'now'){
           this.activeName = 'second';
           this.ifShowShowPanel = false;
