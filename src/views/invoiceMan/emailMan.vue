@@ -3,9 +3,9 @@
     <div class="invoice_info">
       当前已添加
       <span>{{ hasNum }}</span>
-      条地址，还能保存
+      个邮箱，还能保存
       <span>{{ remainNum }}</span>
-      条地址
+      个邮箱地址
     </div>
     <div class="invoice_con">
       <vxe-table
@@ -29,16 +29,14 @@
           show-overflow
         >
           <template v-slot="{ row }">
-            <div>
+            <div class="operDiv">
               <a
-                style="
-                  color: #faad14;
-                  border: 1px solid #faad14;
-                  padding: 2px 6px;
-                "
+                v-if="row.isDefaultFlag == 1"
+                :class="{ isdefault: row.isDefaultFlag == 1 }"
                 @click="settingAddress(row)"
                 >默认地址</a
               >
+              <a v-else @click="settingAddress(row)">设为默认</a>
               <a style="color: #0376fd" @click="editRow(row)">修改</a>
               <a style="color: #ff4d4f" @click="deleteRow(row)">删除</a>
             </div>
@@ -54,11 +52,16 @@
         新增邮箱
       </a-button>
     </div>
-    <vAddEmail v-if="ifShowEmialPopwin" @closePopWin="closeMyPopWin"></vAddEmail>
+    <vAddEmail
+      v-if="ifShowEmialPopwin"
+      :operParms="operParmsFath"
+      @closePopWin="closeMyPopWin"
+    ></vAddEmail>
   </div>
 </template>
 
 <script>
+import { queryEmailList } from "../../api/invoiceMan/index";
 import vAddEmail from "./addEmail";
 export default {
   name: "shipAddressMan",
@@ -69,22 +72,71 @@ export default {
       tableData: [],
       loading: false,
       ifShowEmialPopwin: false,
+      operParmsFath:{}
     };
   },
-  created() {},
+  created() {
+    this.getTableData();
+  },
   components: {
     vAddEmail,
   },
   methods: {
     settingAddress(arg) {},
-    editRow(arg) {},
-    deleteRow(arg) {},
-    addAddress() {
+    editRow(arg) {
+      this.operParmsFath = {
+        title: "编辑邮箱",
+        operType: "edit",
+        arg: arg,
+      };
       this.ifShowEmialPopwin = true;
     },
-    closeMyPopWin(arg){
-      this.ifShowEmialPopwin = arg;
-    }
+    deleteRow(arg) {},
+    addAddress() {
+      if (this.remainNum == 0) {
+        this.$message.warning("添加邮箱条数已到上限！");
+        return;
+      }
+      this.operParmsFath = {
+        title: "添加邮箱",
+        operType: "add",
+      };
+      this.ifShowEmialPopwin = true;
+    },
+    closeMyPopWin(arg) {
+      this.ifShowEmialPopwin = arg.bl;
+      if (arg.op == "ref") {
+        this.getTableData();
+      }
+    },
+    getTableData() {
+      var parms = {
+        page: 1,
+        pageSize: 10,
+      };
+      queryEmailList(parms)
+        .then((res) => {
+          if (res.code == 200000) {
+            var newTableData = [];
+            var tableDataList = res.data.list || [];
+            this.hasNum = tableDataList.length;
+            this.remainNum = 10 - tableDataList.length;
+            tableDataList.forEach((element) => {
+              newTableData.push({
+                emial: element.email,
+                isDefaultFlag: element.isDefaultFlag,
+                mailId:element.mailId
+              });
+            });
+            this.tableData = newTableData;
+          } else {
+            this.$message.error(res.message || "获取电子邮箱列表数据失败！");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("获取电子邮箱列表数据失败！");
+        });
+    },
   },
 };
 </script>

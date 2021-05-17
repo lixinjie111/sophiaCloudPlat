@@ -61,7 +61,7 @@
 import {
   queryPostAddressList,
   deletePostAddress,
-  updatePostAddress,
+  setDefaultAddress
 } from "../../api/invoiceMan/index";
 import vAddShipAddress from "./addShipAddress";
 export default {
@@ -91,7 +91,7 @@ export default {
           addressId: arg.addressId,
           isDefaultFlag: 1,
         };
-        updatePostAddress(parms)
+        setDefaultAddress(parms)
           .then((res) => {
             if (res.code == 200000) {
               this.$message.success("设为默认地址成功！");

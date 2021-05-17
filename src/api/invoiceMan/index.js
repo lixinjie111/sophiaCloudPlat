@@ -53,3 +53,15 @@ export const addPostAddress = params => {
 export const updatePostAddress = params => {
     return axios.post(`${totalUrl}/Invoice/updatePostAddress`, params).then(res => res.data);
 }
+//设置默认寄送地址标志
+export const setDefaultAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/setDefault`, params).then(res => res.data);
+}
+//查询邮箱列表信息 
+export const queryEmailList = params => {
+    return axios.post(`${totalUrl}/Invoice/queryEmailList`, params).then(res => res.data);
+}
+//新增邮箱信息 
+export const addEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/addEmail`, params).then(res => res.data);
+}

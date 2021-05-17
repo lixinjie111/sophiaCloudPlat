@@ -148,7 +148,7 @@
                 <vShipAddressMan v-if="ifShowjsAddress" @getNewAddress="getNewAddressFa"></vShipAddressMan>
             </el-tab-pane>
             <el-tab-pane label="电子邮箱" name="fourth">
-                <vEmailMan></vEmailMan>
+                <vEmailMan v-if="ifShowEmail"></vEmailMan>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -219,7 +219,8 @@ export default {
         infoMsg:{},
         invoiceDetailIdData:{},
         ifShowjsAddress:false,
-        ifShowfpList:true
+        ifShowfpList:true,
+        ifShowEmail:false
     };
   },
   created() {
@@ -407,6 +408,12 @@ export default {
         }
         else{
             this.ifShowjsAddress = false;
+        }
+        if(tab.paneName == 'fourth'){
+            this.ifShowEmail = true;
+        }
+        else{
+            this.ifShowEmail = false;
         }
         this.activeName = tab.paneName; 
     },

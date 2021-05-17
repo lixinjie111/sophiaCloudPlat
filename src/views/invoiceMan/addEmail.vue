@@ -2,7 +2,7 @@
   <div class="addShipAddress_con">
     <div class="white_con">
       <div class="header_con">
-        <span>添加邮箱</span>
+        <span>{{ title }}</span>
         <i class="el-icon-close" @click="closePopWin"></i>
       </div>
       <div class="content_con">
@@ -10,6 +10,7 @@
           :label-position="labelPosition"
           label-width="80px"
           :model="emailFormData"
+          ref="addEmailSubmitForm"
           :rules="emailFormRules"
         >
           <el-form-item label="邮箱" prop="email">
@@ -24,21 +25,26 @@
               v-model="emailFormData.settingEmail"
             ></el-checkbox>
           </el-form-item>
+          <el-form-item class="btn_container">
+            <el-button @click="closePopWin">取消</el-button>
+            <el-button
+              type="primary"
+              @click="addEmailSubmitForm('addEmailSubmitForm')"
+              >确定</el-button
+            >
+          </el-form-item>
         </el-form>
-      </div>
-      <div class="footer_con">
-        <el-button @click="closePopWin">取消</el-button>
-        <el-button type="primary">确定</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { addEmail } from "../../api/invoiceMan/index";
 export default {
-  name: "addShipAddress",
+  name: "addEmail",
   data() {
-     var emailValida = (rule, value, callback) => {
+    var emailValida = (rule, value, callback) => {
       var ifValb = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/gi.test(
         value
       );
@@ -54,19 +60,86 @@ export default {
       labelPosition: "top",
       emailFormData: {
         email: "",
-        settingEmail:false
+        settingEmail: false,
       },
       emailFormRules: {
-        email: [
-          { required: true,trigger: "blur",validator: emailValida },
-        ]
+        email: [{ required: true, trigger: "blur", validator: emailValida }],
       },
+      title: "",
     };
   },
-  created() {},
+  props: ["operParms"],
+  created() {
+    var propsData = this.operParms;
+    this.title = propsData.title;
+  },
   methods: {
     closePopWin() {
-      this.$emit("closePopWin", false);
+      var operObj = {
+        bl:false,
+        op:'noref'
+      };
+      this.$emit("closePopWin", operObj);
+    },
+    addEmailSubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var operData = this.operParms;
+          var inputData = this.emailFormData;
+          console.log(inputData, "inputDatainputDatainputData");
+          if (operData.operType == "add") {
+            var parms = {
+              email: inputData.email,
+              isDefaultFlag: inputData.settingEmail ? 1 : 0,
+            };
+            addEmail(parms)
+              .then((res) => {
+                if (res.code == 200000) {
+                  var operObj = {
+                    bl: false,
+                    op: "ref",
+                  };
+                  this.$emit("closePopWin", operObj);
+                } else {
+                  this.$message.error(res.message || "添加地址失败！");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("添加地址失败！");
+              });
+          } else if (operData.operType == "edit") {
+            var parms = {
+              addressDetail: inputData.detailAddress,
+              addressId: operData.arg.addressId,
+              city: inputData.area[1],
+              contactPhone: inputData.contacNumber,
+              district: inputData.area[2],
+              isDefaultFlag: inputData.settingAddress ? 1 : 0,
+              postalCode: inputData.PostCode,
+              province: inputData.area[0],
+              recipient: inputData.recsName,
+            };
+            updatePostAddress(parms)
+              .then((res) => {
+                if (res.code == 200000) {
+                  var operObj = {
+                    bl: false,
+                    op: "ref",
+                  };
+                  this.$emit("closePopWin", operObj);
+                } else {
+                  this.$message.error(res.message || "添加地址失败！");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("添加地址失败！");
+              });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };
@@ -85,7 +158,6 @@ export default {
   justify-content: center;
   .white_con {
     width: 26%;
-    height: 360px;
     background: #ffffff;
     box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.08),
       0px 9px 4px 0px rgba(0, 0, 0, 0.05),
@@ -122,17 +194,10 @@ export default {
         .el-form-item {
           margin-bottom: 10 !important;
         }
+        /deep/ .btn_container .el-form-item__content {
+          float: right;
+        }
       }
-    }
-    .footer_con {
-      width: 100%;
-      height: 80px;
-      border-top: 1px solid rgba(0, 0, 0, 0.09);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 24px;
-      box-sizing: border-box;
     }
   }
 }
