@@ -170,6 +170,25 @@ export const saveBlack = params => {
   return axios.post(`${totalUrl}/recommend/selfDefinedScene/bindBlacklist`,params).then(res => res.data)
 }
 
+//保存排序策略接口
+export const saveSortStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveSortStrategy`,params).then(res => res.data)
+}
+
+//获得商品参与训练的特征接口
+export const getGoodsFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getGoodsFeatures`,params).then(res => res.data)
+}
+
+//获得用户参与训练的特征接口
+export const getUserFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getUserFeatures`,params).then(res => res.data)
+}
+
+//保存运营规则
+export const saveMustRecommend = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveMustRecommend`,params).then(res => res.data)
+}
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {

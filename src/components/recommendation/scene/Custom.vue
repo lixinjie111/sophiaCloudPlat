@@ -22,25 +22,25 @@
         <a-button v-if="current < steps.length - 1" type="primary" @click="next">
             确定
         </a-button>
-        <a-button
+        <!-- <a-button
             v-if="current == steps.length - 1"
             type="primary"
-            @click="uploadSuc">
+            @click="complete">
             完成
         </a-button>
         <a-button
             v-if="current == steps.length - 1"
             type="primary"
-            @click="uploadSuc">
+            @click="publish">
             发布
         </a-button>
         <a-button
             v-if="current == steps.length - 1"
             type="primary"
-            @click="uploadSuc">
+            @click="test">
             测试
-        </a-button>        
-        <a-button @click="cancel">
+        </a-button>         -->
+        <a-button v-if="current < steps.length - 1" @click="cancel">
             取消
         </a-button>   
         <a-button
@@ -88,16 +88,15 @@ export default {
         }
     },
     methods:{
-        add(){
-            
-        },
         next(){
             this.current++
         },
         cancel(){
 
         },
-        uploadSuc(){},
+        complete(){},
+        publish(){},
+        test(){},
         back(){
             this.current--
         }
