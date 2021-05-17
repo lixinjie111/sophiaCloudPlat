@@ -209,10 +209,10 @@ export default {
                 };
                 this.$emit("closePopWin",operObj);
               } else {
-                this.$message.error(res.message || "添加地址失败！");
+                this.$message.error(res.message || "修改地址失败！");
               }
             }).catch((err) => {
-              this.$message.error("添加地址失败！");
+              this.$message.error("修改地址失败！");
             });
           }
         } else {

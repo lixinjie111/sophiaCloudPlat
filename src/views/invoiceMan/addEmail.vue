@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { addEmail } from "../../api/invoiceMan/index";
+import { addEmail,updateEmail } from "../../api/invoiceMan/index";
 export default {
   name: "addEmail",
   data() {
@@ -71,7 +71,14 @@ export default {
   props: ["operParms"],
   created() {
     var propsData = this.operParms;
+    var propsFormData = propsData.arg;
     this.title = propsData.title;
+    if(propsData.operType == "edit"){
+      this.emailFormData = {
+        email:propsFormData.emial,
+        settingEmail:propsFormData.isDefaultFlag == 1 ? true : false
+      }
+    }
   },
   methods: {
     closePopWin() {
@@ -86,7 +93,6 @@ export default {
         if (valid) {
           var operData = this.operParms;
           var inputData = this.emailFormData;
-          console.log(inputData, "inputDatainputDatainputData");
           if (operData.operType == "add") {
             var parms = {
               email: inputData.email,
@@ -101,25 +107,19 @@ export default {
                   };
                   this.$emit("closePopWin", operObj);
                 } else {
-                  this.$message.error(res.message || "添加地址失败！");
+                  this.$message.error(res.message || "添加邮箱失败！");
                 }
               })
               .catch((err) => {
-                this.$message.error("添加地址失败！");
+                this.$message.error("添加邮箱失败！");
               });
           } else if (operData.operType == "edit") {
             var parms = {
-              addressDetail: inputData.detailAddress,
-              addressId: operData.arg.addressId,
-              city: inputData.area[1],
-              contactPhone: inputData.contacNumber,
-              district: inputData.area[2],
-              isDefaultFlag: inputData.settingAddress ? 1 : 0,
-              postalCode: inputData.PostCode,
-              province: inputData.area[0],
-              recipient: inputData.recsName,
+              email: inputData.email,
+              isDefaultFlag: inputData.settingEmail ? 1 : 0,
+              mailId:operData.arg.mailId
             };
-            updatePostAddress(parms)
+            updateEmail(parms)
               .then((res) => {
                 if (res.code == 200000) {
                   var operObj = {
@@ -128,11 +128,11 @@ export default {
                   };
                   this.$emit("closePopWin", operObj);
                 } else {
-                  this.$message.error(res.message || "添加地址失败！");
+                  this.$message.error(res.message || "修改邮箱失败！");
                 }
               })
               .catch((err) => {
-                this.$message.error("添加地址失败！");
+                this.$message.error("修改邮箱失败！");
               });
           }
         } else {

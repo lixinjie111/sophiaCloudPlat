@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { queryEmailList } from "../../api/invoiceMan/index";
+import { queryEmailList,deleteEmail } from "../../api/invoiceMan/index";
 import vAddEmail from "./addEmail";
 export default {
   name: "shipAddressMan",
@@ -91,7 +91,34 @@ export default {
       };
       this.ifShowEmialPopwin = true;
     },
-    deleteRow(arg) {},
+    deleteRow(arg) {
+     var parms = {
+        mailId: arg.mailId
+      };
+      this.$comfirm("确定要删除该邮箱地址吗？", "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        customClass: "configPopwin",
+      })
+        .then(() => {
+          deleteEmail(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$message.success("删除成功！");
+                this.getTableData();
+              } else {
+                this.$message.error("删除邮箱地址失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("删除邮箱地址失败！");
+            });
+        })
+        .catch(() => {
+          console.log("失败！");
+        });
+    },
     addAddress() {
       if (this.remainNum == 0) {
         this.$message.warning("添加邮箱条数已到上限！");
@@ -110,6 +137,7 @@ export default {
       }
     },
     getTableData() {
+      this.loading = true;
       var parms = {
         page: 1,
         pageSize: 10,
@@ -117,6 +145,7 @@ export default {
       queryEmailList(parms)
         .then((res) => {
           if (res.code == 200000) {
+            this.loading = false;   
             var newTableData = [];
             var tableDataList = res.data.list || [];
             this.hasNum = tableDataList.length;
@@ -130,10 +159,12 @@ export default {
             });
             this.tableData = newTableData;
           } else {
+            this.loading = false;   
             this.$message.error(res.message || "获取电子邮箱列表数据失败！");
           }
         })
         .catch((err) => {
+          this.loading = false;   
           this.$message.error("获取电子邮箱列表数据失败！");
         });
     },

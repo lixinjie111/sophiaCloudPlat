@@ -65,3 +65,11 @@ export const queryEmailList = params => {
 export const addEmail = params => {
     return axios.post(`${totalUrl}/Invoice/addEmail`, params).then(res => res.data);
 }
+//修改邮箱信息 
+export const updateEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/updateEmail`, params).then(res => res.data);
+}
+//删除邮箱信息 
+export const deleteEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/deleteEmail`, params).then(res => res.data);
+}

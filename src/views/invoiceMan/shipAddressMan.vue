@@ -116,9 +116,7 @@ export default {
     },
     deleteRow(arg) {
       var parms = {
-        addressId: arg.addressId,
-        page: 1,
-        pageSize: 10,
+        addressId: arg.addressId
       };
       this.$comfirm("确定要删除这条地址吗？", "温馨提示", {
         confirmButtonText: "确定",
@@ -163,6 +161,7 @@ export default {
       }
     },
     getTableData() {
+      this.loading = true;
       var parms = {
         addressId: "",
         page: 1,
@@ -171,6 +170,7 @@ export default {
       queryPostAddressList(parms)
         .then((res) => {
           if (res.code == 200000) {
+            this.loading = false;
             var newTableData = [];
             var tableDataList = res.data.list || [];
             this.hasNum = tableDataList.length;
@@ -190,10 +190,12 @@ export default {
             });
             this.tableData = newTableData;
           } else {
+            this.loading = false;
             this.$message.error(res.message || "获取寄送地址列表数据失败！");
           }
         })
         .catch((err) => {
+          this.loading = false;
           this.$message.error("获取寄送地址列表数据失败！");
         });
     },
