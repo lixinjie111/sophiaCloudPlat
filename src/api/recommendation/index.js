@@ -184,6 +184,11 @@ export const getGoodsFeatures = params => {
 export const getUserFeatures = params => {
   return axios.post(`${totalUrl}/recommend/selfDefinedScene/getUserFeatures`,params).then(res => res.data)
 }
+
+//保存运营规则
+export const saveMustRecommend = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveMustRecommend`,params).then(res => res.data)
+}
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
