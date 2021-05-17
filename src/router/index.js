@@ -15,6 +15,8 @@ const dashBaord = resolve => require(['@/views/dashBaord/index'], resolve);
 const overview = resolve => require(['@/views/application/overview'], resolve);
 const openMy = resolve => require(['@/views/application/openMy'], resolve);
 const buyBag = resolve => require(['@/views/application/buyBag'], resolve);
+const finance = resolve => require(['@/views/finance/index'], resolve);
+const charge = resolve => require(['@/views/finance/charge'], resolve);
 const barView = resolve => require(['@/components/echarts/barView'], resolve);
 
 //产品服务模板页
@@ -137,6 +139,16 @@ export const menuRouterMap = [{
             name: "buyBag",
             path: "/buyBag",
             component: buyBag
+        },
+        {
+            name: "finance",
+            path: "/finance",
+            component: finance
+        },
+        {
+            name: "charge",
+            path: "/charge",
+            component: charge
         },
         {
             name: "dashBaord",

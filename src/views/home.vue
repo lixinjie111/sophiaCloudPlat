@@ -418,7 +418,7 @@
               {
                 subKey: "caiwu1",
                 title: "财务总览",
-                path: "/caiwu1",
+                path: "/finance",
                 seckey:'caiwu1',
               },
               {
@@ -602,9 +602,9 @@
           var keyVal = e.key;
           if(keyVal == 'caiwu1'){
             this.breadArr.splice(0, 0, "财务中心", "财务总览");
-            // this.$router.push({
-            //   path: "/businessSet"
-            // });
+            this.$router.push({
+              path: "/finance"
+            });
           }
           else if(keyVal == 'caiwu2'){
             this.breadArr.splice(0, 0, "财务中心", "消费中心");
