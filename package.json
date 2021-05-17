@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "echarts": "^4.2.1",
+    "element": "^0.1.4",
     "element-china-area-data": "^5.0.2",
     "element-ui": "^2.13.2",
     "html2canvas": "^1.0.0-rc.7",

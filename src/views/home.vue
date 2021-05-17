@@ -349,6 +349,12 @@ import { userInfo } from '@/api/user';
                         path: "/recommendation/data/list",
                         fourkey:'shujuguanlik'
                       },
+                      {
+                        title: "黑名单管理",
+                        itemKey: "heimingdanguanli",
+                        path: "/recommendation/data/blacklist",
+                        fourkey:'heimingdanguanli'
+                      },
                       // {
                       //   title: "数据详情",
                       //   itemKey: "shujuxiangqing",

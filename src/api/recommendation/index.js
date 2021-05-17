@@ -206,6 +206,11 @@ export const getTableColumn = params => {
   return axios.post(`${totalUrl}/recommend/excel/getTableColumn`,params).then(res => res.data)
 }
 
+// 黑名单列表接口
+export const getBlacklists = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getBlacklists`,params).then(res => res.data)
+}
+
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {

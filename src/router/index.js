@@ -46,6 +46,9 @@ const recommendationSceneFeature = resolve => require(['@/views/recommendation/s
 const recommendationDataList = resolve => require(['@/views/recommendation/data/list'], resolve);
 const recommendationDataDetail = resolve => require(['@/views/recommendation/data/detail'], resolve);
 
+// 黑名单管理
+const recommendationDataBlacklist= resolve => require(['@/views/recommendation/data/blacklist'], resolve);
+
 //数据服务 推荐运营
 const recommendationOperationResult = resolve => require(['@/views/recommendation/operation/result'], resolve);
 
@@ -244,6 +247,11 @@ export const menuRouterMap = [{
           name: "recommendationDataDetail",
           path: "/recommendation/data/detail",
           component: recommendationDataDetail
+        },
+        {
+          name: "recommendationDataBlacklist",
+          path: "/recommendation/data/blacklist",
+          component: recommendationDataBlacklist
         },
         {
           name: "recommendationOperationResult",
