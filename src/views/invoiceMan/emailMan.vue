@@ -66,9 +66,7 @@ export default {
     return {
       hasNum: 0,
       remainNum: 10,
-      tableData: [
-        // { recsName: "Test1", telNum: "Develop", address: "Man", postCode: 28 },
-      ],
+      tableData: [],
       loading: false,
       ifShowEmialPopwin: false,
     };
@@ -114,20 +112,29 @@ export default {
   }
   .invoice_con {
     width: 100%;
-    min-height: 200px;
     margin-top: 23px;
-    /deep/ .vxe-table--render-default {
-      min-height: 200px;
-    }
     /deep/
       .vxe-table--render-default
       .vxe-table--main-wrapper
-      .body--wrapper
-      .vxe-table--header {
-      width: 100%;
-    }
-    /deep/ .vxe-table .vxe-table--empty-placeholder {
-      height: 254px !important;
+      .vxe-table--body-wrapper
+      .vxe-table--body
+      tbody
+      .vxe-body--row
+      .vxe-body--column
+      .vxe-cell
+      .operDiv {
+      a {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.3);
+        padding: 0px 4px;
+      }
+      .isdefault {
+        border: 1px solid #faad14;
+        color: #faad14;
+      }
     }
     /deep/ .vxe-table .vxe-table--empty-placeholder .vxe-table--empty-content {
       span:nth-child(1),

@@ -120,17 +120,28 @@ export default {
         page: 1,
         pageSize: 10,
       };
-      deletePostAddress(parms)
-        .then((res) => {
-          if (res.code == 200000) {
-            this.$message.success("删除成功！");
-            this.getTableData();
-          } else {
-            this.$message.error("删除寄送地址失败！");
-          }
+      this.$comfirm("确定要删除这条地址吗？", "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        customClass: "configPopwin",
+      })
+        .then(() => {
+          deletePostAddress(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$message.success("删除成功！");
+                this.getTableData();
+              } else {
+                this.$message.error("删除寄送地址失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("删除寄送地址失败！");
+            });
         })
-        .catch((err) => {
-          this.$message.error("删除寄送地址失败！");
+        .catch(() => {
+          console.log("失败！");
         });
     },
     addAddress() {
