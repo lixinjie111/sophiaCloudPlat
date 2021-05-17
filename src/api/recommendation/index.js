@@ -111,9 +111,9 @@ export const getSceneDetail = params => {
   return axios.post(`${totalUrl}/recommend/scene/get`, params).then(res => res.data);
 };
 
-// 保存特征抽取
-export const saveSceneFeatures = params => {
-  return axios.post(`${totalUrl}/recommend/scene/saveFeatures`, params).then(res => res.data);
+// 根据一级数据类型获得子数据类型
+export const getFeaturesDataType = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getByParentDataType`, params).then(res => res.data);
 };
 
 // 获得特征名称
@@ -126,10 +126,49 @@ export const getFeaturesDataTables = params => {
   return axios.post(`${totalUrl}/recommend/excel/getDataTablesByDataType`, params).then(res => res.data);
 };
 
-// 根据一级数据类型获得子数据类型
-export const getFeaturesDataType = params => {
-  return axios.post(`${totalUrl}/recommend/enum/getByParentDataType`, params).then(res => res.data);
+// 保存特征抽取
+export const saveSceneFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/scene/saveFeatures`, params).then(res => res.data);
 };
+
+// 获得运营策略中的物品类型
+export const getItemTypes = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getItemTypes`, params).then(res => res.data);
+};
+// 添加推荐策略后显示的详情接口
+export const getStrategiesDetail = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getStrategiesDetail`,params).then(res => res.data)
+}
+
+//基于物品的协同过滤接口
+export const saveRecallStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveRecallStrategy`,params).then(res => res.data)
+}
+
+// 删除推荐策略接口
+export const deleteStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/deleteStrategy`,params).then(res => res.data)
+}
+
+// 获取行为类型枚举
+export const getBehaviorTypes = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getBehaviorTypes`,params).then(res => res.data)
+}
+
+//保存过滤规则
+export const saveFilterRule = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveFilterRule`,params).then(res => res.data)
+}
+
+//获得黑名单列表接口
+export const getBlackList = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getBlacklistsByType`,params).then(res => res.data)
+}
+
+//保存绑定的黑名单接口
+export const saveBlack = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/bindBlacklist`,params).then(res => res.data)
+}
 
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表

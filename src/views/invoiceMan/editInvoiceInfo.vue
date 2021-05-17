@@ -18,7 +18,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div class="person" v-if="IssuType === 'personal'">
+      <div class="person" v-if="IssuType === '0'">
         <el-form
           :model="personalRuleForm"
           ref="personalRuleForm"
@@ -31,7 +31,7 @@
               placeholder="个人"
             ></el-input>
           </el-form-item>
-          <el-form-item label="发票类型：" prop="personalInvoiceType">
+          <el-form-item label="发票类型：" prop="personalInvoiceType" class="personalInvoiceType">
             <el-input
               v-model="personalRuleForm.personalInvoiceType"
               placeholder="增值税普通发票"
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="company" v-if="IssuType === 'company'">
+      <div class="company" v-if="IssuType === '1'">
         <el-form
           :model="invoiveTitleRulePutongForm"
           :rules="invoiveTitlePutongRules"
@@ -141,7 +141,9 @@
           :rules="zzputongConRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-if="invoiceTypeRuleForm.invoiceType =='0'"
+          key="0"
+          v-if="invoiceTypeRuleForm.invoiceType == '0'"
+          ref="qyzzputongRuleForm"
         >
           <el-form-item label="纳税人识别号：" prop="zzputongTaIdeNu">
             <el-input
@@ -177,7 +179,9 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="zzputongsubmitForm()"
+            <el-button
+              type="primary"
+              @click="zzputongsubmitForm('qyzzputongRuleForm')"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -188,7 +192,9 @@
           :rules="zzzhuanyongConRules"
           label-width="140px"
           class="demo-ruleForm"
-          v-else-if="invoiceTypeRuleForm.invoiceType =='1'"
+          key="1"
+          ref="qyzzzhuanyongRuleForm"
+          v-else-if="invoiceTypeRuleForm.invoiceType == '1'"
         >
           <el-form-item label="纳税人识别号：" prop="zzzhuanyongTaIdeNu">
             <el-input
@@ -224,7 +230,9 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="zzzhuanyongsubmitForm()"
+            <el-button
+              type="primary"
+              @click="zzzhuanyongsubmitForm('qyzzzhuanyongRuleForm')"
               >保存发票信息</el-button
             >
           </el-form-item>
@@ -235,6 +243,8 @@
           :rules="zuzhizzConRules"
           label-width="140px"
           class="demo-ruleForm"
+          key="2"
+          ref="qyzuzhizzRuleForm"
           v-else
         >
           <el-form-item label="纳税人识别号：" prop="zuzhizzTaIdeNu">
@@ -271,19 +281,20 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="zuzhizzsubmitForm()"
+            <el-button
+              type="primary"
+              @click="zuzhizzsubmitForm('qyzuzhizzRuleForm')"
               >保存发票信息</el-button
             >
           </el-form-item>
         </el-form>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {editInvoiceBase} from "../../api/invoiceMan/index";
+import { editInvoiceBase } from "../../api/invoiceMan/index";
 export default {
   name: "invoiceInfoMan",
   data() {
@@ -349,146 +360,223 @@ export default {
         zzputongRegAdderss: "",
         zzputongRegFixtel: "",
       },
-      zzzhuanyongConRuleForm:{
-        zzzhuanyongTaIdeNu:'',
-        zzzhuanyongBankName:'',
-        zzzhuanyongBankNumber:'',
-        zzzhuanyongRegAdderss:'',
-        zzzhuanyongRegFixtel:''
+      zzzhuanyongConRuleForm: {
+        zzzhuanyongTaIdeNu: "",
+        zzzhuanyongBankName: "",
+        zzzhuanyongBankNumber: "",
+        zzzhuanyongRegAdderss: "",
+        zzzhuanyongRegFixtel: "",
       },
-      zuzhizzConRuleForm:{
-        zuzhizzTaIdeNu:'',
-        zuzhizzBankName:'',
-        zuzhizzBankNumber:'',
-        zuzhizzRegAdderss:'',
-        zuzhizzRegFixtel:''
+      zuzhizzConRuleForm: {
+        zuzhizzTaIdeNu: "",
+        zuzhizzBankName: "",
+        zuzhizzBankNumber: "",
+        zuzhizzRegAdderss: "",
+        zuzhizzRegFixtel: "",
       },
-      zuzhizzConRules:{
-        zuzhizzTaIdeNu: [
-          {trigger: "blur", validator: taIdeNuvalida },
-        ]
-      },
-      zzzhuanyongConRules:{
+      zzzhuanyongConRules: {
         zzzhuanyongTaIdeNu: [
           { required: true, trigger: "blur", validator: taIdeNuvalida },
         ],
-        zzzhuanyongBankName:[
-          {required: true, message: '请输入开户银行名称', trigger: 'blur'}
+        zzzhuanyongBankName: [
+          { required: true, message: "请输入开户银行名称", trigger: "blur" },
         ],
-        zzzhuanyongBankNumber:[
-          {required: true, message: '请输入开户账号', trigger: 'blur'}
+        zzzhuanyongBankNumber: [
+          { required: true, message: "请输入开户账号", trigger: "blur" },
         ],
-        zzzhuanyongRegAdderss:[
-          {required: true, message: '请输入地址', trigger: 'blur'}
+        zzzhuanyongRegAdderss: [
+          { required: true, message: "请输入地址", trigger: "blur" },
         ],
-        zzzhuanyongRegFixtel:[
-          {required: true, message: '请输入电话', trigger: 'blur'}
-        ]
+        zzzhuanyongRegFixtel: [
+          { required: true, message: "请输入电话", trigger: "blur" },
+        ],
       },
       zzputongConRules: {
         zzputongTaIdeNu: [
           { required: true, trigger: "blur", validator: taIdeNuvalida },
         ],
       },
+      zuzhizzConRules: {
+        zuzhizzTaIdeNu: [{ trigger: "blur", validator: taIdeNuvalida }],
+      },
       zzputongInfo:
         "增值税普通发票开给小规模纳税人或者开票资料不齐全的购买人，购买人取得后不\n可以进行项税额抵扣。若您还有疑问，建议联系贵司财务确认后在提交开票需求。",
-      IssuType: "company",
+      IssuType: "1",
     };
   },
   created() {
-    console.log(this.invoiceDetailIdInfo,'invoiceDetailIdInfo')
+    console.log(this.invoiceDetailIdInfo, "invoiceDetailIdInfo");
+    if(this.invoiceDetailIdInfo.hasD){
+      this.initPageData();
+    }
   },
-  props:['invoiceDetailIdInfo'],
+  props: ["invoiceDetailIdInfo"],
   methods: {
-    zzputongsubmitForm() {
-      alert('ssssss')
-      var parms={
-        issueType:this.IssuingTypeRuleForm.IssuingType,
-        title:this.invoiveTitleRulePutongForm.invoiveZzputongTitle,
-        invoiceType:this.invoiceTypeRuleForm.invoiceType,
-        taxpayerNumber:this.zzputongConRuleForm.zzputongTaIdeNu,
-        bankName:this.zzputongConRuleForm.zzputongBankName,
-        bankNumber:this.zzputongConRuleForm.zzputongBankNumber,
-        companyAddress:this.zzputongConRuleForm.zzputongRegAdderss,
-        companyPhone:this.zzputongConRuleForm.zzputongRegFixtel,
-        invoiceDetailId:this.invoiceDetailIdInfo
-      };
-      editInvoiceBase(parms).then(res=>{
-        console.log(res)
-        if(res.code == 200000){
-
+    initPageData(){
+      var pageD = this.invoiceDetailIdInfo.invoData;
+      if(pageD.issueType == 0){
+        this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
+      }
+      else{
+        this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
+        if(pageD.invoiceType == 0){
+          this.invoiveTitleRulePutongForm.invoiveZzputongTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zzputongConRuleForm.zzputongTaIdeNu = pageD.taxpayerNumber;
+          this.zzputongConRuleForm.zzputongBankName = pageD.bankName;
+          this.zzputongConRuleForm.zzputongBankNumber=pageD.bankNumber;
+          this.zzputongConRuleForm.zzputongRegAdderss=pageD.companyAddress;
+          this.zzputongConRuleForm.zzputongRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
         }
-        else{
-          this.$message.error(res.message || "修改发票信息失败！");
+        else if(pageD.invoiceType == 1){
+          this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu=pageD.taxpayerNumber;
+          this.zzzhuanyongConRuleForm.zzzhuanyongBankName=pageD.bankName;
+          this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber=pageD.bankNumber;
+          this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss=pageD.companyAddress;
+          this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
         }
-      }).catch(err=>{
-         this.$message.error("修改发票信息失败！");
-      });
+        else if(pageD.invoiceType == 2){
+          this.invoiveTitleRulezuzhiForm.invoivezuzhiTitle = pageD.title;
+          this.invoiceTypeRuleForm.invoiceType = pageD.invoiceType+'';
+          this.zuzhizzConRuleForm.zuzhizzTaIdeNu=pageD.taxpayerNumber;
+          this.zuzhizzConRuleForm.zuzhizzBankName=pageD.bankName;
+          this.zuzhizzConRuleForm.zuzhizzBankNumber=pageD.bankNumber;
+          this.zuzhizzConRuleForm.zuzhizzRegAdderss=pageD.companyAddress;
+          this.zuzhizzConRuleForm.zuzhizzRegFixtel=pageD.companyPhone;
+          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
+        }
+      }
     },
-    zzzhuanyongsubmitForm(){
-        alert('ssssss1')
-      var parms={
-        issueType:this.IssuingTypeRuleForm.IssuingType,
-        title:this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle,
-        invoiceType:this.invoiceTypeRuleForm.invoiceType,
-        taxpayerNumber:this.zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu,
-        bankName:this.zzzhuanyongConRuleForm.zzzhuanyongBankName,
-        bankNumber:this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber,
-        companyAddress:this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss,
-        companyPhone:this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel,
-        invoiceDetailId:this.invoiceDetailIdInfo
-      };
-      editInvoiceBase(parms).then(res=>{
-        console.log(res)
-        if(res.code == 200000){
-
-        }
-        else{
-          this.$message.error(res.message || "修改发票信息失败！");
-        }
-      }).catch(err=>{
-         this.$message.error("修改发票信息失败！");
-      });
-    },
-    zuzhizzsubmitForm(){
-        alert('ssssss2')
-      var parms={
-        issueType:this.IssuingTypeRuleForm.IssuingType,
-        title:this.invoiveTitleRulezuzhiForm.invoiveZzputongTitle,
-        invoiceType:this.invoiceTypeRuleForm.invoiceType,
-        taxpayerNumber:this.zuzhizzConRuleForm.zuzhizzTaIdeNu,
-        bankName:this.zuzhizzConRuleForm.zuzhizzBankName,
-        bankNumber:this.zuzhizzConRuleForm.zuzhizzBankNumber,
-        companyAddress:this.zuzhizzConRuleForm.zuzhizzRegAdderss,
-        companyPhone:this.zuzhizzConRuleForm.zuzhizzRegFixtel,
-        invoiceDetailId:this.invoiceDetailIdInfo
-      };
-      editInvoiceBase(parms).then(res=>{
-        console.log(res)
-        if(res.code == 200000){
-
-        }
-        else{
-          this.$message.error(res.message || "修改发票信息失败！");
-        }
-      }).catch(err=>{
-         this.$message.error("修改发票信息失败！");
-      });
-    },
-    personSubmitForm(formName) {
+    zzputongsubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          var parms = {
+            issueType: this.IssuingTypeRuleForm.IssuingType,
+            title: this.invoiveTitleRulePutongForm.invoiveZzputongTitle,
+            invoiceType: this.invoiceTypeRuleForm.invoiceType,
+            taxpayerNumber: this.zzputongConRuleForm.zzputongTaIdeNu,
+            bankName: this.zzputongConRuleForm.zzputongBankName,
+            bankNumber: this.zzputongConRuleForm.zzputongBankNumber,
+            companyAddress: this.zzputongConRuleForm.zzputongRegAdderss,
+            companyPhone: this.zzputongConRuleForm.zzputongRegFixtel,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+          };
+          editInvoiceBase(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$emit("closeEditShow", true);
+              } else {
+                this.$message.error(res.message || "修改发票信息失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("修改发票信息失败！");
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    zzzhuanyongsubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var parms = {
+            issueType: this.IssuingTypeRuleForm.IssuingType,
+            title: this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle,
+            invoiceType: this.invoiceTypeRuleForm.invoiceType,
+            taxpayerNumber: this.zzzhuanyongConRuleForm.zzzhuanyongTaIdeNu,
+            bankName: this.zzzhuanyongConRuleForm.zzzhuanyongBankName,
+            bankNumber: this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber,
+            companyAddress: this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss,
+            companyPhone: this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+          };
+          editInvoiceBase(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$emit("closeEditShow", true);
+              } else {
+                this.$message.error(res.message || "修改发票信息失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("修改发票信息失败！");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    zuzhizzsubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var parms = {
+            issueType: this.IssuingTypeRuleForm.IssuingType,
+            title: this.invoiveTitleRulezuzhiForm.invoivezuzhiTitle,
+            invoiceType: this.invoiceTypeRuleForm.invoiceType,
+            taxpayerNumber: this.zuzhizzConRuleForm.zuzhizzTaIdeNu,
+            bankName: this.zuzhizzConRuleForm.zuzhizzBankName,
+            bankNumber: this.zuzhizzConRuleForm.zuzhizzBankNumber,
+            companyAddress: this.zuzhizzConRuleForm.zuzhizzRegAdderss,
+            companyPhone: this.zuzhizzConRuleForm.zuzhizzRegFixtel,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+          };
+          editInvoiceBase(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$emit("closeEditShow", true);
+              } else {
+                this.$message.error(res.message || "修改发票信息失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("修改发票信息失败！");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    personSubmitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var parms = {
+            issueType: 0,
+            title: this.personalRuleForm.personalInvoiveTitle,
+            invoiceType:0,
+            taxpayerNumber: '',
+            bankName: '',
+            bankNumber: '',
+            companyAddress: '',
+            companyPhone: '',
+            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId
+          };
+          editInvoiceBase(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$emit("closeEditShow", true);
+              } else {
+                this.$message.error(res.message || "修改发票信息失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("修改发票信息失败！");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     changeIssuType(e) {
+      console.log(e, "aaaaaa");
       this.IssuType = e;
     },
   },
@@ -531,17 +619,20 @@ export default {
         .el-form-item__content
         .el-input
         .el-input__inner {
-        border: none;
         background-color: inherit;
       }
       /deep/
         .personalRuleForm
-        .el-form-item
+        .personalInvoiceType
         .el-form-item__content
         .el-input
-        {
-          width: 100px;
-        }
+        .el-input__inner {
+        border: none;
+        background-color: inherit;
+      }
+      /deep/ .personalRuleForm .el-form-item .el-form-item__content .el-input {
+        width: 142px;
+      }
       /deep/ .personalRuleForm .el-form-item .el-form-item__content {
         display: flex;
         align-items: center;

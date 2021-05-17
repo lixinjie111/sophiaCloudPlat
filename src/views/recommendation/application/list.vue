@@ -21,8 +21,8 @@
       <template slot="appKey" slot-scope="text, record, index">
         <span v-if="record.isAppKeyShow">{{text}}</span>
         <span v-else>******</span>
-        <span class="app-key-show" v-if="record.isAppKeyShow" @click="appKeyShow(record.isAppKeyShow,index)">隐藏</span>
-        <span class="app-key-show" v-else @click="appKeyShow(record.isAppKeyShow,index)">显示</span>
+        <span class="app_key_show" v-if="record.isAppKeyShow" @click="appKeyShow(record.isAppKeyShow,index)">隐藏</span>
+        <span class="app_key_show" v-else @click="appKeyShow(record.isAppKeyShow,index)">显示</span>
       </template>
       <template slot="createTime" slot-scope="text, record, index">
         {{formatTime(text)}}
@@ -250,7 +250,7 @@
       align-items: center;
     }
 
-    .app-key-show {
+    .app_key_show {
       cursor: pointer;
       color: #2373FF;
     }

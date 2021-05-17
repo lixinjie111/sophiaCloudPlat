@@ -1,6 +1,6 @@
 <template>
   <div class="set_data_container">
-    <div class="c-mb-10 upload-btn">
+    <div class="c-mb-10 upload_btn">
       <a-button type="primary" @click="toUpload" v-if="type != 'edit'">
         上传数据
       </a-button>
@@ -177,7 +177,7 @@
       text-align: center;
     }
 
-    .upload-btn {
+    .upload_btn {
       text-align: right;
     }
   }

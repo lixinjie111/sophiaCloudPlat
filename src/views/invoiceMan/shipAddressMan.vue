@@ -19,41 +19,21 @@
       >
         <vxe-table-column
           field="recsName"
-          width="15%"
           title="收件人姓名"
         ></vxe-table-column>
-        <vxe-table-column
-          field="telNum"
-          width="15%"
-          title="电话号码"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="address"
-          width="35%"
-          title="地址"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="postCode"
-          width="10%"
-          title="邮编"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="operation"
-          width="25%"
-          title="操作"
-          show-overflow
-        >
+        <vxe-table-column field="telNum" title="电话号码"></vxe-table-column>
+        <vxe-table-column field="address" title="地址"></vxe-table-column>
+        <vxe-table-column field="postCode" title="邮编"></vxe-table-column>
+        <vxe-table-column field="operation" title="操作" show-overflow>
           <template v-slot="{ row }">
-            <div>
+            <div class="operDiv">
               <a
-                style="
-                  color: #faad14;
-                  border: 1px solid #faad14;
-                  padding: 2px 6px;
-                "
+                v-if="row.isDefaultFlag == 1"
+                :class="{ isdefault: row.isDefaultFlag == 1 }"
                 @click="settingAddress(row)"
                 >默认地址</a
               >
+              <a v-else @click="settingAddress(row)">设为默认</a>
               <a style="color: #0376fd" @click="editRow(row)">修改</a>
               <a style="color: #ff4d4f" @click="deleteRow(row)">删除</a>
             </div>
@@ -69,11 +49,20 @@
         新增地址
       </a-button>
     </div>
-    <vAddShipAddress v-if="ifShowPopwin" @closePopWin="closeMyPopWin"></vAddShipAddress>
+    <vAddShipAddress
+      v-if="ifShowPopwin"
+      @closePopWin="closeMyPopWin"
+      :operParms="operParmsFath"
+    ></vAddShipAddress>
   </div>
 </template>
 
 <script>
+import {
+  queryPostAddressList,
+  deletePostAddress,
+  updatePostAddress,
+} from "../../api/invoiceMan/index";
 import vAddShipAddress from "./addShipAddress";
 export default {
   name: "shipAddressMan",
@@ -81,27 +70,133 @@ export default {
     return {
       hasNum: 0,
       remainNum: 10,
-      tableData: [
-        // { recsName: "Test1", telNum: "Develop", address: "Man", postCode: 28 },
-      ],
+      tableData: [],
       loading: false,
       ifShowPopwin: false,
+      operParmsFath: {},
     };
   },
-  created() {},
+  created() {
+    this.getTableData();
+  },
   components: {
     vAddShipAddress,
   },
   methods: {
-    settingAddress(arg) {},
-    editRow(arg) {},
-    deleteRow(arg) {},
-    addAddress() {
+    settingAddress(arg) {
+      if (arg.isDefaultFlag == 1) {
+        return;
+      } else {
+        var parms = {
+          addressId: arg.addressId,
+          isDefaultFlag: 1,
+        };
+        updatePostAddress(parms)
+          .then((res) => {
+            if (res.code == 200000) {
+              this.$message.success("设为默认地址成功！");
+              this.$emit("getNewAddress");
+              this.getTableData();
+            } else {
+              this.$message.error(res.message || "设为默认地址失败！");
+            }
+          })
+          .catch((err) => {
+            this.$message.error("设为默认地址失败！");
+          });
+      }
+    },
+    editRow(arg) {
+      this.operParmsFath = {
+        title: "编辑地址",
+        operType: "edit",
+        arg: arg,
+      };
       this.ifShowPopwin = true;
     },
-    closeMyPopWin(arg){
-      this.ifShowPopwin = arg;
-    }
+    deleteRow(arg) {
+      var parms = {
+        addressId: arg.addressId,
+        page: 1,
+        pageSize: 10,
+      };
+      this.$comfirm("确定要删除这条地址吗？", "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        customClass: "configPopwin",
+      })
+        .then(() => {
+          deletePostAddress(parms)
+            .then((res) => {
+              if (res.code == 200000) {
+                this.$message.success("删除成功！");
+                this.getTableData();
+              } else {
+                this.$message.error("删除寄送地址失败！");
+              }
+            })
+            .catch((err) => {
+              this.$message.error("删除寄送地址失败！");
+            });
+        })
+        .catch(() => {
+          console.log("失败！");
+        });
+    },
+    addAddress() {
+      if (this.remainNum == 0) {
+        this.$message.warning("添加地址条数已到上限！");
+        return;
+      }
+      this.operParmsFath = {
+        title: "添加地址",
+        operType: "add",
+      };
+      this.ifShowPopwin = true;
+    },
+    closeMyPopWin(arg) {
+      this.ifShowPopwin = arg.bl;
+      if (arg.op == "ref") {
+        this.getTableData();
+        this.$emit("getNewAddress");
+      }
+    },
+    getTableData() {
+      var parms = {
+        addressId: "",
+        page: 1,
+        pageSize: 10,
+      };
+      queryPostAddressList(parms)
+        .then((res) => {
+          if (res.code == 200000) {
+            var newTableData = [];
+            var tableDataList = res.data.list || [];
+            this.hasNum = tableDataList.length;
+            this.remainNum = 10 - tableDataList.length;
+            tableDataList.forEach((element) => {
+              newTableData.push({
+                recsName: element.recipient,
+                telNum: element.contactPhone,
+                address: element.addressComplete,
+                postCode: element.postalCode,
+                isDefaultFlag: element.isDefaultFlag,
+                addressId: element.addressId,
+                province: element.province,
+                city: element.city,
+                district: element.district,
+              });
+            });
+            this.tableData = newTableData;
+          } else {
+            this.$message.error(res.message || "获取寄送地址列表数据失败！");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("获取寄送地址列表数据失败！");
+        });
+    },
   },
 };
 </script>
@@ -129,20 +224,29 @@ export default {
   }
   .invoice_con {
     width: 100%;
-    min-height: 200px;
     margin-top: 23px;
-    /deep/ .vxe-table--render-default {
-      min-height: 200px;
-    }
     /deep/
       .vxe-table--render-default
       .vxe-table--main-wrapper
-      .body--wrapper
-      .vxe-table--header {
-      width: 100%;
-    }
-    /deep/ .vxe-table .vxe-table--empty-placeholder {
-      height: 254px !important;
+      .vxe-table--body-wrapper
+      .vxe-table--body
+      tbody
+      .vxe-body--row
+      .vxe-body--column
+      .vxe-cell
+      .operDiv {
+      a {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.3);
+        padding: 0px 4px;
+      }
+      .isdefault {
+        border: 1px solid #faad14;
+        color: #faad14;
+      }
     }
     /deep/ .vxe-table .vxe-table--empty-placeholder .vxe-table--empty-content {
       span:nth-child(1),

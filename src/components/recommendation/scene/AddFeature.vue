@@ -1,5 +1,5 @@
 <template>
-  <div class="add_box">
+  <div class="add_feature_box">
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <div class="index c-mr-20">{{index+1}}</div>
       <div class="c-mr-20">特征名称：</div>
@@ -110,7 +110,7 @@
 </script>
 
 <style scoped lang="scss">
-  .add_box {
+  .add_feature_box {
     width: 100%;
 
     .add_item {

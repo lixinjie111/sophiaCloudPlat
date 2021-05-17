@@ -1,5 +1,5 @@
 <template>
-  <div class="add_box">
+  <div class="add_goods_box">
     <div class="add_title">
       <div class="index">序号</div>
       <div>1级品类</div>
@@ -157,7 +157,7 @@
 </script>
 
 <style scoped lang="scss">
-  .add_box {
+  .add_goods_box {
 
     .add_title {
       display: flex;

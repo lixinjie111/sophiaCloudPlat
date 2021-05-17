@@ -104,30 +104,29 @@
           </a-dropdown>
         </div>
       </a-layout-header>
-      <a-breadcrumb :style="{
-          margin: '84px 16px 24px 16px',
-        }">
+      <a-breadcrumb :style="breadcrumbMargin">
         <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
       </a-breadcrumb>
-      <a-layout-content
-        :style="{
-          margin: '0px 16px 24px 16px',
-          background: '#fff',
-          minHeight:'auto'
-        }"
-      >
+      <a-layout-content :style="contentStyle">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 <script>
-  import { userInfo } from '@/api/user';
+import { userInfo } from '@/api/user';
+
   export default {
     data() {
       return {
+        breadcrumbMargin: {margin: '84px 16px 24px 16px'},
+        contentStyle:{
+          margin: '0px 16px 24px 16px',
+          background: '#fff',
+          minHeight:'auto'
+        },
         userInfomation:{},
-        title: "Shopia云服务平台",
+        title: "Sophia云服务平台",
         logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
         collapsed: false,
         breadArr: [],
@@ -537,7 +536,7 @@
           localStorage.setItem('openkey',routerParm.openkey)
         }
         this.$forceUpdate();
-      }
+      },
     },
     created(){
       this.$store.dispatch('getUserInfo');
@@ -560,7 +559,7 @@
     mounted() {
       this.showHeader();
     },
-    methods: {
+    methods: {  
       getUserInfo(){
         userInfo().then(res => {
           if(res.code == 200000) {

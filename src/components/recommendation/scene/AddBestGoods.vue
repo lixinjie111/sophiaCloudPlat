@@ -1,5 +1,5 @@
 <template>
-  <div class="add_box">
+  <div class="add_best_box">
     <div class="add_item c-mb-10" v-for="(item,index) in addList" :key="index" v-if="addList.length > 0">
       <a-select class="c-mr-10" placeholder="请选择品牌" v-model="item.property" @change="changeProperty" style="width:160px"
                 :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
@@ -86,7 +86,7 @@
 </script>
 
 <style scoped lang="scss">
-  .add_box {
+  .add_best_box {
 
     .add_item {
       margin-top: 10px;
