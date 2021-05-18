@@ -500,8 +500,8 @@ export default {
                         value:fpList[i].invoicePropertyDesc
                     });
                     fpzt.push({
-                        label:fpList[i].invoiceStatusDesc,
-                        value:fpList[i].invoiceStatusDesc
+                        label:document.createRange().createContextualFragment(fpList[i].invoiceStatusDesc).children[0].innerText, 
+                        value:document.createRange().createContextualFragment(fpList[i].invoiceStatusDesc).children[0].innerText
                     });
                 }
                 const xTable = this.$refs.xTable;
@@ -598,7 +598,7 @@ export default {
         return row.invoicePropertyDesc == value
     },
     filterztMethod({ value, row, column }){
-        return row.invoiceStatusDesc == value
+        return document.createRange().createContextualFragment(row.invoiceStatusDesc).children[0].innerText == value
     }
   },
 };
