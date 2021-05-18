@@ -38,7 +38,8 @@
         </template>
         <!--自定义场景规则-->
         <template v-if="sceneType == '1'">
-<!-- 自定义编辑 -->
+          <!-- 自定义编辑 -->
+          <SetCustom :curOpt="'edit'"></SetCustom>
         </template>
       </div>
     </a-card>
@@ -51,11 +52,12 @@
   import SetFeature from "@/components/recommendation/scene/SetFeature";
   import SetData from "@/components/recommendation/scene/SetData";
   import SetRules from "@/components/recommendation/scene/SetRules";
+  import SetCustom from "@/components/recommendation/scene/SetCustom"
   import {getSceneDetail, addScene, getSceneAll} from "@/api/recommendation/index";
 
   export default {
     name: "edit",
-    components: {SetData, SetFeature, SetRules, SceneForm, CreateForm},
+    components: {SetData, SetFeature, SetRules, SceneForm, CreateForm, SetCustom},
     data() {
       return {
         tabListNoTitle: [

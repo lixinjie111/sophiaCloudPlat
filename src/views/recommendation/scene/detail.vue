@@ -250,16 +250,18 @@
     </a-card>
     <!--自定义场景规则-->
     <a-card title="规则推荐" size="small" v-if="sceneType == '1'">
-<!-- 自定义详情 -->
+      <!-- 自定义详情 -->
+      <SetCustom :curOpt="'detail'"></SetCustom>
     </a-card>
   </div>
 </template>
 
 <script>
   import {getSceneDetail} from "@/api/recommendation/index";
-
+  import SetCustom from "@/components/recommendation/scene/SetCustom"
   export default {
     name: "detail",
+    components:{SetCustom},
     data() {
       return {
         detail: {},

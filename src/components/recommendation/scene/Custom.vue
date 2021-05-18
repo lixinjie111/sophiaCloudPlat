@@ -91,9 +91,7 @@ export default {
         next(){
             this.current++
         },
-        cancel(){
-
-        },
+        cancel(){},
         complete(){},
         publish(){},
         test(){},

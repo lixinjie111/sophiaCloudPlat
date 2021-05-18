@@ -189,6 +189,21 @@ export const getUserFeatures = params => {
 export const saveMustRecommend = params => {
   return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveMustRecommend`,params).then(res => res.data)
 }
+
+//获得自定义场景中推荐策略列表接口
+export const getStrategies = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getStrategies`,params).then(res => res.data)
+}
+
+// 启用推荐策略接口
+export const startStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/startStrategy`,params).then(res => res.data)
+} 
+
+// 停用推荐策略接口
+export const endStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/endStrategy`,params).then(res => res.data)
+}
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
