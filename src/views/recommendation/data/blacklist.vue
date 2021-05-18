@@ -189,7 +189,12 @@
        * @param pageType： { String } edit为编辑，空则为查看
        */
       showDetail(row, pageType){
-        this.$router.push({path:"/recommendation/data/blacklist/detail",query:{name:row.tableName, type: this.blacklistType, pageType: pageType}})
+        // this.$router.push({path:"/recommendation/data/blacklist/detail",query:{name:row.tableName, type: this.blacklistType, pageType: pageType}})
+        const { href } = this.$router.resolve({
+          name: "recommendationDataBlacklistDetail",
+          query: {name:row.tableName, type: this.blacklistType, pageType: pageType}
+        });
+        window.open(href, '_blank');
       },
       // 创建
       create() {
