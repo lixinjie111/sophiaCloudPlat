@@ -69,7 +69,7 @@
 
 <script>
 import { regionData } from "element-china-area-data";
-import {addPostAddress,updatePostAddress} from "../../api/invoiceMan/index";
+import { addPostAddress, updatePostAddress } from "../../api/invoiceMan/index";
 export default {
   name: "addShipAddress",
   data() {
@@ -120,7 +120,12 @@ export default {
           { required: true, message: "请填写详细地址", trigger: "blur" },
         ],
         contacNumber: [
-          { required: true, message: "请填写联系电话", trigger: "blur",validator: telNumValida },
+          {
+            required: true,
+            message: "请填写联系电话",
+            trigger: "blur",
+            validator: telNumValida,
+          },
         ],
         PostCode: [
           { required: true, trigger: "blur", validator: PostCodevalida },
@@ -135,23 +140,27 @@ export default {
     var propsData = this.operParms;
     var propsFormData = propsData.arg;
     this.title = propsData.title;
-    if(propsData.operType == "edit"){
+    if (propsData.operType == "edit") {
       this.addressFormData = {
-        recsName:propsFormData.recsName,
-        area:[propsFormData.province,propsFormData.city,propsFormData.district],
-        detailAddress:propsFormData.address,
-        contacNumber:propsFormData.telNum,
-        PostCode:propsFormData.postCode,
-        settingAddress:propsFormData.isDefaultFlag == 1 ? true : false
-      }
+        recsName: propsFormData.recsName,
+        area: [
+          propsFormData.province,
+          propsFormData.city,
+          propsFormData.district,
+        ],
+        detailAddress: propsFormData.address,
+        contacNumber: propsFormData.telNum,
+        PostCode: propsFormData.postCode,
+        settingAddress: propsFormData.isDefaultFlag == 1 ? true : false,
+      };
     }
     this.getProvinceData();
   },
   methods: {
     closePopWin() {
       var operObj = {
-        bl:false,
-        op:'noref'
+        bl: false,
+        op: "noref",
       };
       this.$emit("closePopWin", operObj);
     },
@@ -159,60 +168,64 @@ export default {
       this.addressOptions = regionData;
     },
     addAddresSubmitForm(formName) {
+      var self = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var operData = this.operParms;
-          var inputData = this.addressFormData;
-          if(operData.operType == 'add'){
+          var operData = self.operParms;
+          var inputData = self.addressFormData;
+          if (operData.operType == "add") {
             var parms = {
               addressDetail: inputData.detailAddress,
-              city:(inputData.area)[1],
-              contactPhone:inputData.contacNumber,
-              district:(inputData.area)[2],
-              isDefaultFlag:inputData.settingAddress ? 1 : 0,
-              postalCode:inputData.PostCode,
-              province:(inputData.area)[0],
-              recipient:inputData.recsName
+              city: inputData.area[1],
+              contactPhone: inputData.contacNumber,
+              district: inputData.area[2],
+              isDefaultFlag: inputData.settingAddress ? 1 : 0,
+              postalCode: inputData.PostCode,
+              province: inputData.area[0],
+              recipient: inputData.recsName,
             };
-            addPostAddress(parms).then(res=>{
-              if (res.code == 200000) {
-                var operObj = {
-                  bl:false,
-                  op:'ref'
-                };
-                this.$emit("closePopWin",operObj);
-              } else {
-                this.$message.error(res.message || "添加地址失败！");
-              }
-            }).catch((err) => {
-              this.$message.error("添加地址失败！");
-            });
-          }
-          else if(operData.operType == 'edit'){
+            addPostAddress(parms)
+              .then((res) => {
+                if (res.code == 200000) {
+                  var operObj = {
+                    bl: false,
+                    op: "ref",
+                  };
+                  self.$emit("closePopWin", operObj);
+                } else {
+                  self.$message.error(res.message || "添加地址失败！");
+                }
+              })
+              .catch((err) => {
+                self.$message.error("添加地址失败！");
+              });
+          } else if (operData.operType == "edit") {
             var parms = {
               addressDetail: inputData.detailAddress,
-              addressId:operData.arg.addressId,
-              city:(inputData.area)[1],
-              contactPhone:inputData.contacNumber,
-              district:(inputData.area)[2],
-              isDefaultFlag:inputData.settingAddress ? 1 : 0,
-              postalCode:inputData.PostCode,
-              province:(inputData.area)[0],
-              recipient:inputData.recsName
+              addressId: operData.arg.addressId,
+              city: inputData.area[1],
+              contactPhone: inputData.contacNumber,
+              district: inputData.area[2],
+              isDefaultFlag: inputData.settingAddress ? 1 : 0,
+              postalCode: inputData.PostCode,
+              province: inputData.area[0],
+              recipient: inputData.recsName,
             };
-            updatePostAddress(parms).then(res=>{
-              if (res.code == 200000) {
-                var operObj = {
-                  bl:false,
-                  op:'ref'
-                };
-                this.$emit("closePopWin",operObj);
-              } else {
-                this.$message.error(res.message || "修改地址失败！");
-              }
-            }).catch((err) => {
-              this.$message.error("修改地址失败！");
-            });
+            updatePostAddress(parms)
+              .then((res) => {
+                if (res.code == 200000) {
+                  var operObj = {
+                    bl: false,
+                    op: "ref",
+                  };
+                  self.$emit("closePopWin", operObj);
+                } else {
+                  self.$message.error(res.message || "修改地址失败！");
+                }
+              })
+              .catch((err) => {
+                self.$message.error("修改地址失败！");
+              });
           }
         } else {
           console.log("error submit!!");
@@ -225,6 +238,9 @@ export default {
 </script>
 <style>
 .el-cascader__dropdown {
+  z-index: 99999 !important;
+}
+.ant-message{
   z-index: 99999 !important;
 }
 </style>

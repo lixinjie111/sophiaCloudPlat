@@ -89,10 +89,11 @@ export default {
       this.$emit("closePopWin", operObj);
     },
     addEmailSubmitForm(formName) {
+      var self = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var operData = this.operParms;
-          var inputData = this.emailFormData;
+          var operData = self.operParms;
+          var inputData = self.emailFormData;
           if (operData.operType == "add") {
             var parms = {
               email: inputData.email,
@@ -105,13 +106,13 @@ export default {
                     bl: false,
                     op: "ref",
                   };
-                  this.$emit("closePopWin", operObj);
+                  self.$emit("closePopWin", operObj);
                 } else {
-                  this.$message.error(res.message || "添加邮箱失败！");
+                  self.$message.error(res.message || "添加邮箱失败！");
                 }
               })
               .catch((err) => {
-                this.$message.error("添加邮箱失败！");
+                self.$message.error("添加邮箱失败！");
               });
           } else if (operData.operType == "edit") {
             var parms = {
@@ -126,13 +127,13 @@ export default {
                     bl: false,
                     op: "ref",
                   };
-                  this.$emit("closePopWin", operObj);
+                  self.$emit("closePopWin", operObj);
                 } else {
-                  this.$message.error(res.message || "修改邮箱失败！");
+                  self.$message.error(res.message || "修改邮箱失败！");
                 }
               })
               .catch((err) => {
-                this.$message.error("修改邮箱失败！");
+                self.$message.error("修改邮箱失败！");
               });
           }
         } else {
@@ -144,6 +145,11 @@ export default {
   },
 };
 </script>
+<style>
+.ant-message{
+  z-index: 99999 !important;
+}
+</style>
 <style lang="scss" scoped>
 .addShipAddress_con {
   position: fixed;
