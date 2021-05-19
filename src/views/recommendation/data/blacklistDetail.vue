@@ -183,7 +183,7 @@
         this.getFeaturesDataTables()
       },
       onSearch(){
-        // this.getDataList(this.pagination.current)
+        this.getDataList(this.pagination.current)
       },
       getDataList(pageNum){
         let params = {
@@ -213,7 +213,7 @@
       },
     },
     mounted(){
-      // this.getFeaturesDataTables()
+    this.getFeaturesDataTables()
     }
   }
 </script>
