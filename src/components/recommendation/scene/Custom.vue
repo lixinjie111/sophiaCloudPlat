@@ -91,14 +91,10 @@ export default {
         next(){
             this.current++
         },
-        cancel(){
-            this.$router.push({
-                path: '/recommendation/scene/list'
-            });
-        },
-        // complete(){},
-        // publish(){},
-        // test(){},
+        cancel(){},
+        complete(){},
+        publish(){},
+        test(){},
         back(){
             this.current--
         }

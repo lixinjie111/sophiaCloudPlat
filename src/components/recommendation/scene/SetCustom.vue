@@ -11,6 +11,7 @@
                     <!-- <a-button class="p0" type="link" @click="toStart">启用</a-button> -->
                     <!-- <a-button class="p0" type="link" @click="toEnd">停用</a-button> -->
                     <a-button class="p0" type="link" @click="edit">修改</a-button>
+                    <!-- <a-button class="p0" type="link" @click="del">删除</a-button> -->
                     <a-popconfirm
                         title="是否删除该应用?"
                         ok-text="是"
@@ -28,16 +29,12 @@
             <a-button type="primary" @click="complete">完成</a-button>
             <a-button @click="cancel">取消</a-button>
         </div>
-        <Recall v-if="isShow"></Recall>
     </div>
 </template>
 <script>
-import Recall from "@/components/recommendation/scene/custom/Recall"
-import {getStrategies, startStrategy, endStrategy, deleteStrategy, 
-getRecallStrategy, getFilterRule, getBlacklist, getSortStrategy, getMustRecommend} from "@/api/recommendation/index"
+import {getStrategies, startStrategy, endStrategy, deleteStrategy} from "@/api/recommendation/index"
 export default {
     name:"SetCustom",
-    components:{Recall},
     props:{
         curOpt:{
             type:String
@@ -89,9 +86,7 @@ export default {
                     this.getList(pageNumber)
                 }
             },
-            curId:"",
-            isShow:false,
-            detailData:{}
+            curId:""
         }
     },
     methods:{
@@ -111,9 +106,7 @@ export default {
                 endStrategy({id:this.curId}).then(res=>{}).catch(err=>{this.$message.error(err.message)})
             }
         },
-        edit(){
-
-        },
+        edit(){},
         del(id){
             deleteStrategy({id}).then(res=>{
                 if(res.code==200000){
@@ -128,9 +121,7 @@ export default {
                 this.$message.error(err.message)
             })
         },
-        showDetail(){
-            this.isShow = true
-        },
+        showDetail(){},
         complete(){},
         cancel(){},
         getList(current){
@@ -147,61 +138,6 @@ export default {
                     this.pagination.current = current || 1
                 }else{
                     this.$message.error(res.messag)
-                }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
-        },
-        getRecallStrategy(id){
-            getRecallStrategy({id}).then(res=>{
-                if(res.code==20000){
-                    this.detailData = res.data
-                }else{
-                    this.$message.error("请求失败！")
-                }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
-        }, 
-        getFilterRule(id){
-            getFilterRule({id}).then(res=>{
-                if(res.code==20000){
-                    this.detailData = res.data
-                }else{
-                    this.$message.error("请求失败！")
-                }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
-        }, 
-        getBlacklist(id){
-            getBlacklist({id}).then(res=>{
-                if(res.code==20000){
-                    this.detailData = res.data
-                }else{
-                    this.$message.error("请求失败！")
-                }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
-        }, 
-        getSortStrategy(id){
-            getSortStrategy({id}).then(res=>{
-                if(res.code==20000){
-                    this.detailData = res.data
-                }else{
-                    this.$message.error("请求失败！")
-                }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
-        }, 
-        getMustRecommend(id){
-            getMustRecommend({id}).then(res=>{
-                if(res.code==20000){
-                    this.detailData = res.data
-                }else{
-                    this.$message.error("请求失败！")
                 }
             }).catch(err=>{
                 this.$message.error(err.message)

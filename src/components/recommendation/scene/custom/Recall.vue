@@ -1,5 +1,5 @@
 <template>
-    <a-modal centered destroyOnClose v-model="addModal" title="基于物品的协同过滤" @cancel="handleCancel" @ok="handleOk">
+        <a-modal centered destroyOnClose v-model="addModal" title="基于物品的协同过滤" @cancel="handleCancel" @ok="handleOk">
         <a-form-model :model="dataForm" :rules="rules" labelAlign="left" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-form-model-item label="策略名称" prop="name">
             <a-input placeholder="请输入策略名称" v-model="dataForm.name"/>
@@ -15,39 +15,9 @@
 </template>
 <script>
 export default {
-    name:"Recall",
-    props:{
-        showModal:{
-            type:Boolean,
-            default:false
-        }
-    },
-    data(){
-        return{
-            addModal:true,
-            dataForm:{
-                name:"",
-                date:"",
-                num:""
-            },
-            rules:{
-                name:[{required:true,message:"请输入策略名称",trigger:"blur"}],
-                date:[{required:true,message:"请输入时间跨度（天）",trigger:"blur"}],
-                num:[{required:true,message:"请输入推荐商品数",trigger:"blur"}]
-            }
-        }
-    },
-    methods:{
-        handleCancel(){
-
-        },
-        handleOk(){
-
-        },
-
-    }
+    name:"Recall"
 }
 </script>
-<style scoped lang="scss">
+<style scoped>
 
 </style>

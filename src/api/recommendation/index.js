@@ -204,32 +204,6 @@ export const startStrategy = params => {
 export const endStrategy = params => {
   return axios.post(`${totalUrl}/recommend/selfDefinedScene/endStrategy`,params).then(res => res.data)
 }
-
-// 召回策略详情
-export const getRecallStrategy = params => {
-  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getRecallStrategy`,params).then(res => res.data)
-}
-
-// 过滤规则详情
-export const getFilterRule = params => {
-  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getFilterRule`,params).then(res => res.data)
-}
-
-// 黑名单详情
-export const getBlacklist = params => {
-  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getBlacklist`,params).then(res => res.data)
-}
-
-// 排序策略详情
-export const getSortStrategy = params => {
-  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getSortStrategy`,params).then(res => res.data)
-}
-
-// 必推信息详情
-export const getMustRecommend = params => {
-  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getMustRecommend`,params).then(res => res.data)
-}
-
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
