@@ -18,7 +18,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div class="person" v-if="IssuType === '0'">
+      <div class="person" v-if="IssuType == '0'">
         <el-form
           :model="personalRuleForm"
           ref="personalRuleForm"
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="company" v-if="IssuType === '1'">
+      <div class="company" v-if="IssuType == '1'">
         <el-form
           :model="invoiveTitleRulePutongForm"
           :rules="invoiveTitlePutongRules"
@@ -404,7 +404,7 @@ export default {
       IssuType: "1",
     };
   },
-  created() {
+  mounted() {
     if(this.invoiceDetailIdInfo.hasD){
       this.initPageData();
     }
@@ -413,8 +413,11 @@ export default {
   methods: {
     initPageData(){
       var pageD = this.invoiceDetailIdInfo.invoData;
+      this.IssuType = pageD.issueType; 
       if(pageD.issueType == 0){
         this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
+        this.personalRuleForm.personalInvoiveTitle = pageD.title;
+        this.personalRuleForm.personalInvoiceType = "增值税普通发票";
       }
       else{
         this.IssuingTypeRuleForm.IssuingType = pageD.issueType+'';
@@ -426,7 +429,6 @@ export default {
           this.zzputongConRuleForm.zzputongBankNumber=pageD.bankNumber;
           this.zzputongConRuleForm.zzputongRegAdderss=pageD.companyAddress;
           this.zzputongConRuleForm.zzputongRegFixtel=pageD.companyPhone;
-          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
         }
         else if(pageD.invoiceType == 1){
           this.invoiveTitleRuleZhuanyongForm.invoiveZhuanyongTitle = pageD.title;
@@ -436,7 +438,6 @@ export default {
           this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber=pageD.bankNumber;
           this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss=pageD.companyAddress;
           this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel=pageD.companyPhone;
-          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
         }
         else if(pageD.invoiceType == 2){
           this.invoiveTitleRulezuzhiForm.invoivezuzhiTitle = pageD.title;
@@ -446,7 +447,6 @@ export default {
           this.zuzhizzConRuleForm.zuzhizzBankNumber=pageD.bankNumber;
           this.zuzhizzConRuleForm.zuzhizzRegAdderss=pageD.companyAddress;
           this.zuzhizzConRuleForm.zuzhizzRegFixtel=pageD.companyPhone;
-          this.invoiceDetailIdInfo.invoiceDetailId=pageD.invoiceDetailId;
         }
       }
     },
@@ -462,7 +462,7 @@ export default {
             bankNumber: this.zzputongConRuleForm.zzputongBankNumber,
             companyAddress: this.zzputongConRuleForm.zzputongRegAdderss,
             companyPhone: this.zzputongConRuleForm.zzputongRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoData.invoiceDetailId
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -493,7 +493,7 @@ export default {
             bankNumber: this.zzzhuanyongConRuleForm.zzzhuanyongBankNumber,
             companyAddress: this.zzzhuanyongConRuleForm.zzzhuanyongRegAdderss,
             companyPhone: this.zzzhuanyongConRuleForm.zzzhuanyongRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoData.invoiceDetailId
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -524,7 +524,7 @@ export default {
             bankNumber: this.zuzhizzConRuleForm.zuzhizzBankNumber,
             companyAddress: this.zuzhizzConRuleForm.zuzhizzRegAdderss,
             companyPhone: this.zuzhizzConRuleForm.zuzhizzRegFixtel,
-            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId,
+            invoiceDetailId: this.invoiceDetailIdInfo.invoData.invoiceDetailId
           };
           editInvoiceBase(parms)
             .then((res) => {
@@ -555,7 +555,7 @@ export default {
             bankNumber: '',
             companyAddress: '',
             companyPhone: '',
-            invoiceDetailId: this.invoiceDetailIdInfo.invoiceDetailId
+            invoiceDetailId: this.invoiceDetailIdInfo.invoData.invoiceDetailId
           };
           editInvoiceBase(parms)
             .then((res) => {

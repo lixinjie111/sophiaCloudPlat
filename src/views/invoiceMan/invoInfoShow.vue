@@ -133,6 +133,7 @@ export default {
                 khBankNumber: InvoiceMsgObj.bankNumber,
                 regAdderss: InvoiceMsgObj.companyAddress,
                 regFixtelnum: InvoiceMsgObj.companyPhone,
+                invoiceDetailId:InvoiceMsgObj.invoiceDetailId
               };
             } else {
               this.IssuType = "personal";
@@ -150,6 +151,7 @@ export default {
                 personalInvoiveTitle: InvoiceMsgObj.title,
                 personalInvokjType: "个人",
                 personalInvoiceType: typeTxt,
+                invoiceDetailId:InvoiceMsgObj.invoiceDetailId
               };
             }
           } else {
