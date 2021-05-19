@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import addFeature from "./addFeature"
+  import addFeature from "./AddFeature"
   import {getSceneFeatures, saveSceneFeatures, getFeaturesDataType, getFeaturesDataTables} from "@/api/recommendation/index";
 
   export default {
