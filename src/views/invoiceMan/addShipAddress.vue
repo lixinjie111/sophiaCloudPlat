@@ -84,6 +84,7 @@ export default {
       }
     };
     var telNumValida = (rule, value, callback) => {
+      console.log(value,'电话！')
       var mobile = /^1[0-9]{10}$/,
         phone = /^0\d{2,3}-?\d{7,8}$/;
       var ifValb = mobile.test(value) || phone.test(value);
@@ -122,7 +123,6 @@ export default {
         contacNumber: [
           {
             required: true,
-            message: "请填写联系电话",
             trigger: "blur",
             validator: telNumValida,
           },
