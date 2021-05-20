@@ -63,6 +63,8 @@ const recommendationMateriel = resolve => require(['@/views/recommendation/mater
 const recommendationMaterielWillPush = resolve => require(['@/views/recommendation/materiel/willPush'], resolve);
 // 物料详情
 const recommendationMaterielDetail = resolve => require(['@/views/recommendation/materiel/detail'], resolve);
+// 资讯池
+const recommendationInformationPool = resolve => require(['@/views/recommendation/informationPool'], resolve); // 资讯池
 //订单管理
 const orderMan = resolve => require(['@/views/order/orderMan'], resolve);
 const pay = resolve => require(['@/views/order/pay'], resolve);
@@ -293,6 +295,11 @@ export const menuRouterMap = [{
           name: "recommendationMaterielWillPush",
           path: "/recommendation/materiel/willPush",
           component: recommendationMaterielWillPush
+        },
+        {
+          name: "recommendationInformationPool",
+          path: "/recommendation/informationPool",
+          component: recommendationInformationPool
         }
     ]
 }];

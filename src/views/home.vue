@@ -385,11 +385,30 @@ import { userInfo } from '@/api/user';
                         itemKey: "bitui",
                         path: "/recommendation/materiel/willPush",
                         fourkey:'bitui'
-                      }
+                      },
+                      {
+                        title: "资讯管理",
+                        itemKey: "zixun",
+                        path: "/recommendation/informationPool",
+                        fourkey:'zixun'
+                      },
                     ]
-                  }
+                  },
+                  {
+                    title: "记录管理",
+                    itemKey: "jiluguanli",
+                    threekey:'jiluguanli',
+                    children: [
+                      {
+                        title: "场景更新记录",
+                        itemKey: "changjinggengxinjilu",
+                        path: "/recommendation/jiluguanl/sceneUpdateRecord",
+                        fourkey:'changjinggengxinjilu'
+                      },
                 ]
               },
+            ]
+          },
               {
                 subKey: "dataSer2",
                 title: "用户画像",
