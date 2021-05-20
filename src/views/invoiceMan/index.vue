@@ -220,7 +220,8 @@ export default {
         invoiceDetailIdData:{},
         ifShowjsAddress:false,
         ifShowfpList:true,
-        ifShowEmail:false
+        ifShowEmail:false,
+        reqParms:null
     };
   },
   created() {
@@ -252,7 +253,7 @@ export default {
     },
     watchDetailGetMoney(){
         var ifCanClick = this.moneyNum == '0.00' ? false : true;
-        var fpttObj = this.fpinfoObj;
+        var fpttObj = this.reqParms;
         if(ifCanClick){
             this.$router.push({
                 path:'/InvoiceReq',
@@ -537,6 +538,7 @@ export default {
         queryInvoiceBase(parms).then(res=>{
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
+                this.reqParms = InvoiceMsgObj;
                 this.money = InvoiceMsgObj.totalAmount;
                 if(!InvoiceMsgObj){
                     this.ifShowShowPanel = false;

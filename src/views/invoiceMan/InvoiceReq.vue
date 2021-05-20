@@ -383,6 +383,7 @@ export default {
   created() {
     this.invoiceNum = this.tableData.length;
     var fpttObj = this.$route.query.fpttObj;
+    console.log(fpttObj,'fpttObj');
     if (!fpttObj.title) {
       this.ifShowFpinfo = true;
     }
