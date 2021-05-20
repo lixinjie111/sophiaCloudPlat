@@ -70,7 +70,7 @@
                           购买时长：       
                       </div>
                       <div class="payRight">
-                        1年
+                        {{tableData[0].validPeriod}}个月
                       </div>
                     </div>
                     <div class="payItem">
@@ -445,7 +445,11 @@ export default {
         return (num.toFixed(0) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
     },
     next0(){
-      this.currentIndex=1;
+      if(this.sumPrice==0){
+        this.$message.warning('请购买资源包');
+        return
+      }
+      this.visible=true;
     },
     initInfo(){
       var fwqsParm = new FormData();
@@ -468,8 +472,8 @@ export default {
         });
     },
     handleOk(e) {
-      console.log(e);
       this.visible = false;
+      this.currentIndex++;
     },
     handleOk1(e) {
        this.$router.push({

@@ -125,11 +125,16 @@
       </div>
       <div class="table_container">
         <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage" :pagination="pagination">
-          <a slot="serviceName" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
-          <template  slot="openBuy"  slot-scope="text, record">
-            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD">{{ text }}</span>
+          <a slot="serviceName" class="ant-dropdown-link" slot-scope="text"><span style="color:#0376FD" >{{ text }}</span></a>
+          <template  slot="postpaidStatus"  slot-scope="text, record">
+            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD" v-if="text==2">购买</span>
+            <span  v-if="text==0">--</span>
+            <span  @click="cancleOrder(record)" style="cursor:pointer;color:#f00" v-if="text==1">停止付费</span>
           </template >
-          <a slot="Purchases" class="ant-dropdown-link"  slot-scope="text, record"><span  @click="openMoney1(record)">{{ text }}</span></a>
+          <template  slot="prepaidStatus"  slot-scope="text, record">
+            <span  v-if="text==0">--</span>
+            <span  @click="openMoney1(record)" style="cursor:pointer;color:#0376FD" v-else>购买</span>
+          </template >
         </a-table>
       </div>
     </div>
@@ -161,6 +166,7 @@ import {
 import {
   appCount,
   apiVisitDosage,
+  terminatePostpaid,
   userServiceModels
 } from "../../api/gailan/index";
 export default {
@@ -239,17 +245,17 @@ export default {
         },
         {
           title: "开通付费",
-          key: "openBuy",
-          dataIndex: "openBuy",
-          slots: { title: "customTitle" },
-          scopedSlots: { customRender: "openBuy" }
+          key: "postpaidStatus",
+          dataIndex: "postpaidStatus",
+          slots: { title: "postpaidStatus" },
+          scopedSlots: { customRender: "postpaidStatus" }
         },
         {
           title: "购买次数包",
-          key: "Purchases",
-          dataIndex: "Purchases",
-          slots: { title: "customTitle" },
-          scopedSlots: { customRender: "Purchases" }
+          key: "prepaidStatus",
+          dataIndex: "prepaidStatus",
+          slots: { title: "prepaidStatus" },
+          scopedSlots: { customRender: "prepaidStatus" }
         }
       ],
       searchName: "",
@@ -317,6 +323,8 @@ export default {
         pageSize: 10,
         total: 0,
       },
+      currentRecord:null,
+      cancleRecord:null,
      
     };
   },
@@ -334,19 +342,43 @@ export default {
     },
     handleOk1(e) {
       this.visible1 = false;
+      var fwqsParm = new FormData();
+      fwqsParm.append("serviceId",this.cancleRecord.serviceId,);
+      terminatePostpaid(fwqsParm)
+        .then(res => {
+          if (res.code == 200000) {
+            this.getServiceList();
+            this.$message.success("success");
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
     },
     handleOk(e) {
       this.visible = false;
       this.$router.push({
-        path:'/openMy'
+        path:'/openMy',
+        query:{
+          serviceId:this.currentRecord.serviceId,
+          serviceModel:this.currentRecord.serviceModel,
+        },
       })
     },
     openMoney(item){
       this.visible = true;
+      this.currentRecord=item;
+    },
+    cancleOrder(item){
+      this.visible1 = true;
+      this.cancleRecord=item;
     },
     openMoney1(item){
       this.$router.push({
-        path:'/buyBag?serviceId='+item.serviceId,
+        path:'/buyBag',
         query:{
           serviceId:item.serviceId,
           serviceName:item.serviceModelName+'—'+item.serviceName,
@@ -372,7 +404,6 @@ export default {
     },
     goLink1(){
       this.showModal=true;
-    
     },
     getCount(){
         appCount().then(res => {
@@ -557,20 +588,20 @@ export default {
             var serListdata = res.data.list || [];
             serListdata.forEach(item => {
               item.key = `itemKey${item.id}`;
-              item.Purchases = "购买";
-              if (item.freeType == 1) {
-                item.paySta = "每日免费限额";
-              } else if (item.freeType == 2) {
-                item.paySta = "一次性免费限额";
-              } else if (item.freeType == 3) {
-                item.paySta = "无限制";
-              }
+              // item.Purchases = "购买";
+              // if (item.freeType == 1) {
+              //   item.paySta = "每日免费限额";
+              // } else if (item.freeType == 2) {
+              //   item.paySta = "一次性免费限额";
+              // } else if (item.freeType == 3) {
+              //   item.paySta = "无限制";
+              // }
 
-              if (item.payStatus == 1) {
-                item.openBuy = "";
-              } else {
-                item.openBuy = "购买";
-              }
+              // if (item.payStatus == 1) {
+              //   item.openBuy = "";
+              // } else {
+              //   item.openBuy = "购买";
+              // }
             });
             this.nldata = serListdata;
             this.pagination.total = res.data.total;
