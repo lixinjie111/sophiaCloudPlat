@@ -65,6 +65,7 @@ const recommendationMaterielWillPush = resolve => require(['@/views/recommendati
 const recommendationMaterielDetail = resolve => require(['@/views/recommendation/materiel/detail'], resolve);
 // 资讯池
 const recommendationInformationPool = resolve => require(['@/views/recommendation/informationPool'], resolve); // 资讯池
+const recommendationInformationPoolWillPush = resolve => require(['@/views/recommendation/informationPool/willPush'], resolve); // 必推资讯池
 //订单管理
 const orderMan = resolve => require(['@/views/order/orderMan'], resolve);
 const pay = resolve => require(['@/views/order/pay'], resolve);
@@ -300,7 +301,12 @@ export const menuRouterMap = [{
           name: "recommendationInformationPool",
           path: "/recommendation/informationPool",
           component: recommendationInformationPool
-        }
+        },
+        {
+          name: "recommendationInformationPoolWillPush",
+          path: "/recommendation/informationPool/willPush",
+          component: recommendationInformationPoolWillPush
+        },
     ]
 }];
 export default new VueRouter({
