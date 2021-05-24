@@ -19,7 +19,8 @@
                     </a-popconfirm>
                 </div>
                 <div v-else>
-                    <a-button type="link" @click="showDetail(record)">查看</a-button>
+                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'" type="link" disabled>查看</a-button>
+                    <a-button v-else type="link" @click="showDetail(record)">查看</a-button>
                 </div>
             </template>
         </a-table>
@@ -29,25 +30,29 @@
         </div>
          <Recall v-if="curType=='召回策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Recall>
          <RecallEdit v-else-if="curType=='召回策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></RecallEdit>
-         <FilterRule v-if="curType=='行为过滤'" :detailData="detailData" @initType="initType"></FilterRule>
-         <Black v-if="curType=='黑名单'" :detailData="detailData" @initType="initType"></Black>
-         <Sort v-if="curType=='排序策略'" :detailData="detailData" @initType="initType"></Sort>
-         <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run>
+         <FilterRule v-if="curType=='行为过滤'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></FilterRule>
+         <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initType"></FilterEdit>
+         <!-- <Black v-if="curType=='黑名单'" :detailData="detailData" @initType="initType"></Black> -->
+         <Sort v-if="curType=='排序策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Sort>
+         <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initType"></SortEdit>
+         <!-- <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run> -->
     </div>
 </template>
 <script>
 import Recall from "@/components/recommendation/scene/custom/Recall"
 import RecallEdit from "@/components/recommendation/scene/custom/RecallEdit"
 import FilterRule from "@/components/recommendation/scene/custom/Filter"
+import FilterEdit from "@/components/recommendation/scene/custom/FilterEdit"
 import Black from "@/components/recommendation/scene/custom/Black"
 import Sort from "@/components/recommendation/scene/custom/Sort"
+import SortEdit from "@/components/recommendation/scene/custom/SortEdit"
 import Run from "@/components/recommendation/scene/custom/Run"
 import {getStrategies, startStrategy, endStrategy, deleteStrategy, 
 getRecallStrategy, getFilterRule, getBlacklist, getSortStrategy, getMustRecommend} from "@/api/recommendation/index"
 
 export default {
     name:"SetCustom",
-    components:{Recall, RecallEdit, FilterRule, Black, Sort, Run},
+    components:{Recall, RecallEdit, FilterRule, FilterEdit, Black, Sort, SortEdit, Run},
     props:{
         curOpt:{
             type:String
@@ -118,25 +123,25 @@ export default {
                 endStrategy({id:this.curId}).then(res=>{}).catch(err=>{this.$message.error(err.message)})
             }
         },
-        edit(item){
-            this.curType = item.typeDesc
-            switch(this.curType){
+        async edit(item){
+            switch(item.typeDesc){
                 case '召回策略' :
-                    this.getRecallStrategy(item.id)
+                    await this.getRecallStrategy(item.id)
                     break
                 case '行为过滤' :
-                    this.getFilterRule(item.id)
+                    await this.getFilterRule(item.id)
                     break
                 case '黑名单' :
                     this.getBlacklist(item.id)
                     break
                 case '排序策略' :
-                    this.getSortStrategy(item.id)
+                    await this.getSortStrategy(item.id)
                     break
                 case '设置必推' :
                     this.getMustRecommend(item.id)
                     break
-            }            
+            }
+            this.curType = item.typeDesc            
         },
         del(id){
             deleteStrategy({id}).then(res=>{
@@ -201,26 +206,28 @@ export default {
             })
         },
         async getRecallStrategy(id){
-            getRecallStrategy({id}).then(res=>{
+            try{
+                let res = await getRecallStrategy({id})
                 if(res.code==200000){
                     this.detailData = res.data
                 }else{
                     this.$message.error("请求失败！")
                 }
-            }).catch(err=>{
+            }catch(err){
                 this.$message.error(err.message)
-            })
+            }
         }, 
-        getFilterRule(id){
-            getFilterRule({id}).then(res=>{
+        async getFilterRule(id){
+            try{
+                let res = await getFilterRule({id})
                 if(res.code==200000){
                     this.detailData = res.data
                 }else{
                     this.$message.error("请求失败！")
                 }
-            }).catch(err=>{
-                this.$message.error(err.message)
-            })
+            }catch(err){
+                    this.$message.error(err.message)
+            }
         }, 
         getBlacklist(id){
             getBlacklist({id}).then(res=>{
@@ -233,16 +240,17 @@ export default {
                 this.$message.error(err.message)
             })
         }, 
-        getSortStrategy(id){
-            getSortStrategy({id}).then(res=>{
+        async getSortStrategy(id){
+            try{
+                let res = await getSortStrategy({id})
                 if(res.code==200000){
                     this.detailData = res.data
                 }else{
                     this.$message.error("请求失败！")
                 }
-            }).catch(err=>{
+            }catch(err){
                 this.$message.error(err.message)
-            })
+            }
         }, 
         getMustRecommend(id){
             getMustRecommend({id}).then(res=>{
