@@ -41,6 +41,7 @@
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.seckey"
+                :title="subItem.title"
               >
                 <a-icon :type="subItem.icType" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
@@ -51,6 +52,7 @@
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.seckey"
+                :title="subItem.title"
                 v-if="subItem.title=='企业设置'&& $store.state.busSet==2"
               >
                 <a-icon :type="subItem.icType" />
