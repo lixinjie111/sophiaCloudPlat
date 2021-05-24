@@ -45,30 +45,27 @@ export default {
         },
         handleOk(){
             this.addModal = false
-            this.$emit('refresh')
             this.save()
         },
-      save(){
-        let params = {
-          applicationId:this.$route.query.appId,
-          sceneId:this.$route.query.sceneId,
-          strategyType:0,
-          name:this.dataForm.name,
-          id:this.detailData.id, //召回策略主键ID，用于修改
-          daySpan:this.dataForm.daySpan,
-          goodsNum:this.dataForm.goodsNum
-        }
-        console.log(params)
-        saveRecallStrategy(params).then(res=>{
-          if(res.data){
-              
-          }
-        }).catch(err=>{
-          this.$message.error(err.message)
-        })
-      },
-    },
-
+        save(){
+            let params = {
+            applicationId:this.$route.query.appId,
+            sceneId:this.$route.query.sceneId,
+            strategyType:0,
+            name:this.dataForm.name,
+            id:this.detailData.id, //召回策略主键ID，用于修改
+            daySpan:this.dataForm.daySpan,
+            goodsNum:this.dataForm.goodsNum
+            }
+            saveRecallStrategy(params).then(res=>{
+                if(res.data){
+                    this.$emit('refresh')
+                }
+            }).catch(err=>{
+                this.$message.error(err.message)
+            })
+        },
+    }
 }
 </script>
 <style scoped lang="scss">

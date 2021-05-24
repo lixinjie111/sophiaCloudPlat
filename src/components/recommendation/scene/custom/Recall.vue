@@ -38,8 +38,7 @@ export default {
             this.addModal = false
             this.$emit('initType')
         },
-
-    },
+    }
 
 }
 </script>
