@@ -3,15 +3,15 @@
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="250">
       <div class="logo">
         <template v-if="collapsed" class="sidebar-logo-link" to="/">
-          <div class="pic" v-if="logo">
+          <!-- <div class="pic" v-if="logo">
             <img :src="logo" class="sidebar-logo" />
-          </div>
-          <h1 v-else class="sidebar-title">{{ title }}</h1>
+          </div> -->
+          <h1 v-if="!collapsed" class="sidebar-title">{{ title }}</h1>
         </template>
         <template v-else class="sidebar-logo-link" to="/">
-          <div class="pic" v-if="logo">
+          <!-- <div class="pic" v-if="logo">
             <img :src="logo" class="sidebar-logo" />
-          </div>
+          </div> -->
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
@@ -34,7 +34,7 @@
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <a-menu-item v-show="!collapsed" v-else :key="item.firstkey">
-            <a-icon type="user" />
+            <a-icon :type="item.icType" />
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <template v-if="item.moduleTitle == '财务中心'">
@@ -42,7 +42,7 @@
               <a-menu-item
                 :key="subItem.seckey"
               >
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
               </a-menu-item>
             </template>
@@ -53,12 +53,12 @@
                 :key="subItem.seckey"
                 v-if="subItem.title=='企业设置'&& $store.state.busSet==2"
               >
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
               </a-menu-item>
               <a-sub-menu v-else :key="subItem.seckey">
                 <span slot="title">
-                  <a-icon type="user" />
+                  <a-icon :type="subItem.icType" />
                   <span>{{ subItem.title }}</span>
                 </span>
                 <a-menu-item
@@ -71,7 +71,7 @@
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.seckey">
               <span slot="title">
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span>{{ subItem.title }}</span>
               </span>
               <template v-for="item1 in subItem.menuItmList">
@@ -127,14 +127,14 @@ import { userInfo } from '@/api/user';
         },
         userInfomation:{},
         title: "Sophia云服务平台",
-        logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
         collapsed: false,
         breadArr: [],
         menuList: [
           {
             moduleTitle: "概览",
             list: [],
-            firstkey:'gailan'
+            firstkey:'gailan',
+            icType:'appstore'
           },
           {
             moduleTitle: "应用管理",
@@ -143,6 +143,7 @@ import { userInfo } from '@/api/user';
                 subKey: "myYingyong",
                 title: "我的应用",
                 seckey:'myYingyong',
+                icType:'user',
                 menuItmList: [
                   {
                     title: "概览",
@@ -173,6 +174,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro1",
                 title: "自然语言处理",
                 seckey:'pro1',
+                icType:'container',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -194,6 +196,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro2",
                 title: "语音技术",
                 seckey:'pro2',
+                icType:'audio',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -215,6 +218,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro3",
                 title: "人脸识别",
                 seckey:'pro3',
+                icType:'smile',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -236,6 +240,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro4",
                 title: "人体分析",
                 seckey:'pro4',
+                icType:'team',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -257,6 +262,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro5",
                 title: "文字识别",
                 seckey:'pro5',
+                icType:'file-search',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -278,6 +284,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro6",
                 title: "图像技术",
                 seckey:'pro6',
+                icType:'picture',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -299,6 +306,7 @@ import { userInfo } from '@/api/user';
                 subKey: "pro7",
                 title: "视频技术",
                 seckey:'pro7',
+                icType:'video-camera',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -325,6 +333,7 @@ import { userInfo } from '@/api/user';
                 subKey: "dataSer1",
                 title: "智能推荐",
                 seckey:'dataSer1',
+                icType:'build',
                 menuItmList: [
                   {
                     title: "推荐应用管理",
@@ -407,12 +416,13 @@ import { userInfo } from '@/api/user';
                       },
                 ]
               },
-            ]
-          },
+                ]
+              },
               {
                 subKey: "dataSer2",
                 title: "用户画像",
                 seckey:'dataSer2',
+                icType:'contacts',
               }
             ]
           },
@@ -423,16 +433,19 @@ import { userInfo } from '@/api/user';
                 subKey: "toolSer1",
                 title: "风控管理",
                 seckey:'toolSer1',
+                icType:'insurance',
               },
               {
                 subKey: "toolSer2",
                 title: "财税计算",
                 seckey:'toolSer2',
+                icType:'pay-circle',
               },
               {
                 subKey: "toolSer3",
                 title: "出行工具",
                 seckey:'toolSer3',
+                icType:'mobile',
               }
             ]
           },
@@ -444,54 +457,63 @@ import { userInfo } from '@/api/user';
                 title: "财务总览",
                 path: "/finance",
                 seckey:'caiwu1',
+                icType:'profile'
               },
               {
                 subKey: "caiwu2",
                 title: "消费中心",
                 path: "",
                 seckey:'caiwu2',
+                icType:'shopping'
               },
               {
                 subKey: "caiwu3",
                 title: "成本账单",
                 path: "",
                 seckey:'caiwu3',
+                icType:'money-collect'
               },
               {
                 subKey: "caiwu4",
                 title: "收支明细",
                 path: "",
                 seckey:'caiwu4',
+                icType:'red-envelope'
               },
               {
                 subKey: "caiwu5",
                 title: "订单管理",
                 path: "/orderMan",
                 seckey:'caiwu5',
+                icType:'project'
               },
               {
                 subKey: "caiwu6",
                 title: "续费管理",
                 path: "",
                 seckey:'caiwu6',
+                icType:'property-safety'
               },
               {
                 subKey: "caiwu7",
                 title: "退订管理",
                 path: "",
                 seckey:'caiwu7',
+                icType:'interaction'
               },
               {
                 subKey: "caiwu8",
                 title: "发票管理",
                 path: "",
                 seckey:'caiwu8',
+                icType:'barcode'
               },
               {
                 subKey: "caiwu9",
                 title: "合同管理",
                 path: "",
                 seckey:'caiwu9',
+                icType:'audit'
               }
             ]
           },
@@ -503,11 +525,13 @@ import { userInfo } from '@/api/user';
                 title: "企业设置",
                 path: "/businessSet",
                 seckey:'sys1',
+                icType:'home'
               },
               {
                 subKey: "sys2",
                 title: "用户中心",
                 seckey:'sys2',
+                icType:'usergroup-delete',
                 menuItmList: [
                   {
                     title: "基本资料",
@@ -532,12 +556,14 @@ import { userInfo } from '@/api/user';
               {
                 subKey: "sys3",
                 seckey:'sys3',
-                title: "消息中心"
+                title: "消息中心",
+                icType:'dollar',
               },
               {
                 subKey: "sys4",
                 seckey:'sys4',
-                title: "日志管理"
+                title: "日志管理",
+                icType:'solution',
               }
             ]
           }
@@ -822,15 +848,14 @@ import { userInfo } from '@/api/user';
       display: flex;
       color: #fff;
       align-items: center;
-      justify-content: center;
       .pic {
         width: 30px;
       }
       .sidebar-title {
         margin-left: 12px;
         color: #fff;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 21px;
+        font-weight: 650;
       }
     }
   }
