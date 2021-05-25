@@ -56,7 +56,7 @@
         <a-row class="mb24">
           <a-col :span="6">商品参与训练得特征</a-col>
           <a-col :span="18">
-            <a-select labelInValue v-model="curGoodsFeature" style="width:100px">
+            <a-select labelInValue v-model="curGoodsFeature" style="width:120px">
               <a-select-option v-for="item in goodsFeatures" :key="item.goodsFeature">{{item.goodsFeatureField}}</a-select-option>
             </a-select>
           </a-col>
@@ -201,8 +201,8 @@ export default {
           algorithmMode:this.algorithmMode,
           daySpan:this.daySpan,
           retrainFlag:this.retrainFlag,
-          goodsFeatureField:[{userFeature:this.curGoodsFeature.label,userFeatureField:this.curGoodsFeature.key}],
-          userFeatureField:[{userFeature:this.curUserFeature.label,userFeatureField:this.curUserFeature.key}],
+          goodsFeatures:[{goodsFeature:this.curGoodsFeature.label,goodsFeatureField:this.curGoodsFeature.key}],
+          userFeatures:[{userFeature:this.curUserFeature.label,userFeatureField:this.curUserFeature.key}],
           randomSeedNum:this.randomSeedNum,
           learningRate:this.learningRate,
           treeDepth:this.treeDepth,

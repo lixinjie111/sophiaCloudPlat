@@ -38,7 +38,7 @@
     <a-row class="mb24">
       <a-col :span="8">商品参与训练得特征:</a-col>
       <a-col :span="16">
-            <a-select labelInValue v-model="curGoodsFeature" style="width:100px">
+            <a-select labelInValue v-model="curGoodsFeature" style="width:120px">
               <a-select-option v-for="item in goodsFeatures" :key="item.goodsFeature">{{item.goodsFeatureField}}</a-select-option>
             </a-select>
       </a-col>
@@ -99,9 +99,9 @@ export default {
     return {
       addModal: true,
       dataForm:{...this.detailData},
-      curGoodsFeature:{},
+      curGoodsFeature:{key:this.detailData.goodsFeatures[0].goodsFeatureField,label:this.detailData.goodsFeatures[0].goodsFeature},
       goodsFeatures:[],
-      curUserFeature:{},
+      curUserFeature:{key:this.detailData.userFeatures[0].userFeatureField,label:this.detailData.userFeatures[0].userFeature},
       userFeatures:[],
     };
   },
@@ -139,8 +139,8 @@ export default {
           algorithmMode:this.dataForm.algorithmMode,
           daySpan:this.dataForm.daySpan,
           retrainFlag:this.dataForm.retrainFlag,
-          goodsFeatureField:[{userFeature:this.curGoodsFeature.label,userFeatureField:this.curGoodsFeature.key}],
-          userFeatureField:[{userFeature:this.curUserFeature.label,userFeatureField:this.curUserFeature.key}],
+          goodsFeatures:[{goodsFeature:this.curGoodsFeature.label,goodsFeatureField:this.curGoodsFeature.key}],
+          userFeatures:[{userFeature:this.curUserFeature.label,userFeatureField:this.curUserFeature.key}],
           randomSeedNum:this.dataForm.randomSeedNum,
           learningRate:this.dataForm.learningRate,
           treeDepth:this.dataForm.tree_depth,

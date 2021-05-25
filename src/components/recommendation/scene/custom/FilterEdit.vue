@@ -129,6 +129,7 @@ export default {
             obj.minTimes = item.minTimes
             obj.type = item.type.key
             obj.typeDesc = item.type.label
+            obj.id = item.id
             return obj
           })
         }
