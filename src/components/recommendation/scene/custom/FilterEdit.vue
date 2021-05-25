@@ -8,10 +8,10 @@
           <a-row class="filter_behavior">
             <a-col :span="4" style="padding-left:10px">过滤行为:</a-col>  
             <a-col :span="20" class="flex_box">
-              <div class="behavior_item" v-for="(item,index) in dataForm.behaviors" :key="index">
+              <div class="behavior_item" v-for="(item,index) in behaviorList" :key="index">
                 <div>
                   <div style="margin-bottom:6px">行为类型:
-                    <a-select v-model="item.type" style="width:100px" @select="handleSelect">
+                    <a-select labelInValue v-model="item.type" style="width:100px">
                       <a-select-option v-for="ele in behaviorTypes" :key="ele.id">{{ele.name}}</a-select-option>
                     </a-select>
                   </div>
@@ -64,6 +64,11 @@ export default {
           name:[{required:true,message:"请输入策略名称",trigger:"blur"}]
         },
         dataForm:{...this.detailData},
+        behaviorList:this.detailData.behaviors.map(item=>{
+            let obj = {...item}
+            obj.type = {key:item.type,label:item.typeDesc}
+            return obj
+        }),
         behaviorTypes:[],
       }
       
@@ -71,15 +76,14 @@ export default {
     methods:{
       handleCancel(){
           this.addModal = false
-          this.$emit('initType')
+          this.$emit('refresh')
       },
       handleOk(){
         this.addModal = false
-        this.$emit('initType')
-        // this.saveFilterRule()
+        this.saveFilterRule()
       },
       handleSelect(value){
-        
+        console.log(value)
       },
       getBehaviorTypes(){
         getBehaviorTypes({}).then(res=>{
@@ -91,25 +95,27 @@ export default {
         })
       },   
       minChange(val){
-        if(typeof val.minTime === "number"){
-          val.maxTime?val.minTime > val.maxTime ? [val.minTime, val.maxTime] = [val.maxTime, val.minTime]:null:null
+        if(typeof val.minTimes === "number"){
+          val.maxTimes?val.minTimes > val.maxTimes ? [val.minTimes, val.maxTimes] = [val.maxTimes, val.minTimes]:null:null
         }
       },
       maxChange(val){
-        if(typeof val.maxTime === "number"){
-          val.minTime?val.maxTime < val.minTime ? [val.minTime, val.maxTime] = [val.maxTime, val.minTime]:null:null
+        if(typeof val.maxTimes === "number"){
+          val.minTimes?val.maxTimes < val.minTimes ? [val.minTimes, val.maxTimes] = [val.maxTimes, val.minTimes]:null:null
         }
       }, 
       delBehavior(index){
-        this.dataForm.behaviors.splice(index,1)
+        this.behaviorList.splice(index,1)
       },
       addBehavior(){
-        this.dataForm.behaviors.push({
-            type:0,
-            typeDesc:"曝光",
-            minTime:"",
+        this.behaviorList.push({
+            type:{
+                key:0,
+                label:"曝光"
+            },
+            minTimes:"",
             daySpan:"",
-            maxTime:""
+            maxTimes:""
           })
       }, 
       saveFilterRule(){
@@ -119,19 +125,19 @@ export default {
           sceneId:this.$route.query.sceneId, 
           name:this.dataForm.name,
           filterLogic:this.dataForm.filterLogic,
-          behaviors:this.dataForm.behaviors.map(item=>{
+          behaviors:this.behaviorList.map(item=>{
             let obj = {}
             obj.daySpan = item.daySpan
             obj.maxTimes = item.maxTimes
             obj.minTimes = item.minTimes
-            obj.type = item.type
-            obj.typeDesc = item.typeDesc
+            obj.type = item.type.key
+            obj.typeDesc = item.type.label
             return obj
           })
         }
         saveFilterRule(params).then(res=>{
           if(res.code==200000){
-            if(res.data){this.getList()}
+            if(res.data){this.$emit('refresh')}
           }
         }).catch(err=>{
           this.$message.error(err.message)

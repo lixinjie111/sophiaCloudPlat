@@ -9,7 +9,8 @@
                 <div class="operate" v-if="curOpt=='edit'">
                     <a-switch v-model="record.status" checked-children="启用" un-checked-children="停用" 
                     :default-checked="record.status" @click="onClick" @change="onChange(record.id)"/>
-                    <a-button class="p0" type="link" @click="edit(record)">修改</a-button>
+                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'" class="p0" type="link" disabled>修改</a-button>
+                    <a-button  v-else class="p0" type="link" @click="edit(record)">修改</a-button>
                     <a-popconfirm
                         title="是否删除该应用?"
                         ok-text="是"
@@ -31,10 +32,10 @@
          <Recall v-if="curType=='召回策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Recall>
          <RecallEdit v-else-if="curType=='召回策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></RecallEdit>
          <FilterRule v-if="curType=='行为过滤'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></FilterRule>
-         <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initType"></FilterEdit>
+         <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></FilterEdit>
          <!-- <Black v-if="curType=='黑名单'" :detailData="detailData" @initType="initType"></Black> -->
          <Sort v-if="curType=='排序策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Sort>
-         <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initType"></SortEdit>
+         <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></SortEdit>
          <!-- <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run> -->
     </div>
 </template>
