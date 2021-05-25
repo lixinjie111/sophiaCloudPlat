@@ -40,7 +40,7 @@
                     </a-select>
                   </div>
                   <div>最少次数: 
-                    <a-input-number v-model="item.minTime" :min="0" @change="minChange(item)" />
+                    <a-input-number v-model="item.minTime" :min="0" @blur="minChange(item)" />
                   </div>                 
                 </div>
                 <div style="padding-left:10px">
@@ -48,7 +48,7 @@
                     <a-input-number v-model="item.daySpan" :min="0"/>
                   </div>
                   <div style="display:flex;justify-content:space-between">最大次数:
-                    <a-input-number v-model="item.maxTime" :min="0" @change="maxChange(item)" />
+                    <a-input-number v-model="item.maxTime" :min="0" @blur="maxChange(item)" />
                   </div>
                 </div>
                 <a-button class="modal_del" icon="close" size="small" @click="delBehavior(index)"></a-button> 
