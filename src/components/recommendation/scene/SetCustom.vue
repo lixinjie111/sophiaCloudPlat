@@ -33,7 +33,6 @@
          <RecallEdit v-else-if="curType=='召回策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></RecallEdit>
          <FilterRule v-if="curType=='行为过滤'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></FilterRule>
          <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></FilterEdit>
-         <!-- <Black v-if="curType=='黑名单'" :detailData="detailData" @initType="initType"></Black> -->
          <Sort v-if="curType=='排序策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Sort>
          <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></SortEdit>
          <!-- <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run> -->
@@ -44,7 +43,6 @@ import Recall from "@/components/recommendation/scene/custom/Recall"
 import RecallEdit from "@/components/recommendation/scene/custom/RecallEdit"
 import FilterRule from "@/components/recommendation/scene/custom/Filter"
 import FilterEdit from "@/components/recommendation/scene/custom/FilterEdit"
-import Black from "@/components/recommendation/scene/custom/Black"
 import Sort from "@/components/recommendation/scene/custom/Sort"
 import SortEdit from "@/components/recommendation/scene/custom/SortEdit"
 import Run from "@/components/recommendation/scene/custom/Run"
@@ -53,7 +51,7 @@ getRecallStrategy, getFilterRule, getBlacklist, getSortStrategy, getMustRecommen
 
 export default {
     name:"SetCustom",
-    components:{Recall, RecallEdit, FilterRule, FilterEdit, Black, Sort, SortEdit, Run},
+    components:{Recall, RecallEdit, FilterRule, FilterEdit, Sort, SortEdit, Run},
     props:{
         curOpt:{
             type:String
@@ -133,13 +131,13 @@ export default {
                     await this.getFilterRule(item.id)
                     break
                 case '黑名单' :
-                    this.getBlacklist(item.id)
+                    await this.getBlacklist(item.id)
                     break
                 case '排序策略' :
                     await this.getSortStrategy(item.id)
                     break
                 case '设置必推' :
-                    this.getMustRecommend(item.id)
+                    await this.getMustRecommend(item.id)
                     break
             }
             this.curType = item.typeDesc            
@@ -230,16 +228,17 @@ export default {
                     this.$message.error(err.message)
             }
         }, 
-        getBlacklist(id){
-            getBlacklist({id}).then(res=>{
+        async getBlacklist(id){
+            try{
+                let res = await getBlacklist({id})
                 if(res.code==200000){
                     this.detailData = res.data
                 }else{
                     this.$message.error("请求失败！")
                 }
-            }).catch(err=>{
+            }catch(err){
                 this.$message.error(err.message)
-            })
+            }
         }, 
         async getSortStrategy(id){
             try{
@@ -253,16 +252,17 @@ export default {
                 this.$message.error(err.message)
             }
         }, 
-        getMustRecommend(id){
-            getMustRecommend({id}).then(res=>{
+        async getMustRecommend(id){
+            try{
+                let res = await getMustRecommend({id})
                 if(res.code==200000){
                     this.detailData = res.data
                 }else{
                     this.$message.error("请求失败！")
                 }
-            }).catch(err=>{
+            }catch(err){
                 this.$message.error(err.message)
-            })
+            }
         }
     },
     mounted(){
