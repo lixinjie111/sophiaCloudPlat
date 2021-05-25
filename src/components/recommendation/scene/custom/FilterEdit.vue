@@ -82,9 +82,6 @@ export default {
         this.addModal = false
         this.saveFilterRule()
       },
-      handleSelect(value){
-        console.log(value)
-      },
       getBehaviorTypes(){
         getBehaviorTypes({}).then(res=>{
           if(res.code==200000){
