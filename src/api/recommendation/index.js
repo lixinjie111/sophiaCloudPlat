@@ -270,7 +270,20 @@ export const getTableColumn = params => {
 export const getBlacklists = params => {
   return axios.post(`${totalUrl}/recommend/excel/getBlacklists`,params).then(res => res.data)
 }
-
+// 上传黑名单
+export const loadBlacklist = (data, params) => {
+  // return axios.post(`${totalUrl}/recommend/excel/loadBlacklist`,params).then(res => res.data)
+  return axios({
+    url: `${totalUrl}/recommend/excel/loadBlacklist`,
+    method: "post",
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'multipart/form-data'
+    },
+    data,
+    params
+  })
+}
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {

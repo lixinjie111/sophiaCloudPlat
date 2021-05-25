@@ -22,6 +22,7 @@
     <a-table
       :columns="columns"
       :data-source="tableList"
+<!--      :scroll="{ x: 1500}"-->
       :pagination="pagination">
       <template slot="status" slot-scope="text,record">
         <a-select v-if="pageType === 'edit'" class="c-mr-10" style="width:160px" v-model="text"
@@ -127,6 +128,7 @@
         appName: void 0,
         sceneId: void 0,
         tableName: void 0,
+        // tableName: this.$route.query.name,
         appNameList: [],
         sceneList: [],
         dataSourceTable: [],
@@ -172,16 +174,6 @@
           this.$message.error("请求失败!")
         })
       },
-      appNameChange (value,option){
-        this.appName = value;
-        this.sceneId = void 0;
-        this.tableName = void 0;
-        this.getAllByApplication(value)
-      },
-      sceneTypeChange (value,option){
-        this.sceneId = value;
-        this.getFeaturesDataTables()
-      },
       onSearch(){
         this.getDataList(this.pagination.current)
       },
@@ -209,11 +201,13 @@
       },
       // 查看
       showDetail(row){
-        this.$router.push({path:"/recommendation/data/detail",query:{name:row.tableName}})
+        this.$router.push({path:"/recommendation/data/detail",query:{name: row.tableName}})
+        // this.$router.push({path:"/recommendation/data/detail",query:{name: this.tableName}})
       },
     },
     mounted(){
-    this.getFeaturesDataTables()
+      this.getFeaturesDataTables()
+      // this.onSearch()
     }
   }
 </script>
