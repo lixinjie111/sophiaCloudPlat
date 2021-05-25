@@ -221,7 +221,7 @@ export default {
         ifShowjsAddress:false,
         ifShowfpList:true,
         ifShowEmail:false,
-        reqParms:null
+        reqParms:''
     };
   },
   created() {
@@ -253,14 +253,11 @@ export default {
     },
     watchDetailGetMoney(){
         var ifCanClick = this.moneyNum == '0.00' ? false : true;
-        var fpttObj = this.reqParms;
         if(ifCanClick){
             this.$router.push({
-                path:'/InvoiceReq',
-                query:{
-                    fpttObj
-                }
+                path:'/InvoiceReq'
             });
+            localStorage.setItem('fpttObj',JSON.stringify(this.reqParms));
         }
         else{
             return;
@@ -538,7 +535,6 @@ export default {
         queryInvoiceBase(parms).then(res=>{
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
-                this.reqParms = InvoiceMsgObj;
                 this.money = InvoiceMsgObj.totalAmount;
                 if(!InvoiceMsgObj){
                     this.ifShowShowPanel = false;
@@ -566,6 +562,7 @@ export default {
                             title:InvoiceMsgObj.title,
                             type:typeTxt
                         };
+                        this.reqParms = InvoiceMsgObj;
                     }
                     else{
                         this.nofpInfo = true;

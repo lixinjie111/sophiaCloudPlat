@@ -3,10 +3,9 @@
     <div class="til_con">发票索取</div>
     <div class="invo_get_con">
       <div class="invo_get_con1">
-        <a-steps :current="current" @change="onChange">
+        <a-steps :current="current">
           <a-step title="选择发票" />
           <a-step title="确认信息和地址" />
-          <a-step title="申请完成" />
         </a-steps>
       </div>
       <template v-if="current == 0">
@@ -40,158 +39,287 @@
         <div class="invo_get_con4">
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="可开票消费" name="first">
-              <div class="input_con">
-                <span class="inp_label">产品名称：</span>
-                <div class="input_self">
-                  <el-input
-                    v-model="proName"
-                    placeholder="产品名称模糊搜索"
-                  ></el-input>
+             <template v-if="activeName=='first'">
+                <div class="input_con">
+                  <span class="inp_label">产品名称：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="proName"
+                      placeholder="产品名称模糊搜索"
+                    ></el-input>
+                  </div>
+                  <span class="inp_label">起止时间：</span>
+                  <div class="input_self timeRange_con">
+                    <el-date-picker
+                      v-model="timeRange"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd"
+                    >
+                    </el-date-picker>
+                  </div>
+                  <span class="inp_label">金额范围：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="moneyRange"
+                      placeholder="请选择金额范围"
+                      @focus="choiceMoneyRange"
+                    ></el-input>
+                  </div>
+                  <span class="inp_label">订单编号：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="orderNum"
+                      placeholder="请输入订单编号"
+                    ></el-input>
+                  </div>
+                  <el-button class="my_el_btn"  @click="reset">重 置</el-button>
+                  <el-button class="my_el_btn" type="primary" @click="search">查 询</el-button>
                 </div>
-                <span class="inp_label">起止时间：</span>
-                <div class="input_self timeRange_con">
-                  <el-date-picker
-                    v-model="timeRange"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
+                <div class="check_con">
+                  <el-checkbox
+                    v-model="allChecked"
+                    style="margin-right: 8px"
+                  ></el-checkbox>
+                  <span>全选(支持跨分页)：有</span>
+                  <span class="active_num">{{ invoiceNum }}</span>
+                  <span>个订单可申请发票，可开票总额：</span>
+                  <span class="active_num">￥ 0.00</span>
+                </div>
+                <div class="table_con">
+                  <vxe-table
+                    row-id="id"
+                    :checkbox-config="{ labelField: '', highlight: true, trigger: 'row', reserve: true , range: true}"
+                    :align="allAlign"
+                    :data="tableData"
+                    show-header-overflow
+                    show-overflow
+                    highlight-hover-row
+                    ref="xTable1"
+                    @checkbox-all="selectChangeEvent"
+                    @checkbox-change="selectChangeEvent"
                   >
-                  </el-date-picker>
-                </div>
-                <span class="inp_label">金额范围：</span>
-                <div class="input_self">
-                  <el-input
-                    v-model="moneyRange"
-                    placeholder="请选择金额范围"
-                    @focus="choiceMoneyRange"
-                  ></el-input>
-                </div>
-                <span class="inp_label">订单编号：</span>
-                <div class="input_self">
-                  <el-input
-                    v-model="orderNum"
-                    placeholder="请输入订单编号"
-                  ></el-input>
-                </div>
-                <el-button class="my_el_btn">重 置</el-button>
-                <el-button class="my_el_btn" type="primary">查 询</el-button>
-              </div>
-              <div class="check_con">
-                <el-checkbox
-                  v-model="allChecked"
-                  style="margin-right: 8px"
-                ></el-checkbox>
-                <span>全选(支持跨分页)：有</span>
-                <span class="active_num">{{ invoiceNum }}</span>
-                <span>个订单可申请发票，可开票总额：</span>
-                <span class="active_num">￥ 0.00</span>
-              </div>
-              <div class="table_con">
-                <vxe-table
-                  :align="allAlign"
-                  :data="tableData"
-                  show-header-overflow
-                  show-overflow
-                  highlight-hover-row
-                >
-                  <vxe-table-column
-                    type="checkbox"
-                    width="60"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderNum"
-                    title="订单编号"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="moneyType"
-                    title="资金类型"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderType"
-                    title="订单类型"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="proName"
-                    title="产品名称"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderMoney"
-                    title="订单实付金额"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="kpMoney"
-                    title="可开票金额"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="oriorderNum"
-                    title="原始订单编号"
-                  ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderPayTime"
-                    title="订单支付时间"
-                  ></vxe-table-column>
-                  <template v-slot:empty>
-                    <i class="el-icon-warning-outline"></i>
-                    <span>暂无可开票订单/账单</span>
-                  </template>
-                </vxe-table>
-                <div class="tab_bom_con">
-                  <div class="tab_bom_lef">
-                    <el-checkbox v-model="setingChecked"></el-checkbox>
-                    <el-button type="info" plain>下一步</el-button>
-                    <div v-if="ifShowFpinfo">
-                      <span class="set_info"
-                        >您尚未设置有效的开票信息，无法开具发票</span
+                    <vxe-table-column
+                      type="checkbox"
+                      width="60"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="orderSn"
+                      title="订单编号"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="orderType"
+                      title="资金类型"
+                    >
+                      <template #default="{ row }">
+                        <span v-if="row.orderType==1">新购</span>
+                        <span v-if="row.orderType==2">续费</span>
+                        <span v-if="row.orderType==3">升级</span>
+                        <span v-if="row.orderType==4">降级</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field=""
+                      title="订单类型"
+                    >
+                      <template #default="{ row }">
+                        <span v-if="row.orderAssort==1">账单</span>
+                        <span v-if="row.orderAssort==2">订单</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field="serviceName"
+                      title="产品名称"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="orderAmount"
+                      title="订单实付金额"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="invoiceAmount"
+                      title="可开票金额"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="masterOrderSn"
+                      title="原始订单编号"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="paySuccessTime"
+                      title="订单支付时间"
+                    ></vxe-table-column>
+                    <template v-slot:empty>
+                      <i class="el-icon-warning-outline"></i>
+                      <span>暂无可开票订单/账单</span>
+                    </template>
+                  </vxe-table>
+                  <div class="tab_bom_con">
+                    <div class="tab_bom_lef">
+                      <!-- <el-checkbox v-model="setingChecked"></el-checkbox> -->
+                      <el-button type="info" plain @click="next">下一步</el-button>
+                      <div v-if="ifShowFpinfo">
+                        <span class="set_info"
+                          >您尚未设置有效的开票信息，无法开具发票</span
+                        >
+                        <span class="set_txt">立即设置发票抬头</span>
+                      </div>
+                      <div v-else>
+                      待开票金额： <span class="set_txt">¥ {{invoiceAmount}}</span>，已选 <span class="set_txt">{{this.selectionRows.length}}</span>个订单
+                      </div>
+                    </div>
+                    <div class="tab_bom_rig">
+                      <vxe-pager
+                        border
+                        size="medium"
+                        :loading="loading2"
+                        :current-page="tablePage2.currentPage"
+                        :page-size="tablePage2.pageSize"
+                        :total="tablePage2.totalResult"
+                        :layouts="[
+                          'PrevPage',
+                          'JumpNumber',
+                          'NextPage',
+                          'FullJump',
+                          'Sizes',
+                          'Total',
+                        ]"
+                        @page-change="handlePageChange2"
                       >
-                      <span class="set_txt">立即设置发票抬头</span>
+                      </vxe-pager>
                     </div>
                   </div>
-                  <div class="tab_bom_rig">
-                    <vxe-pager
-                      border
-                      size="medium"
-                      :loading="loading2"
-                      :current-page="tablePage2.currentPage"
-                      :page-size="tablePage2.pageSize"
-                      :total="tablePage2.totalResult"
-                      :layouts="[
-                        'PrevPage',
-                        'JumpNumber',
-                        'NextPage',
-                        'FullJump',
-                        'Sizes',
-                        'Total',
-                      ]"
-                      @page-change="handlePageChange2"
-                    >
-                    </vxe-pager>
-                  </div>
                 </div>
-              </div>
+              </template>
             </el-tab-pane>
-            <el-tab-pane label="暂不可开票消费" name="second"
-              >暂不可开票消费</el-tab-pane
-            >
+            <el-tab-pane label="暂不可开票消费" name="second">
+              <template v-if="activeName=='second'">
+                <div class="input_con">
+                  <span class="inp_label">产品名称：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="proName"
+                      placeholder="产品名称模糊搜索"
+                    ></el-input>
+                  </div>
+                  <span class="inp_label">起止时间：</span>
+                  <div class="input_self timeRange_con">
+                    <el-date-picker
+                      v-model="timeRange"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd"
+                    >
+                    </el-date-picker>
+                  </div>
+                  <span class="inp_label">金额范围：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="moneyRange"
+                      placeholder="请选择金额范围"
+                      @focus="choiceMoneyRange"
+                    ></el-input>
+                  </div>
+                  <span class="inp_label">订单编号：</span>
+                  <div class="input_self">
+                    <el-input
+                      v-model="orderNum"
+                      placeholder="请输入订单编号"
+                    ></el-input>
+                  </div>
+                  <el-button class="my_el_btn"  @click="reset">重 置</el-button>
+                  <el-button class="my_el_btn" type="primary" @click="search">查 询</el-button>
+                </div>
+                <div class="table_con">
+                  <vxe-table
+                    row-id="id"
+                    :align="allAlign"
+                    :data="tableData1"
+                    show-header-overflow
+                    show-overflow
+                    highlight-hover-row
+                  >
+                    <vxe-table-column
+                      field="orderSn"
+                      title="订单编号"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="orderType"
+                      title="资金类型"
+                    >
+                      <template #default="{ row }">
+                        <span v-if="row.orderType==1">新购</span>
+                        <span v-if="row.orderType==2">续费</span>
+                        <span v-if="row.orderType==3">升级</span>
+                        <span v-if="row.orderType==4">降级</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field=""
+                      title="订单类型"
+                    >
+                      <template #default="{ row }">
+                        <span v-if="row.orderAssort==1">账单</span>
+                        <span v-if="row.orderAssort==2">订单</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field="serviceName"
+                      title="产品名称"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="orderAmount"
+                      title="订单实付金额"
+                    >
+                     <template #default="{ row }">
+                        <span>累账中</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field="invoiceAmount"
+                      title="可开票金额"
+                    >
+                     <template #default="{ row }">
+                        <span>累账中</span>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column
+                      field="masterOrderSn"
+                      title="原始订单编号"
+                    ></vxe-table-column>
+                    <vxe-table-column
+                      field="paySuccessTime"
+                      title="订单支付时间"
+                    ></vxe-table-column>
+                    <template v-slot:empty>
+                      <i class="el-icon-warning-outline"></i>
+                      <span>暂无可开票订单/账单</span>
+                    </template>
+                  </vxe-table>
+                </div>
+              </template>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </template>
       <template v-if="current == 1">
         <div class="invo_get_con2">
           <span
-            >您选取了3条单据开具发票（若选中多条订单，订单金额将合并开具在一张票据中），开票金额合计：</span
+            >您选取了{{this.selectionRows.length}}条单据开具发票（若选中多条订单，订单金额将合并开具在一张票据中），开票金额合计：</span
           >
-          <span class="setting_now">￥ 216.64</span>
+          <span class="setting_now">￥ {{invoiceAmount}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">发票抬头：</span>
           <span class="setting_now1"
-            >上海元知晟睿科技研究有限公司北京分公司</span
+            >{{detailObj.title}}</span
           >
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">开具类型：</span>
-          <span class="setting_now1">企业</span>
+          <span class="setting_now1">{{detailObj.issueTypeDesc}}</span>
         </div>
         <div class="invo_get_con2">
           <i class="el-icon-warning"></i>
@@ -203,34 +331,38 @@
         <div class="invo_get_item">
           <span class="setting_now0">纳税人识别号：</span>
           <span class="setting_now1"
-            >上海元知晟睿科技研究有限公司北京分公司</span
+            >{{detailObj.taxpayerNumber}}</span
           >
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">开户银行名称：</span>
-          <span class="setting_now1">91110101MA01QT236E</span>
+          <span class="setting_now1">{{detailObj.bankName}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">开户账号：</span>
-          <span class="setting_now1">91110101MA01QT236E</span>
+          <span class="setting_now1">{{detailObj.bankNumber}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">注册场所地址：</span>
-          <span class="setting_now1">91110101MA01QT236E</span>
+          <span class="setting_now1">{{detailObj.companyAddress}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">注册固定电话：</span>
-          <span class="setting_now1">91110101MA01QT236E</span>
+          <span class="setting_now1">{{detailObj.companyPhone}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">发票性质：</span>
-          <span class="setting_now1">91110101MA01QT236E</span>
+          <span class="setting_now1">{{detailObj.invoiceTypeDesc}}</span>
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">电子发票邮寄地址：</span>
-          <span class="setting_now1"
-            >660306@gdpr.com <span class="setting_now">更换地址</span></span
-          >
+          <span class="setting_now1">
+            <span v-for="(item,index) in emailList1" :key="index">
+              {{item}},
+            </span>
+            <span class="setting_now" @click="isMail=true">更换地址</span>
+            </span>
+          
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">备注：</span>
@@ -241,8 +373,8 @@
               style="width: 600px"
               placeholder="该备注信息会展示在发票上，如有需要请录入，否则无需录入任何信息。"
             ></el-input>
-            <br />建议不要超过25个汉字或50个（数字+字母），否则盖章的时候有可能压到。<span
-              class="setting_now"
+            <br /><br />建议不要超过25个汉字或50个（数字+字母），否则盖章的时候有可能压到。<span
+              class="setting_now" @click="isPreview=true"
               >查看样例</span
             ></span
           >
@@ -250,121 +382,109 @@
         <div class="table_con" style="width: 100%; margin-top: 20px">
           <vxe-table
             :align="allAlign"
-            :data="tableData"
+            :data="detailObj.invoicePlayInfoList"
             show-header-overflow
             show-overflow
             highlight-hover-row
           >
             <vxe-table-column
               field="orderNum"
-              title="发票名称"
-            ></vxe-table-column>
+              title="发票示例"
+            >
+              <template #default="{ row }">
+                <span style="color:#0376fd;cursor:pointer" @click="isPreview=true">发票预览</span>
+              </template>
+            </vxe-table-column>
             <vxe-table-column
-              field="orderNum"
+              field="invoiceContent"
               title="开票内容"
             ></vxe-table-column>
             <vxe-table-column
               field="moneyType"
               title="规格型号"
             ></vxe-table-column>
-            <vxe-table-column field="orderType" title="数量"></vxe-table-column>
-            <vxe-table-column field="proName" title="单位"></vxe-table-column>
+            <vxe-table-column field="amount" title="数量"></vxe-table-column>
+            <vxe-table-column field="unit" title="单位"></vxe-table-column>
             <vxe-table-column
-              field="orderMoney"
+              field="totalAmount"
               title="总价"
             ></vxe-table-column>
-            <vxe-table-column field="kpMoney" title="税率"></vxe-table-column>
+            <vxe-table-column field="tax" title="税率"></vxe-table-column>
             <template v-slot:empty>
               <i class="el-icon-warning-outline"></i>
               <span>暂无可开票订单/账单</span>
             </template>
           </vxe-table>
           <div class="tab_bom_con" style="margin-top: 20px">
-            <el-button plain>上一步</el-button>
-            <el-button type="primary">索要发票</el-button>
+            <el-button plain @click="current--">上一步</el-button>
+            <el-button type="primary" @click="askInvoice">索要发票</el-button>
           </div>
         </div>
       </template>
     </div>
-    <el-dialog title="金额范围" :visible.sync="dialogFormVisible" style="z-index:99999;">
+    <el-dialog title="金额范围" :visible.sync="dialogFormVisible">
       <el-form :model="rangeForm">
         <el-form-item>
-          <el-input v-model="rangeForm.min" autocomplete="off"></el-input>
+          <a-input-number v-model="rangeForm.min" :min="1" :max="9999"/>
         </el-form-item>
         &nbsp;&nbsp;
         <div class="henxian">-</div>
         &nbsp;&nbsp;
         <el-form-item>
-          <el-input v-model="rangeForm.max" autocomplete="off"></el-input>
+          <a-input-number v-model="rangeForm.max" :min="1" :max="9999"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button type="primary" @click="makeUp"
           >确 定</el-button
         >
       </div>
+    </el-dialog>
+    <el-dialog title="更换地址" :visible.sync="isMail">
+      <div>最多可以选择3个邮箱地址 <span style="color:#0376fd;cursor:pointer" @click="goLink">电子邮箱管理</span></div>
+      <el-form :model="mailForm" label-position="top" style="display:block">
+        <el-form-item label="邮箱" prop="type">
+          <el-checkbox-group v-model="mailForm.type" max="3" min="1">
+            <el-checkbox :label="item.email" name="type" v-for="item in emailList" :key="item.id" style="display:block"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isMail = false">取 消</el-button>
+        <el-button type="primary" @click="makeSure"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+    <el-dialog title="发票预览" :visible.sync="isPreview">
+        <img src="../../assets/images/fapiao.png" alt="">
     </el-dialog>
   </div>
 </template>
 
 <script>
+import {
+ queryEnableOrderList,queryDisableOrderList,pretreatInvoice,queryEmailList,addInvoice
+} from "../../api/InvoiceReq/index";
 export default {
   name: "InvoiceReq",
   data() {
     return {
+      isPreview:false,
+      isMail:false,
       memo: "",
       current: 0,
       activeName: "first",
       proName: "",
       moneyRange: "",
       orderNum: "",
-      timeRange: "",
+      timeRange: [],
       allChecked: false,
       setingChecked: false,
       allAlign: null, //对齐方式
-      tableData: [
-        // {
-        //   orderNum: "预览",
-        //   moneyType: "Develop",
-        //   orderType: "Man",
-        //   proName: 28,
-        //   orderMoney: "vxe-table 从入门到放弃",
-        //   kpMoney: "12.22",
-        //   oriorderNum: "1257967623425",
-        //   orderPayTime: "2020-04-23",
-        // },
-        // {
-        //   orderNum: "Test2",
-        //   moneyType: "Test",
-        //   orderType: "Women",
-        //   proName: 22,
-        //   orderMoney: "Guangzhou",
-        //   kpMoney: "12.22",
-        //   oriorderNum: "1257967623425",
-        //   orderPayTime: "2020-04-23",
-        // },
-        // {
-        //   orderNum: "Test3",
-        //   moneyType: "PM",
-        //   orderType: "Man",
-        //   proName: 32,
-        //   orderMoney: "Shanghai",
-        //   kpMoney: "12.22",
-        //   oriorderNum: "1257967623425",
-        //   orderPayTime: "2020-04-23",
-        // },
-        // {
-        //   orderNum: "Test4",
-        //   moneyType: "Designer",
-        //   orderType: "Women ",
-        //   proName: 24,
-        //   orderMoney: "Shanghai",
-        //   kpMoney: "12.22",
-        //   oriorderNum: "1257967623425",
-        //   orderPayTime: "2020-04-23",
-        // },
-      ],
+      tableData: [],
+      tableData1: [],
       loading2: false,
       tablePage2: {
         currentPage: 1,
@@ -377,18 +497,235 @@ export default {
       rangeForm:{
         min:'',
         max:''
-      }
+      },
+      mailForm:{
+        type:[],
+      },
+        /*table选中keys*/
+      selectedRowKeys: [],
+      /*table选中records*/
+      selectionRows : [],
+      emailList : [],
+      emailList1 : [],
+      invoiceAmount:0,
+      parmObj:{},
+      detailObj:{},
     };
   },
   created() {
-    this.invoiceNum = this.tableData.length;
-    var fpttObj = this.$route.query.fpttObj;
-    console.log(fpttObj,'fpttObj');
-    if (!fpttObj.title) {
+    this.parmObj = JSON.parse(localStorage.getItem('fpttObj'));
+    if (!this.parmObj.title) {
       this.ifShowFpinfo = true;
     }
+    this.queryList();
+    this.queryEmail();
   },
   methods: {
+    goLink(){
+      this.$router.push({
+        path:'/invoiceMan'
+      })
+    },
+    makeSure(){
+      this.emailList1=this.mailForm.type;
+      this.isMail=false;
+    },
+    next(){
+      if(this.ifShowFpinfo){
+        this.$message.warning("请设置发票抬头");
+        return
+      }
+      // if(this.setingChecked==false){
+      //   this.$message.warning("请勾选");
+      //   return
+      // }
+      if(this.selectionRows.length<1){
+        this.$message.warning("请至少选择一个订单");
+         return
+      }
+      this.preView();
+     
+    },
+    selectChangeEvent ({ checked, records, reserves, row }) {
+        if (checked) {
+            //第一次选数据，还未进行翻页时
+            if (reserves.length == 0){
+                this.selectedRowKeys = records.map(v => v.id);
+                this.selectionRows = records;
+            }else {
+                //id集合，翻页存在已选中的数据时,拼接新选中的数据
+                this.selectedRowKeys = [...reserves.map(v => v.id),...records.map(v => v.id)];
+                //数据集合，翻页存在已选中的数据时,拼接新选中的数据
+                this.selectionRows = [...reserves,...records];
+            }
+        }else {
+            //取消选中时
+            let idIndex = this.selectedRowKeys.indexOf(row.id);
+            if (idIndex > -1) {
+                //删除取消选中删除指定元素id
+                this.$delete(this.selectedRowKeys, idIndex);
+            }
+            
+            let dataIndex = null;
+            for(let i = 0; i < this.selectionRows.length; i++) {
+                if (this.selectionRows[i].id == row.id) {
+                    dataIndex = i;
+                    break;
+                }
+            }
+            //删除取消选中的元素整个对象
+            this.$delete(this.selectionRows, dataIndex);
+        }
+        let _sum=0;
+        this.selectionRows.forEach(item=>{
+           _sum=(_sum+(item.invoiceAmount)*100);
+        })
+        this.invoiceAmount=_sum/100;
+    },
+    reset(){
+      this.proName="";
+      this.moneyRange="";
+      this.orderNum="";
+      this.timeRange=[];
+      this.rangeForm={
+        min:'',
+        max:''
+      };
+    },
+    search(){
+      this.tablePage2.currentPage=1;
+      if(this.activeName=='first'){
+        this.queryList();
+      }else{
+        this.queryList1();
+      }
+      
+    },
+    makeUp(){
+      this.dialogFormVisible = false;
+      this.moneyRange=this.rangeForm.min+'-'+this.rangeForm.max;
+    },
+    preView(){
+      let _list=[];
+      this.selectionRows.forEach(item=>{
+        _list.push(item.orderSn)
+      })
+       let _param={
+        "invoiceDetailId": this.parmObj.invoiceDetailId,
+        "orderSnList":_list,
+      };
+      pretreatInvoice(_param)
+        .then(res => {
+          if (res.code == 200000) {
+            this.detailObj=res.data;
+            this.mailForm.type=[this.detailObj.email];
+            this.emailList1=[this.detailObj.email];
+            this.current++;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    askInvoice(){
+      let _list=[];
+      this.selectionRows.forEach(item=>{
+        _list.push(item.orderSn)
+      })
+       let _param={
+        "email": this.emailList1,
+        "invoiceDetailId": this.parmObj.invoiceDetailId,
+        "orderSnList":_list,
+        "remark": this.memo
+      };
+      addInvoice(_param)
+        .then(res => {
+          if (res.code == 200000) {
+            this.$message.error("success");
+            this.$router.push({
+              path:"/invoiceMan"
+            })
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    queryEmail(){
+       let _param={
+        "page": 1,
+        "pageSize":30,
+      };
+      queryEmailList(_param)
+        .then(res => {
+          if (res.code == 200000) {
+            this.emailList= res.data.list;
+            this.tablePage2.totalResult=res.data.total;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    queryList(){
+       let _param={
+        "beginDate": this.timeRange[0],
+        "endDate": this.timeRange[1],
+        "maxMoney": this.rangeForm.max,
+        "minMoney": this.rangeForm.min,
+        "orderSn": this.orderNum,
+        "page": this.tablePage2.currentPage,
+        "pageSize":this.tablePage2.pageSize,
+        "serviceName":this.proName,
+      };
+      queryEnableOrderList(_param)
+        .then(res => {
+          if (res.code == 200000) {
+            this.tableData= res.data.list;
+            this.tablePage2.totalResult=res.data.total;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    queryList1(){
+       let _param={
+        "beginDate": this.timeRange[0],
+        "endDate": this.timeRange[1],
+        "maxMoney": this.rangeForm.max,
+        "minMoney": this.rangeForm.min,
+        "orderSn": this.orderNum,
+        "page": this.tablePage2.currentPage,
+        "pageSize":this.tablePage2.pageSize,
+        "serviceName":this.proName,
+      };
+      queryDisableOrderList(_param)
+        .then(res => {
+          if (res.code == 200000) {
+            this.tableData1= res.data.list;
+            this.tablePage2.totalResult=res.data.total;
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
     choiceMoneyRange(){
       this.dialogFormVisible = true;
     },
@@ -404,15 +741,30 @@ export default {
       this.current = current;
     },
     handleClick(tab, event) {
-      console.log(tab, event);
+      this.reset();
+      this.tablePage2.currentPage=1;
+      if(tab.name=='first'){
+        this.queryList();
+      }else{
+        this.queryList1();
+      }
     },
     handlePageChange2({ currentPage, pageSize }) {
       this.tablePage2.currentPage = currentPage;
       this.tablePage2.pageSize = pageSize;
+      this.queryList();
     },
   },
 };
 </script>
+<style>
+.v-modal{
+  z-index:999991 !important;
+}
+.el-dialog__wrapper{
+  z-index:999992 !important;
+}
+</style>
 <style lang="scss" scoped>
 .InvoiceReq_con {
   width: 100%;
@@ -519,7 +871,7 @@ export default {
           display: flex;
           align-items: center;
           .inp_label {
-            width: 116px;
+            width: 80px;
             height: 22px;
             font-size: 14px;
             font-family: PingFangSC-Regular, PingFang SC;
@@ -529,7 +881,6 @@ export default {
           }
           .input_self {
             width: 260px;
-            height: 32px;
             margin-right: 20px;
             /deep/ .el-input {
               width: 100%;
@@ -554,7 +905,7 @@ export default {
             }
           }
           .timeRange_con {
-            width: 320px;
+            width: 350px;
           }
           .my_el_btn {
             height: 32px;
