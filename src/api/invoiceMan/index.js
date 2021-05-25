@@ -45,6 +45,10 @@ export const getProvince = params => {
 export const getCity = params => {
     return axios.post(`${totalUrl}/Area/getCity`, params).then(res => res.data);
 }
+//获取区信息列表   
+export const getDistrict = params => {
+    return axios.post(`${totalUrl}/Area/getDistrict`, params).then(res => res.data);
+}
 //新增寄送地址信息   
 export const addPostAddress = params => {
     return axios.post(`${totalUrl}/Invoice/addPostAddress`, params).then(res => res.data);

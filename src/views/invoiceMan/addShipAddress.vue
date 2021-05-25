@@ -20,13 +20,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="选择地区" prop="area">
-            <el-cascader
+            <el-cascader 
               class="widthSmall"
               style="width: 100%"
-              :options="addressOptions"
               v-model="addressFormData.area"
-              @change="changeOptions"
-            >
+              :props="props">
             </el-cascader>
           </el-form-item>
           <el-form-item label="详细地址" prop="detailAddress">
@@ -68,8 +66,7 @@
 </template>
 
 <script>
-import { regionData } from "element-china-area-data";
-import { addPostAddress, updatePostAddress } from "../../api/invoiceMan/index";
+import { addPostAddress, updatePostAddress,getProvince,getCity,getDistrict } from "../../api/invoiceMan/index";
 export default {
   name: "addShipAddress",
   data() {
@@ -84,7 +81,7 @@ export default {
       }
     };
     var telNumValida = (rule, value, callback) => {
-      console.log(value,'电话！')
+      console.log(value, "电话！");
       var mobile = /^1[0-9]{10}$/,
         phone = /^0\d{2,3}-?\d{7,8}$/;
       var ifValb = mobile.test(value) || phone.test(value);
@@ -96,6 +93,7 @@ export default {
         callback();
       }
     };
+    let that = this;
     return {
       labelPosition: "top",
       addressFormData: {
@@ -133,6 +131,39 @@ export default {
       },
       title: "",
       addressOptions: [],
+      props: {
+        //级联选择器懒加载
+        lazy: true,
+        lazyLoad(node, resolve) {
+          const { level } = node;
+          console.log(level, "lev");
+          console.log(node, "node");
+          if (level == 0) {
+            that.getProvince((list1) => {
+              let arr = list1.map((e) => ({ value: e.code, label: e.name }));
+              resolve(arr); // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+            });
+          }
+          if (level == 1) {
+            let value = node.value;
+            that.getCity({ pid: value }).then((list2) => {
+              let arr = list2.map((e) => ({ value: e.code, label: e.name }));
+              resolve(arr);
+            });
+          }
+          if (level == 2) {
+            let value = node.value;
+            that.getArea({ pid: value }).then((list3) => {
+              let arr = list3.map((e) => ({
+                value: e.code,
+                label: e.name,
+                leaf: true,
+              }));
+              resolve(arr);
+            });
+          }
+        },
+      },
     };
   },
   props: ["operParms"],
@@ -154,18 +185,35 @@ export default {
         settingAddress: propsFormData.isDefaultFlag == 1 ? true : false,
       };
     }
-    this.getProvinceData();
   },
   methods: {
+    //请求省数据
+    async getProvince(callback) {
+      let res = await getProvince();
+      if (res.code == 200000) {
+        callback(res.data);
+      }
+    },
+    //请求市数据
+    async getCity(params) {
+      let res = await getCity(params);
+      if (res.code == 200000) {
+        return res.data;
+      }
+    },
+    //请求县数据
+    async getArea(params) {
+      let res = await getDistrict(params);
+      if (res.code == 200000) {
+        return res.data;
+      }
+    },
     closePopWin() {
       var operObj = {
         bl: false,
         op: "noref",
       };
       this.$emit("closePopWin", operObj);
-    },
-    getProvinceData() {
-      this.addressOptions = regionData;
     },
     addAddresSubmitForm(formName) {
       var self = this;
@@ -240,7 +288,7 @@ export default {
 .el-cascader__dropdown {
   z-index: 99999 !important;
 }
-.ant-message{
+.ant-message {
   z-index: 99999 !important;
 }
 </style>
