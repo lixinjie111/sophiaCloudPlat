@@ -21,10 +21,11 @@
     <a-table
       :columns="columns"
       :data-source="tableList"
+      :scroll="{x: 1500}"
       :pagination="pagination">
       <template slot="operation" slot-scope="text,record">
         <a-button class="p0" type="link" @click.stop="showDetail(record)">查看</a-button>
-        <a-button class="p0" type="link" @click.stop="showDetail(record, 'edit')">修改</a-button>
+        <a-button class="p0" type="link" disabled @click.stop="showDetail(record, 'edit')">修改</a-button>
         <a-button class="p0" type="link" disabled>删除</a-button>
       </template>
     </a-table>

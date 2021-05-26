@@ -5,13 +5,13 @@
         <span>共 <span>{{pagination.total}}</span> 个{{typeConfig[type]}}在黑名单中</span>
       </div>
       <div class="right">
-        <div>
-          黑名单表:
-          <a-select style="width: 140px" placeholder="请选择黑名单表" v-model="tableName"
-                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">
-            <a-select-option v-for="item in dataSourceTable" :key="item.id" :value="item.tableName">{{item.userTableName}}</a-select-option>
-          </a-select>
-        </div>
+<!--        <div>-->
+<!--          黑名单表:-->
+<!--          <a-select style="width: 140px" placeholder="请选择黑名单表" v-model="tableName"-->
+<!--                    :getPopupContainer="triggerNode => {return triggerNode.parentNode}">-->
+<!--            <a-select-option v-for="item in dataSourceTable" :key="item.id" :value="item.tableName">{{item.userTableName}}</a-select-option>-->
+<!--          </a-select>-->
+<!--        </div>-->
         <div>
           关键词:
           <a-input v-model="searchText" placeholder="物品名称、品类等" style="width: 140px"/>
@@ -22,7 +22,7 @@
     <a-table
       :columns="columns"
       :data-source="tableList"
-<!--      :scroll="{ x: 1500}"-->
+      :scroll="{ x: 1500}"
       :pagination="pagination">
       <template slot="status" slot-scope="text,record">
         <a-select v-if="pageType === 'edit'" class="c-mr-10" style="width:160px" v-model="text"
@@ -47,7 +47,167 @@
     data() {
       return {
         tableList:[],
-        columns: [
+        columns1: [
+          {
+            title: '序号',
+            dataIndex: 'index',
+            width: 60,
+            fixed: 'left'
+          },
+          {
+            title: '物料ID',
+            dataIndex: 'materiel_id'
+          },
+          {
+            title: '物料名称',
+            dataIndex: 'material_name'
+          },
+          {
+            title: '物料类型',
+            dataIndex: 'material_type'
+          },
+          {
+            title: '品类1',
+            dataIndex: 'category1'
+          },
+          {
+            title: '品类2',
+            dataIndex: 'category2'
+          },
+          {
+            title: '品牌',
+            dataIndex: 'brand_name'
+          },
+          {
+            title: '销售原价',
+            dataIndex: 'selling_price'
+          },
+          {
+            title: '发布时间',
+            dataIndex: 'exposure_times'
+          },
+          {
+            title: '激活',
+            dataIndex: 'recommendation_status',
+            scopedSlots: {customRender: 'status'},
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            scopedSlots: {customRender: 'operation'},
+            width: 200,
+            fixed: 'right'
+          },
+        ],
+        columns2: [
+          {
+            title: '序号',
+            width: 60,
+            fixed: "left",
+          },
+          {
+            title: '资讯ID',
+            dataIndex: 'materiel_id'
+          },
+          {
+            title: '内容标题',
+            dataIndex: 'material_name',
+            width: 200
+          },
+          {
+            title: '资讯类型',
+            dataIndex: 'material_type'
+          },
+          {
+            title: '1级分类',
+            dataIndex: 'category1'
+          },
+          {
+            title: '2级分类',
+            dataIndex: 'category2'
+          },
+          {
+            title: '发布媒体',
+            dataIndex: 'brand_name'
+          },
+          {
+            title: '资讯作者',
+            dataIndex: 'selling_price'
+          },
+          {
+            title: '资讯来源',
+            dataIndex: 'exposure_times'
+          },
+          {
+            title: '发布时间',
+            dataIndex: 'exposure_times'
+          },
+          {
+            title: '激活',
+            dataIndex: 'exposure_times',
+            scopedSlots: {customRender: 'status'},
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            width: 200,
+            fixed: "right",
+            scopedSlots: {customRender: 'operation'},
+          },
+        ],
+        columns3: [
+          {
+            title: '序号',
+            dataIndex: 'index',
+            width: 60,
+            fixed: 'left'
+          },
+          {
+            title: '物料ID',
+            dataIndex: 'materiel_id'
+          },
+          {
+            title: '物料名称',
+            dataIndex: 'material_name'
+          },
+          {
+            title: '物料类型',
+            dataIndex: 'material_type'
+          },
+          {
+            title: '品类1',
+            dataIndex: 'category1'
+          },
+          {
+            title: '品类2',
+            dataIndex: 'category2'
+          },
+          {
+            title: '品牌',
+            dataIndex: 'brand_name'
+          },
+          {
+            title: '销售原价',
+            dataIndex: 'selling_price'
+          },
+          {
+            title: '发布时间',
+            dataIndex: 'exposure_times'
+          },
+          {
+            title: '激活',
+            dataIndex: 'recommendation_status',
+            scopedSlots: {customRender: 'status'},
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            scopedSlots: {customRender: 'operation'},
+            width: 200,
+            fixed: 'right'
+          },
+        ],
+        columns4: [
           {
             title: '序号',
             dataIndex: 'index',
@@ -127,8 +287,7 @@
         statusConfig: {'0': '否', '1': '是' },
         appName: void 0,
         sceneId: void 0,
-        tableName: void 0,
-        // tableName: this.$route.query.name,
+        tableName: this.$route.query.name,
         appNameList: [],
         sceneList: [],
         dataSourceTable: [],
@@ -201,13 +360,17 @@
       },
       // 查看
       showDetail(row){
-        this.$router.push({path:"/recommendation/data/detail",query:{name: row.tableName}})
-        // this.$router.push({path:"/recommendation/data/detail",query:{name: this.tableName}})
+        this.$router.push({path:"/recommendation/data/detail",query:{name: this.tableName}})
       },
     },
     mounted(){
       this.getFeaturesDataTables()
-      // this.onSearch()
+      this.onSearch()
+    },
+    computed:{
+      columns(){
+        return this[`columns${this.type}`]
+      }
     }
   }
 </script>
