@@ -228,7 +228,7 @@
             </div>
         </a-descriptions-item>
         <a-descriptions-item label="必推行为">
-          <div class="text_left" v-if="ruleInfo.mustRecommendFlag">有必推商品</div>
+          <div class="text_left" v-if="ruleInfo.mustRecommendFlag">必推物品规则</div>
           <div class="text_left" v-else>无必推商品</div>
         </a-descriptions-item>
         <a-descriptions-item label="必推物品" v-if="recommendParams.length">

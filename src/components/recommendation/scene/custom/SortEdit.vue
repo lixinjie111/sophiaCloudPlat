@@ -99,9 +99,9 @@ export default {
     return {
       addModal: true,
       dataForm:{...this.detailData},
-      curGoodsFeature:{key:this.detailData.goodsFeatures[0].goodsFeatureField,label:this.detailData.goodsFeatures[0].goodsFeature},
+      curGoodsFeature:this.detailData.goodsFeatures.length?{key:this.detailData.goodsFeatures[0].goodsFeatureField,label:this.detailData.goodsFeatures[0].goodsFeature}:{},
       goodsFeatures:[],
-      curUserFeature:{key:this.detailData.userFeatures[0].userFeatureField,label:this.detailData.userFeatures[0].userFeature},
+      curUserFeature:this.detailData.userFeatures.length?{key:this.detailData.userFeatures[0].userFeatureField,label:this.detailData.userFeatures[0].userFeature}:{},
       userFeatures:[],
     };
   },

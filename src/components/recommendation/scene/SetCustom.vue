@@ -183,8 +183,16 @@ export default {
             this.curType = ""
             this.getList()
         },
-        complete(){},
-        cancel(){},
+        complete(){
+            this.$router.push({
+                path: '/recommendation/scene/list'
+            });
+        },
+        cancel(){
+            this.$router.push({
+                path: '/recommendation/scene/list'
+            });
+        },
         getList(current){
             let params = {
                 pageNum:current||1,
