@@ -250,6 +250,11 @@ export default {
           this.activeName = 'second';
           this.ifShowShowPanel = false;
         }
+         var type = this.$route.query.type;
+         if(type=="mail"){
+             this.activeName='fourth';
+             this.ifShowEmail = true;
+         }
     },
     watchDetailGetMoney(){
         var ifCanClick = this.moneyNum == '0.00' ? false : true;
@@ -400,6 +405,7 @@ export default {
     },
     editfpaddress(){
         this.activeName = 'third'; 
+        this.ifShowjsAddress = true;
     },
     handleClick(tab, event) {
         if(tab.paneName == "first"){

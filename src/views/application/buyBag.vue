@@ -121,7 +121,7 @@
                       应付款： <span>¥ {{format(sumPrice)}} </span>
                   </div>
                   <div class="confirmBtn1">
-                      <el-button type="primary" @click="goPay">去支付</el-button>
+                      <el-button type="primary" @click="goPay" :loading="isload">去支付</el-button>
                       <el-button @click="goBack">返回修改</el-button>
                   </div>
                   <div class="payCheck">
@@ -258,6 +258,7 @@ import {
 export default {
   data() {
     return {
+      isload:false,
       sumPrice:0,
       serviceName:'',
       serviceId:'',
@@ -372,6 +373,7 @@ export default {
               this.tableData2.push(res.data);
               // this.$message.success(res.message);
               this.currentIndex++;
+              this.isload=false;
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -386,6 +388,7 @@ export default {
         this.$message.warning('请勾选Sophia云平台线上订购协议');
         return
       }
+      this.isload=true;
       var fwqsParm = new FormData();
       fwqsParm.append("serviceId",this.serviceId);
       createPreOderVerify(fwqsParm).then(res => {

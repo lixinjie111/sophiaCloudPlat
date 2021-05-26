@@ -8,7 +8,7 @@
           <a-step title="确认信息和地址" />
         </a-steps>
       </div>
-      <template v-if="current == 0">
+      <div v-show="current == 0" style="width:100%;">
         <div class="invo_get_con2" v-if="ifShowFpinfo">
           <i class="el-icon-warning"></i>
           <span
@@ -78,7 +78,7 @@
                   <el-button class="my_el_btn"  @click="reset">重 置</el-button>
                   <el-button class="my_el_btn" type="primary" @click="search">查 询</el-button>
                 </div>
-                <div class="check_con">
+                <!-- <div class="check_con">
                   <el-checkbox
                     v-model="allChecked"
                     style="margin-right: 8px"
@@ -87,7 +87,7 @@
                   <span class="active_num">{{ invoiceNum }}</span>
                   <span>个订单可申请发票，可开票总额：</span>
                   <span class="active_num">￥ 0.00</span>
-                </div>
+                </div> -->
                 <div class="table_con">
                   <vxe-table
                     row-id="id"
@@ -157,7 +157,7 @@
                   <div class="tab_bom_con">
                     <div class="tab_bom_lef">
                       <!-- <el-checkbox v-model="setingChecked"></el-checkbox> -->
-                      <el-button type="info" plain @click="next">下一步</el-button>
+                      <el-button @click="next" type="primary" style="margin-right:10px">下一步</el-button>
                       <div v-if="ifShowFpinfo">
                         <span class="set_info"
                           >您尚未设置有效的开票信息，无法开具发票</span
@@ -303,8 +303,8 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-      </template>
-      <template v-if="current == 1">
+      </div>
+      <div v-show="current == 1" style="width:100%;">
         <div class="invo_get_con2">
           <span
             >您选取了{{this.selectionRows.length}}条单据开具发票（若选中多条订单，订单金额将合并开具在一张票据中），开票金额合计：</span
@@ -326,7 +326,7 @@
           <span
             >发票类型为‘增值税专用发票’只可以开具纸质发票，如需修改可前往</span
           >
-          <span class="setting_now">发票信息管理</span>进行修改
+          <span class="setting_now" @click="goLink1">发票信息管理</span>进行修改
         </div>
         <div class="invo_get_item">
           <span class="setting_now0">纳税人识别号：</span>
@@ -399,10 +399,6 @@
               field="invoiceContent"
               title="开票内容"
             ></vxe-table-column>
-            <vxe-table-column
-              field="moneyType"
-              title="规格型号"
-            ></vxe-table-column>
             <vxe-table-column field="amount" title="数量"></vxe-table-column>
             <vxe-table-column field="unit" title="单位"></vxe-table-column>
             <vxe-table-column
@@ -416,11 +412,11 @@
             </template>
           </vxe-table>
           <div class="tab_bom_con" style="margin-top: 20px">
-            <el-button plain @click="current--">上一步</el-button>
+            <el-button plain @click="jian">上一步</el-button>
             <el-button type="primary" @click="askInvoice">索要发票</el-button>
           </div>
         </div>
-      </template>
+      </div>
     </div>
     <el-dialog title="金额范围" :visible.sync="dialogFormVisible">
       <el-form :model="rangeForm">
@@ -510,6 +506,7 @@ export default {
       invoiceAmount:0,
       parmObj:{},
       detailObj:{},
+      currentRecords:[],
     };
   },
   created() {
@@ -521,9 +518,24 @@ export default {
     this.queryEmail();
   },
   methods: {
+    jian(){
+      this.current--;
+      console.log(this.selectionRows)
+    },
     goLink(){
       this.$router.push({
-        path:'/invoiceMan'
+        path:'/invoiceMan',
+        query:{
+          type:'mail'
+        }
+      })
+    },
+    goLink1(){
+      this.$router.push({
+        path:'/invoiceMan',
+        query:{
+          setting:'now'
+        }
       })
     },
     makeSure(){
@@ -548,6 +560,7 @@ export default {
     },
     selectChangeEvent ({ checked, records, reserves, row }) {
         if (checked) {
+            this.currentRecords=records;
             //第一次选数据，还未进行翻页时
             if (reserves.length == 0){
                 this.selectedRowKeys = records.map(v => v.id);
@@ -558,7 +571,31 @@ export default {
                 //数据集合，翻页存在已选中的数据时,拼接新选中的数据
                 this.selectionRows = [...reserves,...records];
             }
+            console.log(checked, records, reserves, row)
+            //console.log(this.selectedRowKeys)
         }else {
+          console.log(checked, records, reserves, row)
+          //console.log(this.selectionRows)
+          if(!row){
+            let idIndex = null;
+            for(let i = 0; i < this.selectedRowKeys.length; i++) {
+              for(let j = 0; j < this.currentRecords.length; j++) {
+                if (this.selectedRowKeys[i] == this.currentRecords[j].id) {
+                    idIndex = i;
+                    this.$delete(this.selectedRowKeys, idIndex);
+                }
+              }
+            }
+            let dataIndex = null;
+            for(let i = 0; i < this.selectionRows.length; i++) {
+              for(let j = 0; j < this.currentRecords.length; j++) {
+                if (this.selectionRows[i].id == this.currentRecords[j].id) {
+                    dataIndex = i;
+                    this.$delete(this.selectionRows, dataIndex);
+                }
+              }
+            }
+          }else{
             //取消选中时
             let idIndex = this.selectedRowKeys.indexOf(row.id);
             if (idIndex > -1) {
@@ -575,11 +612,13 @@ export default {
             }
             //删除取消选中的元素整个对象
             this.$delete(this.selectionRows, dataIndex);
+          }
         }
         let _sum=0;
         this.selectionRows.forEach(item=>{
            _sum=(_sum+(item.invoiceAmount)*100);
         })
+         //console.log(this.selectionRows)
         this.invoiceAmount=_sum/100;
     },
     reset(){
@@ -644,7 +683,7 @@ export default {
       addInvoice(_param)
         .then(res => {
           if (res.code == 200000) {
-            this.$message.error("success");
+            this.$message.success("success");
             this.$router.push({
               path:"/invoiceMan"
             })
@@ -742,6 +781,9 @@ export default {
     },
     handleClick(tab, event) {
       this.reset();
+      this.selectedRowKeys = [];
+      this.selectionRows = [];
+      this.invoiceAmount=0;
       this.tablePage2.currentPage=1;
       if(tab.name=='first'){
         this.queryList();

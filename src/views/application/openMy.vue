@@ -138,7 +138,7 @@
                 您购买的服务将在1～5分钟内开通，请耐心等待。
               </div>
               <div class="text3">
-                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button>
+                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台123</el-button>
                 <el-link type="primary">
                    <span v-if="this.orderList.length==1"  @click="goLink">查看订单明细</span>
                    <span v-else  @click="goLink2">查看订单列表</span>
@@ -186,6 +186,7 @@ export default {
   },
   watch:{
     goLink1(){
+      console.log(11111111)
        this.$router.push({
         path:'/overview',
          query:{
