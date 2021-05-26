@@ -40,9 +40,9 @@
             @click="test">
             测试
         </a-button>         -->
-        <a-button v-if="current < steps.length - 1" @click="cancel">
+        <!-- <a-button v-if="current < steps.length - 1" @click="cancel">
             取消
-        </a-button>   
+        </a-button>    -->
         <a-button
             v-if="current>0"
             @click="back">
@@ -91,11 +91,11 @@ export default {
         next(){
             this.current++
         },
-        cancel(){
-             this.$router.push({
-                path: '/recommendation/scene/list'
-            });
-        },
+        // cancel(){
+        //      this.$router.push({
+        //         path: '/recommendation/scene/list'
+        //     });
+        // },
         // complete(){},
         // publish(){},
         // test(){},
