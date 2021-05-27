@@ -9,7 +9,7 @@
                 <div class="operate" v-if="curOpt=='edit'">
                     <a-switch v-model="record.status" checked-children="启用" un-checked-children="停用" 
                     :default-checked="record.status" @click="onClick" @change="onChange(record.id)"/>
-                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'" class="p0" type="link" disabled>修改</a-button>
+                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'||record.typeDesc=='运营策略'" class="p0" type="link" disabled>修改</a-button>
                     <a-button  v-else class="p0" type="link" @click="edit(record)">修改</a-button>
                     <a-popconfirm
                         title="是否删除该应用?"
@@ -20,7 +20,7 @@
                     </a-popconfirm>
                 </div>
                 <div v-else>
-                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'" type="link" disabled>查看</a-button>
+                    <a-button v-if="record.typeDesc=='黑名单'||record.typeDesc=='设置必推'||record.typeDesc=='运营策略'" type="link" disabled>查看</a-button>
                     <a-button v-else type="link" @click="showDetail(record)">查看</a-button>
                 </div>
             </template>
