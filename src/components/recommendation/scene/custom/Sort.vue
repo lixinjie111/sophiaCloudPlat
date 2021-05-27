@@ -35,7 +35,7 @@
       </a-col>
     </a-row>
     <a-row class="mb24">
-      <a-col :span="8">商品参与训练得特征:</a-col>
+      <a-col :span="8">商品参与训练的特征:</a-col>
       <a-col :span="16">
           <div
             v-for="item in detailData.goodsFeatures"

@@ -36,7 +36,7 @@
       </a-col>
     </a-row>
     <a-row class="mb24">
-      <a-col :span="8">商品参与训练得特征:</a-col>
+      <a-col :span="8">商品参与训练的特征:</a-col>
       <a-col :span="16">
             <a-select labelInValue v-model="curGoodsFeature" style="width:120px">
               <a-select-option v-for="item in goodsFeatures" :key="item.goodsFeature">{{item.goodsFeatureField}}</a-select-option>

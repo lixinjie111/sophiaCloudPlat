@@ -695,12 +695,12 @@ export default {
 };
 </script>
 <style>
-.ant-modal-mask{
+/* .ant-modal-mask{
    z-index:999991 !important;
 }
 .ant-modal-wrap{
    z-index:999992 !important;
-}
+} */
 </style>
 
 <style lang="scss" scoped>
