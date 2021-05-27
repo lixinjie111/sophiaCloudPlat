@@ -393,7 +393,7 @@ export default {
     },
     editfpInfo(){
         this.activeName = 'second';
-        this.ifShowShowPanel = false;
+        this.ifShowShowPanel = true;
     },
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg.opt; 
