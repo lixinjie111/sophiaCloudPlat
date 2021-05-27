@@ -16,7 +16,7 @@
             <CustomSort></CustomSort>
         </div>
         <div class="steps_content" v-else>
-            <CustomRun></CustomRun>
+            <CustomRun @last="back"></CustomRun>
         </div>
         <div class="steps_action">
         <a-button v-if="current < steps.length - 1" type="primary" @click="next">
@@ -44,7 +44,7 @@
             取消
         </a-button>    -->
         <a-button
-            v-if="current>0"
+            v-if="current < steps.length - 1"
             @click="back">
             上一步
         </a-button>    

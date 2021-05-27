@@ -220,6 +220,7 @@ export default {
       }
   },
   mounted(){
+    this.getList()
     this.getGoodsFeatures()
     this.getUserFeatures()
   }

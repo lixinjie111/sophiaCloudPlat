@@ -72,6 +72,10 @@
             @click="cancel">
             取消
         </a-button>        
+        <a-button
+            @click="back">
+            上一步
+        </a-button>        
       </div>
   </div>
 </template>
@@ -108,6 +112,9 @@ export default {
     },
     test(){
       this.saveMustRecommend('test')
+    },
+    back(){
+      this.$emit('last')
     },
     saveMustRecommend(type){
       let operationObject = this.$refs.operationChild.operationObject;

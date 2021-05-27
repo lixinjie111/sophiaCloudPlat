@@ -84,14 +84,15 @@ export default {
         this.radioModel = 1
         this.blackId = ""
       },
-      getBlackList(){
-        getBlackList({blacklistType:this.radioModel}).then(res=>{
+      async getBlackList(){
+        try{
+          let res = await getBlackList({blacklistType:this.radioModel})
           if(res.code==200000){
             this.blackList = res.data
           }
-        }).catch(err=>{
+        }catch(err){
           this.$message.error(err.message)
-        })
+        }
       },
       getList(){
         getStrategiesDetail({id:this.$route.query.sceneId}).then(res=>{
@@ -125,8 +126,9 @@ export default {
       }   
   },
   mounted(){
-    this.getList()
     this.getBlackList()
+    this.getList()
+    
   }
 };
 </script>
