@@ -66,6 +66,8 @@ const recommendationMaterielDetail = resolve => require(['@/views/recommendation
 // 资讯池
 const recommendationInformationPool = resolve => require(['@/views/recommendation/informationPool'], resolve); // 资讯池
 const recommendationInformationPoolWillPush = resolve => require(['@/views/recommendation/informationPool/willPush'], resolve); // 必推资讯池
+// 场景更新记录
+const sceneUpdateRecord = resolve => require(['@/views/recommendation/sceneUpdateRecord'], resolve); // 场景更新记录列表
 //订单管理
 const orderMan = resolve => require(['@/views/order/orderMan'], resolve);
 const pay = resolve => require(['@/views/order/pay'], resolve);
@@ -306,6 +308,11 @@ export const menuRouterMap = [{
           name: "recommendationInformationPoolWillPush",
           path: "/recommendation/informationPool/willPush",
           component: recommendationInformationPoolWillPush
+        },
+        {
+          name: "sceneUpdateRecord",
+          path: "/recommendation/jiluguanl/sceneUpdateRecord",
+          component: sceneUpdateRecord
         },
     ]
 }];
