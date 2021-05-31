@@ -7,3 +7,4 @@ import {HTTPURL} from '../requestUrl';
 //export const userAccountSummary = params => { return axios.get(`${HTTPURL}/admin/service/userAccountSummary`, {params: params}).then(res => res.data); };
 //export const getPrepaidFeePackage = params => { return axios.post(`${HTTPURL}/admin/serviceOrder/getPrepaidFeePackage`, params).then(res => res.data); };
 export const warning = params => { return axios.post(`${HTTPURL}/admin/service/userAccount/warning`, params).then(res => res.data); };
+export const overdraft = params => { return axios.post(`${HTTPURL}/admin/service/userAccount/overdraft`, params).then(res => res.data); };

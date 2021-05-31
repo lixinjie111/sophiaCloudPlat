@@ -21,7 +21,7 @@
                 </div>
                  <div class="fp_money4">
                     <div class="fp_money_item">启用延停服务：<el-switch v-model="value2" @change="isOpen1"></el-switch></div>
-                    <div class="fp_money_item1">延停额度：¥ 0.00</div>
+                    <div class="fp_money_item1">延停额度：¥ {{format(account.amountOverdraft)}}</div>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@ import {
  userAccount
 } from "../../api/bugBag/index";
 import {
- warning
+ warning,overdraft
 } from "../../api/finance/index";
 export default {
   name: "invoiceMan",
@@ -137,13 +137,16 @@ export default {
   },
   methods: {
         format (num) {
-            return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+            if(num){
+                return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+            }
         },
        userAccount(){
         userAccount().then(res => {
             if (res.code == 200000) {
                 this.account=res.data;
                 this.value1=res.data.warningType==0?false:true;
+                this.value2=res.data.overdraftType==0?false:true;
                 this.fazhi=res.data.amountWarning?res.data.amountWarning:'0.00';
                 this.input=this.fazhi;
             } else {
@@ -155,14 +158,12 @@ export default {
             });
         },
        isOpen(){
-          alert(1)
            let _param={
                 "amountWarning": this.input,
                 "warningType": this.value1==true?1:0, //余额预警0=禁止；1=启用
             };
             warning(_param).then(res => {
                 if (res.code == 200000) {
-                    // this.fazhi=this.input;
                     this.userAccount();
                     this.$message.success(res.message);
                 } else {
@@ -178,12 +179,25 @@ export default {
           this.value2=false;
       },
       closeDialog2(){
-          this.isAlert=false;
-          this.value2=true;
+        this.isAlert=false;
+        let _param={
+            "amountOverdraft": this.account.amountOverdraft,
+            "overdraftType": this.value2==true?1:0, //余额预警0=禁止；1=启用
+        };
+        overdraft(_param).then(res => {
+            if (res.code == 200000) {
+                this.userAccount();
+                this.$message.success(res.message);
+            } else {
+                this.$message.error(res.message || "请求失败！");
+            }
+        })
+        .catch(err => {
+                this.$message.error("请求失败！");
+        });
       },
       isOpen1(e){
           this.isAlert=true;
-          console.log(e)
       },
       initInfo1(){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));

@@ -104,13 +104,7 @@ export default {
                 };
                 mobileProtect(_param).then(res => {
                     if(res.code == 200000) {
-                        if(this.path==1){
-                            this.$emit('closeDialog2');
-                        }else{
-                            // this.$router.push({
-                            //     path:this.path
-                            // })
-                        }
+                       this.$emit('closeDialog2');
                     }else {
                         this.idVertify=true;
                         this.idVertifyMsg=res.message;
