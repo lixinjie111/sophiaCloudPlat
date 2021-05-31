@@ -27,22 +27,22 @@
         </div>
         <div class="fp_info">
             <div class="fp_money_til">待办提醒</div>
-            <div class="fp_money_container1">
+            <div class="fp_money_container1" v-if="dataAll">
                 <div class="fp_money1">
                     <div class="fp_title">待续费</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.renewed}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">待支付</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.pay}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">待开票</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.Invoicing}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">未结清还款</div>
-                    <div class="fp_price">¥ 0.00</div>
+                    <div class="fp_price">¥ {{format(daiban.settlement)}}</div>
                 </div>
             </div>
         </div>
@@ -56,10 +56,10 @@
                 </el-tooltip>
                 <div class="more">更多></div>
             </div>
-            <div class="fp_sub_til">本期消费合计 2021-02 <span class="fp_price">¥ 0.0</span> </div>
+            <div class="fp_sub_til">本期消费合计 {{customData.name[customData.name.length-1]}}  &nbsp;<span class="fp_price">¥{{format(customData.value[customData.value.length-1])}}</span> </div>
             <div class="fp_money_container">
                  <template>
-                    <cLine id="box58" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                    <cLine id="box58" :colorList="$lxjData.colorList" :myData="customData"></cLine>
                 </template>
                  <!-- <template>
                     暂无数据
@@ -82,7 +82,7 @@
             </div>
             <div class="fp_money_container1">
                 <template>
-                    <PieEcharts :colorList="$fjData.colorList" :myData="$fjData.box01Data"></PieEcharts>
+                    <PieEcharts :colorList="$fjData.colorList" :myData="productData"></PieEcharts>
                 </template>
                 <!-- <template>
                     暂无数据
@@ -109,7 +109,7 @@ import {
  userAccount
 } from "../../api/bugBag/index";
 import {
- warning,overdraft
+ warning,overdraft,userOverview
 } from "../../api/finance/index";
 export default {
   name: "invoiceMan",
@@ -126,11 +126,22 @@ export default {
         userInfomation:{},
         account:{},
         fazhi:'',
+        dataAll:{},
+        daiban:{},
+        customData:{
+            name: [],
+            value:[]
+        },
+        productData:{
+            name: [],
+            value:[]
+        },
     };
   },
   created() {
       this.initInfo1();
       this.userAccount();
+      this.userOverview();
   },
   components:{
       cLine,PieEcharts,safeAlert
@@ -149,6 +160,35 @@ export default {
                 this.value2=res.data.overdraftType==0?false:true;
                 this.fazhi=res.data.amountWarning?res.data.amountWarning:'0.00';
                 this.input=this.fazhi;
+            } else {
+                this.$message.error(res.message || "请求失败！");
+            }
+            })
+            .catch(err => {
+            this.$message.error("请求失败！");
+            });
+        },
+       userOverview(){
+            this.customData={
+                name: [],
+                value:[]
+            };
+            this.productData={
+                name: [],
+                value:[]
+            };
+        userOverview().then(res => {
+            if (res.code == 200000) {
+                this.dataAll=res.data;
+                this.daiban=res.data.reminder;
+                res.data.summary.forEach(item=>{
+                    this.customData.name.push(item.time);
+                    this.customData.value.push(item.amount);
+                })
+                res.data.product.forEach(item=>{
+                    this.productData.name.push(item.type);
+                    this.productData.value.push(item.value);
+                })
             } else {
                 this.$message.error(res.message || "请求失败！");
             }
@@ -364,6 +404,7 @@ export default {
         .fp_sub_til{
             margin-top: 16px;
             .fp_price{
+                margin-left: 8px;
                 color: #0376FD;
             }
         }
