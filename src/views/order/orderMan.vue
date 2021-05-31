@@ -63,7 +63,7 @@
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column field="orderSn" title="订单号" width="200">
           <template #default="{ row }">
-            <vxe-button type="text" status="primary" @click="getDetail(row.orderSn)">{{row.orderSn}}</vxe-button>
+            <vxe-button type="text" status="primary" @click="getDetail(row)">{{row.orderSn}}</vxe-button>
           </template>
         </vxe-table-column>
         <vxe-table-column field="serviceName" title="产品名称" width="100"></vxe-table-column>
@@ -117,7 +117,7 @@
         <vxe-table-column field="paySuccessTime" title="支付/开通时间" sortable width="150"></vxe-table-column>
         <vxe-table-column title="操作" width="200">
           <template #default="{ row }">
-            <vxe-button type="text" status="primary" content="详情" @click="getDetail(row.orderSn)"></vxe-button>
+            <vxe-button type="text" status="primary" content="详情" @click="getDetail(row)"></vxe-button>
             <el-tag type="danger" @click="payOne(row.orderSn)" v-if="row.payStatus==2" style="width: 40px;
 height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
     padding: 0;">支付
@@ -215,9 +215,14 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
             this.getList()
         },
         methods: {
-            getDetail(id) {
+            getDetail(row) {
+              // 后付费并且已支付的
+              if(row.orderAssort === 1){
+                this.$router.push({path: "/orderInfoLaterPaid?id=" + row.orderSn});
+                return
+              }
                 this.$router.push({
-                    path: "/orderInfo?id=" + id
+                    path: "/orderInfo?id=" + row.orderSn
                 })
             },
             payOne(id) {

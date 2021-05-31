@@ -72,6 +72,7 @@ const sceneUpdateRecord = resolve => require(['@/views/recommendation/sceneUpdat
 const orderMan = resolve => require(['@/views/order/orderMan'], resolve);
 const pay = resolve => require(['@/views/order/pay'], resolve);
 const orderInfo = resolve => require(['@/views/order/orderInfo'], resolve);
+const orderInfoLaterPaid = resolve => require(['@/views/order/orderInfoLaterPaid'], resolve); // 后付费已支付订单详情
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
@@ -98,6 +99,11 @@ export const menuRouterMap = [{
         name: 'orderInfo',
         path: '/orderInfo',
         component: orderInfo
+      },
+      {
+        name: 'orderInfoLaterPaid',
+        path: '/orderInfoLaterPaid',
+        component: orderInfoLaterPaid
       },
         {
             name: "applicationList",
