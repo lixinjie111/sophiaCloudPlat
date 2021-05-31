@@ -147,6 +147,11 @@ export default {
       cLine,PieEcharts,safeAlert
   },
   methods: {
+        charge(){
+            this.$router.push({
+                path:"/charge?half="+this.account.amount,
+            })
+        },
         format (num) {
             if(num){
                 return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
