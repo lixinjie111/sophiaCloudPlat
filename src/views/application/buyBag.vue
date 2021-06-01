@@ -31,7 +31,7 @@
                         show-overflow
                         highlight-hover-row
                         :data="tableData0">
-                        <vxe-table-column field="numStandard" title="规格(万次)"></vxe-table-column>
+                        <vxe-table-column field="numStandard" title="规格(次)"></vxe-table-column>
                         <vxe-table-column field="validPeriod" title="购买时长(月)"></vxe-table-column>
                         <vxe-table-column field="packagePrice" title="单价(元)"></vxe-table-column>
                         <vxe-table-column field="num" title="数量">
@@ -45,7 +45,7 @@
                   <el-card class="box-card" shadow="never">
                     <div slot="header" class="clearfix">
                       <span>当前配置</span>
-                      <el-button style="float: right; padding: 3px 0" type="text">清除</el-button>
+                      <el-button style="float: right; padding: 3px 0" type="text" @click="clearSource">清除</el-button>
                     </div>
                     <div class="payItem">
                       <div class="payLf">
@@ -69,8 +69,8 @@
                       <div class="payLf">
                           购买时长：       
                       </div>
-                      <div class="payRight">
-                        {{tableData[0].validPeriod}}个月
+                      <div class="payRight" v-if="tableData0.length>0">
+                        {{tableData0[0].validPeriod}}个月
                       </div>
                     </div>
                     <div class="payItem">
@@ -314,6 +314,9 @@ export default {
   mounted() {
   },
   methods: {
+    clearSource(){
+     this.initInfo();
+    },
     goLink1(){
        this.$router.push({
         path:'/overview',

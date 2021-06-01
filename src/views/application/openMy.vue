@@ -186,7 +186,6 @@ export default {
   },
   watch:{
     goLink1(){
-      console.log(11111111)
        this.$router.push({
         path:'/overview',
          query:{
@@ -275,6 +274,13 @@ export default {
             })
             this.tableList.push(_table)
           } else {
+            console.log(this.checkedList)
+             this.checkedList.forEach((item,index)=>{
+              if(item==id){
+                this.checkedList.splice(index,1);
+              }
+            })
+             console.log(this.checkedList)
             this.$message.error(res.message || "请求失败！");
           }
         })
