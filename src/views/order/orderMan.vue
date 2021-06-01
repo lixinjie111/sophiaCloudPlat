@@ -59,6 +59,7 @@
         :loading="loading"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
+        :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2}"
       >
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column field="orderSn" title="订单号" width="200">
@@ -118,7 +119,7 @@
         <vxe-table-column title="操作" width="200">
           <template #default="{ row }">
             <vxe-button type="text" status="primary" content="详情" @click="getDetail(row)"></vxe-button>
-            <el-tag type="danger" @click="payOne(row.orderSn)" v-if="row.payStatus==2" style="width: 40px;
+            <el-tag type="danger" @click="payOne(row.orderSn)" v-if="row.payStatus==2&&row.orderAssort==2" style="width: 40px;
 height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
     padding: 0;">支付
             </el-tag>
@@ -173,25 +174,31 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
                 isIndeterminate: false,
                 selectRecords: [],
                 date: [],
-                proList: [
+                proList: [{
+                    id: 1,
+                    name: "全部"
+                },
                     {
-                        id: 1,
+                        id: 2,
                         name: "自然语言处理"
                     },
                     {
-                        id: 2,
+                        id: 3,
                         name: "语言技术"
                     }, {
-                        id: 3,
+                        id: 4,
                         name: "文字识别"
                     }, {
-                        id: 4,
+                        id: 5,
                         name: "图片识别"
                     }, {
-                        id: 5,
+                        id: 6,
                         name: "视频技术"
                     }, {
-                        id: 6,
+                        id: 7,
+                        name: "人体分析"
+                    }, {
+                        id: 8,
                         name: "人脸识别"
                     }],
                 rangeTime: [moment(new Date(new Date().getTime() - 3600 * 1000 * 24 * 7)).format('YYYY-MM-DD'), moment(new Date()).format('YYYY-MM-DD')],
@@ -215,12 +222,15 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
             this.getList()
         },
         methods: {
+            checCheckboxkMethod2({row}) {
+                return row.payStatus == 2;
+            },
             getDetail(row) {
-              // 后付费并且已支付的
-              if(row.orderAssort === 1){
-                this.$router.push({path: "/orderInfoLaterPaid?id=" + row.orderSn});
-                return
-              }
+                // 后付费并且已支付的
+                if (row.orderAssort === 1) {
+                    this.$router.push({path: "/orderInfoLaterPaid?id=" + row.orderSn});
+                    return
+                }
                 this.$router.push({
                     path: "/orderInfo?id=" + row.orderSn
                 })
@@ -347,6 +357,11 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
     };
 </script>
 <style lang="scss" scoped>
+  .custom-checkbox {
+    font-size: 18px;
+    cursor: pointer;
+  }
+
   .page-left {
     position: absolute;
     left: 10px;
