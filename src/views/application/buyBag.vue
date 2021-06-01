@@ -125,7 +125,7 @@
                       <el-button @click="goBack">返回修改</el-button>
                   </div>
                   <div class="payCheck">
-                    <a-checkbox v-model="checked">我已我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
+                    <a-checkbox v-model="checked">我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
                   </div>
               </div>
           </template> 

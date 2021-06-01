@@ -24,7 +24,7 @@
       </a-button>
     </div>
     <a-modal centered class="add_modal" destroyOnClose v-model="addModal" title="行为过滤" @cancel="handleCancel" @ok="handleOk">
-        <a-form-model :model="dataForm" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }" labelAlign="left">
+        <a-form-model ref="ruleForm" :model="dataForm" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }" labelAlign="left">
           <a-form-model-item label="策略名称" prop="name">
               <a-input placeholder="请输入策略名称" v-model="dataForm.name"/>
           </a-form-model-item>
@@ -47,7 +47,7 @@
                   <div style="margin-bottom:6px">时间间隔(天):
                     <a-input-number v-model="item.daySpan" :min="0"/>
                   </div>
-                  <div style="display:flex;justify-content:space-between">最大次数:
+                  <div style="display:flex;justify-content:space-between;align-items:center">最大次数:
                     <a-input-number v-model="item.maxTime" :min="0" @blur="maxChange(item)" />
                   </div>
                 </div>
@@ -130,8 +130,12 @@ export default {
         this.radioModel='AND'
       },
       handleOk(){ 
-          this.addModal = false
-          this.saveFilterRule()
+          this.$refs.ruleForm.validate(valid => {
+            if(valid){
+              this.addModal = false
+              this.saveFilterRule()
+            }
+          })        
           this.dataForm = {name:""}
           this.behaviorList = [
           {

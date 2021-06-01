@@ -110,7 +110,9 @@ export default {
     },
     methods:{
         toRule(){
-
+            this.$router.push({
+                path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
+            });
         },
         onChange(id){
             this.curId = id
@@ -201,7 +203,10 @@ export default {
             }
             getStrategies(params).then(res=>{
                 if(res.code==200000){
-                    this.list = res.data.list
+                    this.list = res.data.list.map(item=>{
+                        item.status = !Boolean(item.status)
+                        return item
+                    })
                     this.total = res.data.total
                     this.pagination.total = res.data.total
                     this.pagination.current = current || 1

@@ -99,6 +99,8 @@ export default {
           if(res.code==200000){
             let ary = res.data.blankList
             this.list = ary
+          }else{
+            this.$message.error("请求失败!")
           }
         }).catch(err=>{
           this.$message.error(err.message)
@@ -115,6 +117,8 @@ export default {
         saveBlack(params).then(res=>{
           if(res.code==200000){
             if(res.data){this.getList()}
+          }else{
+            this.$message.error("添加失败!")
           }
         }).catch(err=>{
           this.$message.error(err.message)
