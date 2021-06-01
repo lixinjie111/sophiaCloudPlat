@@ -47,7 +47,7 @@
                   <div style="margin-bottom:6px">时间间隔(天):
                     <a-input-number v-model="item.daySpan" :min="0"/>
                   </div>
-                  <div style="display:flex;justify-content:space-between">最大次数:
+                  <div style="display:flex;justify-content:space-between;align-items:center">最大次数:
                     <a-input-number v-model="item.maxTime" :min="0" @blur="maxChange(item)" />
                   </div>
                 </div>
