@@ -37,7 +37,7 @@
       </a-button>
     </div>
     <a-modal centered destroyOnClose v-model="addModal" title="基于物品的协同过滤" @cancel="handleCancel" @ok="handleOk">
-        <a-form-model :model="dataForm" :rules="rules" labelAlign="left" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+        <a-form-model ref="ruleForm" :model="dataForm" :rules="rules" labelAlign="left" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-form-model-item label="策略名称" prop="name">
             <a-input placeholder="请输入策略名称" v-model="dataForm.name"/>
         </a-form-model-item>
@@ -89,9 +89,12 @@ export default {
         }
       },
       handleOk(){
-          this.addModal = false
-          // this.list.push({name:this.dataForm.name})
-          this.save()
+          this.$refs.ruleForm.validate(valid => {
+            if(valid){
+              this.addModal = false
+              this.save()
+            }
+          })
           this.dataForm = {
             name:"",
             date:"",
