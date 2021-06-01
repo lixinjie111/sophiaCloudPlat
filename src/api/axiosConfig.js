@@ -56,9 +56,18 @@ function axiosFilter(vm) {
     // )
      // request 添加请求拦截器 
      axios.interceptors.request.use(function (config) { 
-        config.headers = {
-            'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
-        };
+        var serType =  config.url.split('/')[1];
+        if(serType == 'ai'){
+            config.headers = {
+                'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):'',
+                'service_type':1
+            };
+        }
+        else{
+            config.headers = {
+                'accessToken': localStorage.getItem('yk-token')?localStorage.getItem('yk-token'):''
+            };
+        }
         return config;
     }, function (err) {
       return Promise.reject(err);

@@ -3,15 +3,15 @@
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible width="250">
       <div class="logo">
         <template v-if="collapsed" class="sidebar-logo-link" to="/">
-          <div class="pic" v-if="logo">
+          <!-- <div class="pic" v-if="logo">
             <img :src="logo" class="sidebar-logo" />
-          </div>
-          <h1 v-else class="sidebar-title">{{ title }}</h1>
+          </div> -->
+          <h1 v-if="!collapsed" class="sidebar-title">{{ title }}</h1>
         </template>
         <template v-else class="sidebar-logo-link" to="/">
-          <div class="pic" v-if="logo">
+          <!-- <div class="pic" v-if="logo">
             <img :src="logo" class="sidebar-logo" />
-          </div>
+          </div> -->
           <h1 class="sidebar-title">{{ title }}</h1>
         </template>
       </div>
@@ -34,15 +34,16 @@
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <a-menu-item v-show="!collapsed" v-else :key="item.firstkey">
-            <a-icon type="user" />
+            <a-icon :type="item.icType" />
             <span>{{item.moduleTitle}}</span>
           </a-menu-item>
           <template v-if="item.moduleTitle == '财务中心'">
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.seckey"
+                :title="subItem.title"
               >
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
               </a-menu-item>
             </template>
@@ -51,14 +52,15 @@
             <template v-for="subItem in item.list">
               <a-menu-item
                 :key="subItem.seckey"
+                :title="subItem.title"
                 v-if="subItem.title=='企业设置'&& $store.state.busSet==2"
               >
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span v-if="!collapsed">{{ subItem.title }}</span>
               </a-menu-item>
               <a-sub-menu v-else :key="subItem.seckey">
                 <span slot="title">
-                  <a-icon type="user" />
+                  <a-icon :type="subItem.icType" />
                   <span>{{ subItem.title }}</span>
                 </span>
                 <a-menu-item
@@ -71,7 +73,7 @@
           <template v-else>
             <a-sub-menu v-for="subItem in item.list" :key="subItem.seckey">
               <span slot="title">
-                <a-icon type="user" />
+                <a-icon :type="subItem.icType" />
                 <span>{{ subItem.title }}</span>
               </span>
               <template v-for="item1 in subItem.menuItmList">
@@ -104,38 +106,37 @@
           </a-dropdown>
         </div>
       </a-layout-header>
-      <a-breadcrumb :style="{
-          margin: '84px 16px 24px 16px',
-        }">
+      <a-breadcrumb :style="breadcrumbMargin">
         <a-breadcrumb-item v-for="item in breadArr" :key="item">{{item}}</a-breadcrumb-item>
       </a-breadcrumb>
-      <a-layout-content
-        :style="{
-          margin: '0px 16px 24px 16px',
-          background: '#fff',
-          minHeight:'auto'
-        }"
-      >
+      <a-layout-content :style="contentStyle">
         <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 <script>
-  import { userInfo } from '@/api/user';
+import { userInfo } from '@/api/user';
+
   export default {
     data() {
       return {
+        breadcrumbMargin: {margin: '84px 16px 24px 16px'},
+        contentStyle:{
+          margin: '0px 16px 24px 16px',
+          background: '#fff',
+          minHeight:'auto'
+        },
         userInfomation:{},
-        title: "Shopia云服务平台",
-        logo:"https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
+        title: "Sophia云服务平台",
         collapsed: false,
         breadArr: [],
         menuList: [
           {
             moduleTitle: "概览",
             list: [],
-            firstkey:'gailan'
+            firstkey:'gailan',
+            icType:'appstore'
           },
           {
             moduleTitle: "应用管理",
@@ -144,11 +145,12 @@
                 subKey: "myYingyong",
                 title: "我的应用",
                 seckey:'myYingyong',
+                icType:'user',
                 menuItmList: [
                   {
                     title: "概览",
                     itemKey: "yingyong1",
-                    path: "/gailan",
+                    path: "/overview",
                     threekey:'yingyong1'
                   },
                   {
@@ -174,6 +176,7 @@
                 subKey: "pro1",
                 title: "自然语言处理",
                 seckey:'pro1',
+                icType:'container',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -195,6 +198,7 @@
                 subKey: "pro2",
                 title: "语音技术",
                 seckey:'pro2',
+                icType:'audio',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -216,6 +220,7 @@
                 subKey: "pro3",
                 title: "人脸识别",
                 seckey:'pro3',
+                icType:'smile',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -237,6 +242,7 @@
                 subKey: "pro4",
                 title: "人体分析",
                 seckey:'pro4',
+                icType:'team',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -258,6 +264,7 @@
                 subKey: "pro5",
                 title: "文字识别",
                 seckey:'pro5',
+                icType:'file-search',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -279,6 +286,7 @@
                 subKey: "pro6",
                 title: "图像技术",
                 seckey:'pro6',
+                icType:'picture',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -300,6 +308,7 @@
                 subKey: "pro7",
                 title: "视频技术",
                 seckey:'pro7',
+                icType:'video-camera',
                 menuItmList: [
                   {
                     title: "API管理",
@@ -326,6 +335,7 @@
                 subKey: "dataSer1",
                 title: "智能推荐",
                 seckey:'dataSer1',
+                icType:'build',
                 menuItmList: [
                   {
                     title: "推荐应用管理",
@@ -349,6 +359,12 @@
                         itemKey: "shujuguanli",
                         path: "/recommendation/data/list",
                         fourkey:'shujuguanlik'
+                      },
+                      {
+                        title: "黑名单管理",
+                        itemKey: "heimingdanguanli",
+                        path: "/recommendation/data/blacklist",
+                        fourkey:'heimingdanguanli'
                       },
                       // {
                       //   title: "数据详情",
@@ -380,15 +396,35 @@
                         itemKey: "bitui",
                         path: "/recommendation/materiel/willPush",
                         fourkey:'bitui'
-                      }
+                      },
+                      {
+                        title: "资讯管理",
+                        itemKey: "zixun",
+                        path: "/recommendation/informationPool",
+                        fourkey:'zixun'
+                      },
                     ]
-                  }
+                  },
+                  {
+                    title: "记录管理",
+                    itemKey: "jiluguanli",
+                    threekey:'jiluguanli',
+                    children: [
+                      {
+                        title: "场景更新记录",
+                        itemKey: "changjinggengxinjilu",
+                        path: "/recommendation/jiluguanl/sceneUpdateRecord",
+                        fourkey:'changjinggengxinjilu'
+                      },
+                ]
+              },
                 ]
               },
               {
                 subKey: "dataSer2",
                 title: "用户画像",
                 seckey:'dataSer2',
+                icType:'contacts',
               }
             ]
           },
@@ -479,11 +515,13 @@
                 title: "企业设置",
                 path: "/businessSet",
                 seckey:'sys1',
+                icType:'home'
               },
               {
                 subKey: "sys2",
                 title: "用户中心",
                 seckey:'sys2',
+                icType:'usergroup-delete',
                 menuItmList: [
                   {
                     title: "基本资料",
@@ -508,12 +546,14 @@
               {
                 subKey: "sys3",
                 seckey:'sys3',
-                title: "消息中心"
+                title: "消息中心",
+                icType:'dollar',
               },
               {
                 subKey: "sys4",
                 seckey:'sys4',
-                title: "日志管理"
+                title: "日志管理",
+                icType:'solution',
               }
             ]
           }
@@ -537,7 +577,7 @@
           localStorage.setItem('openkey',routerParm.openkey)
         }
         this.$forceUpdate();
-      }
+      },
     },
     created(){
       this.$store.dispatch('getUserInfo');
@@ -560,7 +600,7 @@
     mounted() {
       this.showHeader();
     },
-    methods: {
+    methods: {  
       getUserInfo(){
         userInfo().then(res => {
           if(res.code == 200000) {
@@ -602,9 +642,9 @@
           var keyVal = e.key;
           if(keyVal == 'caiwu1'){
             this.breadArr.splice(0, 0, "财务中心", "财务总览");
-            // this.$router.push({
-            //   path: "/businessSet"
-            // });
+            this.$router.push({
+              path: "/finance"
+            });
           }
           else if(keyVal == 'caiwu2'){
             this.breadArr.splice(0, 0, "财务中心", "消费中心");
@@ -627,7 +667,7 @@
           else if(keyVal == 'caiwu5'){
             this.breadArr.splice(0, 0, "财务中心", "订单管理");
              this.$router.push({
-               path: "/order_man"
+               path: "/orderMan"
              });
           }
           else if(keyVal == 'caiwu6'){
@@ -798,15 +838,14 @@
       display: flex;
       color: #fff;
       align-items: center;
-      justify-content: center;
       .pic {
         width: 30px;
       }
       .sidebar-title {
         margin-left: 12px;
         color: #fff;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 21px;
+        font-weight: 650;
       }
     }
   }

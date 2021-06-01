@@ -1,6 +1,6 @@
 <template>
-  <div class="app_edit_container">
-    <div class="app_edit_top c-mb-10">
+  <div class="scene_edit_container">
+    <div class="scene_edit_top c-mb-10">
       <a-button type="primary" @click="toTest">
         测试
       </a-button>
@@ -20,7 +20,7 @@
             <SceneForm ref="sceneForm" :sceneForm="sceneForm" :app-list="appList" type="edit"></SceneForm>
           </div>
         </a-card>
-        <div class="basic-btn">
+        <div class="basic_btn">
           <a-button type="primary" class="c-mr-20" @click="finish">完成</a-button>
           <a-button @click="cancel">取消</a-button>
         </div>
@@ -28,8 +28,19 @@
       <div v-else-if="noTitleKey === '2'">
         <SetData type="edit" :dataInfo="dataInfo"></SetData>
       </div>
-      <div v-else="noTitleKey === '3'">
-        <SetRules type="edit" :ruleInfo="ruleInfo"></SetRules>
+      <div v-else-if="noTitleKey === '3'">
+        <SetFeature type="edit" :dataInfo="featureInfo"></SetFeature>
+      </div>
+      <div v-else>
+        <!--智能场景规则-->
+        <template v-if="sceneType == '0'">
+          <SetRules type="edit" :ruleInfo="ruleInfo"></SetRules>
+        </template>
+        <!--自定义场景规则-->
+        <template v-if="sceneType == '1'">
+          <!-- 自定义编辑 -->
+          <SetCustom :curOpt="'edit'"></SetCustom>
+        </template>
       </div>
     </a-card>
   </div>
@@ -38,13 +49,15 @@
 <script>
   import CreateForm from "@/components/recommendation/application/CreateForm";
   import SceneForm from "@/components/recommendation/scene/SceneForm";
+  import SetFeature from "@/components/recommendation/scene/SetFeature";
   import SetData from "@/components/recommendation/scene/SetData";
   import SetRules from "@/components/recommendation/scene/SetRules";
+  import SetCustom from "@/components/recommendation/scene/SetCustom"
   import {getSceneDetail, addScene, getSceneAll} from "@/api/recommendation/index";
 
   export default {
     name: "edit",
-    components: {SetData, SetRules, SceneForm, CreateForm},
+    components: {SetData, SetFeature, SetRules, SceneForm, CreateForm, SetCustom},
     data() {
       return {
         tabListNoTitle: [
@@ -58,6 +71,11 @@
           },
           {
             key: '3',
+            tab: '特征抽取',
+          },
+          ,
+          {
+            key: '4',
             tab: '推荐规则',
           },
         ],
@@ -65,12 +83,19 @@
         sceneForm: {},
         appList:[],
         dataInfo: {},
+        featureInfo: {},
         ruleInfo: {}
       }
     },
     created() {
       this.getSceneDetail();
       this.getSceneAll();
+    },
+    computed: {
+      // 场景类型 0-智能场景 1-自定义场景 2-模板场景
+      sceneType() {
+        return JSON.parse(localStorage.getItem('sceneInfo')).sceneType
+      }
     },
     methods: {
       toDetail() {
@@ -118,7 +143,13 @@
               description: res.data.description
             };
             this.dataInfo = res.data.dataInfo;
+            this.featureInfo = res.data.featureInfo;
             this.ruleInfo = res.data.ruleInfo;
+            let sceneInfo= {
+              sceneType: res.data.sceneType,
+              recommendObjectType: res.data.recommendObjectType
+            };
+            localStorage.setItem("sceneInfo",JSON.stringify(sceneInfo));
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -155,15 +186,15 @@
 </script>
 
 <style scoped lang="scss">
-  .app_edit_container {
+  .scene_edit_container {
     padding: 20px;
 
-    .basic-btn {
+    .basic_btn {
       margin-top: 20px;
       text-align: center;
     }
 
-    .app_edit_top {
+    .scene_edit_top {
       display: flex;
       justify-content: flex-end;
       align-items: center;

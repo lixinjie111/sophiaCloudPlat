@@ -47,6 +47,7 @@
       :pagination="pagination">
       <template slot="operation" slot-scope="text, record, index">
         <div class="operate">
+<!--        <a-button class="p0" type="link" @click="toPublish">发布</a-button>-->
         <a-button class="p0" type="link" @click="toDetail(record.applicationId,record.id)">详情</a-button>
         <a-button class="p0" type="link" @click="toEdit(record.applicationId,record.id)">编辑</a-button>
         <a-button class="p0" type="link" @click="toTest">测试</a-button>
@@ -105,6 +106,10 @@
             dataIndex: 'title'
           },
           {
+            title: '场景ID',
+            dataIndex: 'id'
+          },
+          {
             title: '所属应用',
             dataIndex: 'applicationName'
           },
@@ -120,6 +125,10 @@
             title: '推荐种类',
             dataIndex: 'recommendObjectTypeDesc'
           },
+          // {
+          //   title: '发布状态',
+          //   dataIndex: ''
+          // },
           {
             title: '调用次数',
             dataIndex: 'recallTimes'
@@ -223,29 +232,42 @@
           console.log(err, "err");
         });
       },
+      toPublish() {
+
+      },
       toDetail(applicationId,id) {
-        // const {href} = this.$router.resolve({
-        //   name: "recommendation-scene-detail",
-        //   query: {id: id}
-        // });
-        // window.open(href, '_blank');
-        this.$router.push({
-          path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+        const {href} = this.$router.resolve({
+          name: "recommendationSceneDetail",
+          query: {appId: applicationId,sceneId: id}
         });
+        window.open(href, '_blank');
+        // this.$router.push({
+        //   path: '/recommendation/scene/detail?appId=' + applicationId + '&sceneId=' + id
+        // });
       },
       toEdit(applicationId,id) {
-        this.$router.push({
-          path: '/recommendation/scene/edit?appId=' + applicationId + '&sceneId=' + id
+        const {href} = this.$router.resolve({
+          name: "recommendationSceneEdit",
+          query: {appId: applicationId,sceneId: id}
         });
+        window.open(href, '_blank');
+        // this.$router.push({
+        //   path: '/recommendation/scene/edit?appId=' + applicationId + '&sceneId=' + id
+        // });
       },
       toTest() {
-        this.$router.push({
-          path: '/recommendation/operation/result',
-          query:{
-            activekey:['tuijianceshijijieguo'],
-            openkey:['dataSer1',"tuijianyunying"]
-          }
+        // this.$router.push({
+        //   path: '/recommendation/operation/result',
+        //   query:{
+        //     activekey:['tuijianceshijijieguo'],
+        //     openkey:['dataSer1',"tuijianyunying"]
+        //   }
+        // });
+        const {href} = this.$router.resolve({
+          name: "recommendationOperationResult",
+          query: {activekey: ['tuijianceshijijieguo'],openkey: ['dataSer1', 'tuijianyunying']}
         });
+        window.open(href, '_blank');
       },
       add() {
         this.sceneModalShow = true;
@@ -282,6 +304,11 @@
             addScene(params).then(res => {
               if (res.code == 200000) {
                 this.$message.success("添加成功！");
+                let sceneInfo= {
+                  sceneType: params.sceneType,// 场景类型 0-智能场景 1-自定义场景 2-模板场景
+                  recommendObjectType: params.recommendObjectType // 推荐种类 0-推荐商品 1-推荐用户 2-推荐资讯 3-推荐活动
+                };
+                localStorage.setItem("sceneInfo",JSON.stringify(sceneInfo));
                 this.$router.push({
                   path: '/recommendation/scene/data?appId='+ this.$refs.sceneForm.$refs.sceneForm.model.applicationId + '&sceneId=' + res.data
                 });

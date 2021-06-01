@@ -1,5 +1,5 @@
 <template>
-  <div class="app_data_container">
+  <div class="scene_data_container">
     <SetData></SetData>
   </div>
 </template>
@@ -14,7 +14,7 @@
 </script>
 
 <style scoped lang="scss">
-  .app_data_container {
+  .scene_data_container {
     padding: 20px;
   }
 </style>

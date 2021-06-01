@@ -7,9 +7,13 @@
       </div>
       <div class="scene_box">
         <p class="title">过滤行为：</p>
-        <a-checkbox @click="onChange1" :checked="buyFlag">有购买行为的物品</a-checkbox>
-        <a-checkbox @click="onChange2" :checked="hasPushFlag">用户过去3天内有过曝光行为的物品</a-checkbox>
-        <a-checkbox @click="onChange3" :checked="complainFlag">用户投诉的物品</a-checkbox>
+        <a-checkbox @click="buyChange" :checked="buyFlag">有购买行为的物品</a-checkbox>
+        <a-checkbox @click="hasPushChange" :checked="hasPushFlag">用户过去3天内有过曝光行为的物品</a-checkbox>
+        <a-checkbox @click="complainChange" :checked="complainFlag">用户投诉的物品</a-checkbox>
+      </div>
+      <div class="scene_box">
+        <p class="title">运营策略：</p>
+        <addOperation ref="operationChild" :operationObject="operationObject"></addOperation>
       </div>
       <div class="scene_box">
         <p class="title">必推行为：</p>
@@ -41,11 +45,12 @@
 <script>
   import AddGoods from "./AddGoods";
   import AddBestGoods from "./AddBestGoods";
+  import AddOperation from "./AddOperation";
   import {getSceneItems, getSceneItemProperties, getSceneMustPushProperties, saveSceneConfigRule} from "@/api/recommendation/index";
 
   export default {
     name: "scene",
-    components: {AddGoods, AddBestGoods},
+    components: {AddOperation, AddGoods, AddBestGoods},
     props: {
       type: {
         type: String,
@@ -69,6 +74,15 @@
           {label: '无必推商品', value: 0},
           {label: '有必推商品', value: 1}
         ],
+        operationObject: {
+          varietyFlag: this.ruleInfo.varietyFlag || 0,
+          scatterFlag: this.ruleInfo.scatterFlag || 0,
+          shufflingFlag: this.ruleInfo.shufflingFlag || 0,
+          varietyNum: this.ruleInfo.varietyNum || '',
+          scatterNum: this.ruleInfo.scatterNum || '',
+          scatterChannelNum: this.ruleInfo.scatterChannelNum || '',
+          shufflings: this.ruleInfo.shufflings || [],
+        },
         recommendParams: this.ruleInfo.recommendParams || [],
         mustPushPropertiesList:[]
       }
@@ -125,13 +139,13 @@
           console.log(err, "err");
         });
       },
-      onChange1(e){
+      buyChange(e){
         e.target.checked ? this.buyFlag = 1 : this.buyFlag = 0;
       },
-      onChange2(e){
+      hasPushChange(e){
         e.target.checked ? this.hasPushFlag = 1 : this.hasPushFlag = 0;
       },
-      onChange3(e){
+      complainChange(e){
         e.target.checked ? this.complainFlag = 1 : this.complainFlag = 0;
       },
       bestChange(e) {
@@ -141,6 +155,7 @@
          this.finish('test');
       },
       finish(type) {
+        let operationObject = this.$refs.operationChild.operationObject;
         let params = {
           filterItemParams: this.filterItemParams,
           applicationId: this.$route.query.appId,
@@ -148,7 +163,14 @@
           buyFlag: this.buyFlag,
           complainFlag: this.complainFlag,
           hasPushFlag: this.hasPushFlag,
-          mustRecommendFlag: this.mustRecommendFlag
+          mustRecommendFlag: this.mustRecommendFlag,
+          varietyFlag: operationObject.varietyFlag,
+          scatterFlag: operationObject.scatterFlag,
+          shufflingFlag: operationObject.shufflingFlag,
+          varietyNum: operationObject.varietyNum,
+          scatterNum: operationObject.scatterNum,
+          scatterChannelNum: operationObject.scatterChannelNum,
+          shufflings: operationObject.shufflings,
         };
         if(this.mustRecommendFlag){
           params = Object.assign(params,{recommendParams:this.recommendParams});

@@ -1,7 +1,4 @@
-
 import {HTTPURL} from '../requestUrl';
-import qs from 'qs';
-
 let totalUrl = HTTPURL+'/admin';
 //发票管理搜索接口
 export const fapSearch = params => {
@@ -19,22 +16,64 @@ export const queryInvoiceDetail = params => {
 export const queryInvoiceOrderList = params => {
     return axios.post(`${totalUrl}/Invoice/queryInvoiceOrderList`, params).then(res => res.data);
 }
-/*订单列表*/
-export const orderList = params => {
-    return axios.post(`${totalUrl}/serviceOrder/queryOrderList`, params);
-  };
-  export const cancelOrder = params => {
-    return axios.post(`${totalUrl}/serviceOrder/cancelOrder`, params);
-  };
-  export const getOrderInfo = params => {
-    return axios.post(`${totalUrl}/serviceOrder/getOrderInfo`, params);
-  };
-  export const batchOrderInfoList = params => {
-    return axios.post(`${totalUrl}/serviceOrder/batchOrderInfoList`, params);
-  };
-  export const payBulk = params => {
-    return axios.post(`${totalUrl}/service/userAccount/payBulk`, params);
-  };
-  export const userAccount = params => {
-    return axios.get(`${totalUrl}/service/userAccount`, {params}).then(res => res.data);
-};
+//导出开票订单信息
+export const exportInvoiceDetail = params => { return axios.get(`${totalUrl}/Invoice/exportInvoiceOrder`, {params: params,responseType: "blob"}).then(res => res.data); };
+//发票操作接口   
+export const operateInvoice = params => {
+    return axios.post(`${totalUrl}/Invoice/operateInvoice`, params).then(res => res.data);
+}
+//获取用户信息
+export const getUserInfo = params => { return axios.post(`${HTTPURL}/ucenter/user/info`, params).then(res => res.data); };
+
+//发票基本信息修改
+export const editInvoiceBase = params => {
+    return axios.post(`${totalUrl}/Invoice/updateInvoiceBase`, params).then(res => res.data);
+}
+//查询寄送地址列表信息
+export const queryPostAddressList = params => {
+    return axios.post(`${totalUrl}/Invoice/queryPostAddressList`, params).then(res => res.data);
+}
+//删除寄送地址  
+export const deletePostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/deletePostAddress`, params).then(res => res.data);
+}
+//获取省信息列表
+export const getProvince = params => {
+    return axios.post(`${totalUrl}/Area/getProvince`, params).then(res => res.data);
+}
+//获得市信息列表    
+export const getCity = params => {
+    return axios.post(`${totalUrl}/Area/getCity`, params).then(res => res.data);
+}
+//获取区信息列表   
+export const getDistrict = params => {
+    return axios.post(`${totalUrl}/Area/getDistrict`, params).then(res => res.data);
+}
+//新增寄送地址信息   
+export const addPostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/addPostAddress`, params).then(res => res.data);
+}
+//修改寄送地址    
+export const updatePostAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/updatePostAddress`, params).then(res => res.data);
+}
+//设置默认寄送地址标志
+export const setDefaultAddress = params => {
+    return axios.post(`${totalUrl}/Invoice/setDefault`, params).then(res => res.data);
+}
+//查询邮箱列表信息 
+export const queryEmailList = params => {
+    return axios.post(`${totalUrl}/Invoice/queryEmailList`, params).then(res => res.data);
+}
+//新增邮箱信息 
+export const addEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/addEmail`, params).then(res => res.data);
+}
+//修改邮箱信息 
+export const updateEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/updateEmail`, params).then(res => res.data);
+}
+//删除邮箱信息 
+export const deleteEmail = params => {
+    return axios.post(`${totalUrl}/Invoice/deleteEmail`, params).then(res => res.data);
+}

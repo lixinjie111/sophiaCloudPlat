@@ -111,6 +111,125 @@ export const getSceneDetail = params => {
   return axios.post(`${totalUrl}/recommend/scene/get`, params).then(res => res.data);
 };
 
+// 根据一级数据类型获得子数据类型
+export const getFeaturesDataType = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getByParentDataType`, params).then(res => res.data);
+};
+
+// 获得特征名称
+export const getSceneFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getFeatures`, params).then(res => res.data);
+};
+
+// 根据应用和业务场景以及数据类型获得数据源表信息
+export const getFeaturesDataTables = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getDataTablesByDataType`, params).then(res => res.data);
+};
+
+// 保存特征抽取
+export const saveSceneFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/scene/saveFeatures`, params).then(res => res.data);
+};
+
+// 获得运营策略中的物品类型
+export const getItemTypes = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getItemTypes`, params).then(res => res.data);
+};
+// 添加推荐策略后显示的详情接口
+export const getStrategiesDetail = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getStrategiesDetail`,params).then(res => res.data)
+}
+
+//基于物品的协同过滤接口
+export const saveRecallStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveRecallStrategy`,params).then(res => res.data)
+}
+
+// 删除推荐策略接口
+export const deleteStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/deleteStrategy`,params).then(res => res.data)
+}
+
+// 获取行为类型枚举
+export const getBehaviorTypes = params => {
+  return axios.post(`${totalUrl}/recommend/enum/getBehaviorTypes`,params).then(res => res.data)
+}
+
+//保存过滤规则
+export const saveFilterRule = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveFilterRule`,params).then(res => res.data)
+}
+
+//获得黑名单列表接口
+export const getBlackList = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getBlacklistsByType`,params).then(res => res.data)
+}
+
+//保存绑定的黑名单接口
+export const saveBlack = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/bindBlacklist`,params).then(res => res.data)
+}
+
+//保存排序策略接口
+export const saveSortStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveSortStrategy`,params).then(res => res.data)
+}
+
+//获得商品参与训练的特征接口
+export const getGoodsFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getGoodsFeatures`,params).then(res => res.data)
+}
+
+//获得用户参与训练的特征接口
+export const getUserFeatures = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getUserFeatures`,params).then(res => res.data)
+}
+
+//保存运营规则
+export const saveMustRecommend = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/saveMustRecommend`,params).then(res => res.data)
+}
+
+//获得自定义场景中推荐策略列表接口
+export const getStrategies = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getStrategies`,params).then(res => res.data)
+}
+
+// 启用推荐策略接口
+export const startStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/startStrategy`,params).then(res => res.data)
+} 
+
+// 停用推荐策略接口
+export const endStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/endStrategy`,params).then(res => res.data)
+}
+
+// 召回策略详情
+export const getRecallStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getRecallStrategy`,params).then(res => res.data)
+}
+
+// 过滤规则详情
+export const getFilterRule = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getFilterRule`,params).then(res => res.data)
+}
+
+// 黑名单详情
+export const getBlacklist = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getBlacklist`,params).then(res => res.data)
+}
+
+// 排序策略详情
+export const getSortStrategy = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getSortStrategy`,params).then(res => res.data)
+}
+
+// 必推信息详情
+export const getMustRecommend = params => {
+  return axios.post(`${totalUrl}/recommend/selfDefinedScene/getMustRecommend`,params).then(res => res.data)
+}
+
 // -------------------------数据中心-----------------------------
 // 推荐数据管理列表
 export const getDataTableList = params => {
@@ -147,6 +266,24 @@ export const getTableColumn = params => {
   return axios.post(`${totalUrl}/recommend/excel/getTableColumn`,params).then(res => res.data)
 }
 
+// 黑名单列表接口
+export const getBlacklists = params => {
+  return axios.post(`${totalUrl}/recommend/excel/getBlacklists`,params).then(res => res.data)
+}
+// 上传黑名单
+export const loadBlacklist = (data, params) => {
+  // return axios.post(`${totalUrl}/recommend/excel/loadBlacklist`,params).then(res => res.data)
+  return axios({
+    url: `${totalUrl}/recommend/excel/loadBlacklist`,
+    method: "post",
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'multipart/form-data'
+    },
+    data,
+    params
+  })
+}
 // ------------------------推荐运营------------------------------
 // 获得推荐结果
 export const getRecommendResult = params => {

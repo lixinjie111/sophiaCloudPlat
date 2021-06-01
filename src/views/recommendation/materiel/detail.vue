@@ -1,5 +1,5 @@
 <template>
-  <div class="data-admin">
+  <div class="data_admin">
     <div class="top">
       <div class="left">
         <a-button type="primary" style="margin-right: 10px">删除</a-button>
@@ -237,7 +237,7 @@
 </script>
 
 <style scoped lang="scss">
-  .data-admin {
+  .data_admin {
     padding: 20px;
 
     .top {

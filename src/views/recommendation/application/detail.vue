@@ -17,7 +17,7 @@
       </a-descriptions>
     </a-card>
     <a-card title="业务场景" size="small" class="c-mt-20">
-      <div class="scene-top">
+      <div class="scene_top">
         <p>共{{list.length}}个业务场景</p>
         <a-button type="primary" class="c-ml-20" @click="addScene">添加场景</a-button>
       </div>
@@ -126,7 +126,7 @@
   .app_edit_container {
     padding: 20px;
 
-    .scene-top {
+    .scene_top {
       margin-bottom: 20px;
       display: flex;
       justify-content: flex-start;

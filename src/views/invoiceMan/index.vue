@@ -68,7 +68,7 @@
             <div class="no_fp_info_con" v-if="nofpAddress">暂无默认地址信息</div>
             <div class="has_fp_info_con" v-else>
                 <div class="fptt_con">
-                    <span>{{addressObj.name}}</span>
+                    <span>{{addressObj.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span>{{addressObj.phone}}</span>
                 </div>
                 <div class="kjlx_con">
@@ -80,78 +80,94 @@
     <div class="three_area">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="发票列表" name="first">
-                <vxe-table
-                    border
-                    show-header-overflow
-                    show-overflow
-                    highlight-hover-row
-                    :align="allAlign"
-                    :data="tableData"
-                    :loading="loading"
-                    ref="xTable"
-                >
-                    <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                    <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
-                    <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
-                    <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
-                    <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
-                    <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
-                    <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
-                    <vxe-table-column field="operation" title="操作" show-overflow>
-                        <template v-slot="{ row }">
-                            <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
-                            </div>
-                            <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
-                                <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
-                            </div>
-                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已拒绝') || (formatHtml(row.invoiceStatusDesc) == '已撤销') || (formatHtml(row.invoiceStatusDesc) == '已作废') || (formatHtml(row.invoiceStatusDesc) == '退票中')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                            </div>
-                           <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
-                                <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
-                                <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
-                                <a style="color:#0376FD;" @click="cancelFn(row)">下载</a>
-                            </div>
+                <div v-if="ifShowfpList">
+                    <vxe-table
+                        border
+                        show-header-overflow
+                        show-overflow
+                        highlight-hover-row
+                        :align="allAlign"
+                        :data="tableData"
+                        :loading="loading"
+                        ref="xTable"
+                    >
+                        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                        <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
+                        <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
+                        <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
+                        <vxe-table-column field="invoiceTypeDesc" title="发票类型" :filters="fptypeFilter" :filter-method="filtertypeMethod"></vxe-table-column>
+                        <vxe-table-column field="invoicePropertyDesc" title="发票性质" :filters="fpxzFilter" :filter-method="filterxzMethod"></vxe-table-column>
+                        <vxe-table-column field="invoiceStatusDesc" type="html" title="发票状态" :title-help="{message:helpMsg}" :filters="fpztFilter" :filter-method="filterztMethod"></vxe-table-column>
+                        <vxe-table-column field="operation" title="操作" show-overflow>
+                            <template v-slot="{ row }">
+                                <div v-if="(formatHtml(row.invoiceStatusDesc) == '待审核') || (formatHtml(row.invoiceStatusDesc) == '开票中')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                                </div>
+                                <div v-else-if="formatHtml(row.invoiceStatusDesc) == '已开票'">
+                                    <a style="color:#0376FD;" @click="returnTicket(row)">退票</a>
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="cancelFn(row)">撤销</a>
+                                    <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
+                                </div>
+                                <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已拒绝') || (formatHtml(row.invoiceStatusDesc) == '已撤销') || (formatHtml(row.invoiceStatusDesc) == '已作废') || (formatHtml(row.invoiceStatusDesc) == '退票中')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                </div>
+                            <div v-else-if="(formatHtml(row.invoiceStatusDesc) == '已红冲')">
+                                    <a style="color:#0376FD;" @click="goDetail(row)">详情</a>
+                                    <a style="color:#0376FD;" @click="exportDetail(row)">导出明细</a>
+                                    <a style="color:#0376FD;" @click="downLoad(row)">下载</a>
+                                </div>
+                            </template>
+                        </vxe-table-column>
+                        <template v-slot:empty>
+                            <span>暂无已索取发票数据，</span><span>索取发票</span>
                         </template>
-                    </vxe-table-column>
-                    <template v-slot:empty>
-                        <span>暂无已索取发票数据，</span><span>索取发票</span>
-                    </template>
-                </vxe-table>
-                <vxe-pager
-                    border
-                    size="medium"
-                    :loading="loading2"
-                    :current-page="tablePage2.currentPage"
-                    :page-size="tablePage2.pageSize"
-                    :total="tablePage2.totalResult"
-                    :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-                    @page-change="handlePageChange2"
-                >
-                </vxe-pager>
+                    </vxe-table>
+                    <vxe-pager
+                        border
+                        size="medium"
+                        :loading="loading2"
+                        :current-page="tablePage2.currentPage"
+                        :page-size="tablePage2.pageSize"
+                        :total="tablePage2.totalResult"
+                        :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
+                        @page-change="handlePageChange2"
+                    >
+                    </vxe-pager>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="发票信息管理" name="second">
-                <vInvoInfo></vInvoInfo>
+                <vInvoInfoShow v-if="ifShowShowPanel" @showEditPanel="showeditpanelfaFn"></vInvoInfoShow>
+                <vEditInvoInfo v-else :invoiceDetailIdInfo="invoiceDetailIdData" @closeEditShow="closeEditShowFn"></vEditInvoInfo>
             </el-tab-pane>
-            <el-tab-pane label="寄送地址管理" name="third">寄送地址管理</el-tab-pane>
-            <el-tab-pane label="电子邮箱" name="fourth">电子邮箱</el-tab-pane>
+            <el-tab-pane label="寄送地址管理" name="third">
+                <vShipAddressMan v-if="ifShowjsAddress" @getNewAddress="getNewAddressFa"></vShipAddressMan>
+            </el-tab-pane>
+            <el-tab-pane label="电子邮箱" name="fourth">
+                <vEmailMan v-if="ifShowEmail"></vEmailMan>
+            </el-tab-pane>
         </el-tabs>
     </div>
+    <!--发票退票弹框-->
+    <vInvoiceReturn v-if="ifShowPtInvReturn" :invoiceInfo="invoiceParm" @closePopWin="closePtInvoReturnPop"></vInvoiceReturn>
+    <vInvoiceZpReturn v-if="ifShowZpInvReturn" :invoiceInfo="invoiceParm" @closePopWin="closeZpInvoReturnPop"></vInvoiceZpReturn>
   </div>
 </template>
 
 <script>
 import moment from "moment";
 import "moment/locale/zh-cn";
-import {fapSearch,queryInvoiceBase} from "../../api/invoiceMan/index";
-import vInvoInfo from "./invoiceInfoMan";
+import {fapSearch,queryInvoiceBase,exportInvoiceDetail,operateInvoice} from "../../api/invoiceMan/index";
+import vEditInvoInfo from "./editInvoiceInfo";
+import vInvoInfoShow from "./invoInfoShow";
+import vShipAddressMan from "./shipAddressMan";
+import vEmailMan from "./emailMan";
+import vInvoiceReturn from "./invoiceReturn";
+import vInvoiceZpReturn from "./invoiceZpReturn";
 export default {
   name: "invoiceMan",
   data() {
@@ -195,12 +211,23 @@ export default {
         fptypeFilter:[],
         fpttFilter:[],
         fpxzFilter:[],
-        fpztFilter:[]
+        fpztFilter:[],
+        ifShowShowPanel:true,
+        ifShowPtInvReturn:false,
+        ifShowZpInvReturn:false,
+        invoiceParm:null,
+        infoMsg:{},
+        invoiceDetailIdData:{},
+        ifShowjsAddress:false,
+        ifShowfpList:true,
+        ifShowEmail:false,
+        reqParms:''
     };
   },
   created() {
       this.getfpManData();
       this.getInvoiceBase();
+      this.settitle();
   },
   computed:{
       moneyNum(){
@@ -208,18 +235,67 @@ export default {
       }
   },
   components:{
-      vInvoInfo
+      vEditInvoInfo,
+      vInvoInfoShow,
+      vShipAddressMan,
+      vEmailMan,
+      vInvoiceReturn,
+      vInvoiceZpReturn
   },
   methods: {
+    settitle(){
+        var setObj = this.$route.query.setting;
+        this.activeName = 'first';
+        if(setObj == 'now'){
+          this.activeName = 'second';
+          this.ifShowShowPanel = false;
+        }
+         var type = this.$route.query.type;
+         if(type=="mail"){
+             this.activeName='fourth';
+             this.ifShowEmail = true;
+         }
+    },
     watchDetailGetMoney(){
         var ifCanClick = this.moneyNum == '0.00' ? false : true;
         if(ifCanClick){
             this.$router.push({
                 path:'/InvoiceReq'
             });
+            localStorage.setItem('fpttObj',JSON.stringify(this.reqParms));
         }
         else{
             return;
+        }
+    },
+    returnTicket(e){
+        var titleFlg = e.invoiceTypeDesc;
+        this.invoiceParm = e;
+        if(titleFlg == '增值税专用发票'){
+            this.ifShowZpInvReturn = true;
+            this.ifShowPtInvReturn = false;
+        }
+        else{
+            this.ifShowPtInvReturn = true;
+            this.ifShowZpInvReturn = false;
+        }        
+    },
+    closePtInvoReturnPop(e){
+        if(e.refreshParm == 'refresh'){
+            this.ifShowPtInvReturn = e.operParm;
+            this.getfpManData();
+        }
+        else{
+            this.ifShowPtInvReturn = e.operParm;
+        }
+    },
+    closeZpInvoReturnPop(e){
+        if(e.refreshParm == 'refresh'){
+            this.ifShowZpInvReturn = e.operParm;
+            this.getfpManData();
+        }
+        else{
+            this.ifShowZpInvReturn = e.operParm;
         }
     },
     goDetail(e){
@@ -231,13 +307,52 @@ export default {
         });
     },
     exportDetail(e){
-        console.log(e,'222222')
+        var invoiceId = e.invoiceId || '';
+        var parms = {
+            invoiceId:invoiceId,
+        };
+        exportInvoiceDetail(parms).then(res=>{
+          var eleLink = document.createElement('a');
+          eleLink.download = '发票明细';
+          eleLink.style.display = 'none'
+          var blob = new Blob([res],{type: 'application/vnd.ms-excel'});
+          eleLink.href = URL.createObjectURL(blob);
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
+        }).catch(err=>{
+            this.$message.error('导出明细失败！')
+        });
     },
-    cancelFn(e){
-        console.log(e,'333333')
+    cancelFn(arg) {
+        var invoiceId = arg.invoiceId || '';
+        var parms = {
+            invoiceId:invoiceId,
+            invoiceStatus:'4'
+        };
+        this.$comfirm('撤销后将不会为您开具相应的发票，您是否要撤销此次发票申请？', '撤销发票', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          customClass:'configPopwin'
+        }).then(() => { 
+            operateInvoice(parms).then(res=>{
+                if(res.code == 200000){
+                    this.getfpManData();
+                }
+                else{
+                    this.$message.error('撤销失败！')
+                }
+            }).catch(err=>{
+                this.$message.error('撤销失败！')
+            });
+        }).catch(() => {
+          console.log('失败！')         
+        });
     },
     downLoad(e){
-        console.log(e,'444444')
+        console.log('下载后端说暂时做不了')
     },
     formatHtml(dom){
         let frag = document.createRange().createContextualFragment(dom).children[0].innerText;
@@ -277,12 +392,43 @@ export default {
       }
     },
     editfpInfo(){
-        this.activeName = 'second'; 
+        this.activeName = 'second';
+        this.ifShowShowPanel = true;
+    },
+    showeditpanelfaFn(arg){
+        this.ifShowShowPanel = arg.opt; 
+        this.invoiceDetailIdData = arg;
+    },
+    closeEditShowFn(arg){
+        this.ifShowShowPanel = arg;
+        this.getInvoiceBase();
     },
     editfpaddress(){
         this.activeName = 'third'; 
+        this.ifShowjsAddress = true;
     },
     handleClick(tab, event) {
+        if(tab.paneName == "first"){
+            this.ifShowfpList = true;
+        }
+        else{
+            this.ifShowfpList = false;
+        }
+        if(tab.paneName == "second"){
+            this.ifShowShowPanel = true;
+        }
+        if(tab.paneName == "third"){
+            this.ifShowjsAddress = true;
+        }
+        else{
+            this.ifShowjsAddress = false;
+        }
+        if(tab.paneName == 'fourth'){
+            this.ifShowEmail = true;
+        }
+        else{
+            this.ifShowEmail = false;
+        }
         this.activeName = tab.paneName; 
     },
     handlePageChange2 ({ currentPage, pageSize }) {
@@ -358,8 +504,8 @@ export default {
                         value:fpList[i].invoicePropertyDesc
                     });
                     fpzt.push({
-                        label:fpList[i].invoiceStatusDesc,
-                        value:fpList[i].invoiceStatusDesc
+                        label:document.createRange().createContextualFragment(fpList[i].invoiceStatusDesc).children[0].innerText, 
+                        value:document.createRange().createContextualFragment(fpList[i].invoiceStatusDesc).children[0].innerText
                     });
                 }
                 const xTable = this.$refs.xTable;
@@ -380,48 +526,64 @@ export default {
             this.$message.error('请求发票列表数据失败！')
         });
     },
+    getNewAddressFa(){
+        this.getInvoiceBase();
+    },
     getInvoiceBase(){
         var parms = {
             invoiceDetailId:''
         };
+        this.addressObj = {
+            name:'',
+            phone:'',
+            address:''
+        };
         queryInvoiceBase(parms).then(res=>{
-            console.log(res,'res')
             if(res.code == 200000){
                 var InvoiceMsgObj = res.data || {};
                 this.money = InvoiceMsgObj.totalAmount;
-                if(InvoiceMsgObj.title){
-                    this.nofpInfo = false;
-                    var typeTxt = '';
-                    if(InvoiceMsgObj.invoiceType == 0){
-                        typeTxt = '增值税普通发票';
-                    }
-                    else if(InvoiceMsgObj.invoiceType == 1){
-                        typeTxt = '增值税专用发票';
-                    }
-                    else if(InvoiceMsgObj.invoiceType == 2){
-                        typeTxt = '组织（非企业）增值税普通发票';
+                if(!InvoiceMsgObj){
+                    this.ifShowShowPanel = false;
+                }
+                else{
+                    this.infoMsg = InvoiceMsgObj;
+                    this.ifShowShowPanel = true;
+                    this.invoiceDetailIdData = InvoiceMsgObj || {};
+                    if(InvoiceMsgObj.title){
+                        this.nofpInfo = false;
+                        var typeTxt = '';
+                        if(InvoiceMsgObj.invoiceType == 0){
+                            typeTxt = '增值税普通发票';
+                        }
+                        else if(InvoiceMsgObj.invoiceType == 1){
+                            typeTxt = '增值税专用发票';
+                        }
+                        else if(InvoiceMsgObj.invoiceType == 2){
+                            typeTxt = '组织（非企业）增值税普通发票';
+                        }
+                        else{
+                            typeTxt = '';
+                        }
+                        this.fpinfoObj = {
+                            title:InvoiceMsgObj.title,
+                            type:typeTxt
+                        };
+                        this.reqParms = InvoiceMsgObj;
                     }
                     else{
-                        typeTxt = '';
+                        this.nofpInfo = true;
                     }
-                    this.fpinfoObj = {
-                        title:InvoiceMsgObj.title,
-                        type:typeTxt
-                    };
-                }
-                else{
-                    this.nofpInfo = true;
-                }
-                if(!InvoiceMsgObj.addressComplete && !InvoiceMsgObj.recipient && !InvoiceMsgObj.contactPhone){
-                    this.nofpAddress = true;
-                }
-                else{
-                    this.nofpAddress = false;
-                    this.addressObj={
-                        name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
-                        phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
-                        address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete + InvoiceMsgObj.postAddressVo.addressDetail: '',
-                    };
+                    if(!InvoiceMsgObj.postAddressVo){
+                        this.nofpAddress = true;
+                    }
+                    else{
+                        this.nofpAddress = false;
+                        this.addressObj={
+                            name:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.recipient : '',
+                            phone:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.contactPhone : '',
+                            address:InvoiceMsgObj.postAddressVo ? InvoiceMsgObj.postAddressVo.addressComplete : '',
+                        };
+                    }
                 }
             }
             else{
@@ -441,11 +603,22 @@ export default {
         return row.invoicePropertyDesc == value
     },
     filterztMethod({ value, row, column }){
-        return row.invoiceStatusDesc == value
+        return document.createRange().createContextualFragment(row.invoiceStatusDesc).children[0].innerText == value
     }
   },
 };
 </script>
+<style>
+.v-modal{
+    z-index: 9999999 !important; 
+}
+.el-message-box__wrapper{
+    z-index: 999999991 !important;
+}
+.el-message-box__wrapper .configPopwin{
+    z-index: 999999992 !important;
+}
+</style>
 <style lang="scss" scoped>
 .invoice_con {
   width: 100%;

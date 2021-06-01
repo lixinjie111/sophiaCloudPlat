@@ -1,6 +1,6 @@
 <template>
   <div class="set_data_container">
-    <div class="c-mb-10 upload-btn">
+    <div class="c-mb-10 upload_btn">
       <a-button type="primary" @click="toUpload" v-if="type != 'edit'">
         上传数据
       </a-button>
@@ -36,7 +36,7 @@
       </div>
     </a-card>
     <div class="btns">
-      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '配置规则'}}</a-button>
+      <a-button type="primary" class="c-mr-20" @click="save">{{type == 'edit' ? '完成' : '特征抽取'}}</a-button>
       <a-button @click="cancel">取消</a-button>
     </div>
   </div>
@@ -140,7 +140,7 @@
             }else {
               this.$message.success("添加成功！");
               this.$router.push({
-                path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
+                path: '/recommendation/scene/feature?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
               });
             }
           } else {
@@ -177,7 +177,7 @@
       text-align: center;
     }
 
-    .upload-btn {
+    .upload_btn {
       text-align: right;
     }
   }

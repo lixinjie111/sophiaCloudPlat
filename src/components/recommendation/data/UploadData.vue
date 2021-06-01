@@ -254,12 +254,7 @@ export default {
         formData.append('documentId',this.dataForm.file)
         formData.append('documentName',this.dataForm.fileName)
         formData.append('userTableName',this.dataForm.name)
-        formData.append('files',this.fileList[0])
-        // let config = {
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data'
-        //   }
-        // }        
+        formData.append('files',this.fileList[0])     
         let res = await uploadFileData(formData)
         if(res.code == 200000){
           this.tableName = res.data

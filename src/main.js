@@ -5,6 +5,8 @@ import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+import { MessageBox } from 'element-ui';
+Vue.prototype.$comfirm = MessageBox.confirm;
 
 import Xui from 'x-intelligent-ui';
 import 'x-intelligent-ui/dist/main.css';
@@ -54,7 +56,7 @@ Vue.use(VXETable);
 // 全局修改message距离顶部高度
 import { message } from 'x-intelligent-ui';
 message.config({
-  top: `100px`
+  top:'40%'
 });
 
 import lxjData from "./utils/lxjData.js"
