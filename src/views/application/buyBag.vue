@@ -162,7 +162,7 @@
               <div class="payType">
                  <p><el-radio v-model="radio" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
                  <div class="payMust">
-                      需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span>充值</span>或选择其他方式支付</span>
+                      需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span @click="goCharge">充值</span>或选择其他方式支付</span>
                   </div>
                    <div class="payDesc1">
                      温馨提示：如果您有正在使用中的后付费产品，请保证有足够余额。
@@ -316,6 +316,15 @@ export default {
   methods: {
     clearSource(){
      this.initInfo();
+    },
+    goCharge(){
+       this.$router.push({
+        path:'/finance',
+         query:{
+          activekey:['caiwu1'],
+          openkey:['caiwu1']
+        }
+      })
     },
     goLink1(){
        this.$router.push({

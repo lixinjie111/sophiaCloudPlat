@@ -191,7 +191,7 @@ export default {
                     this.customData.value.push(item.amount);
                 })
                 res.data.product.forEach(item=>{
-                    this.productData.name.push(item.type);
+                    this.productData.name.push(item.name);
                     this.productData.value.push(item.value);
                 })
             } else {
