@@ -35,7 +35,7 @@
          <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></FilterEdit>
          <Sort v-if="curType=='排序策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Sort>
          <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></SortEdit>
-         <!-- <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run> -->
+         <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run>
     </div>
 </template>
 <script>
@@ -83,7 +83,7 @@ export default {
                     dataIndex:"userName"
                 },
                 {
-                    title:"跟新时间",
+                    title:"更新时间",
                     dataIndex:"updateTime"
                 },
                 {
@@ -110,12 +110,15 @@ export default {
     },
     methods:{
         toRule(){
-
+              this.$router.push({
+                path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
+              });
         },
         onChange(id){
             this.curId = id
         },
         onClick(checked){
+            console.log(checked)
             if(checked){
                 startStrategy({id:this.curId}).then(res=>{}).catch(err=>{this.$message.error(err.message)})
             }else{
@@ -201,7 +204,10 @@ export default {
             }
             getStrategies(params).then(res=>{
                 if(res.code==200000){
-                    this.list = res.data.list
+                    this.list = res.data.list.map(item=>{
+                        item.status = !Boolean(item.status)
+                        return item
+                    })
                     this.total = res.data.total
                     this.pagination.total = res.data.total
                     this.pagination.current = current || 1
