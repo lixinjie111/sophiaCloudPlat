@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="visible" title="配置应用" @cancel="onCancel" :maskClosable="false" @ok="handleOk" width="488px" wrapClassName="wrapClassName">
+  <a-modal v-model="visible" title="配置应用" @cancel="onCancel" :maskClosable="false" @ok="handleOk" width="976px" wrapClassName="wrapClassName">
     <div class="row mg0">
       <div class="label must">接口选择 <span class="tips">（勾选以下接口，使此应用可以请求已勾选的接口服务）</span></div>
       <div v-for="(it, key) in interfaceList" :key="i" class="interface-row module-content">
@@ -189,6 +189,7 @@
     padding-left: 80px;
     transition: height 0.5s;
     overflow: hidden;
+    flex-wrap: wrap;
     .subject-content-item{
       flex: 0 0 33.33%;
       .content-item{
