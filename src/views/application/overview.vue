@@ -107,7 +107,7 @@
         </a-table>
       </div>
     </div>
-     <div class="nengli_area_container">
+    <div class="nengli_area_container">
       <div class="nengli_title_container">
         <div class="nl_title">能力服务列表</div>
         <div class="search_container">
@@ -126,8 +126,14 @@
       <div class="table_container">
         <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage" :pagination="pagination">
           <a slot="serviceName" class="ant-dropdown-link" slot-scope="text"><span style="color:#0376FD" >{{ text }}</span></a>
+          <template  slot="freeType"  slot-scope="text, record">
+            <span  v-if="text==1">每日免费限额</span>
+            <span  v-else-if="text==2">一次性免费限额</span>
+            <span  v-else-if="text==3">无限制</span>
+            <span  v-else>--</span>
+          </template >
           <template  slot="postpaidStatus"  slot-scope="text, record">
-            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD" v-if="text==2">购买</span>
+            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD" v-if="text==2">开通</span>
             <span  v-if="text==0">--</span>
             <span  @click="cancleOrder(record)" style="cursor:pointer;color:#f00" v-if="text==1">停止付费</span>
           </template >
@@ -220,8 +226,10 @@ export default {
         },
         {
           title: "消费状态",
-          dataIndex: "paySta",
-          key: "paySta"
+          dataIndex: "freeType",
+          key: "freeType",
+          slots: { title: "freeType" },
+          scopedSlots: { customRender: "freeType" }
         },
         {
           title: "调用量限制",
@@ -588,20 +596,6 @@ export default {
             var serListdata = res.data.list || [];
             serListdata.forEach(item => {
               item.key = `itemKey${item.id}`;
-              // item.Purchases = "购买";
-              // if (item.freeType == 1) {
-              //   item.paySta = "每日免费限额";
-              // } else if (item.freeType == 2) {
-              //   item.paySta = "一次性免费限额";
-              // } else if (item.freeType == 3) {
-              //   item.paySta = "无限制";
-              // }
-
-              // if (item.payStatus == 1) {
-              //   item.openBuy = "";
-              // } else {
-              //   item.openBuy = "购买";
-              // }
             });
             this.nldata = serListdata;
             this.pagination.total = res.data.total;
