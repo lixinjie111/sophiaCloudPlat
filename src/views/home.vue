@@ -428,85 +428,97 @@ import { userInfo } from '@/api/user';
               }
             ]
           },
-          // {
-          //   moduleTitle: "工具服务",
-          //   list: [
-          //     {
-          //       subKey: "toolSer1",
-          //       title: "风控管理",
-          //       seckey:'toolSer1',
-          //     },
-          //     {
-          //       subKey: "toolSer2",
-          //       title: "财税计算",
-          //       seckey:'toolSer2',
-          //     },
-          //     {
-          //       subKey: "toolSer3",
-          //       title: "出行工具",
-          //       seckey:'toolSer3',
-          //     }
-          //   ]
-          // },
-          // {
-          //   moduleTitle: "财务中心",
-          //   list: [
-          //     {
-          //       subKey: "caiwu1",
-          //       title: "财务总览",
-          //       path: "/caiwu1",
-          //       seckey:'caiwu1',
-          //     },
-          //     {
-          //       subKey: "caiwu2",
-          //       title: "消费中心",
-          //       path: "",
-          //       seckey:'caiwu2',
-          //     },
-          //     {
-          //       subKey: "caiwu3",
-          //       title: "成本账单",
-          //       path: "",
-          //       seckey:'caiwu3',
-          //     },
-          //     {
-          //       subKey: "caiwu4",
-          //       title: "收支明细",
-          //       path: "",
-          //       seckey:'caiwu4',
-          //     },
-          //     {
-          //       subKey: "caiwu5",
-          //       title: "订单管理",
-          //       path: "/order_man",
-          //       seckey:'caiwu5',
-          //     },
-          //     {
-          //       subKey: "caiwu6",
-          //       title: "续费管理",
-          //       path: "",
-          //       seckey:'caiwu6',
-          //     },
-          //     {
-          //       subKey: "caiwu7",
-          //       title: "退订管理",
-          //       path: "",
-          //       seckey:'caiwu7',
-          //     },
-          //     {
-          //       subKey: "caiwu8",
-          //       title: "发票管理",
-          //       path: "",
-          //       seckey:'caiwu8',
-          //     },
-          //     {
-          //       subKey: "caiwu9",
-          //       title: "合同管理",
-          //       path: "",
-          //       seckey:'caiwu9',
-          //     }
-          //   ]
-          // },
+          {
+            moduleTitle: "工具服务",
+            list: [
+              {
+                subKey: "toolSer1",
+                title: "风控管理",
+                seckey:'toolSer1',
+                icType:'insurance',
+              },
+              {
+                subKey: "toolSer2",
+                title: "财税计算",
+                seckey:'toolSer2',
+                icType:'pay-circle',
+              },
+              {
+                subKey: "toolSer3",
+                title: "出行工具",
+                seckey:'toolSer3',
+                icType:'mobile',
+              }
+            ]
+          },
+          {
+            moduleTitle: "财务中心",
+            list: [
+              {
+                subKey: "caiwu1",
+                title: "财务总览",
+                path: "/finance",
+                seckey:'caiwu1',
+                icType:'profile'
+              },
+              {
+                subKey: "caiwu2",
+                title: "消费中心",
+                path: "",
+                seckey:'caiwu2',
+                icType:'shopping'
+              },
+              {
+                subKey: "caiwu3",
+                title: "成本账单",
+                path: "",
+                seckey:'caiwu3',
+                icType:'money-collect'
+              },
+              {
+                subKey: "caiwu4",
+                title: "收支明细",
+                path: "",
+                seckey:'caiwu4',
+                icType:'red-envelope'
+              },
+              {
+                subKey: "caiwu5",
+                title: "订单管理",
+                path: "/orderMan",
+                seckey:'caiwu5',
+                icType:'project'
+              },
+              {
+                subKey: "caiwu6",
+                title: "续费管理",
+                path: "",
+                seckey:'caiwu6',
+                icType:'property-safety'
+              },
+              {
+                subKey: "caiwu7",
+                title: "退订管理",
+                path: "",
+                seckey:'caiwu7',
+                icType:'interaction'
+              },
+              {
+                subKey: "caiwu8",
+                title: "发票管理",
+                path: "",
+                seckey:'caiwu8',
+                icType:'barcode'
+              },
+              {
+                subKey: "caiwu9",
+                title: "合同管理",
+                path: "",
+                seckey:'caiwu9',
+                icType:'audit'
+              }
+            ]
+          },
           {
             moduleTitle: "系统管理",
             list: [
