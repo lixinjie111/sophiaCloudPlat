@@ -14,7 +14,7 @@
                 <a-step title="支付成功"/>
               </a-steps>
           </div>
-          <template v-if="currentIndex==0">
+          <div v-if="currentIndex==0">
               <div class="payForm">
                 <div class="payLeft">
                     <div class="payTitle">{{serviceName}}</div>
@@ -90,18 +90,19 @@
                   </el-card>
                 </div>
               </div>
-          </template>  
-          <template v-if="currentIndex==1"> 
+          </div>  
+          <div v-if="currentIndex==1"> 
             <div class="detailTitle">订单详情</div>
             <vxe-table
                   border
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
+                  key="table1"
                   :data="tableData1">
                   <vxe-table-column field="pagName" title="资源包类型"></vxe-table-column>
                   <vxe-table-column field="" title="付费方式">
-                     <template>
+                     <template #default="{ row }">
                        预付费
                     </template>
                   </vxe-table-column>
@@ -128,8 +129,8 @@
                     <a-checkbox v-model="checked">我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
                   </div>
               </div>
-          </template> 
-          <template v-if="currentIndex==2"> 
+          </div> 
+          <div v-if="currentIndex==2"> 
             <div class="navTitle">
                <div class="detailTitle">待支付订单</div>
                <div class="detailTotal">待支付总金额：<span>¥ {{format(tableData2[0].orderAmount)}} </span></div>
@@ -139,13 +140,10 @@
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
+                  key="table2"
                   :data="tableData2">
                   <vxe-table-column field="orderSn" title="订单号"></vxe-table-column>
-                  <vxe-table-column field="" title="产品名称">
-                    <template #default="{ row }">
-                      {{row.serviceModelName}}-{{row.serviceName}}
-                    </template>
-                  </vxe-table-column>
+                  <vxe-table-column field="proName" title="产品名称"></vxe-table-column>
                   <vxe-table-column field="" title="配置">
                       <template #default="{ row }">
                         <span style="color: #0376FD;cursor:pointer" @click="lookSet(row)">详情</span>
@@ -153,7 +151,7 @@
                   </vxe-table-column>
                   <vxe-table-column field="orderPackageTime" title="时长(月)"></vxe-table-column>
                   <vxe-table-column field="orderAmount" title="总额">
-                    <template #default="{ row }">
+                      <template #default="{ row }">
                         <span>¥ {{format(row.orderAmount)}}</span>
                       </template>
                   </vxe-table-column>
@@ -187,8 +185,8 @@
                   </div>
                 </div>
               </div>
-          </template>  
-          <template v-if="currentIndex==3"> 
+          </div>  
+          <div v-if="currentIndex==3"> 
             <div class="openStatus">
               <div class="text1">
                 <i class="el-icon-circle-check"></i> 支付成功
@@ -200,7 +198,7 @@
                 <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button><el-link type="primary" @click="goLink">查看订单明细</el-link>
               </div>
             </div> 
-          </template>  
+          </div>  
         </div>
     </div>
    <a-modal v-model="visible" title="提醒" @ok="handleOk" cancelText="取消" centered okText="购买">
@@ -301,6 +299,7 @@ export default {
         })
         this.tableData1=_newArr;
         this.sumPrice=sum;
+        console.log(this.tableData1)
       },
       deep:true,
       },
@@ -382,9 +381,12 @@ export default {
       getOrderInfo(fwqsParm)
         .then(res => {
           if (res.code == 200000) {
-              this.tableData2.push(res.data);
+              console.log(res.data,'res.data')  //proName
+              var tbData = res.data;
+              tbData.proName = tbData.serviceModelName + '-' + tbData.serviceName;
+              this.$set(this.tableData2,0,tbData);
               // this.$message.success(res.message);
-              this.currentIndex++;
+              this.currentIndex=2;
               this.isload=false;
           } else {
             this.$message.error(res.message || "请求失败！");
