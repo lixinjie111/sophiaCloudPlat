@@ -1,5 +1,6 @@
 // 不在菜单导航里的路由
 const Login = resolve => require(['@/views/login/index'], resolve)
+const alipay = resolve => require(['@/views/alipay/index'], resolve)
 const register = resolve => require(['@/views/login/register'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
@@ -76,6 +77,7 @@ const orderInfoLaterPaid = resolve => require(['@/views/order/orderInfoLaterPaid
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
+        { path: '/alipay', name: 'alipay', component: alipay },
         // { path: '*', redirect: '/404' }
     ]
     // 在菜单导航里的路由

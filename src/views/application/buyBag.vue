@@ -158,7 +158,7 @@
               </vxe-table>
               <div class="detailTitle" style="margin-top:30px">选择支付方式</div>
               <div class="payType">
-                 <p><el-radio v-model="radio" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
+                 <p><el-radio v-model="payType" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
                  <div class="payMust">
                       需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span @click="goCharge">充值</span>或选择其他方式支付</span>
                   </div>
@@ -167,13 +167,23 @@
                     </div>
               </div>
               <div class="payType">
-                <p><el-radio v-model="radio" label="2">其他方式支付</el-radio></p>
+                <p><el-radio v-model="payType" label="2">其他方式支付</el-radio></p>
                 <div class="payMust">
                   <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="支付宝" name="first">支付宝</el-tab-pane>
+                    <el-tab-pane label="支付宝" name="first">
+                      <div class="pic" style="width:137px"><img src="../../assets/images/alipay.png" alt=""></div>
+                    </el-tab-pane>
                     <el-tab-pane label="微信" name="second">微信</el-tab-pane>
-                    <el-tab-pane label="个人网银" name="third">个人网银</el-tab-pane>
-                    <el-tab-pane label="企业网银" name="fourth">企业网银</el-tab-pane>
+                    <el-tab-pane label="个人网银" name="third">
+                      <el-radio-group v-model="personalBankNO">
+                        <el-radio :label="item.id" border v-for="item in personalBankList" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                      </el-radio-group>
+                    </el-tab-pane>
+                    <el-tab-pane label="企业网银" name="fourth">
+                      <el-radio-group v-model="corporateBankNo">
+                        <el-radio :label="item.id" border v-for="item in corporateBankList" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                      </el-radio-group>
+                    </el-tab-pane>
                   </el-tabs>
                   <div class="payBox payBox1">
                       <div class="payTotal">
@@ -251,7 +261,7 @@
 
 <script>
 import {
-  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank
 } from "../../api/bugBag/index";
 export default {
   data() {
@@ -261,7 +271,7 @@ export default {
       serviceName:'',
       serviceId:'',
       activeName: 'second',
-      radio:'1',
+      payType:'1',
       orderSn:'',
       checked:false,
       visible:false,
@@ -283,6 +293,10 @@ export default {
       ],
       checkedCities: ['短语音识别-英语', '北京'],
       cities: ['短语音识别-中文普通话', '短语音识别-英语', '短语音识别-英语', '短语音识别-英语'],
+      personalBankList:[],
+      corporateBankList:[],
+      personalBankNO:'',
+      corporateBankNo:"",
     };
   },
   watch:{
@@ -309,6 +323,8 @@ export default {
     this.serviceName=this.$route.query.serviceName;
     this.initInfo();
     this.userAccount();
+    this.personalBank();
+    this.corporateBank();
   },
   mounted() {
   },
@@ -344,19 +360,45 @@ export default {
         }
       })
     },
-    realPay(){
-      let _param=[this.tableData2[0].orderSn];
-      payBulk(_param)
+    personalBank(){
+      personalBank()
         .then(res => {
-          if (res.code == 200000) {
-              this.currentIndex++;
-          } else {
-            this.$message.error(res.message || "请求失败！");
-          }
+          this.personalBankList=res.data;
         })
         .catch(err => {
           this.$message.error("请求失败！");
         });
+    },
+    corporateBank(){
+      corporateBank()
+        .then(res => {
+          this.corporateBankList=res.data;
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
+    realPay(){
+      if(this.payType==1){
+        let _param=[this.tableData2[0].orderSn];
+        payBulk(_param)
+          .then(res => {
+            if (res.code == 200000) {
+                this.currentIndex++;
+            } else {
+              this.$message.error(res.message || "请求失败！");
+            }
+          })
+          .catch(err => {
+            this.$message.error("请求失败！");
+          });
+      }else{
+        if(this.activeName=='first'){
+          this.$router.push({
+            path:'alipay?orderSn='+this.tableData2[0].orderSn
+          })
+        }
+      }
     },
     userAccount(){
       userAccount().then(res => {
@@ -381,7 +423,6 @@ export default {
       getOrderInfo(fwqsParm)
         .then(res => {
           if (res.code == 200000) {
-              console.log(res.data,'res.data')  //proName
               var tbData = res.data;
               tbData.proName = tbData.serviceModelName + '-' + tbData.serviceName;
               this.$set(this.tableData2,0,tbData);
@@ -389,6 +430,7 @@ export default {
               this.currentIndex=2;
               this.isload=false;
           } else {
+            this.isload=false;
             this.$message.error(res.message || "请求失败！");
           }
         })
@@ -625,6 +667,12 @@ export default {
                     color:#0376FD;
                     cursor: pointer;
                   }
+                }
+                .bankName{
+                  display: inline-block;
+                  width: 20px;
+                  vertical-align: middle;
+                  margin-left: 20px;
                 }
               }
               .payDesc1{
