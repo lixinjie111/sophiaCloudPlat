@@ -133,7 +133,7 @@
           <div v-if="currentIndex==2"> 
             <div class="navTitle">
                <div class="detailTitle">待支付订单</div>
-               <div class="detailTotal">待支付总金额：<span>¥ {{format(tableData2[0].orderAmount)}} </span></div>
+               <div class="detailTotal">待支付总金额：<span>¥ {{format(totalOrderAmount)}} </span></div>
             </div>
              <vxe-table
                   border
@@ -160,7 +160,7 @@
               <div class="payType">
                  <p><el-radio v-model="payType" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
                  <div class="payMust">
-                      需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span @click="goCharge">充值</span>或选择其他方式支付</span>
+                      需支付： <span class="payPrice">¥ {{format(totalOrderAmount)}} </span> <span  class="payTip" v-if="account.amount<totalOrderAmount">当前帐户余额不足，请<span @click="goCharge">充值</span>或选择其他方式支付</span>
                   </div>
                    <div class="payDesc1">
                      温馨提示：如果您有正在使用中的后付费产品，请保证有足够余额。
@@ -187,7 +187,7 @@
                   </el-tabs>
                   <div class="payBox payBox1">
                       <div class="payTotal">
-                          应付金额： <span>¥ {{format(tableData2[0].orderAmount)}}</span>
+                          应付金额： <span>¥ {{format(totalOrderAmount)}}</span>
                       </div>
                       <div class="confirmBtn1">
                           <el-button type="primary" @click="realPay">支付</el-button>
@@ -205,7 +205,12 @@
                 您购买的服务将在1～5分钟内开通，请耐心等待。
               </div>
               <div class="text3">
-                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button><el-link type="primary" @click="goLink">查看订单明细</el-link>
+                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button>
+                <el-link type="primary" @click="goLink">查看订单明细</el-link>
+                 <el-link type="primary">
+                   <span v-if="this.tableData2.length==1"  @click="goLink">查看订单明细</span>
+                   <span v-else  @click="goLink2">查看订单列表</span>
+                </el-link>
               </div>
             </div> 
           </div>  
@@ -226,7 +231,7 @@
               资源包类型：
           </div>
           <div class="payRight">
-             {{serviceName}}
+             {{info.serviceModelName}} - {{info.serviceName}}
           </div>
         </div>
         <div class="payItem">
@@ -234,7 +239,7 @@
               资源包配置：
           </div>
           <div class="payRight">
-            <div v-for="item in tableData2[0].orderAllocations" :key="item.packageAllocation">
+            <div v-for="item in info.orderAllocations" :key="item.packageAllocation">
               <p  v-if="item.num!=0" >{{format1(item.packageAllocation)}}次 * {{item.orderNum}}个</p>
             </div>
           </div>
@@ -244,7 +249,7 @@
               购买时长：       
           </div>
           <div class="payRight">
-            {{tableData2[0].orderPackageTime}}个月
+            {{info.orderPackageTime}}个月
           </div>
         </div>
         <div class="payItem">
@@ -252,7 +257,7 @@
               价格：       
           </div>
           <div class="payRight">
-            <div class="price">¥ {{format(tableData2[0].orderAmount)}}</div>
+            <div class="price">¥ {{format(totalOrderAmount)}}</div>
           </div>
         </div>
     </a-modal>
@@ -261,8 +266,9 @@
 
 <script>
 import {
-  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList
 } from "../../api/bugBag/index";
+
 export default {
   data() {
     return {
@@ -282,7 +288,7 @@ export default {
       tableData0:[],
       tableData1:[],
       tableData2:[],
-      tableData3:[],
+      info:'',
       orderList:[],
       account:{},
       tableData: [
@@ -295,8 +301,10 @@ export default {
       cities: ['短语音识别-中文普通话', '短语音识别-英语', '短语音识别-英语', '短语音识别-英语'],
       personalBankList:[],
       corporateBankList:[],
+      orderSnList:[],
       personalBankNO:'',
       corporateBankNo:"",
+      totalOrderAmount:'',
     };
   },
   watch:{
@@ -319,9 +327,14 @@ export default {
       },
   },
   created() {
-    this.serviceId=this.$route.query.serviceId;
-    this.serviceName=this.$route.query.serviceName;
-    this.initInfo();
+    if(this.$route.query.id){
+      this.currentIndex=2;
+      this.getOrderInfo();
+    }else{
+      this.serviceId=this.$route.query.serviceId;
+      this.serviceName=this.$route.query.serviceName;
+      this.initInfo();
+    }
     this.userAccount();
     this.personalBank();
     this.corporateBank();
@@ -360,6 +373,15 @@ export default {
         }
       })
     },
+    goLink2(){
+       this.$router.push({
+        path:'/orderMan',
+        query:{
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
+    },
     personalBank(){
       personalBank()
         .then(res => {
@@ -380,7 +402,7 @@ export default {
     },
     realPay(){
       if(this.payType==1){
-        let _param=[this.tableData2[0].orderSn];
+        let _param=this.orderSnList;
         payBulk(_param)
           .then(res => {
             if (res.code == 200000) {
@@ -395,7 +417,7 @@ export default {
       }else{
         if(this.activeName=='first'){
           this.$router.push({
-            path:'alipay?orderSn='+this.tableData2[0].orderSn
+            path:'alipay?orderSn='+this.orderSnList.join(',')
           })
         }
       }
@@ -414,30 +436,29 @@ export default {
     },
     lookSet(val){
       this.visible3=true;
-      this.tableData3=val.orderAllocations;
+      this.info=val;
     },
-    getOrderInfo(){
-     var fwqsParm = new FormData();
-      fwqsParm.append("orderSn",this.orderList[0]);
-      this.tableData2=[];
-      getOrderInfo(fwqsParm)
-        .then(res => {
-          if (res.code == 200000) {
-              var tbData = res.data;
-              tbData.proName = tbData.serviceModelName + '-' + tbData.serviceName;
-              this.$set(this.tableData2,0,tbData);
-              // this.$message.success(res.message);
-              this.currentIndex=2;
-              this.isload=false;
-          } else {
-            this.isload=false;
-            this.$message.error(res.message || "请求失败！");
-          }
+    getOrderInfo() {
+        if(this.$route.query.id){
+          this.orderSnList=this.$route.query.id.split(',');
+        }else{
+            this.orderSnList=this.orderList
+        }
+        batchOrderInfoList(this.orderSnList).then((res) => {
+            if (res.code === 200000) {
+                var tbData= res.data.orderInfoRespList;
+                tbData.forEach(item=>{
+                  item['proName']= item.serviceModelName + '-' + item.serviceName;
+                })
+                this.tableData2=tbData;
+                this.totalOrderAmount = res.data.totalOrderAmount;
+                this.currentIndex=2;
+                this.isload=false;
+            } else {
+                this.isload=false;
+                this.$message.error('订单查询失败');
+            }
         })
-        .catch(err => {
-          this.$message.error("请求失败！");
-        });
-
     },
     goPay(){
       if(!this.checked){
@@ -498,10 +519,14 @@ export default {
       this.currentIndex--;
     },
     format (num) {
+      if(num){
         return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+      }
     },
     format1 (num) {
+      if(num){
         return (num.toFixed(0) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+      }
     },
     next0(){
       if(this.sumPrice==0){

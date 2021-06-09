@@ -220,7 +220,7 @@
         methods: {
             pay() {
                 this.$router.push({
-                    path: "/pay?id=" + this.$route.query.id
+                    path: "/buyBag?id=" + this.$route.query.id
                 })
             },
             cancelOrder(id) {

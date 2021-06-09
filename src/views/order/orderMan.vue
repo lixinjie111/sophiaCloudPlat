@@ -237,7 +237,7 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
             },
             payOne(id) {
                 this.$router.push({
-                    path: "/pay?id=" + id
+                    path: "/buyBag?id=" + id
                 })
             },
             payAll() {
@@ -247,7 +247,7 @@ height: 22px;line-height: 22px;cursor: pointer;    text-align: center;
                     orderSnList.push(value.orderSn)
                 })
                 this.$router.push({
-                    path: "/pay?id=" + orderSnList.splice(',')
+                    path: "/buyBag?id=" + orderSnList.splice(',')
                 })
             },
             AllCancel() {

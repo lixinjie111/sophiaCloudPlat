@@ -14,3 +14,4 @@ export const createOrder = params => { return axios.post(`${HTTPURL}/admin/servi
 export const createPreOderVerify = params => { return axios.post(`${HTTPURL}/admin/serviceOrder/createPreOderVerify`, params).then(res => res.data); };
 export const getOrderInfo = params => { return axios.post(`${HTTPURL}/admin/serviceOrder/getOrderInfo`, params).then(res => res.data); };
 export const payBulk = params => { return axios.post(`${HTTPURL}/admin/service/userAccount/payBulk`, params).then(res => res.data); };
+export const batchOrderInfoList = params => {return axios.post(`${HTTPURL}/admin/serviceOrder/batchOrderInfoList`, params).then(res => res.data); };
