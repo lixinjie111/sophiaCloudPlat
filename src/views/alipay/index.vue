@@ -20,7 +20,7 @@
                         </div>
                         <div class="list">
                             <span class="list_title">交易单号：</span>
-                            <span class="list_desc">{{orderObj.orderSn}}</span>
+                            <span class="list_desc">{{orderObj.orderSn[0]}}</span>
                         </div>
                         <div class="list">
                             <span class="list_title">创建时间：</span>
@@ -42,13 +42,15 @@ import {
 export default {
     data() {
         return {
-            orderSn:'',
-            orderObj:{}
+            orderObj:{
+                merchantName:'',
+                serviceName:'',
+                orderSn:[],
+                creatTime:''
+            }
         }
     },
     mounted() {
-        this.orderSn=this.$route.query.orderSn;
-        console.log(this.orderSn)
         this.initInfo();
     },
     methods: {
@@ -63,9 +65,7 @@ export default {
             })
         },
         initInfo(){
-            let _param={
-                'order_sn':this.orderSn
-            }
+            let _param=this.$route.query.orderParm;
             payAli(_param)
                 .then(res => {
                 if (res.code == 200000) {

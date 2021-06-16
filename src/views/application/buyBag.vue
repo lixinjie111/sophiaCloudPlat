@@ -417,7 +417,10 @@ export default {
       }else{
         if(this.activeName=='first'){
           this.$router.push({
-            path:'alipay?orderSn='+this.orderSnList.join(',')
+            path:'/alipay',
+            query:{
+              orderParm:this.orderSnList
+            }
           })
         }
       }
@@ -442,7 +445,7 @@ export default {
         if(this.$route.query.id){
           this.orderSnList=this.$route.query.id.split(',');
         }else{
-            this.orderSnList=this.orderList
+          this.orderSnList=this.orderList;
         }
         batchOrderInfoList(this.orderSnList).then((res) => {
             if (res.code === 200000) {

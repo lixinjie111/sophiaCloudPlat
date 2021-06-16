@@ -4,7 +4,7 @@ import {HTTPURL} from '../requestUrl';
 /**
  * 登录
  */
-export const payAli = params => { return axios.get(`${HTTPURL}/admin/payOrder/payAli`, {params: params}).then(res => res.data); };
+export const payAli = params => { return axios.post(`${HTTPURL}/admin/payOrder/payAli`,params).then(res => res.data); };
 export const userAccountSummary = params => { return axios.get(`${HTTPURL}/admin/service/userAccountSummary`, {params: params}).then(res => res.data); };
 export const corporateBank = params => { return axios.get(`${HTTPURL}/admin/payOrder/corporateBank`, {params: params}).then(res => res.data); };
 export const personalBank = params => { return axios.get(`${HTTPURL}/admin/payOrder/personalBank`, {params: params}).then(res => res.data); };
