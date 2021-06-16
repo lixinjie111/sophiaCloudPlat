@@ -330,7 +330,11 @@ export default {
     if(this.$route.query.id){
       this.currentIndex=2;
       this.getOrderInfo();
-    }else{
+    }
+    else if(this.$route.query.payStatus == 'success'){
+      this.currentIndex=3;
+    }
+    else{
       this.serviceId=this.$route.query.serviceId;
       this.serviceName=this.$route.query.serviceName;
       this.initInfo();

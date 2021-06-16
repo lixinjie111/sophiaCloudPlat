@@ -15,3 +15,5 @@ export const createPreOderVerify = params => { return axios.post(`${HTTPURL}/adm
 export const getOrderInfo = params => { return axios.post(`${HTTPURL}/admin/serviceOrder/getOrderInfo`, params).then(res => res.data); };
 export const payBulk = params => { return axios.post(`${HTTPURL}/admin/service/userAccount/payBulk`, params).then(res => res.data); };
 export const batchOrderInfoList = params => {return axios.post(`${HTTPURL}/admin/serviceOrder/batchOrderInfoList`, params).then(res => res.data); };
+//查询支付订单接口
+export const queryOrder = params => { return axios.get(`${HTTPURL}/admin/payOrder/queryOrder`, {params: params}).then(res => res.data); };

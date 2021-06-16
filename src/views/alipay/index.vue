@@ -37,7 +37,7 @@
 <script>
 import QRCode from 'qrcodejs2';
 import {
-  payAli
+  payAli,queryOrder
 } from "../../api/bugBag/index";
 export default {
     data() {
@@ -47,7 +47,8 @@ export default {
                 serviceName:'',
                 orderSn:[],
                 creatTime:''
-            }
+            },
+            timer:null
         }
     },
     mounted() {
@@ -56,13 +57,32 @@ export default {
     methods: {
         bindQRCode(str){
             new QRCode(this.$refs.qrCodeDiv, {
-            text: str,
-            width: 220,
-            height: 220,
-            colorDark: "#333333", //二维码颜色
-            colorLight: "#ffffff", //二维码背景色
-            correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
-            })
+                text: str,
+                width: 220,
+                height: 220,
+                colorDark: "#333333", //二维码颜色
+                colorLight: "#ffffff", //二维码背景色
+                correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
+            });
+        },
+        getPayStatus(paySn){
+           var parm = {
+               paySn 
+           } 
+           queryOrder(parm).then(res=>{
+               if(res.code == 200000){
+                   clearInterval(this.timer);
+                   this.$message.success(res.message);
+                   this.$router.push({
+                       path:'/buyBag',
+                       query:{
+                           payStatus:'success'
+                       }
+                   });
+               }
+           }).catch(err=>{
+               console.log(err,'err')
+           }); 
         },
         initInfo(){
             let _param=this.$route.query.orderParm;
@@ -70,15 +90,23 @@ export default {
                 .then(res => {
                 if (res.code == 200000) {
                     this.orderObj=res.data;
-                     this.$nextTick(function () {
+                    this.$nextTick(function () {
+                        if(!res.data.qrcode){
+                            this.$message.error("获取二维码失败，请稍后重试！");
+                        }
+                        else{
                             this.bindQRCode(res.data.qrcode);
-                        })
+                            this.timer = setInterval(()=>{
+                                this.getPayStatus(res.data.paySn);
+                            },2000);
+                        }
+                    })
                 } else {
                     this.$message.error(res.message || "请求失败！");
                 }
             })
             .catch(err => {
-            this.$message.error("请求失败！");
+                this.$message.error("请求失败！");
             });
         },
         closeDialog1(){
