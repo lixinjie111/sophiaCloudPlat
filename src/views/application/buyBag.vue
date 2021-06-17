@@ -206,7 +206,6 @@
               </div>
               <div class="text3">
                 <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button>
-                <el-link type="primary" @click="goLink">查看订单明细</el-link>
                  <el-link type="primary">
                    <span v-if="this.tableData2.length==1"  @click="goLink">查看订单明细</span>
                    <span v-else  @click="goLink2">查看订单列表</span>
