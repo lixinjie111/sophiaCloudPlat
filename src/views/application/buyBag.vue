@@ -275,7 +275,7 @@ export default {
       sumPrice:0,
       serviceName:'',
       serviceId:'',
-      activeName: 'second',
+      activeName: 'first',
       payType:'1',
       orderSn:'',
       checked:false,
@@ -301,7 +301,7 @@ export default {
       personalBankList:[],
       corporateBankList:[],
       orderSnList:[],
-      personalBankNO:'ABC',
+      personalBankNO:'BCCB',
       corporateBankNo:"ABC",
       totalOrderAmount:'',
     };
@@ -436,7 +436,10 @@ export default {
             console.log(res,'sssssss')
             if(res.code == 200000){
               let url = res.data.cashierGatewayUrl;
-              window.open(url,'_blank');
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
             }
             else{
               this.$message.error(res.message || "请求失败！");
@@ -454,7 +457,10 @@ export default {
           wyPay(payPrams).then(res=>{
             if(res.code == 200000){
               let url = res.data.cashierGatewayUrl;
-              window.open(url,'_blank');
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
             }
             else{
               this.$message.error(res.message || "请求失败！");
