@@ -168,7 +168,7 @@
               </div>
               <div class="payType">
                 <p><el-radio v-model="payType" label="2">其他方式支付</el-radio></p>
-                <div class="payMust">
+                <div class="payMust" v-if="payType == 2">
                   <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="支付宝" name="first">
                       <div class="pic" style="width:137px"><img src="../../assets/images/alipay.png" alt=""></div>
@@ -176,24 +176,24 @@
                     <el-tab-pane label="微信" name="second">微信</el-tab-pane>
                     <el-tab-pane label="个人网银" name="third">
                       <el-radio-group v-model="personalBankNO">
-                        <el-radio :label="item.id" border v-for="item in personalBankList" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                        <el-radio border v-for="item in personalBankList" :label="item.abbreviation" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
                       </el-radio-group>
                     </el-tab-pane>
                     <el-tab-pane label="企业网银" name="fourth">
                       <el-radio-group v-model="corporateBankNo">
-                        <el-radio :label="item.id" border v-for="item in corporateBankList" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                        <el-radio border v-for="item in corporateBankList" :label="item.abbreviation" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
                       </el-radio-group>
                     </el-tab-pane>
                   </el-tabs>
-                  <div class="payBox payBox1">
-                      <div class="payTotal">
-                          应付金额： <span>¥ {{format(totalOrderAmount)}}</span>
-                      </div>
-                      <div class="confirmBtn1">
-                          <el-button type="primary" @click="realPay">支付</el-button>
-                      </div>
-                  </div>
                 </div>
+              </div>
+              <div class="payBox payBox1">
+                  <div class="payTotal">
+                      应付金额： <span>¥ {{format(totalOrderAmount)}}</span>
+                  </div>
+                  <div class="confirmBtn1">
+                      <el-button type="primary" @click="realPay">支付</el-button>
+                  </div>
               </div>
           </div>  
           <div v-if="currentIndex==3"> 
@@ -265,7 +265,7 @@
 
 <script>
 import {
-  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList,wyPay
 } from "../../api/bugBag/index";
 
 export default {
@@ -301,8 +301,8 @@ export default {
       personalBankList:[],
       corporateBankList:[],
       orderSnList:[],
-      personalBankNO:'',
-      corporateBankNo:"",
+      personalBankNO:'ABC',
+      corporateBankNo:"ABC",
       totalOrderAmount:'',
     };
   },
@@ -425,6 +425,43 @@ export default {
               orderParm:this.orderSnList
             }
           })
+        }
+        else if(this.activeName == 'third'){
+          let payPrams = {
+            abbreviation:this.personalBankNO,
+            orderSnList:this.orderSnList,
+            payMode:'B2C'
+          };
+          wyPay(payPrams).then(res=>{
+            console.log(res,'sssssss')
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              window.open(url,'_blank');
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+          }).catch(err=>{
+            console.log(err,'err')
+          });
+        }
+        else if(this.activeName == 'fourth'){
+          let payPrams = {
+            abbreviation:this.corporateBankNo,
+            orderSnList:this.orderSnList,
+            payMode:'B2B'
+          };
+          wyPay(payPrams).then(res=>{
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              window.open(url,'_blank');
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+          }).catch(err=>{
+            console.log(err,'err')
+          });
         }
       }
     },

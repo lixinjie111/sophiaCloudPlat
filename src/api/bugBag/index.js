@@ -17,3 +17,5 @@ export const payBulk = params => { return axios.post(`${HTTPURL}/admin/service/u
 export const batchOrderInfoList = params => {return axios.post(`${HTTPURL}/admin/serviceOrder/batchOrderInfoList`, params).then(res => res.data); };
 //查询支付订单接口
 export const queryOrder = params => { return axios.get(`${HTTPURL}/admin/payOrder/queryOrder`, {params: params}).then(res => res.data); };
+//网银支付接口  
+export const wyPay = params => { return axios.post(`${HTTPURL}/admin/payOrder/payBank`,params).then(res => res.data); };
