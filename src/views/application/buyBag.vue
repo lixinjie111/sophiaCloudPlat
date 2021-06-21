@@ -185,6 +185,7 @@
                       </el-radio-group>
                     </el-tab-pane>
                   </el-tabs>
+                  <a-spin tip="请稍候！" v-if="ifShowLoading"></a-spin>
                 </div>
               </div>
               <div class="payBox payBox1">
@@ -290,12 +291,6 @@ export default {
       info:'',
       orderList:[],
       account:{},
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-      ],
       checkedCities: ['短语音识别-英语', '北京'],
       cities: ['短语音识别-中文普通话', '短语音识别-英语', '短语音识别-英语', '短语音识别-英语'],
       personalBankList:[],
@@ -304,6 +299,7 @@ export default {
       personalBankNO:'BCCB',
       corporateBankNo:"ABC",
       totalOrderAmount:'',
+      ifShowLoading:false
     };
   },
   watch:{
@@ -427,13 +423,13 @@ export default {
           })
         }
         else if(this.activeName == 'third'){
+          this.ifShowLoading = true;
           let payPrams = {
             abbreviation:this.personalBankNO,
             orderSnList:this.orderSnList,
             payMode:'B2C'
           };
           wyPay(payPrams).then(res=>{
-            console.log(res,'sssssss')
             if(res.code == 200000){
               let url = res.data.cashierGatewayUrl;
               var newWindow = window.open();
@@ -444,11 +440,14 @@ export default {
             else{
               this.$message.error(res.message || "请求失败！");
             }
+             this.ifShowLoading = false;
           }).catch(err=>{
+            this.ifShowLoading = false;
             console.log(err,'err')
           });
         }
         else if(this.activeName == 'fourth'){
+          this.ifShowLoading = true;
           let payPrams = {
             abbreviation:this.corporateBankNo,
             orderSnList:this.orderSnList,
@@ -465,8 +464,10 @@ export default {
             else{
               this.$message.error(res.message || "请求失败！");
             }
+            this.ifShowLoading = false;
           }).catch(err=>{
-            console.log(err,'err')
+            console.log(err,'err');
+            this.ifShowLoading = false;
           });
         }
       }
@@ -728,6 +729,7 @@ export default {
               }
               .payMust{
                 padding-left: 25px;
+                position: relative;
                 .payPrice{
                     font-size: 18px;
                     font-family: PingFangSC-Medium, PingFang SC;
@@ -747,6 +749,13 @@ export default {
                   width: 20px;
                   vertical-align: middle;
                   margin-left: 20px;
+                }
+                /deep/ .ant-spin{
+                  position: absolute;
+                  top: 90%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  z-index: 999999999;
                 }
               }
               .payDesc1{

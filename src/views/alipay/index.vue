@@ -54,6 +54,9 @@ export default {
     mounted() {
         this.initInfo();
     },
+    beforeDestroy(){
+        clearInterval(this.timer);
+    },
     methods: {
         bindQRCode(str){
             new QRCode(this.$refs.qrCodeDiv, {
