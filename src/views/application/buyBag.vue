@@ -14,7 +14,7 @@
                 <a-step title="支付成功"/>
               </a-steps>
           </div>
-          <template v-if="currentIndex==0">
+          <div v-if="currentIndex==0">
               <div class="payForm">
                 <div class="payLeft">
                     <div class="payTitle">{{serviceName}}</div>
@@ -31,7 +31,7 @@
                         show-overflow
                         highlight-hover-row
                         :data="tableData0">
-                        <vxe-table-column field="numStandard" title="规格(万次)"></vxe-table-column>
+                        <vxe-table-column field="numStandard" title="规格(次)"></vxe-table-column>
                         <vxe-table-column field="validPeriod" title="购买时长(月)"></vxe-table-column>
                         <vxe-table-column field="packagePrice" title="单价(元)"></vxe-table-column>
                         <vxe-table-column field="num" title="数量">
@@ -45,7 +45,7 @@
                   <el-card class="box-card" shadow="never">
                     <div slot="header" class="clearfix">
                       <span>当前配置</span>
-                      <el-button style="float: right; padding: 3px 0" type="text">清除</el-button>
+                      <el-button style="float: right; padding: 3px 0" type="text" @click="clearSource">清除</el-button>
                     </div>
                     <div class="payItem">
                       <div class="payLf">
@@ -69,8 +69,8 @@
                       <div class="payLf">
                           购买时长：       
                       </div>
-                      <div class="payRight">
-                        {{tableData[0].validPeriod}}个月
+                      <div class="payRight" v-if="tableData0.length>0">
+                        {{tableData0[0].validPeriod}}个月
                       </div>
                     </div>
                     <div class="payItem">
@@ -90,18 +90,19 @@
                   </el-card>
                 </div>
               </div>
-          </template>  
-          <template v-if="currentIndex==1"> 
+          </div>  
+          <div v-if="currentIndex==1"> 
             <div class="detailTitle">订单详情</div>
             <vxe-table
                   border
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
+                  key="table1"
                   :data="tableData1">
                   <vxe-table-column field="pagName" title="资源包类型"></vxe-table-column>
                   <vxe-table-column field="" title="付费方式">
-                     <template>
+                     <template #default="{ row }">
                        预付费
                     </template>
                   </vxe-table-column>
@@ -125,27 +126,24 @@
                       <el-button @click="goBack">返回修改</el-button>
                   </div>
                   <div class="payCheck">
-                    <a-checkbox v-model="checked">我已我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
+                    <a-checkbox v-model="checked">我已阅读并同意</a-checkbox><span> Sophia云平台线上订购协议</span>
                   </div>
               </div>
-          </template> 
-          <template v-if="currentIndex==2"> 
+          </div> 
+          <div v-if="currentIndex==2"> 
             <div class="navTitle">
                <div class="detailTitle">待支付订单</div>
-               <div class="detailTotal">待支付总金额：<span>¥ {{format(tableData2[0].orderAmount)}} </span></div>
+               <div class="detailTotal">待支付总金额：<span>¥ {{format(totalOrderAmount)}} </span></div>
             </div>
              <vxe-table
                   border
                   show-header-overflow
                   show-overflow
                   highlight-hover-row
+                  key="table2"
                   :data="tableData2">
                   <vxe-table-column field="orderSn" title="订单号"></vxe-table-column>
-                  <vxe-table-column field="" title="产品名称">
-                    <template #default="{ row }">
-                      {{row.serviceModelName}}-{{row.serviceName}}
-                    </template>
-                  </vxe-table-column>
+                  <vxe-table-column field="proName" title="产品名称"></vxe-table-column>
                   <vxe-table-column field="" title="配置">
                       <template #default="{ row }">
                         <span style="color: #0376FD;cursor:pointer" @click="lookSet(row)">详情</span>
@@ -153,42 +151,53 @@
                   </vxe-table-column>
                   <vxe-table-column field="orderPackageTime" title="时长(月)"></vxe-table-column>
                   <vxe-table-column field="orderAmount" title="总额">
-                    <template #default="{ row }">
+                      <template #default="{ row }">
                         <span>¥ {{format(row.orderAmount)}}</span>
                       </template>
                   </vxe-table-column>
               </vxe-table>
               <div class="detailTitle" style="margin-top:30px">选择支付方式</div>
               <div class="payType">
-                 <p><el-radio v-model="radio" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
+                 <p><el-radio v-model="payType" label="1">账户余额（当前账户余额 ¥ {{format(account.amount)}}）</el-radio></p>
                  <div class="payMust">
-                      需支付： <span class="payPrice">¥ {{format(tableData2[0].orderAmount)}} </span> <span  class="payTip" v-if="account.amount<tableData2[0].orderAmount">当前帐户余额不足，请<span>充值</span>或选择其他方式支付</span>
+                      需支付： <span class="payPrice">¥ {{format(totalOrderAmount)}} </span> <span  class="payTip" v-if="account.amount<totalOrderAmount">当前帐户余额不足，请<span @click="goCharge">充值</span>或选择其他方式支付</span>
                   </div>
                    <div class="payDesc1">
                      温馨提示：如果您有正在使用中的后付费产品，请保证有足够余额。
                     </div>
               </div>
               <div class="payType">
-                <p><el-radio v-model="radio" label="2">其他方式支付</el-radio></p>
-                <div class="payMust">
+                <p><el-radio v-model="payType" label="2">其他方式支付</el-radio></p>
+                <div class="payMust" v-if="payType == 2">
                   <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="支付宝" name="first">支付宝</el-tab-pane>
+                    <el-tab-pane label="支付宝" name="first">
+                      <div class="pic" style="width:137px"><img src="../../assets/images/alipay.png" alt=""></div>
+                    </el-tab-pane>
                     <el-tab-pane label="微信" name="second">微信</el-tab-pane>
-                    <el-tab-pane label="个人网银" name="third">个人网银</el-tab-pane>
-                    <el-tab-pane label="企业网银" name="fourth">企业网银</el-tab-pane>
+                    <el-tab-pane label="个人网银" name="third">
+                      <el-radio-group v-model="personalBankNO">
+                        <el-radio border v-for="item in personalBankList" :label="item.abbreviation" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                      </el-radio-group>
+                    </el-tab-pane>
+                    <el-tab-pane label="企业网银" name="fourth">
+                      <el-radio-group v-model="corporateBankNo">
+                        <el-radio border v-for="item in corporateBankList" :label="item.abbreviation" :key="item.id" style="margin-bottom:20px;margin-left:0"><span >{{item.bankName}}</span><span  class="bankName"><img :src="item.iconUrl" alt=""></span></el-radio>
+                      </el-radio-group>
+                    </el-tab-pane>
                   </el-tabs>
-                  <div class="payBox payBox1">
-                      <div class="payTotal">
-                          应付金额： <span>¥ {{format(tableData2[0].orderAmount)}}</span>
-                      </div>
-                      <div class="confirmBtn1">
-                          <el-button type="primary" @click="realPay">支付</el-button>
-                      </div>
-                  </div>
+                  <a-spin tip="请稍候！" v-if="ifShowLoading"></a-spin>
                 </div>
               </div>
-          </template>  
-          <template v-if="currentIndex==3"> 
+              <div class="payBox payBox1">
+                  <div class="payTotal">
+                      应付金额： <span>¥ {{format(totalOrderAmount)}}</span>
+                  </div>
+                  <div class="confirmBtn1">
+                      <el-button type="primary" @click="realPay">支付</el-button>
+                  </div>
+              </div>
+          </div>  
+          <div v-if="currentIndex==3"> 
             <div class="openStatus">
               <div class="text1">
                 <i class="el-icon-circle-check"></i> 支付成功
@@ -197,10 +206,14 @@
                 您购买的服务将在1～5分钟内开通，请耐心等待。
               </div>
               <div class="text3">
-                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button><el-link type="primary" @click="goLink">查看订单明细</el-link>
+                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button>
+                 <el-link type="primary">
+                   <span v-if="this.tableData2.length==1"  @click="goLink">查看订单明细</span>
+                   <span v-else  @click="goLink2">查看订单列表</span>
+                </el-link>
               </div>
             </div> 
-          </template>  
+          </div>  
         </div>
     </div>
    <a-modal v-model="visible" title="提醒" @ok="handleOk" cancelText="取消" centered okText="购买">
@@ -218,7 +231,7 @@
               资源包类型：
           </div>
           <div class="payRight">
-             {{serviceName}}
+             {{info.serviceModelName}} - {{info.serviceName}}
           </div>
         </div>
         <div class="payItem">
@@ -226,7 +239,7 @@
               资源包配置：
           </div>
           <div class="payRight">
-            <div v-for="item in tableData2[0].orderAllocations" :key="item.packageAllocation">
+            <div v-for="item in info.orderAllocations" :key="item.packageAllocation">
               <p  v-if="item.num!=0" >{{format1(item.packageAllocation)}}次 * {{item.orderNum}}个</p>
             </div>
           </div>
@@ -236,7 +249,7 @@
               购买时长：       
           </div>
           <div class="payRight">
-            {{tableData2[0].orderPackageTime}}个月
+            {{info.orderPackageTime}}个月
           </div>
         </div>
         <div class="payItem">
@@ -244,7 +257,7 @@
               价格：       
           </div>
           <div class="payRight">
-            <div class="price">¥ {{format(tableData2[0].orderAmount)}}</div>
+            <div class="price">¥ {{format(totalOrderAmount)}}</div>
           </div>
         </div>
     </a-modal>
@@ -253,8 +266,9 @@
 
 <script>
 import {
-  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList,wyPay
 } from "../../api/bugBag/index";
+
 export default {
   data() {
     return {
@@ -262,8 +276,8 @@ export default {
       sumPrice:0,
       serviceName:'',
       serviceId:'',
-      activeName: 'second',
-      radio:'1',
+      activeName: 'first',
+      payType:'1',
       orderSn:'',
       checked:false,
       visible:false,
@@ -274,17 +288,18 @@ export default {
       tableData0:[],
       tableData1:[],
       tableData2:[],
-      tableData3:[],
+      info:'',
       orderList:[],
       account:{},
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-      ],
       checkedCities: ['短语音识别-英语', '北京'],
       cities: ['短语音识别-中文普通话', '短语音识别-英语', '短语音识别-英语', '短语音识别-英语'],
+      personalBankList:[],
+      corporateBankList:[],
+      orderSnList:[],
+      personalBankNO:'BCCB',
+      corporateBankNo:"ABC",
+      totalOrderAmount:'',
+      ifShowLoading:false
     };
   },
   watch:{
@@ -301,19 +316,43 @@ export default {
         })
         this.tableData1=_newArr;
         this.sumPrice=sum;
+        console.log(this.tableData1)
       },
       deep:true,
       },
   },
   created() {
-    this.serviceId=this.$route.query.serviceId;
-    this.serviceName=this.$route.query.serviceName;
-    this.initInfo();
+    if(this.$route.query.id){
+      this.currentIndex=2;
+      this.getOrderInfo();
+    }
+    else if(this.$route.query.payStatus == 'success'){
+      this.currentIndex=3;
+    }
+    else{
+      this.serviceId=this.$route.query.serviceId;
+      this.serviceName=this.$route.query.serviceName;
+      this.initInfo();
+    }
     this.userAccount();
+    this.personalBank();
+    this.corporateBank();
   },
   mounted() {
   },
   methods: {
+    clearSource(){
+     this.initInfo();
+    },
+    goCharge(){
+       this.$router.push({
+        path:'/finance',
+         query:{
+          activekey:['caiwu1'],
+          openkey:['caiwu1']
+        }
+      })
+    },
     goLink1(){
        this.$router.push({
         path:'/overview',
@@ -333,19 +372,105 @@ export default {
         }
       })
     },
-    realPay(){
-      let _param=[this.tableData2[0].orderSn];
-      payBulk(_param)
+    goLink2(){
+       this.$router.push({
+        path:'/orderMan',
+        query:{
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
+    },
+    personalBank(){
+      personalBank()
         .then(res => {
-          if (res.code == 200000) {
-              this.currentIndex++;
-          } else {
-            this.$message.error(res.message || "请求失败！");
-          }
+          this.personalBankList=res.data;
         })
         .catch(err => {
           this.$message.error("请求失败！");
         });
+    },
+    corporateBank(){
+      corporateBank()
+        .then(res => {
+          this.corporateBankList=res.data;
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+        });
+    },
+    realPay(){
+      if(this.payType==1){
+        let _param=this.orderSnList;
+        payBulk(_param)
+          .then(res => {
+            if (res.code == 200000) {
+                this.currentIndex++;
+            } else {
+              this.$message.error(res.message || "请求失败！");
+            }
+          })
+          .catch(err => {
+            this.$message.error("请求失败！");
+          });
+      }else{
+        if(this.activeName=='first'){
+          this.$router.push({
+            path:'/alipay',
+            query:{
+              orderParm:this.orderSnList
+            }
+          })
+        }
+        else if(this.activeName == 'third'){
+          this.ifShowLoading = true;
+          let payPrams = {
+            abbreviation:this.personalBankNO,
+            orderSnList:this.orderSnList,
+            payMode:'B2C'
+          };
+          wyPay(payPrams).then(res=>{
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+             this.ifShowLoading = false;
+          }).catch(err=>{
+            this.ifShowLoading = false;
+            console.log(err,'err')
+          });
+        }
+        else if(this.activeName == 'fourth'){
+          this.ifShowLoading = true;
+          let payPrams = {
+            abbreviation:this.corporateBankNo,
+            orderSnList:this.orderSnList,
+            payMode:'B2B'
+          };
+          wyPay(payPrams).then(res=>{
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+            this.ifShowLoading = false;
+          }).catch(err=>{
+            console.log(err,'err');
+            this.ifShowLoading = false;
+          });
+        }
+      }
     },
     userAccount(){
       userAccount().then(res => {
@@ -361,27 +486,29 @@ export default {
     },
     lookSet(val){
       this.visible3=true;
-      this.tableData3=val.orderAllocations;
+      this.info=val;
     },
-    getOrderInfo(){
-     var fwqsParm = new FormData();
-      fwqsParm.append("orderSn",this.orderList[0]);
-      this.tableData2=[];
-      getOrderInfo(fwqsParm)
-        .then(res => {
-          if (res.code == 200000) {
-              this.tableData2.push(res.data);
-              // this.$message.success(res.message);
-              this.currentIndex++;
-              this.isload=false;
-          } else {
-            this.$message.error(res.message || "请求失败！");
-          }
+    getOrderInfo() {
+        if(this.$route.query.id){
+          this.orderSnList=this.$route.query.id.split(',');
+        }else{
+          this.orderSnList=this.orderList;
+        }
+        batchOrderInfoList(this.orderSnList).then((res) => {
+            if (res.code === 200000) {
+                var tbData= res.data.orderInfoRespList;
+                tbData.forEach(item=>{
+                  item['proName']= item.serviceModelName + '-' + item.serviceName;
+                })
+                this.tableData2=tbData;
+                this.totalOrderAmount = res.data.totalOrderAmount;
+                this.currentIndex=2;
+                this.isload=false;
+            } else {
+                this.isload=false;
+                this.$message.error('订单查询失败');
+            }
         })
-        .catch(err => {
-          this.$message.error("请求失败！");
-        });
-
     },
     goPay(){
       if(!this.checked){
@@ -442,10 +569,14 @@ export default {
       this.currentIndex--;
     },
     format (num) {
+      if(num){
         return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+      }
     },
     format1 (num) {
+      if(num){
         return (num.toFixed(0) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+      }
     },
     next0(){
       if(this.sumPrice==0){
@@ -598,6 +729,7 @@ export default {
               }
               .payMust{
                 padding-left: 25px;
+                position: relative;
                 .payPrice{
                     font-size: 18px;
                     font-family: PingFangSC-Medium, PingFang SC;
@@ -611,6 +743,19 @@ export default {
                     color:#0376FD;
                     cursor: pointer;
                   }
+                }
+                .bankName{
+                  display: inline-block;
+                  width: 20px;
+                  vertical-align: middle;
+                  margin-left: 20px;
+                }
+                /deep/ .ant-spin{
+                  position: absolute;
+                  top: 90%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  z-index: 999999999;
                 }
               }
               .payDesc1{

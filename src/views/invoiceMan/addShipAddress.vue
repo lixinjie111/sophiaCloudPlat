@@ -98,7 +98,7 @@ export default {
       labelPosition: "top",
       addressFormData: {
         recsName: "",
-        area: "",
+        area: [],
         detailAddress: "",
         contacNumber: "",
         PostCode: "",
@@ -130,24 +130,21 @@ export default {
         ],
       },
       title: "",
-      addressOptions: [],
       props: {
         //级联选择器懒加载
         lazy: true,
         lazyLoad(node, resolve) {
-          const { level } = node;
-          console.log(level, "lev");
-          console.log(node, "node");
+          var level = node.level;
           if (level == 0) {
             that.getProvince((list1) => {
-              let arr = list1.map((e) => ({ value: e.code, label: e.name }));
-              resolve(arr); // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+              let arr = list1.map((e) => ({ value: e.code, label: e.name}));
+              resolve(arr); 
             });
           }
           if (level == 1) {
             let value = node.value;
             that.getCity({ pid: value }).then((list2) => {
-              let arr = list2.map((e) => ({ value: e.code, label: e.name }));
+              let arr = list2.map((e) => ({ value: e.code, label: e.name}));
               resolve(arr);
             });
           }
@@ -157,7 +154,7 @@ export default {
               let arr = list3.map((e) => ({
                 value: e.code,
                 label: e.name,
-                leaf: true,
+                leaf:true
               }));
               resolve(arr);
             });
@@ -175,9 +172,9 @@ export default {
       this.addressFormData = {
         recsName: propsFormData.recsName,
         area: [
-          propsFormData.province,
-          propsFormData.city,
-          propsFormData.district,
+          parseInt(propsFormData.province),
+          parseInt(propsFormData.city),
+          parseInt(propsFormData.district),
         ],
         detailAddress: propsFormData.address,
         contacNumber: propsFormData.telNum,

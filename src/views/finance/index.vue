@@ -9,7 +9,7 @@
             <div class="fp_money_container">
                 <div class="fp_money4">
                     <div class="fp_money_item">现金余额:</div>
-                    <div class="fp_money_item1  price">¥ 0.00</div>
+                    <div class="fp_money_item1  price">¥ {{format(account.amount)}}</div>
                     <div class="fp_money_item1"> 
                         <el-button type="primary" size="small" @click="charge">充值</el-button>
                         <el-button size="small">提现</el-button>
@@ -17,32 +17,32 @@
                 </div>
                  <div class="fp_money4">
                     <div class="fp_money_item">启用余额预警： <el-switch v-model="value1"  @change="isOpen"></el-switch></div>
-                    <div class="fp_money_item1">预警阈值：<span>¥ 0.00</span> &nbsp;&nbsp;  <span><i class="el-icon-edit" style="cursor:pointer" @click="edit"></i></span> </div>
+                    <div class="fp_money_item1">预警阈值：<span>¥ {{format(fazhi)}}</span> &nbsp;&nbsp;  <span><i class="el-icon-edit" style="cursor:pointer" @click="edit"></i></span> </div>
                 </div>
                  <div class="fp_money4">
                     <div class="fp_money_item">启用延停服务：<el-switch v-model="value2" @change="isOpen1"></el-switch></div>
-                    <div class="fp_money_item1">延停额度：¥ 0.00</div>
+                    <div class="fp_money_item1">延停额度：¥ {{format(account.amountOverdraft)}}</div>
                 </div>
             </div>
         </div>
         <div class="fp_info">
             <div class="fp_money_til">待办提醒</div>
-            <div class="fp_money_container1">
+            <div class="fp_money_container1" v-if="dataAll">
                 <div class="fp_money1">
                     <div class="fp_title">待续费</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.renewed}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">待支付</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.pay}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">待开票</div>
-                    <div class="fp_price">0</div>
+                    <div class="fp_price">{{daiban.Invoicing}}</div>
                 </div>
                 <div class="fp_money1">
                     <div class="fp_title">未结清还款</div>
-                    <div class="fp_price">¥ 0.00</div>
+                    <div class="fp_price">¥ {{format(daiban.settlement)}}</div>
                 </div>
             </div>
         </div>
@@ -56,10 +56,10 @@
                 </el-tooltip>
                 <div class="more">更多></div>
             </div>
-            <div class="fp_sub_til">本期消费合计 2021-02 <span class="fp_price">¥ 0.0</span> </div>
+            <div class="fp_sub_til">本期消费合计 {{customData.name[customData.name.length-1]}}  &nbsp;<span class="fp_price">¥{{format(customData.value[customData.value.length-1])}}</span> </div>
             <div class="fp_money_container">
                  <template>
-                    <cLine id="box58" :colorList="$lxjData.colorList" :myData="$lxjData.box58Data"></cLine>
+                    <cLine id="box58" :colorList="$lxjData.colorList" :myData="customData"></cLine>
                 </template>
                  <!-- <template>
                     暂无数据
@@ -82,7 +82,7 @@
             </div>
             <div class="fp_money_container1">
                 <template>
-                    <PieEcharts :colorList="$fjData.colorList" :myData="$fjData.box01Data"></PieEcharts>
+                    <PieEcharts :colorList="$fjData.colorList" :myData="productData"></PieEcharts>
                 </template>
                 <!-- <template>
                     暂无数据
@@ -105,7 +105,12 @@
 import cLine from '@/components/echarts/common/line';
 import PieEcharts from '@/components/echarts/common/PieEcharts';
 import safeAlert from './safeAlert1';
-import {} from "../../api/invoiceMan/index";
+import {
+ userAccount
+} from "../../api/bugBag/index";
+import {
+ warning,overdraft,userOverview
+} from "../../api/finance/index";
 export default {
   name: "invoiceMan",
   data() {
@@ -119,32 +124,133 @@ export default {
         input:'0.00',
         isEdit:'true',
         userInfomation:{},
+        account:{},
+        fazhi:'',
+        dataAll:{},
+        daiban:{},
+        customData:{
+            name: [],
+            value:[]
+        },
+        productData:{
+            name: [],
+            value:[]
+        },
     };
   },
   created() {
       this.initInfo1();
+      this.userAccount();
+      this.userOverview();
   },
   components:{
       cLine,PieEcharts,safeAlert
   },
   methods: {
+        charge(){
+            this.$router.push({
+                path:"/charge?half="+this.account.amount,
+            })
+        },
+        format (num) {
+            if(num){
+                return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+            }
+        },
+       userAccount(){
+        userAccount().then(res => {
+            if (res.code == 200000) {
+                this.account=res.data;
+                this.value1=res.data.warningType==0?false:true;
+                this.value2=res.data.overdraftType==0?false:true;
+                this.fazhi=res.data.amountWarning?res.data.amountWarning:'0.00';
+                this.input=this.fazhi;
+            } else {
+                this.$message.error(res.message || "请求失败！");
+            }
+            })
+            .catch(err => {
+            this.$message.error("请求失败！");
+            });
+        },
+       userOverview(){
+            this.customData={
+                name: [],
+                value:[]
+            };
+            this.productData={
+                name: [],
+                value:[]
+            };
+        userOverview().then(res => {
+            if (res.code == 200000) {
+                this.dataAll=res.data;
+                this.daiban=res.data.reminder;
+                res.data.summary.forEach(item=>{
+                    this.customData.name.push(item.time);
+                    this.customData.value.push(item.amount);
+                })
+                res.data.product.forEach(item=>{
+                    this.productData.name.push(item.name);
+                    this.productData.value.push(item.value);
+                })
+            } else {
+                this.$message.error(res.message || "请求失败！");
+            }
+            })
+            .catch(err => {
+            this.$message.error("请求失败！");
+            });
+        },
+       isOpen(){
+           let _param={
+                "amountWarning": this.input,
+                "warningType": this.value1==true?1:0, //余额预警0=禁止；1=启用
+            };
+            warning(_param).then(res => {
+                if (res.code == 200000) {
+                    this.userAccount();
+                    this.$message.success(res.message);
+                } else {
+                    this.$message.error(res.message || "请求失败！");
+                }
+            })
+            .catch(err => {
+                 this.$message.error("请求失败！");
+            });
+        },
       closeDialog1(){
           this.isAlert=false;
           this.value2=false;
       },
       closeDialog2(){
-          this.isAlert=false;
-          this.value2=true;
+        this.isAlert=false;
+        let _param={
+            "amountOverdraft": this.account.amountOverdraft,
+            "overdraftType": this.value2==true?1:0, //余额预警0=禁止；1=启用
+        };
+        overdraft(_param).then(res => {
+            if (res.code == 200000) {
+                this.userAccount();
+                this.$message.success(res.message);
+            } else {
+                this.$message.error(res.message || "请求失败！");
+            }
+        })
+        .catch(err => {
+                this.$message.error("请求失败！");
+        });
       },
       isOpen1(e){
           this.isAlert=true;
-          console.log(e)
       },
       initInfo1(){
             this.userInfomation=JSON.parse(localStorage.getItem('yk-userInfo'));
         },
       handleOk(){
-           this.visible=false;
+          console.log('ssssss')
+        this.visible=false;
+        this.isOpen();
       },
       handleOk1(){
            this.visible1=false;
@@ -303,6 +409,7 @@ export default {
         .fp_sub_til{
             margin-top: 16px;
             .fp_price{
+                margin-left: 8px;
                 color: #0376FD;
             }
         }

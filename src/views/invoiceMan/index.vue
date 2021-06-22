@@ -91,7 +91,6 @@
                         :loading="loading"
                         ref="xTable"
                     >
-                        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                         <vxe-table-column field="applyTime" title="申请时间" sortable></vxe-table-column>
                         <vxe-table-column field="title" title="发票抬头" :filters="fpttFilter" :filter-method="filterNameMethod"></vxe-table-column>
                         <vxe-table-column field="totalAmount" title="发票总额" formatter="formatAmount"></vxe-table-column>
@@ -128,6 +127,7 @@
                         </template>
                     </vxe-table>
                     <vxe-pager
+                        style="width:100%;"
                         border
                         size="medium"
                         :loading="loading2"
@@ -245,15 +245,14 @@ export default {
   methods: {
     settitle(){
         var setObj = this.$route.query.setting;
-        this.activeName = 'first';
         if(setObj == 'now'){
           this.activeName = 'second';
           this.ifShowShowPanel = false;
         }
          var type = this.$route.query.type;
          if(type=="mail"){
-             this.activeName='fourth';
-             this.ifShowEmail = true;
+            this.activeName='fourth';
+            this.ifShowEmail = true;
          }
     },
     watchDetailGetMoney(){
@@ -393,7 +392,7 @@ export default {
     },
     editfpInfo(){
         this.activeName = 'second';
-        this.ifShowShowPanel = false;
+        this.ifShowShowPanel = true;
     },
     showeditpanelfaFn(arg){
         this.ifShowShowPanel = arg.opt; 
@@ -408,14 +407,20 @@ export default {
         this.ifShowjsAddress = true;
     },
     handleClick(tab, event) {
-        if(tab.paneName == "first"){
-            this.ifShowfpList = true;
-        }
-        else{
-            this.ifShowfpList = false;
-        }
+        this.ifShowfpList = false;
+        setTimeout(()=>{
+            if(tab.paneName == "first"){
+                this.ifShowfpList = true;
+            }
+            else{
+                this.ifShowfpList = false;
+            }
+        },0)
         if(tab.paneName == "second"){
             this.ifShowShowPanel = true;
+        }
+        else{
+            this.ifShowShowPanel = false;
         }
         if(tab.paneName == "third"){
             this.ifShowjsAddress = true;

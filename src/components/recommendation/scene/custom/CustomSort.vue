@@ -24,7 +24,7 @@
       </a-button>
     </div>
     <a-modal centered destroyOnClose v-model="addModal" title="梯度下降树(GBDT)" @cancel="handleCancel" @ok="handleOk">
-        <a-form-model :model="dataForm" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+        <a-form-model ref="ruleForm" :model="dataForm" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
           <a-form-model-item label="策略名称" prop="name">
               <a-input placeholder="请输入策略名称" v-model="dataForm.name"/>
           </a-form-model-item>
@@ -163,8 +163,12 @@ export default {
         this.initData()
       },
       handleOk(){
-        this.addModal = false
-        this.saveSortStrategy()
+        this.$refs.ruleForm.validate(valid => {
+          if(valid){
+            this.addModal = false
+            this.saveSortStrategy()
+          }
+        })        
         this.initData()
       },
       // 商品参与训练的特征
@@ -213,6 +217,8 @@ export default {
         saveSortStrategy(params).then(res=>{
           if(res.code==200000){
             if(res.data){this.getList()}
+          }else{
+            this.$message.error('添加失败!')
           }
         }).catch(err=>{
           this.$message.error(err.message)

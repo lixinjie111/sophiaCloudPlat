@@ -19,7 +19,7 @@
             </div>
             <div class="payRight">
                 <div class="price">
-                    ¥ 0.00
+                    ¥ {{format(half)}}
                 </div>
             </div>
         </div>
@@ -68,13 +68,21 @@ export default {
     return {
         input:'',
         activeName: 'second',
+        half:0,
     };
   },
   created() {
+      this.half=Number(this.$route.query.half);
   },
   components:{
   },
   methods: {
+      format (num) {
+            if(num){
+                console.log(num)
+                return (num.toFixed(2) + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+            }
+        },
       edit(){
           this.visible=true;
       },

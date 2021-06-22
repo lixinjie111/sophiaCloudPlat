@@ -89,6 +89,55 @@
         </div>
       </div>
       <div class="table_container">
+        <a-table :columns="nlcolumns" :data-source="nldata" @change="changePage" :pagination="pagination">
+          <a slot="serviceName" class="ant-dropdown-link" slot-scope="text"><span style="color:#0376FD" >{{ text }}</span></a>
+          <template  slot="freeType"  slot-scope="text, record">
+            <span  v-if="text==1">每日免费限额</span>
+            <span  v-else-if="text==2">一次性免费限额</span>
+            <span  v-else-if="text==3">无限制</span>
+            <span  v-else>--</span>
+          </template >
+          <template  slot="postpaidStatus"  slot-scope="text, record">
+            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD" v-if="text==2">开通</span>
+            <span  v-if="text==0">--</span>
+            <span  @click="cancleOrder(record)" style="cursor:pointer;color:#f00" v-if="text==1">停止付费</span>
+          </template >
+          <template  slot="prepaidStatus"  slot-scope="text, record">
+            <span  v-if="text==0">--</span>
+            <span  @click="openMoney1(record)" style="cursor:pointer;color:#0376FD" v-else>购买</span>
+          </template >
+        </a-table>
+      </div>
+    </div>
+     <create-app-modal v-if="showModal" @cancel="closeModal" @refreshList="refreshList"/>
+     <a-modal v-model="visible" title="温馨提示" @ok="handleOk" cancelText="取消" centered okText="确定">
+        <p>即将前往购买页面开通服务</p>
+        <p>1、开通服务将会 <span style="color:#0376FD">产生服务调用费用</span>  </p>
+        <p>2、如在服务试用期内，开通服务再停止后，将不再支持试用服务</p>
+      </a-modal>
+      <a-modal v-model="visible1" title="停止付费" @ok="handleOk1" cancelText="取消" centered okText="确定">
+        <p>您确定要终止付费吗？终止付费后，您的资源将回归至免费状态，超过免费资源的调用将不再响应。后续如需使用付费资源，可再次开通付费。</p>
+      </a-modal>
+      <a-modal v-model="visible2" title="提醒" @ok="handleOk2" cancelText="取消" centered okText="确定">
+        <p>您开通的录音文件识别、实时语音识别、一句话识别、语音合成免费试用版即将到期，请尽快购买以保证服务正常使用。</p>
+      </a-modal>
+    <!-- <div class="nengli_area_container">
+      <div class="nengli_title_container">
+        <div class="nl_title">能力服务列表</div>
+        <div class="search_container">
+          <a-input-search
+            placeholder="按API名称进行搜索"
+            size="large"
+            v-model="searchName"
+            @search="onSearch"
+          >
+            <a-button slot="enterButton">
+              <a-icon type="search" />
+            </a-button>
+          </a-input-search>
+        </div>
+      </div>
+      <div class="table_container">
         <a-table 
           :columns="nlcolumns" 
           :data-source="nldata" 
@@ -101,7 +150,7 @@
           <a slot="Purchases" class="ant-dropdown-link" slot-scope="text">{{ text }}</a>
         </a-table>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -109,6 +158,7 @@
 import locale from "x-intelligent-ui/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import "moment/locale/zh-cn";
+ import CreateAppModal from '@/components/application/list/components/CreateAppModal1.vue'
 import {
   apiVisitTrend,
   apiVisitTrendInfo,
@@ -116,6 +166,7 @@ import {
 } from "../../api/proSer/index";
 export default {
   name: "apiMan",
+  components:{CreateAppModal},
   data() {
     return {
       locale,
@@ -129,8 +180,10 @@ export default {
         },
         {
           title: "消费状态",
-          dataIndex: "paySta",
-          key: "paySta"
+          dataIndex: "freeType",
+          key: "freeType",
+          slots: { title: "freeType" },
+          scopedSlots: { customRender: "freeType" }
         },
         {
           title: "调用量限制",
@@ -154,17 +207,17 @@ export default {
         },
         {
           title: "开通付费",
-          key: "openBuy",
-          dataIndex: "openBuy",
-          slots: { title: "customTitle" },
-          scopedSlots: { customRender: "openBuy" }
+          key: "postpaidStatus",
+          dataIndex: "postpaidStatus",
+          slots: { title: "postpaidStatus" },
+          scopedSlots: { customRender: "postpaidStatus" }
         },
         {
           title: "购买次数包",
-          key: "Purchases",
-          dataIndex: "Purchases",
-          slots: { title: "customTitle" },
-          scopedSlots: { customRender: "Purchases" }
+          key: "prepaidStatus",
+          dataIndex: "prepaidStatus",
+          slots: { title: "prepaidStatus" },
+          scopedSlots: { customRender: "prepaidStatus" }
         }
       ],
       searchName: "",
@@ -221,8 +274,16 @@ export default {
       endDate:moment(new Date()).format('YYYY-MM-DD'),
       selVal:'cl7',
       routerData:'',
-      pagination:{},
-      loading:false
+      pagination:{
+        current: 1, 
+        pageSize: 10,
+        total: 0,
+      },
+       showModal:false,
+      loading:false,
+      visible:false,
+      visible1:false,
+      visible2:false,
     };
   },
   created() {
@@ -231,6 +292,8 @@ export default {
   watch: {
     $route: function(newVal, oldVal) {
       this.routerData = this.$route.query.serviceModel;
+      this.pagination.current=1;
+      this.searchName='';
       this.getPageData();
     }
   },
@@ -238,8 +301,56 @@ export default {
     this.getPageData();
   },
   methods: {
+     cancleOrder(item){
+      this.visible1 = true;
+      this.cancleRecord=item;
+    },
+    openMoney1(item){
+      this.$router.push({
+        path:'/buyBag',
+        query:{
+          serviceId:item.serviceId,
+          serviceName:item.serviceModelName+'—'+item.serviceName,
+        },
+      })
+    },
+    handleOk2(e) {
+      this.visible2 = false;
+    },
+    handleOk1(e) {
+      this.visible1 = false;
+      var fwqsParm = new FormData();
+      fwqsParm.append("serviceId",this.cancleRecord.serviceId,);
+      terminatePostpaid(fwqsParm)
+        .then(res => {
+          if (res.code == 200000) {
+            this.getServiceList();
+            this.$message.success("success");
+          } else {
+            this.$message.error(res.message || "请求失败！");
+          }
+        })
+        .catch(err => {
+          this.$message.error("请求失败！");
+          console.log(err, "err");
+        });
+    },
+    handleOk(e) {
+      this.visible = false;
+      this.$router.push({
+        path:'/openMy',
+        query:{
+          serviceId:this.currentRecord.serviceId,
+          serviceModel:this.currentRecord.serviceModel,
+        },
+      })
+    },
+    openMoney(item){
+      this.visible = true;
+      this.currentRecord=item;
+    },
     getPageData() {
-      this.getServiceList({ current: 1, pageSize: 10, serviceName: "" });
+      this.getServiceList();
       this.getSelectList({ current: 1, pageSize: "", serviceName: "" });
       this.getApiVisitTrend();
       this.getApiVisitedInfo({beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'), endDate:moment(new Date()).format('YYYY-MM-DD'), current: 1, pageSize: 10, serViceId: ""});
@@ -294,8 +405,8 @@ export default {
       this.endDate = dateList[1];
     },
     changePage(pagination, filters, sorter) {
-      pagination.serviceName = "";
-      this.getServiceList(pagination);
+      this.pagination={...pagination}
+      this.getServiceList();
     },
     changeQsTablePag(pagination, filters, sorter){
       pagination.serviceId = this.serViceId;
@@ -303,13 +414,21 @@ export default {
       pagination.endDate = this.endDate;
       this.getApiVisitedInfo(pagination);
     },
+     closeModal(){
+      this.showModal=false;
+    },
+    refreshList(){
+      this.$router.push({
+        path:'/application/list'
+      })
+    },
     onSearch() {
-      var searchText = this.searchName || "";
-      this.getServiceList({
-        current: 1,
+       this.pagination={
+        current: 1, 
         pageSize: 10,
-        serviceName: searchText
-      });
+        total: 0,
+      };
+      this.getServiceList();
     },
     getSelectList(pagination) {
       this.serListArr = [];
@@ -388,40 +507,65 @@ export default {
           console.log(err, "err");
         });
     },
-    getServiceList(pagination) {
-      this.loading = true;
+    // getServiceList(pagination) {
+    //   this.loading = true;
+    //   this.nldata = [];
+    //   var serListParm = new FormData();
+    //   serListParm.append("serviceName", pagination.serviceName);
+    //   serListParm.append("pageIndex", pagination.current);
+    //   serListParm.append("pageSize", pagination.pageSize);
+    //   serListParm.append("serviceModel",this.routerData); 
+    //   serviceList(serListParm)
+    //     .then(res => {
+    //       if (res.code == 200000) {
+    //         var serListdata = res.data.list || [];
+    //         serListdata.forEach(item => {
+    //           item.key = `itemKey${item.id}`;
+    //           item.Purchases = "购买";
+    //           if (item.freeType == 1) {
+    //             item.paySta = "每日免费限额";
+    //           } else if (item.freeType == 2) {
+    //             item.paySta = "一次性免费限额";
+    //           } else if (item.freeType == 3) {
+    //             item.paySta = "无限制";
+    //           }
+
+    //           if (item.payStatus == 1) {
+    //             item.openBuy = "";
+    //           } else {
+    //             item.openBuy = "购买";
+    //           }
+    //         });
+    //         const pagination = { ...this.pagination };
+    //         pagination.total = res.data.total;
+    //         this.loading = false;
+    //         this.pagination = pagination;
+    //         this.nldata = serListdata;
+    //       } else {
+    //         this.$message.error(res.message || "请求失败！");
+    //       }
+    //     })
+    //     .catch(err => {
+    //       this.$message.error("请求失败！");
+    //       console.log(err, "err");
+    //     });
+    // },
+    getServiceList() {
       this.nldata = [];
       var serListParm = new FormData();
-      serListParm.append("serviceName", pagination.serviceName);
-      serListParm.append("pageIndex", pagination.current);
-      serListParm.append("pageSize", pagination.pageSize);
-      serListParm.append("serviceModel",this.routerData); 
+      serListParm.append("serviceName", this.searchName);
+      serListParm.append("pageIndex", this.pagination.current);
+      serListParm.append("pageSize", this.pagination.pageSize);
+      serListParm.append("serviceModel",this.routerData);
       serviceList(serListParm)
         .then(res => {
           if (res.code == 200000) {
             var serListdata = res.data.list || [];
             serListdata.forEach(item => {
               item.key = `itemKey${item.id}`;
-              item.Purchases = "购买";
-              if (item.freeType == 1) {
-                item.paySta = "每日免费限额";
-              } else if (item.freeType == 2) {
-                item.paySta = "一次性免费限额";
-              } else if (item.freeType == 3) {
-                item.paySta = "无限制";
-              }
-
-              if (item.payStatus == 1) {
-                item.openBuy = "";
-              } else {
-                item.openBuy = "购买";
-              }
             });
-            const pagination = { ...this.pagination };
-            pagination.total = res.data.total;
-            this.loading = false;
-            this.pagination = pagination;
             this.nldata = serListdata;
+            this.pagination.total = res.data.total;
           } else {
             this.$message.error(res.message || "请求失败！");
           }
@@ -627,42 +771,45 @@ export default {
       }
     }
   }
-  .nengli_area_container {
-    width: 100%;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    .nengli_title_container {
-      width: 100%;
-      height: 57px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .nl_title {
-        font-size: 15px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
-        color: #676970;
-        line-height: 21px;
-      }
-      .search_container {
-        width: 288px;
-        height: 32px;
-      }
-    }
-    .table_container {
-      width: 100%;
-      flex: 1;
-      /deep/ .ant-table-wrapper {
-        /deep/ .ant-spin-nested-loading {
-          /deep/ .ant-pagination {
-            display: flex;
-            justify-content: center;
-            float: inherit;
-          }
+   .nengli_area_container {
+        width: 100%;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        padding: 0 24px;
+        margin-top: 20px;
+        background: #fff;
+        .nengli_title_container {
+        width: 100%;
+        height: 57px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .nl_title {
+            font-size: 15px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #676970;
+            line-height: 21px;
         }
-      }
+        .search_container {
+            width: 288px;
+            height: 32px;
+        }
+        }
+        .table_container {
+        width: 100%;
+        flex: 1;
+        /deep/ .ant-table-wrapper {
+            /deep/ .ant-spin-nested-loading {
+            /deep/ .ant-pagination {
+                display: flex;
+                justify-content: center;
+                float: inherit;
+            }
+            }
+        }
+        }
     }
-  }
 }
 </style>

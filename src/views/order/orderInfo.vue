@@ -160,14 +160,14 @@
           prop="packageAllocation"
           label="配置">
           <template slot-scope="scope">
-            <span>{{scope.row.packageAllocation===null?'':scope.row.packageAllocation+'万次'}}</span>
+            <span>{{scope.row.packageAllocation===null?'':scope.row.packageAllocation+'次'}}</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="packageTime"
           label="时长">
           <template slot-scope="scope">
-            <span>{{scope.row.packageTime===null?'':scope.row.packageTime+'年'}}</span>
+            <span>{{scope.row.packageTime===null?'':scope.row.packageTime+'月'}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -220,7 +220,7 @@
         methods: {
             pay() {
                 this.$router.push({
-                    path: "/pay?id=" + this.$route.query.id
+                    path: "/buyBag?id=" + this.$route.query.id
                 })
             },
             cancelOrder(id) {

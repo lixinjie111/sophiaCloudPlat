@@ -26,8 +26,8 @@
                     <input type="text" class="sendMsg"  id="sendMsg" readonly  @click="sendMeg" v-model="sendMessage">
                 </div>
                 <div class="alert_footer">
-                    <div class="submit1">
-                        <span style="margin-right:5px" @click="closeDialog">取消</span>
+                    <div class="submit1" @click="closeDialog">
+                        <span style="margin-right:5px">取消</span>
                     </div>
                     <div class="submit">
                         <span style="margin-right:5px" v-if="status"  @click="makSure">确定开启</span>
@@ -104,13 +104,7 @@ export default {
                 };
                 mobileProtect(_param).then(res => {
                     if(res.code == 200000) {
-                        if(this.path==1){
-                            this.$emit('closeDialog2');
-                        }else{
-                            // this.$router.push({
-                            //     path:this.path
-                            // })
-                        }
+                       this.$emit('closeDialog2');
                     }else {
                         this.idVertify=true;
                         this.idVertifyMsg=res.message;

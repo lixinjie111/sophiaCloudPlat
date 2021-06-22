@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="visible" title="应用信息" :footer="null" @cancel="onCancel" @ok="handleOk" width="488px" wrapClassName="wrapClassName">
+  <a-modal v-model="visible" title="应用信息" :footer="null" @cancel="onCancel" @ok="handleOk" width="976px" wrapClassName="wrapClassName">
     <div class="row mg0">
       <div class="label must">应用名称</div>
       <div><a-input placeholder="请输入应用名称" :disabled="disabled" v-model="record.appName"/></div>
@@ -163,6 +163,7 @@
     padding-left: 80px;
     transition: height 0.5s;
     overflow: hidden;
+    flex-wrap: wrap;
     .subject-content-item{
       flex: 0 0 33.33%;
       .content-item{

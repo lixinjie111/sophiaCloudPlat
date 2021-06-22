@@ -110,9 +110,9 @@ export default {
     },
     methods:{
         toRule(){
-              this.$router.push({
+            this.$router.push({
                 path: '/recommendation/scene/rule?appId='+ this.$route.query.appId + '&sceneId=' + this.$route.query.sceneId
-              });
+            });
         },
         onChange(id){
             this.curId = id

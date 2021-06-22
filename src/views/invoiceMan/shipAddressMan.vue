@@ -129,6 +129,7 @@ export default {
             .then((res) => {
               if (res.code == 200000) {
                 this.$message.success("删除成功！");
+                this.$emit("getNewAddress");
                 this.getTableData();
               } else {
                 this.$message.error("删除寄送地址失败！");

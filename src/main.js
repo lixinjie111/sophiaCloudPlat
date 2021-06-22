@@ -1,6 +1,8 @@
 import App from './App';
 import router from './router';
 import store from './store';
+// import QRCode from 'qrcodejs2';
+// Vue.prototype.$qrCode = QRCode;
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

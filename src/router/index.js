@@ -1,5 +1,6 @@
 // 不在菜单导航里的路由
 const Login = resolve => require(['@/views/login/index'], resolve)
+const alipay = resolve => require(['@/views/alipay/index'], resolve)
 const register = resolve => require(['@/views/login/register'], resolve)
 const Home = resolve => require(['@/views/home'], resolve)
 
@@ -66,13 +67,17 @@ const recommendationMaterielDetail = resolve => require(['@/views/recommendation
 // 资讯池
 const recommendationInformationPool = resolve => require(['@/views/recommendation/informationPool'], resolve); // 资讯池
 const recommendationInformationPoolWillPush = resolve => require(['@/views/recommendation/informationPool/willPush'], resolve); // 必推资讯池
+// 场景更新记录
+const sceneUpdateRecord = resolve => require(['@/views/recommendation/sceneUpdateRecord'], resolve); // 场景更新记录列表
 //订单管理
 const orderMan = resolve => require(['@/views/order/orderMan'], resolve);
 const pay = resolve => require(['@/views/order/pay'], resolve);
 const orderInfo = resolve => require(['@/views/order/orderInfo'], resolve);
+const orderInfoLaterPaid = resolve => require(['@/views/order/orderInfoLaterPaid'], resolve); // 后付费已支付订单详情
 export const publicRouterMap = [
         { path: '/login', name: 'Login', component: Login },
         { path: '/register', name: 'register', component: register },
+        { path: '/alipay', name: 'alipay', component: alipay },
         // { path: '*', redirect: '/404' }
     ]
     // 在菜单导航里的路由
@@ -96,6 +101,11 @@ export const menuRouterMap = [{
         name: 'orderInfo',
         path: '/orderInfo',
         component: orderInfo
+      },
+      {
+        name: 'orderInfoLaterPaid',
+        path: '/orderInfoLaterPaid',
+        component: orderInfoLaterPaid
       },
         {
             name: "applicationList",
@@ -306,6 +316,11 @@ export const menuRouterMap = [{
           name: "recommendationInformationPoolWillPush",
           path: "/recommendation/informationPool/willPush",
           component: recommendationInformationPoolWillPush
+        },
+        {
+          name: "sceneUpdateRecord",
+          path: "/recommendation/jiluguanl/sceneUpdateRecord",
+          component: sceneUpdateRecord
         },
     ]
 }];

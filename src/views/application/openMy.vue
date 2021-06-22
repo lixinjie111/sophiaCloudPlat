@@ -138,7 +138,7 @@
                 您购买的服务将在1～5分钟内开通，请耐心等待。
               </div>
               <div class="text3">
-                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台123</el-button>
+                <el-button type="primary" size="small" style="margin-right:10px" @click="goLink1">控制台</el-button>
                 <el-link type="primary">
                    <span v-if="this.orderList.length==1"  @click="goLink">查看订单明细</span>
                    <span v-else  @click="goLink2">查看订单列表</span>
@@ -185,35 +185,6 @@ export default {
     this.initData();
   },
   watch:{
-    goLink1(){
-      console.log(11111111)
-       this.$router.push({
-        path:'/overview',
-         query:{
-          activekey:['yingyong1'],
-          openkey:['myYingyong']
-        }
-      })
-    },
-    goLink(){
-       this.$router.push({
-        path:'/orderInfo',
-        query:{
-          id:this.orderList[0],
-          activekey:['caiwu5'],
-          openkey:['caiwu5']
-        }
-      })
-    },
-    goLink2(){
-       this.$router.push({
-        path:'/orderMan',
-        query:{
-          activekey:['caiwu5'],
-          openkey:['caiwu5']
-        }
-      })
-    },
     checkedList(newVal,oldVal){
       if(newVal.length>oldVal.length){
         //增加
@@ -236,6 +207,34 @@ export default {
   mounted() {
   },
   methods: {
+      goLink1(){
+       this.$router.push({
+        path:'/overview',
+         query:{
+          activekey:['yingyong1'],
+          openkey:['myYingyong']
+        }
+      })
+    },
+    goLink(){
+       this.$router.push({
+        path:'/orderInfoLaterPaid',
+        query:{
+          id:this.orderList[0],
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
+    },
+    goLink2(){
+       this.$router.push({
+        path:'/orderMan',
+        query:{
+          activekey:['caiwu5'],
+          openkey:['caiwu5']
+        }
+      })
+    },
       toOpen(){
         let _arr=[];
         this.checkList.forEach(item=>{
@@ -275,6 +274,13 @@ export default {
             })
             this.tableList.push(_table)
           } else {
+            console.log(this.checkedList)
+             this.checkedList.forEach((item,index)=>{
+              if(item==id){
+                this.checkedList.splice(index,1);
+              }
+            })
+             console.log(this.checkedList)
             this.$message.error(res.message || "请求失败！");
           }
         })

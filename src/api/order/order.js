@@ -12,6 +12,10 @@ export const cancelOrder = params => {
 export const getOrderInfo = params => {
   return axios.post(`${totalUrl}/serviceOrder/getOrderInfo`, params);
 };
+// 获取后付费订单详情
+export const getPostOrderInfo = params => {
+  return axios.post(`${totalUrl}/serviceOrder/getPostOrderInfo`, params);
+};
 export const batchOrderInfoList = params => {
   return axios.post(`${totalUrl}/serviceOrder/batchOrderInfoList`, params);
 };
