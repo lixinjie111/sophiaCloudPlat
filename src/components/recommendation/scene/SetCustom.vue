@@ -35,7 +35,7 @@
          <FilterEdit v-else-if="curType=='行为过滤'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></FilterEdit>
          <Sort v-if="curType=='排序策略'&&curOpt=='detail'" :detailData="detailData" @initType="initType"></Sort>
          <SortEdit v-else-if="curType=='排序策略'&&curOpt=='edit'" :detailData="detailData" @refresh="initList"></SortEdit>
-         <!-- <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run> -->
+         <Run v-if="curType=='设置必推'" :detailData="detailData" @initType="initType"></Run>
     </div>
 </template>
 <script>
@@ -118,6 +118,7 @@ export default {
             this.curId = id
         },
         onClick(checked){
+            console.log(checked)
             if(checked){
                 startStrategy({id:this.curId}).then(res=>{}).catch(err=>{this.$message.error(err.message)})
             }else{
