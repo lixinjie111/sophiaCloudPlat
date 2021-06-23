@@ -48,12 +48,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dataplat/index.html'),
+    index: path.resolve(__dirname, '../dataplat/index.html'),//html文件生成的地方
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dataplat'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsRoot: path.resolve(__dirname, '../dataplat'),//编译后生成的文件位置
+    assetsSubDirectory: 'static',//编译生成的静态文件目录
+    assetsPublicPath: './',//编译发布的根目录
 
     /**
      * Source Maps
