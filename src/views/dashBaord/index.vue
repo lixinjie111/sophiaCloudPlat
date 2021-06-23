@@ -276,13 +276,14 @@ export default {
     },
     created() {
         this.getSelectList();
-        this.getVistedInfo();
-        this.getCash();
-        this.getTrend();
-        this.getDistribution();
-        this.getappCount();
-        this.getStistics();
-       
+        setTimeout(()=>{
+            this.getVistedInfo();
+            this.getCash();
+            this.getTrend();
+            this.getDistribution();
+            this.getappCount();
+            this.getStistics();
+        },600);
     },
     methods: {
         change2(){
@@ -536,12 +537,11 @@ export default {
                     // });
                     this.serListArr = serListdata;
                 } else {
-                    this.$message.error(res.message || "请求失败！");
+                    console.log(res.message || "请求失败！");
                 }
                 })
                 .catch(err => {
-                this.$message.error("请求失败！");
-                console.log(err, "err");
+                    console.log(err, "err");
                 });
         },
         getVistedInfo1(val,str1){

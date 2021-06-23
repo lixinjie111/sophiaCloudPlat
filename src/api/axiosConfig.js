@@ -103,11 +103,15 @@ function axiosFilter(vm) {
                     break;
             }
             case '1000': {   // 登录失效
-                //window.location.href = '#/login';
                 router.push({
                     path:'/login'
                 })
-                // return Promise.resolve(response);
+                break;
+            }
+            case '500000': {   // 登录失效
+                router.push({
+                    path:'/login'
+                })
                 break;
             }
             default: {
