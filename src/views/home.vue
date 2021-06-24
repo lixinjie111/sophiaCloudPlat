@@ -740,7 +740,9 @@ import { userInfo } from '@/api/user';
           });
         } else if(e.key=='dataSer0'){
           this.breadArr.splice(0, 0, "数据服务", "数据平台");
-          window.open(`http://10.16.40.186:8080?token=${localStorage.getItem('yk-token')}`,'_blank')
+          // window.open(`http://10.16.40.186:8080?token=${localStorage.getItem('yk-token')}`,'_blank')
+          window.open(`https://dev-www.yzsophia.com/dfsys?token=${localStorage.getItem('yk-token')}`,'_blank')
+          // console.log(window.config.url)
         }else {
           // if(this.menuList){return}
           this.menuList.forEach(item => {
