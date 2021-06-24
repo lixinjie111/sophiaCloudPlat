@@ -414,62 +414,62 @@ export default {
             this.$message.error("请求失败！");
           });
       }else{
-        if(this.activeName=='first'){
-          this.$router.push({
-            path:'/alipay',
-            query:{
-              orderParm:this.orderSnList
-            }
-          })
-        }
-        else if(this.activeName == 'third'){
-          this.ifShowLoading = true;
-          let payPrams = {
-            abbreviation:this.personalBankNO,
-            orderSnList:this.orderSnList,
-            payMode:'B2C'
-          };
-          wyPay(payPrams).then(res=>{
-            if(res.code == 200000){
-              let url = res.data.cashierGatewayUrl;
-              var newWindow = window.open();
-              setTimeout(()=>{
-                newWindow.location.href = url;
-              },200);
-            }
-            else{
-              this.$message.error(res.message || "请求失败！");
-            }
-             this.ifShowLoading = false;
-          }).catch(err=>{
-            this.ifShowLoading = false;
-            console.log(err,'err')
-          });
-        }
-        else if(this.activeName == 'fourth'){
-          this.ifShowLoading = true;
-          let payPrams = {
-            abbreviation:this.corporateBankNo,
-            orderSnList:this.orderSnList,
-            payMode:'B2B'
-          };
-          wyPay(payPrams).then(res=>{
-            if(res.code == 200000){
-              let url = res.data.cashierGatewayUrl;
-              var newWindow = window.open();
-              setTimeout(()=>{
-                newWindow.location.href = url;
-              },200);
-            }
-            else{
-              this.$message.error(res.message || "请求失败！");
-            }
-            this.ifShowLoading = false;
-          }).catch(err=>{
-            console.log(err,'err');
-            this.ifShowLoading = false;
-          });
-        }
+        // if(this.activeName=='first'){
+        //   this.$router.push({
+        //     path:'/alipay',
+        //     query:{
+        //       orderParm:this.orderSnList
+        //     }
+        //   })
+        // }
+        // else if(this.activeName == 'third'){
+        //   this.ifShowLoading = true;
+        //   let payPrams = {
+        //     abbreviation:this.personalBankNO,
+        //     orderSnList:this.orderSnList,
+        //     payMode:'B2C'
+        //   };
+        //   wyPay(payPrams).then(res=>{
+        //     if(res.code == 200000){
+        //       let url = res.data.cashierGatewayUrl;
+        //       var newWindow = window.open();
+        //       setTimeout(()=>{
+        //         newWindow.location.href = url;
+        //       },200);
+        //     }
+        //     else{
+        //       this.$message.error(res.message || "请求失败！");
+        //     }
+        //      this.ifShowLoading = false;
+        //   }).catch(err=>{
+        //     this.ifShowLoading = false;
+        //     console.log(err,'err')
+        //   });
+        // }
+        // else if(this.activeName == 'fourth'){
+        //   this.ifShowLoading = true;
+        //   let payPrams = {
+        //     abbreviation:this.corporateBankNo,
+        //     orderSnList:this.orderSnList,
+        //     payMode:'B2B'
+        //   };
+        //   wyPay(payPrams).then(res=>{
+        //     if(res.code == 200000){
+        //       let url = res.data.cashierGatewayUrl;
+        //       var newWindow = window.open();
+        //       setTimeout(()=>{
+        //         newWindow.location.href = url;
+        //       },200);
+        //     }
+        //     else{
+        //       this.$message.error(res.message || "请求失败！");
+        //     }
+        //     this.ifShowLoading = false;
+        //   }).catch(err=>{
+        //     console.log(err,'err');
+        //     this.ifShowLoading = false;
+        //   });
+        // }
       }
     },
     userAccount(){
