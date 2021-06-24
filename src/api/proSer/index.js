@@ -52,7 +52,7 @@ export const apiVisitTrendInfo = params => {
     return axios.get(`${totalUrl}/APIService/apiVisitTrendInfo`, {params: params}).then(res => res.data);
 }
 //能力服务列表
-export const serviceList = params => { 
+export const serviceList =(params) => {
     return axios.post(`${totalUrl}/APIService/serviceList`, params).then(res => res.data);
 };
 //监控报表选择API

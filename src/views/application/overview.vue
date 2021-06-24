@@ -564,7 +564,7 @@ export default {
         });
     },
     getApiVisitTrend() {
-      var fwqsParm = new FormData();
+      var fwqsParm = new URLSearchParams();
       fwqsParm.append("serviceId",'');
       fwqsParm.append("beginDate",  this.rangeTime[0]); 
       fwqsParm.append("endDate", this.rangeTime[1]); 
@@ -585,7 +585,7 @@ export default {
     },
     getServiceList() {
       this.nldata = [];
-      var serListParm = new FormData();
+      var serListParm = new URLSearchParams();
       serListParm.append("serviceName", this.searchName);
       serListParm.append("pageIndex", this.pagination.current);
       serListParm.append("pageSize", this.pagination.pageSize);

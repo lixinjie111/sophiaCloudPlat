@@ -432,7 +432,7 @@ export default {
     },
     getSelectList(pagination) {
       this.serListArr = [];
-      var serListParm = new FormData();
+      var serListParm = new URLSearchParams();
       serListParm.append("serviceName", pagination.serviceName);
       serListParm.append("pageIndex", pagination.current);
       serListParm.append("pageSize", pagination.pageSize);
@@ -488,11 +488,11 @@ export default {
         });
     },
     getApiVisitTrend() {
-      var fwqsParm = new FormData();
+      var fwqsParm = new URLSearchParams();
       fwqsParm.append("serviceId",this.serViceId);
       fwqsParm.append("beginDate", this.beginDate); 
       fwqsParm.append("endDate",this.endDate); 
-      fwqsParm.append("serviceModel",this.routerData); 
+      fwqsParm.append("serviceModel",this.routerData);
       apiVisitTrend(fwqsParm)
         .then(res => {
           if (res.code == 200000) {
@@ -552,7 +552,7 @@ export default {
     // },
     getServiceList() {
       this.nldata = [];
-      var serListParm = new FormData();
+      var serListParm = new URLSearchParams();
       serListParm.append("serviceName", this.searchName);
       serListParm.append("pageIndex", this.pagination.current);
       serListParm.append("pageSize", this.pagination.pageSize);
