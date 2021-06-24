@@ -24,7 +24,7 @@ export const getIndustryOptions = params => { return axios.get(`${totalUrl}/indu
 /**
  * 获取接口项列表
  */
-export const getServiceList = params => { return axios.get(`${totalUrl}/service/list`, params).then(res => res.data); };
+export const getServiceList = params => { return axios.get(`${totalUrl}/service/listBySetup`, params).then(res => res.data); };
 /**
  * 获取应用服务配置
  */
