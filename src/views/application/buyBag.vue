@@ -460,10 +460,10 @@ export default {
                   })
                 },
               });
-              var newWindow = window.open();
+              var newWindow = window.open('_blank');
               setTimeout(()=>{
                 newWindow.location.href = url;
-              },200);
+              },500);
             }
             else{
               this.$message.error(res.message || "请求失败！");
@@ -513,10 +513,10 @@ export default {
                   })
                 },
               });
-              var newWindow = window.open();
+              var newWindow = window.open('_blank');
               setTimeout(()=>{
                 newWindow.location.href = url;
-              },200);
+              },500);
             }
             else{
               this.$message.error(res.message || "请求失败！");
