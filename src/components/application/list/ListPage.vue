@@ -210,10 +210,8 @@
       // 接口配置项
       getServiceList(){
         getServiceList().then((res)=>{
-          console.log(res)
           if(res.code === 200000){
             let template = (res.data || []).map(e=>e.serviceModelName).reduce((x, y)=>{ x[y] = []; return x}, {})
-            console.log(template)
             for (let k in template){
               template[k] = res.data.filter(e=>e.serviceModelName === k)
             }

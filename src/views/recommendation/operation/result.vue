@@ -78,7 +78,7 @@ export default {
       param1: {
         applicationId: null,
         sceneId: null,
-        type: 1,
+        type: 2,
         code: JSON.stringify({"recNum": "", "id": ""}, null, 2)
       },
       param2: {
