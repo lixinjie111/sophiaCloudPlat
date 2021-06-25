@@ -266,9 +266,8 @@
 
 <script>
 import {
-  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList,wyPay
+  getPrepaidFeePackage,createOrder,createPreOderVerify,getOrderInfo,userAccount,payBulk,personalBank,corporateBank,batchOrderInfoList,wyPay,queryOrder
 } from "../../api/bugBag/index";
-
 export default {
   data() {
     return {
@@ -414,62 +413,120 @@ export default {
             this.$message.error("请求失败！");
           });
       }else{
-        // if(this.activeName=='first'){
-        //   this.$router.push({
-        //     path:'/alipay',
-        //     query:{
-        //       orderParm:this.orderSnList
-        //     }
-        //   })
-        // }
-        // else if(this.activeName == 'third'){
-        //   this.ifShowLoading = true;
-        //   let payPrams = {
-        //     abbreviation:this.personalBankNO,
-        //     orderSnList:this.orderSnList,
-        //     payMode:'B2C'
-        //   };
-        //   wyPay(payPrams).then(res=>{
-        //     if(res.code == 200000){
-        //       let url = res.data.cashierGatewayUrl;
-        //       var newWindow = window.open();
-        //       setTimeout(()=>{
-        //         newWindow.location.href = url;
-        //       },200);
-        //     }
-        //     else{
-        //       this.$message.error(res.message || "请求失败！");
-        //     }
-        //      this.ifShowLoading = false;
-        //   }).catch(err=>{
-        //     this.ifShowLoading = false;
-        //     console.log(err,'err')
-        //   });
-        // }
-        // else if(this.activeName == 'fourth'){
-        //   this.ifShowLoading = true;
-        //   let payPrams = {
-        //     abbreviation:this.corporateBankNo,
-        //     orderSnList:this.orderSnList,
-        //     payMode:'B2B'
-        //   };
-        //   wyPay(payPrams).then(res=>{
-        //     if(res.code == 200000){
-        //       let url = res.data.cashierGatewayUrl;
-        //       var newWindow = window.open();
-        //       setTimeout(()=>{
-        //         newWindow.location.href = url;
-        //       },200);
-        //     }
-        //     else{
-        //       this.$message.error(res.message || "请求失败！");
-        //     }
-        //     this.ifShowLoading = false;
-        //   }).catch(err=>{
-        //     console.log(err,'err');
-        //     this.ifShowLoading = false;
-        //   });
-        // }
+        if(this.activeName=='first'){
+          this.$router.push({
+            path:'/alipay',
+            query:{
+              orderParm:this.orderSnList
+            }
+          })
+        }
+        else if(this.activeName == 'third'){
+          this.ifShowLoading = true;
+          let self = this;
+          let payPrams = {
+            abbreviation:this.personalBankNO,
+            orderSnList:this.orderSnList,
+            payMode:'B2C'
+          };
+          wyPay(payPrams).then(res=>{
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              //弹框放此处是因为paySn在这里面才能获取
+              this.$confirm({
+                title: '付款完成前请不要关掉页面',
+                content: '请在新页面完成付款，如付款遇到问题请选择提交工单或致电：4008-123-456（转1）',
+                okText: '完成付款',
+                cancelText: '提交工单',
+                onOk() {
+                  var parm = {
+                      paySn:res.data.paySn 
+                  } 
+                  queryOrder(parm).then(res=>{
+                    if(res.code == 200000){
+                        self.$message.success(res.message);
+                        self.currentIndex=3;
+                    }
+                    else{
+                      self.$message.error(res.message);
+                    }
+                  }).catch(err=>{
+                      console.log(err,'err')
+                  }); 
+                },
+                onCancel() {
+                  return new Promise((resolve, reject) => {
+                    reject()
+                  })
+                },
+              });
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+             this.ifShowLoading = false;
+          }).catch(err=>{
+            this.ifShowLoading = false;
+            console.log(err,'err')
+          });
+        }
+        else if(this.activeName == 'fourth'){
+          this.ifShowLoading = true;
+          let self = this;
+          let payPrams = {
+            abbreviation:this.corporateBankNo,
+            orderSnList:this.orderSnList,
+            payMode:'B2B'
+          };
+          wyPay(payPrams).then(res=>{
+            if(res.code == 200000){
+              let url = res.data.cashierGatewayUrl;
+              //弹框放此处是因为paySn在这里面才能获取
+              this.$confirm({
+                title: '付款完成前请不要关掉页面',
+                content: '请在新页面完成付款，如付款遇到问题请选择提交工单或致电：4008-123-456（转1）',
+                okText: '完成付款',
+                cancelText: '提交工单',
+                onOk() {
+                  var parm = {
+                      paySn:res.data.paySn 
+                  } 
+                  queryOrder(parm).then(res=>{
+                    if(res.code == 200000){
+                        self.$message.success(res.message);
+                        self.currentIndex=3;
+                    }
+                    else{
+                      self.$message.error(res.message);
+                    }
+                  }).catch(err=>{
+                      console.log(err,'err')
+                  }); 
+                },
+                onCancel() {
+                  return new Promise((resolve, reject) => {
+                    reject()
+                  })
+                },
+              });
+              var newWindow = window.open();
+              setTimeout(()=>{
+                newWindow.location.href = url;
+              },200);
+            }
+            else{
+              this.$message.error(res.message || "请求失败！");
+            }
+            this.ifShowLoading = false;
+          }).catch(err=>{
+            console.log(err,'err');
+            this.ifShowLoading = false;
+          });
+        }
       }
     },
     userAccount(){
@@ -631,7 +688,15 @@ export default {
   }
 };
 </script>
-
+<style lang="scss">
+.ant-modal-mask{
+  z-index: 99999 !important;
+}
+.ant-modal-wrap{
+  z-index: 999991 !important;
+  top: 240px;
+} 
+</style>
 <style lang="scss" scoped>
 .payItem{
                     display: flex;
