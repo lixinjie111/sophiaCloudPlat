@@ -22,12 +22,12 @@
                      <a-row :gutter="[20,20]">
                         <a-col :span="12">
                             <div class="box xufei">
-                                <div class="xufeiBox"><span>{{accountSummary.notPayOrders || 0}}</span> &nbsp; 个待续费</div>  <span class="look">查看</span>
+                                <div class="xufeiBox"><span> {{accountSummary.renewServices || 0}}</span> &nbsp; 个待续费</div>  <span class="look">查看</span>
                             </div>
                         </a-col>
                         <a-col :span="12">
                             <div class="box xufei">
-                                <div class="xufeiBox"><span>{{accountSummary.renewServices || 0}}</span> &nbsp;  个待支付订单</div>  <span class="look">查看</span>
+                                <div class="xufeiBox"><span> {{accountSummary.notPayOrders || 0}} </span> &nbsp;  个待支付订单</div>  <span class="look">查看</span>
                             </div>
                         </a-col>
                     </a-row>
@@ -166,7 +166,7 @@
                             <span class="half">剩余</span> <span :style="{ color: '#FF4D4F' }">{{value.summary?value.summary.remainNum:'0'}}</span>
                         </div>
                         <div class="boxEts">
-                            <barEcharts id="box1" :colorList="$lxjData.colorList" :myData="value.echartData"></barEcharts>
+                            <barEcharts :id="'box2'+index" :colorList="$lxjData.colorList" :myData="value.echartData"></barEcharts>
                         </div>
                     </div>
                 </a-col>
@@ -339,6 +339,7 @@ export default {
                             this.vistedInfo[str].echartData['value'].push(item.cnt);
                         })
                    }
+                   console.log(this.vistedInfo)
                   
                 }else {
                     
