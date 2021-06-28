@@ -148,7 +148,7 @@
                                     <!-- <div class="bm">周环比<a-icon type="caret-up" :style="{ fontSize: '16px', color: '#FF4D4F' }" /><span :style="{ color: '#FF4D4F' }">6.47%</span>，月环比<a-icon type="caret-down"  :style="{ fontSize: '16px', color: '#52C41A' }"/><span :style="{ color: '#52C41A' }">6.47%</span></div> -->
                                 </div>
                                 <div class="boxEts">
-                                   <cLine id="box56" :colorList="$lxjData.colorList" :myData="sdkInfo"></cLine>
+                                   <cLine id="box98" :colorList="$lxjData.colorList" :myData="sdkInfo"></cLine>
                                 </div>
                             </div>
                         </a-col>
@@ -423,11 +423,11 @@ export default {
             stisticsCallInfo(_param).then(res => {
                 if(res.code == 200000) {
                     this.stisticsInfo=res.data;
-                    res.data.sdkList.forEach(item=>{
+                    res.data.apiList.forEach(item=>{
                          this.appInfo['name'].push(item.date_str)
                          this.appInfo['value'].push(item.total_call_num)
                     })
-                    res.data.apiList.forEach(item=>{
+                    res.data.sdkList.forEach(item=>{
                          this.sdkInfo['name'].push(item.date_str)
                          this.sdkInfo['value'].push(item.total_call_num)
                     })
