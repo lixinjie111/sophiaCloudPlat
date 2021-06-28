@@ -137,7 +137,6 @@
 </template>
 <script>
 import { userInfo } from '@/api/user';
-
   export default {
     data() {
       return {
@@ -740,10 +739,12 @@ import { userInfo } from '@/api/user';
             path: "/dashBaord"
           });
         } else if(e.key=='dataSer0'){
-            this.breadArr.splice(0, 0, "数据服务", "数据平台");
-            window.open('http://10.16.40.186:8080','_blank')
+          this.breadArr.splice(0, 0, "数据服务", "数据平台");
+          // window.open(`http://10.16.40.186:8080?token=${localStorage.getItem('yk-token')}`,'_blank')
+          window.open(`https://dev-www.yzsophia.com/dfsys?token=${localStorage.getItem('yk-token')}`,'_blank')
+          // console.log(window.config.url)
         }else {
-          if(this.menuList){return}
+          // if(this.menuList){return}
           this.menuList.forEach(item => {
             if (item.list.length > 0) {
               item.list.forEach(subItem => {
