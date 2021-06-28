@@ -71,21 +71,41 @@
             </template>
           </template>
           <template v-else>
-            <a-sub-menu v-for="subItem in item.list" :key="subItem.seckey">
-              <span slot="title">
-                <a-icon :type="subItem.icType" />
-                <span>{{ subItem.title }}</span>
-              </span>
-              <template v-for="item1 in subItem.menuItmList">
-                <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.threekey">
-                  <a-menu-item v-for="child in item1.children" :key="child.fourkey">
-                    {{child.title}}
-                  </a-menu-item>
-                </a-sub-menu>
-                <a-menu-item v-else :key="item1.threekey">{{item1.title}}</a-menu-item>
-              </template>
-            </a-sub-menu>
-          </template>
+            <template v-for="subItem in item.list">
+              <a-sub-menu v-if="subItem.menuItmList" :key="subItem.seckey">
+                <span slot="title">
+                  <a-icon :type="subItem.icType" />
+                  <span>{{ subItem.title }}</span>
+                </span>
+                <template v-for="item1 in subItem.menuItmList">
+                  <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.threekey">
+                    <a-menu-item v-for="child in item1.children" :key="child.fourkey">
+                      {{child.title}}
+                    </a-menu-item>
+                  </a-sub-menu>
+                  <a-menu-item v-else :key="item1.threekey">{{item1.title}}</a-menu-item>
+                </template>
+              </a-sub-menu>
+              <a-menu-item v-else  :key="subItem.seckey">
+                  <a-icon :type="subItem.icType" />
+                  <span>{{ subItem.title }}</span>
+              </a-menu-item>
+            </template>
+            <!-- <a-sub-menu v-for="subItem in item.list" :key="subItem.seckey">
+                <span slot="title">
+                  <a-icon :type="subItem.icType" />
+                  <span>{{ subItem.title }}</span>
+                </span>
+                <template v-for="item1 in subItem.menuItmList">
+                  <a-sub-menu :title="item1.title" v-if="item1.children" :key="item1.threekey">
+                    <a-menu-item v-for="child in item1.children" :key="child.fourkey">
+                      {{child.title}}
+                    </a-menu-item>
+                  </a-sub-menu>
+                  <a-menu-item v-else :key="item1.threekey">{{item1.title}}</a-menu-item>
+                </template>
+              </a-sub-menu> -->
+          </template> 
         </template>
       </a-menu>
     </a-layout-sider>
@@ -331,6 +351,13 @@ import { userInfo } from '@/api/user';
           {
             moduleTitle: "数据服务",
             list: [
+              {
+                subKey: "dataSer0",
+                title: "数据平台",
+                path: "",
+                seckey:'dataSer0',
+                icType:'profile'
+              },
               {
                 subKey: "dataSer1",
                 title: "智能推荐",
@@ -712,7 +739,11 @@ import { userInfo } from '@/api/user';
           this.$router.push({
             path: "/dashBaord"
           });
-        } else {
+        } else if(e.key=='dataSer0'){
+            this.breadArr.splice(0, 0, "数据服务", "数据平台");
+            window.open('http://10.16.40.186:8080','_blank')
+        }else {
+          if(this.menuList){return}
           this.menuList.forEach(item => {
             if (item.list.length > 0) {
               item.list.forEach(subItem => {
