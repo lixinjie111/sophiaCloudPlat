@@ -99,11 +99,20 @@
             <span :style="numMonthRatio < 0 ? 'color:red' :'color:green' ">
               {{numMonthRatio}}
               <span v-if="numMonthRatio>0">%</span>
-              <span v-else>/</span>
+              <span v-else></span>
             </span>
           </span>
-          <a slot="openBuyF" slot-scope="text" href="">{{text}}</a>
-          <a slot="buyNum" slot-scope="text" href="">{{text}}</a>
+          <template  slot="postpaidStatus"  slot-scope="text, record">
+            <span  @click="openMoney(record)" style="cursor:pointer;color:#0376FD" v-if="text==2">开通</span>
+            <span  v-if="text==0">--</span>
+            <span  @click="cancleOrder(record)" style="cursor:pointer;color:#f00" v-if="text==1">停止付费</span>
+          </template >
+          <template  slot="prepaidStatus"  slot-scope="text, record">
+            <span  v-if="text==0">--</span>
+            <span  @click="openMoney1(record)" style="cursor:pointer;color:#0376FD" v-else>购买</span>
+          </template >
+          <!-- <a slot="openBuyF" slot-scope="text" href="">{{text}}</a>
+          <a slot="buyNum" slot-scope="text" href="">{{text}}</a> -->
         </a-table>
       </div>
     </div>
@@ -283,8 +292,8 @@ export default {
         },
         {
           title: "剩余用量",
-          dataIndex: "remainCount",
-          key: "remainCount"
+          dataIndex: "nowRemainNum",
+          key: "nowRemainNum"
         },
         {
           title: "同上月相比",
@@ -300,16 +309,17 @@ export default {
         },
         {
           title: "开通付费",
-          key: "openBuyF",
-          dataIndex: "openBuyF",
-          scopedSlots: { customRender: "openBuyF" },
-          slots: { title: "customTitle" }
+          key: "postpaidStatus",
+          dataIndex: "postpaidStatus",
+          slots: { title: "postpaidStatus" },
+          scopedSlots: { customRender: "postpaidStatus" }
         },
         {
           title: "购买次数包",
-          key: "buyNum",
-          dataIndex: "buyNum",
-          scopedSlots: { customRender: "buyNum" }
+          key: "prepaidStatus",
+          dataIndex: "prepaidStatus",
+          slots: { title: "prepaidStatus" },
+          scopedSlots: { customRender: "prepaidStatus" }
         }
       ],
       qsdata: [],
