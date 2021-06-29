@@ -315,7 +315,7 @@ export default {
       qsdata: [],
       ifShowDetail: false,
       serListArr: [],
-      rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*365*3)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+      rangeTime1:[moment(new Date()).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       serViceId:'',
       beginDate:moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),

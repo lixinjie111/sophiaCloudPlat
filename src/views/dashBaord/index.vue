@@ -27,7 +27,7 @@
                         </a-col>
                         <a-col :span="12">
                             <div class="box xufei">
-                                <div class="xufeiBox"><span> {{accountSummary.notPayOrders || 0}} </span> &nbsp;  个待支付订单</div>  <span class="look">查看</span>
+                                <div class="xufeiBox"><span> {{accountSummary.notPayOrders || 0}} </span> &nbsp;  个待支付订单</div>  <span class="look" @click="goLink">查看</span>
                             </div>
                         </a-col>
                     </a-row>
@@ -237,6 +237,8 @@ export default {
             rangeTime2:[moment(new Date(new Date().getTime() - 3600*1000*24*365*2)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             rangeTime1:[moment(new Date(new Date().getTime() - 3600*1000*24*182)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             rangeTime:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime3:[moment(new Date(new Date().getTime() - 3600*1000*24*7)).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
+            rangeTime4:[moment( moment().month(moment().month() - 1).startOf('month').valueOf()).format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
             formInline: {
                 region: '0'
             },
@@ -286,6 +288,15 @@ export default {
         },600);
     },
     methods: {
+        goLink(){
+           this.$router.push({
+               path:'/orderMan',
+               query:{
+                    activekey:['caiwu5'],
+                    openkey:['caiwu5']
+               }
+           })
+        },
         change2(){
             this.getDistribution();
         },
@@ -300,8 +311,8 @@ export default {
                 serviceId:'',//API服务SERVICEID
                 statisticsType :'1',//统计时间类型, 1:天 2:小时 3:月
                 requestStatus :'1',// 1:成功 2:失败 3:全部
-                startTime :this.rangeTime[0],
-                endTime :this.rangeTime[1],
+                startTime :this.rangeTime3[0],
+                endTime :this.rangeTime3[1],
                 // startTime :'2000-01-08',
                 // endTime :'2021-04-02',
             };
@@ -316,7 +327,7 @@ export default {
                        this.vistedInfo[str]={
                             'radio1':'COUNT',
                             'radioList':[{lable:'调用量',value:'COUNT'},{lable:'QPS',value:'QPS'}],
-                            'radio2':'1',
+                            'radio2':'0',
                             'radioList2':[{lable:'7天',value:'0'},{lable:'30天',value:'1'}],
                             'moudle_name':res.data[i].list[0].moudle_name,
                             'service_model':res.data[i].list[0].service_model,
@@ -551,10 +562,10 @@ export default {
                 appId:val.appId,//应用APPID
                 serviceModel:val.service_model,
                 serviceId:val.serviceId,//API服务SERVICEID
-                statisticsType :val.radio2==0?'1':'3',//统计时间类型, 1:天 2:小时 3:月
+                statisticsType :'1',//统计时间类型, 1:天 2:小时 3:月
                 requestStatus :'1',// 1:成功 2:失败 3:全部
-                startTime :this.rangeTime[0],
-                endTime :this.rangeTime[1],
+                startTime :val.radio2==0?this.rangeTime3[0]:this.rangeTime4[0],
+                endTime :this.rangeTime3[1],
                 // startTime :'2000-01-08',
                 // endTime :'2021-04-02',
             };
@@ -606,6 +617,7 @@ export default {
                 const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
                 const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
                 this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
+                
             }
             else if(e == 'sgjd'){
                 const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();

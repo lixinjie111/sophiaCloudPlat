@@ -205,12 +205,22 @@ export default {
       var xAxisData = [];
       var successList = [];
       var failList = [];
-      successData.forEach(item=>{
-        successList.push(item.cnt);
-      });
-      failData.forEach(item=>{
-        failList.push(item.cnt);
-      });
+      if(this.monItem=='COUNT'){
+        successData.forEach(item=>{
+          successList.push(item.cnt);
+        });
+        failData.forEach(item=>{
+          failList.push(item.cnt);
+        });
+      }else{
+         successData.forEach(item=>{
+          successList.push(item.qps);
+        });
+        failData.forEach(item=>{
+          failList.push(item.qps);
+        });
+      }
+      
       if(successData.length > 0){
         successData.forEach(item=>{
           xAxisData.push(item.dateStr);
