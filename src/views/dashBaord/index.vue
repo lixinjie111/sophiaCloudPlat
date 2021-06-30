@@ -627,8 +627,8 @@ export default {
             }
         },
          searchFn(){
-            this.vistedInfo={};
-            this.getVistedInfo();
+            // this.vistedInfo={};
+            // this.getVistedInfo();
             this.getStistics();
         },
         resetFn(){
