@@ -248,10 +248,10 @@ export default {
             currentRadio: 'COUNT',
             radio2: '',
             accountSummary:{
-               invoiceAmount:null, 
-               notPayOrders:null, 
-               renewServices:null, 
-               totalAmount:null, 
+               invoiceAmount:null,
+               notPayOrders:null,
+               renewServices:null,
+               totalAmount:null,
             },
             appNum:0,
             stisticsInfo:{},
@@ -350,13 +350,13 @@ export default {
                             this.vistedInfo[str].echartData['value'].push(item.cnt);
                         })
                    }
-                   console.log(this.vistedInfo)
-                  
+                   // console.log(this.vistedInfo)
+
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         select1(item,item2,index){
@@ -376,17 +376,17 @@ export default {
             applist(_param).then(res => {
                 if(res.code == 200000) {
                     this.vistedInfo[str].applist=res.data.list;
-                    this.$set(this.vistedInfo[str],'applist',res.data.list) 
+                    this.$set(this.vistedInfo[str],'applist',res.data.list)
                    if(length==index){
                        setTimeout(()=>{
                            this.showList=true;
                            this.$forceUpdate();
                        },300)
-                        
+
                    }
-                   
+
                 }else {
-                    
+
                 }
             })
         },
@@ -409,10 +409,10 @@ export default {
                     this.$forceUpdate();
                     this.vistedInfo = vistList;
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         getStistics(){
@@ -442,12 +442,12 @@ export default {
                          this.sdkInfo['name'].push(item.date_str)
                          this.sdkInfo['value'].push(item.total_call_num)
                     })
-                   
+
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         getappCount(){
@@ -459,10 +459,10 @@ export default {
                 if(res.code == 200000) {
                     this.appNum=res.data;
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         getDistribution(){
@@ -483,10 +483,10 @@ export default {
                         })
                     }
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         getTrend(){
@@ -506,10 +506,10 @@ export default {
                         })
                     }
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         getCash(){
@@ -576,7 +576,7 @@ export default {
                     this.vistedInfo[str1].echartData.value=[];
                    for(var i in res.data){
                           if(res.data[i].list){
-                              console.log(res.data[i].list)
+                              // console.log(res.data[i].list)
                               res.data[i].list.forEach(item=>{
                                 if(val.radio1=='QPS'){
                                     this.vistedInfo[str1].echartData.name.push(item.dateStr);
@@ -588,13 +588,13 @@ export default {
                              })
                           }
                    }
-                   this.$set(this.vistedInfo,'abc',this.currentNo) 
+                   this.$set(this.vistedInfo,'abc',this.currentNo)
                    this.$forceUpdate();
                 }else {
-                    
+
                 }
             }).catch(err => {
-                
+
             })
         },
         onChange(value,index){
@@ -618,7 +618,7 @@ export default {
                 const startDate = moment().month(moment().month() - 1).startOf('month').valueOf();
                 const endDate = moment().month(moment().month() - 1).endOf('month').valueOf();
                 this.rangeTime = [moment(startDate).format('YYYY-MM-DD'),moment(endDate).format('YYYY-MM-DD')];
-                
+
             }
             else if(e == 'sgjd'){
                 const startDate = moment().quarter(moment().quarter() - 1).startOf('quarter').valueOf();
@@ -627,8 +627,8 @@ export default {
             }
         },
          searchFn(){
-            this.vistedInfo={};
-            //this.getVistedInfo();
+            // this.vistedInfo={};
+            // this.getVistedInfo();
             this.getStistics();
         },
         resetFn(){
@@ -643,12 +643,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.dash{
-         background: #f0f2f5; 
+         background: #f0f2f5;
          height: 100%;
         .tip{
             padding:24px;
             background: #60ACFF;
-            border-radius: 4px; 
+            border-radius: 4px;
            .tipTitle{
                 font-size: 24px;
                 font-family: PingFangSC-Regular, PingFang SC;
@@ -730,7 +730,7 @@ export default {
                         }
                     }
                 }
-                
+
             }
             .box1{
                 padding:20px;
@@ -755,7 +755,7 @@ export default {
                     font-size: 30px;
                     font-family: HelveticaNeue;
                     color: rgba(0, 0, 0, 0.85);
-                    line-height: 38px; 
+                    line-height: 38px;
                 }
                 .bm{
                     margin-top: 8px;
@@ -763,7 +763,7 @@ export default {
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
                     color: #54565B;
-                    line-height: 20px; 
+                    line-height: 20px;
                     .half{
                         margin-left: 10px;
                     }
@@ -830,7 +830,7 @@ export default {
                     color: #606266;
                     line-height: 17px;
                     .look{
-                           cursor: pointer; 
+                           cursor: pointer;
                         }
                     .xufeiBox{
                          display: flex;
@@ -839,7 +839,7 @@ export default {
                             font-size: 24px;
                             color:#121C33;
                         }
-                        
+
                     }
                 }
             }
@@ -885,7 +885,7 @@ export default {
                 }
                 .boxEts{
                     margin-top: 10px;
-                   height: 150px; 
+                   height: 150px;
                 }
             }
         }
@@ -930,5 +930,5 @@ export default {
         //         }
         //     }
         // }
-    }		
+    }
 </style>
