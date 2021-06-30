@@ -108,12 +108,12 @@ function axiosFilter(vm) {
                 })
                 break;
             }
-            case '500000': {   // 登录失效
-                router.push({
-                    path:'/login'
-                })
-                break;
-            }
+            // case '500000': {   // 登录失效
+            //     router.push({
+            //         path:'/login'
+            //     })
+            //     break;
+            // }
             default: {
                 // vm.$message.error(response.data.message);
                 if(returnMessage) {
