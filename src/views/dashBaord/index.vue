@@ -572,10 +572,11 @@ export default {
             statisticsVistedInfo(_param).then(res => {
                 if(res.code == 200000) {
                     this.currentNo++;
+                    this.vistedInfo[str1].echartData.name=[];
+                    this.vistedInfo[str1].echartData.value=[];
                    for(var i in res.data){
-                        this.vistedInfo[str1].echartData.name=[];
-                        this.vistedInfo[str1].echartData.value=[];
                           if(res.data[i].list){
+                              console.log(res.data[i].list)
                               res.data[i].list.forEach(item=>{
                                 if(val.radio1=='QPS'){
                                     this.vistedInfo[str1].echartData.name.push(item.dateStr);
@@ -627,7 +628,7 @@ export default {
         },
          searchFn(){
             this.vistedInfo={};
-            this.getVistedInfo();
+            //this.getVistedInfo();
             this.getStistics();
         },
         resetFn(){
