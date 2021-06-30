@@ -90,7 +90,7 @@
       <div class="title_container">访问趋势详情</div>
       <div class="fangwen_detail_container">
         <a-table :columns="qscolumns" :data-source="qsdata" @change="changeQsTablePag" :pagination="pagination1">
-          <a slot="serviceName" slot-scope="text" href="">{{text}}</a>
+          <a slot="serviceName" slot-scope="text">{{text}}</a>
           <span slot="successUsageRate" slot-scope="successUsageRate">
             <a-progress :percent="successUsageRate" size="small" status="active" />
           </span>
