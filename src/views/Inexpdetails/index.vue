@@ -58,6 +58,42 @@
         </div>
       </div>
     </div>
+    <div class="second_area">
+        <vxe-table
+            border
+            show-header-overflow
+            show-overflow
+            highlight-hover-row
+            :align="allAlign"
+            :data="tableData"
+            :loading="loading1"
+            ref="xTable"
+        >
+            <vxe-table-column field="liushuiNum" title="流水号"></vxe-table-column>
+            <vxe-table-column field="jyTime" title="交易时间" sortable></vxe-table-column>
+            <vxe-table-column field="product" title="产品"></vxe-table-column>
+            <vxe-table-column field="szType" title="收支类型" :filters="szTypeFilter"  :filter-method="filterSzType"></vxe-table-column>
+            <vxe-table-column field="jyType" title="交易类型"></vxe-table-column>
+            <vxe-table-column field="jyQudao" title="交易渠道" :filters="jyQudaoFilter"  :filter-method="filterJyQudao"></vxe-table-column>
+            <vxe-table-column field="money" title="金额" formatter="formatAmount"></vxe-table-column>
+            <vxe-table-column field="yeMoney" title="余额" formatter="formatAmount"></vxe-table-column>
+            <template v-slot:empty>
+                <span>暂无数据</span>
+            </template>
+        </vxe-table>
+        <vxe-pager
+            style="width:100%;"
+            border
+            size="medium"
+            :loading="loading2"
+            :current-page="tablePage2.currentPage"
+            :page-size="tablePage2.pageSize"
+            :total="tablePage2.totalResult"
+            :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
+            @page-change="handlePageChange2"
+        >
+        </vxe-pager>
+    </div>
   </div>
 </template>
 
@@ -68,51 +104,72 @@ export default {
   name: "Inexpdetails",
   data() {
     return {
-      rangeTime: [
-        moment(new Date(new Date().getTime() - 3600 * 1000 * 24 * 365)).format(
-          "YYYY-MM-DD"
-        ),
-        moment(new Date()).format("YYYY-MM-DD"),
-      ],
-      selVal: "cl7",
-      fpttVal: "",
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
+        rangeTime: [
+            moment(new Date(new Date().getTime() - 3600 * 1000 * 24 * 365)).format(
+            "YYYY-MM-DD"
+            ),
+            moment(new Date()).format("YYYY-MM-DD"),
+        ],
+        selVal: "cl7",
+        fpttVal: "",
+        options: [
+            {
+            value: "选项1",
+            label: "黄金糕",
+            },
+            {
+            value: "选项2",
+            label: "双皮奶",
+            },
+            {
+            value: "选项3",
+            label: "蚵仔煎",
+            },
+            {
+            value: "选项4",
+            label: "龙须面",
+            },
+            {
+            value: "选项5",
+            label: "北京烤鸭",
+            },
+        ],
+        jyType: "",
+        ifStart:false,
+        allAlign: null,
+        tableData: [],
+        loading1:false,
+        loading2: false,
+        tablePage2: {
+            currentPage: 1,
+            pageSize: 10,
+            totalResult: 0
         },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      jyType: "",
-      ifStart:false
+        szTypeFilter:[],
+        jyQudaoFilter:[]
     };
   },
   created() {},
   computed: {},
 
   methods: {
-      refreshFn(){
+    refreshFn(){
         this.ifStart = true;
         setTimeout(() => {
             //刷新结束，停止旋转
             this.ifStart = false;
         }, 3000);
-      }
+    },
+    filterSzType ({ value, row, column }) {
+        return row.szType == value
+    },
+    filterJyQudao ({ value, row, column }) {
+        return row.jyQudao == value
+    },
+    handlePageChange2 ({ currentPage, pageSize }) {
+        this.tablePage2.currentPage = currentPage;
+        this.tablePage2.pageSize = pageSize;
+    },
   },
 };
 </script>
@@ -237,11 +294,16 @@ export default {
             }
         }
         .refreshing{
-            animation: myrefresh 2s infinite;
-            -webkit-animation:myrefresh 2s infinite;
+            animation: myrefresh 2s linear infinite;
+            -webkit-animation:myrefresh 2s linear infinite;
         }
       }
     }
+  }
+  .second_area{
+    width: 100%;
+    min-height: 230px;
+    background: #ffffff;
   }
 }
 </style>
