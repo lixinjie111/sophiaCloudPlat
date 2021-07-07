@@ -698,9 +698,9 @@ import { userInfo } from '@/api/user';
           }
           else if(keyVal == 'caiwu4'){
             this.breadArr.splice(0, 0, "财务中心", "收支明细");
-            // this.$router.push({
-            //   path: "/businessSet"
-            // });
+            this.$router.push({
+              path: "/Inexpdetails"
+            });
           }
           else if(keyVal == 'caiwu5'){
             this.breadArr.splice(0, 0, "财务中心", "订单管理");

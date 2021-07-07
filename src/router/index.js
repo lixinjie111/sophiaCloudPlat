@@ -58,6 +58,8 @@ const recommendationOperationResult = resolve => require(['@/views/recommendatio
 const invoiceMan = resolve => require(['@/views/invoiceMan/index'], resolve);
 const invoiceDetail = resolve => require(['@/views/invoiceMan/invoiceDetail'], resolve);
 const InvoiceReq = resolve => require(['@/views/invoiceMan/InvoiceReq'], resolve);
+//收支明细
+const Inexpdetails = resolve => require(['@/views/Inexpdetails/index'], resolve);
 //推荐运营 物料及用户管理
 const recommendationMateriel = resolve => require(['@/views/recommendation/materiel/list'], resolve);
 //必推物品池
@@ -276,6 +278,11 @@ export const menuRouterMap = [{
           name: "recommendationOperationResult",
           path: "/recommendation/operation/result",
           component: recommendationOperationResult
+        },
+        {
+          name:'Inexpdetails',
+          path:'/Inexpdetails',
+          component:Inexpdetails
         },
         {
           name:'invoiceMan',
