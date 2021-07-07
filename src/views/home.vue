@@ -615,7 +615,7 @@ import { userInfo } from '@/api/user';
           localStorage.setItem('openkey',routerParm.openkey)
         }
         this.$forceUpdate();
-      },
+      }
     },
     created(){
       this.$store.dispatch('getUserInfo');
@@ -634,11 +634,19 @@ import { userInfo } from '@/api/user';
         this.defaultopenkeys = openkey;
         this.$forceUpdate();
       }
+      this.getSubMenuTxt();
     },
     mounted() {
       this.showHeader();
     },
-    methods: {  
+    methods: {
+      getSubMenuTxt(){
+        var subMenuTxtList = this.breadArr;
+        var subMenuTxtList1 = localStorage.getItem('subMenuTxt').split(',');
+        if(subMenuTxtList.length == 0){
+          this.breadArr = subMenuTxtList1;
+        }
+      },  
       getUserInfo(){
         userInfo().then(res => {
           if(res.code == 200000) {
@@ -779,6 +787,7 @@ import { userInfo } from '@/api/user';
             }
           });
         }
+        localStorage.setItem('subMenuTxt',this.breadArr);
         localStorage.setItem('activKey',e.key);
         var openPath = e.keyPath;
         var inx = openPath.indexOf(e.key);
