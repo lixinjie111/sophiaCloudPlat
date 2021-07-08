@@ -53,7 +53,7 @@
         <div class="btn_container">
           <el-button type="primary">搜索</el-button>
           <el-button>重置</el-button>
-          <i class="el-icon-upload2"></i>
+          <a-icon type="upload" class="upload"/>
           <i class="el-icon-refresh" :class="{'refreshing' : ifStart}" @click="refreshFn"></i>
         </div>
       </div>
@@ -276,12 +276,12 @@ export default {
           display: flex;
           align-items: center;
         }
-        .el-icon-upload2,
+        .upload,
         .el-icon-refresh {
           font-size: 20px;
           color: #1890ff;
         }
-        .el-icon-upload2 {
+        .upload {
           margin-left: 33px;
           margin-right: 16px;
         }

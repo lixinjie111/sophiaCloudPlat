@@ -488,6 +488,13 @@ import { userInfo } from '@/api/user';
                 icType:'profile'
               },
               {
+                subKey: "caiwuExpensebill",
+                title: "费用账单",
+                path: "",
+                seckey:'caiwuExpensebill',
+                icType:'reconciliation'
+              },
+              {
                 subKey: "caiwu2",
                 title: "消费中心",
                 path: "",
@@ -690,6 +697,12 @@ import { userInfo } from '@/api/user';
             this.breadArr.splice(0, 0, "财务中心", "财务总览");
             this.$router.push({
               path: "/finance"
+            });
+          }
+          else if(keyVal == 'caiwuExpensebill'){
+            this.breadArr.splice(0, 0, "财务中心", "费用账单");
+            this.$router.push({
+              path: "/expensebill"
             });
           }
           else if(keyVal == 'caiwu2'){

@@ -60,6 +60,8 @@ const invoiceDetail = resolve => require(['@/views/invoiceMan/invoiceDetail'], r
 const InvoiceReq = resolve => require(['@/views/invoiceMan/InvoiceReq'], resolve);
 //收支明细
 const Inexpdetails = resolve => require(['@/views/Inexpdetails/index'], resolve);
+//费用账单
+const expensebill = resolve => require(['@/views/expenseBill/index'], resolve);
 //推荐运营 物料及用户管理
 const recommendationMateriel = resolve => require(['@/views/recommendation/materiel/list'], resolve);
 //必推物品池
@@ -283,6 +285,11 @@ export const menuRouterMap = [{
           name:'Inexpdetails',
           path:'/Inexpdetails',
           component:Inexpdetails
+        },
+        {
+          name:'expensebill',
+          path:'/expensebill',
+          component:expensebill
         },
         {
           name:'invoiceMan',
